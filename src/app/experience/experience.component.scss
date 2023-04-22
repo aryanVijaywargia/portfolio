@@ -1,0 +1,46 @@
+/* CSS styles for the tab component with toggle buttons in a column */
+.tab-component {
+  display: flex;
+}
+
+.tabs-column {
+  flex: 0 0 auto;
+}
+
+.values-column {
+  flex: 1;
+}
+
+::ng-deep .mat-tab-labels {
+  /* display: flex; */ 
+  display: block !important;
+}
+
+.value {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.bullets {
+  margin-top: 10px;
+  list-style-type: disc;
+}
+
+.mat-tab-group {
+  display: flex;
+  flex-direction: column;
+  width: 150px; /* Adjust the width to your preference */
+}
+
+.mat-tab-header {
+  flex: 0 0 auto;
+}
+
+.mat-tab-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-tab-label {
+  margin: 5px 0;
+}
