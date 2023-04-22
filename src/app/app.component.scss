@@ -1,0 +1,23 @@
+*{
+    margin: 0%;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    scroll-behavior: smooth;
+
+}
+.main-container{
+    margin: 0 auto;
+    max-width: 1500px;
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
+        
+        // display: flex;
+        // flex-direction: column;
+    }
+    
+}
+
