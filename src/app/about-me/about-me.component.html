@@ -1,0 +1,51 @@
+<!-- <p>about-me works!</p> -->
+
+<div id="form-wrapper">
+    <form action="/p/quote.php" method="GET">
+        <h1 id="form-title">Select Bio length</h1>
+        <div id="debt-amount-slider">
+            <input type="radio" name="debt-amount" id="1" value="1" (click)="showDiv = 'small'" required>
+            <label for="1" data-debt-amount="Small"></label>
+            <input type="radio" name="debt-amount" id="2" value="2" (click)="showDiv = 'medium'" required>
+            <label for="2" data-debt-amount="Medium"></label>
+            <input type="radio" name="debt-amount" id="3" value="3" (click)="showDiv = 'large'" required>
+            <label for="3" data-debt-amount="Large"></label>
+            <div id="debt-amount-pos"></div>
+        </div>
+    </form>
+
+
+    <div class="container">
+        <div id="about" class="about-area">
+            <div class="about">
+                <div class="about-details">
+                    <ng-container *ngIf="showDiv === 'small'">
+                        <strong> Aryan is trying his very best.</strong>
+                    </ng-container>
+                    <ng-container *ngIf="showDiv === 'medium' ||  showDiv===''">
+                        <strong> Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita reprehenderit ratione
+                            accusamus enim hic molestiae officia natus praesentium ullam. Aperiam eius facilis aut
+                            eveniet consequatur, doloribus reiciendis neque tempore illo?.</strong>
+                    </ng-container>
+                    <ng-container *ngIf=" showDiv==='large'">
+                        <strong> Jason Lengstorf is the host of Learn With Jason, a web generalist, and the undefeated
+                            smashburger champ. A creative technologist and educator, Jason helps tech companies connect
+                            with developer communities through better devrel strategy and creative media production. He
+                            advocates for continued learning through collaboration and play as the fastest path to
+                            growth, and models this on weekly livestreams where he pair programs with experts from
+                            around the community to learn something new in 90 minutes. He’s trying his very best to
+                            follow his own advice. When ChatGpt takes over my job I'll probably open
+                            a food truck in my hometown Bhopal.
+                            .</strong>
+                    </ng-container>
+                </div>
+                <div class="about-image">
+                    <div class="image">
+                        <img alt="profile" src={profile} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
