@@ -1,0 +1,34 @@
+<div class="content">
+    <div class="card">
+        <div class="card__cap">
+            <h1 class="card__title">
+                Contact me
+            </h1>
+            <!-- <SocLinks
+                onMouseOver={() => setSmile(true)}
+                onMouseLeave={() => setSmile(false)}
+                shouldInherit='card'
+            /> -->
+        </div>
+        <div class="card__body">
+            <div class="card__photo">
+                <!-- <Face
+                    shouldSmile={shouldSmile}
+                /> -->
+                <app-face #face [shouldSmile]="shouldSmile"></app-face>
+
+
+            </div>
+            <div class="card__info">
+                <!-- <Card__wr1 />
+                <Card__wr2
+                    onMouseOver={() => setSmile(true)}
+                    onMouseLeave={() => setSmile(false)}
+                /> -->
+
+                <app-card-title></app-card-title>
+
+            </div>
+        </div>
+    </div>
+</div>
