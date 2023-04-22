@@ -1,0 +1,102 @@
+// @import '../../shared/styles/variables';
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
+
+// :host {
+//   display: block;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   z-index: 10;
+// }
+
+// .hamburger-btn {
+//   cursor: pointer;
+// }
+
+// .navbar {
+//   &.bg-navbar {
+//     // background-color: $color-primary;
+//     background-color:black;
+//   }
+// }
+
+// .option-button {
+//   &:hover {
+//     // background-color: $color-primary-dark;
+//     background-color: gray;
+//   }
+// }
+
+// @media (min-width: 950px) {
+//   .hamburger-btn {
+//     display: none;
+//   }
+
+//   .navbar {
+//     background-color: transparent;
+//   }
+
+//   .option-button {
+//     &:hover {
+//       background-color: transparent;
+//     }
+//   }
+// }
+
+/* headbar.component.scss */
+.headbar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  // padding: 1rem;
+  color: gray; /* Initial color */
+  background-color: gray; /* Initial background color */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  justify-content: space-between;
+  padding: 0 16px; /* Add padding as needed */
+  background-color: #000000; /* Set background color as needed */
+  height: 30pxpx; /* Set height as needed */
+}
+
+.fixed {
+  position: fixed;
+  top: 0;
+  color: black; /* Color when fixed */
+  background-color: black; /* Background color when fixed */
+  opacity: 1; /* Faded in when fixed */
+}
+
+// :host {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   padding: 0 16px; /* Add padding as needed */
+//   background-color: #000000; /* Set background color as needed */
+//   height: 64px; /* Set height as needed */
+// }
+
+.logo {
+  /* Add styles for the logo on the left */
+  font-size: 24px; /* Set font size as needed */
+  font-weight: bold; /* Set font weight as needed */
+  color: #333; /* Set color as needed */
+}
+
+.headbar-icon {
+  /* Add styles for the icons on the right */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.mat-icon {
+  /* Add styles for the Material Icons */
+  font-size: 24px; /* Set font size as needed */
+  color: #666; /* Set color as needed */
+  margin-left: 16px; /* Add margin as needed between icons */
+}
+
