@@ -138,7 +138,6 @@
 
 
 <!-- headbar.component.html -->
-<div class="headbar" [ngClass]="{'fixed': isFixed}" [ngStyle]="{'opacity': opacity}">
     <!-- Headbar content goes here -->
     <!-- <mat-icon>notifications_none</mat-icon>
     <div class="headbar-icon" (click)="onIconClick('home')">
@@ -157,29 +156,26 @@
     <!-- <div class="navbar__icon">
         <mat-icon>home</mat-icon>
     </div> -->
+<div class="headbar" [ngClass]="{'fixed': isFixed}" [ngStyle]="{'opacity': opacity}">
 
-    <div class="navbar__icon" (mouseenter)="onIconMouseEnter($event)" (mouseleave)="onIconMouseLeave($event)">
+    <div class="navbar__icon" appTransition>
         <mat-icon class="navbar__icon__content">home</mat-icon>
-        <span class="navbar__icon__text" #iconText>Home</span>
+        <span class="navbar__icon__text" >Home</span>
     </div>
-    <div class="navbar__icon" (mouseenter)="onIconMouseEnter($event)" (mouseleave)="onIconMouseLeave($event)">
+    <div class="navbar__icon" appTransition>
         <mat-icon class="navbar__icon__content">home</mat-icon>
-        <span class="navbar__icon__text" #iconText2>Hom</span>
+        <span class="navbar__icon__text">Hom</span>
     </div>
 
-    <div class="navbar__icon">
+    <div class="navbar__icon" appTransition>
         <mat-icon>notifications</mat-icon>
-        <span class="navbar__icon__text" #iconText>notifications</span>
+        <span class="navbar__icon__text" >notifications</span>
     </div>
     <div class="navbar__icon">
         <mat-icon>settings</mat-icon>
-        <span class="navbar__icon__text" #iconText>settings</span>
+        <span class="navbar__icon__text" >settings</span>
     </div>
     <!-- </nav> -->
-
-
-
-
 </div>
 
 

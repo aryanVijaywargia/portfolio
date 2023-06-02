@@ -349,46 +349,48 @@ export class NavbarComponent implements OnInit {
   // }
 
   
-  @ViewChild('iconText', { static: false }) iconText!: ElementRef;
-  @ViewChild('iconText2', { static: false }) iconText2!: ElementRef;
+  // @ViewChild('iconText', { static: false }) iconText!: ElementRef;
+  // @ViewChild('iconText2', { static: false }) iconText2!: ElementRef;
 
   constructor(private renderer: Renderer2, private el: ElementRef) { }
 
   ngAfterViewInit() {
     // Hide the text initially
-    this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '0');
-    this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '0');
+    // this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '0');
+    // this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '0');
   }
 
-  @HostListener('mouseenter', ['$event'])
-  onIconMouseEnter(event: MouseEvent) {
-    const icon = event.target as HTMLElement;
+  // @HostListener('mouseenter', ['$event'])
+  // onIconMouseEnter(event: MouseEvent) {
+  //   const icon = event.target as HTMLElement;
+  //   // const iconText != event.target.children[0].children[0].children[1];
+  //   // Apply CSS styles and transitions for icon slide effect
+  //   this.renderer.setStyle(icon, 'transform', 'translateX(-30px)');
+  //   this.renderer.setStyle(icon, 'transition', 'transform 0.3s ease-in-out');
 
-    // Apply CSS styles and transitions for icon slide effect
-    this.renderer.setStyle(icon, 'transform', 'translateX(-10px)');
-    this.renderer.setStyle(icon, 'transition', 'transform 0.3s ease-in-out');
+  //   // if (!) return;
 
-    // Show the text with fade-in effect
-    this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '1');
-    this.renderer.setStyle(this.iconText.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
-    this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '1');
-    this.renderer.setStyle(this.iconText2.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
-  }
+  //   // Show the text with fade-in effect
+  //   this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '1');
+  //   this.renderer.setStyle(this.iconText.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
+  //   this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '1');
+  //   this.renderer.setStyle(this.iconText2.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
+  // }
 
-  @HostListener('mouseleave', ['$event'])
-  onIconMouseLeave(event: MouseEvent) {
-    const icon = event.target as HTMLElement;
+  // @HostListener('mouseleave', ['$event'])
+  // onIconMouseLeave(event: MouseEvent) {
+  //   const icon = event.target as HTMLElement;
 
-    // Reset CSS styles and transitions for icon slide effect
-    this.renderer.removeStyle(icon, 'transform');
-    this.renderer.removeStyle(icon, 'transition');
+  //   // Reset CSS styles and transitions for icon slide effect
+  //   this.renderer.removeStyle(icon, 'transform');
+  //   this.renderer.removeStyle(icon, 'transition');
 
-    // Hide the text with fade-out effect
-    this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '0');
-    this.renderer.setStyle(this.iconText.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
-    this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '0');
-    this.renderer.setStyle(this.iconText2.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
-  }
+  //   // Hide the text with fade-out effect
+  //   this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '0');
+  //   this.renderer.setStyle(this.iconText.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
+  //   this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '0');
+  //   this.renderer.setStyle(this.iconText2.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
+  // }
 
   isFixed = false; // Flag to determine if the headbar is fixed
   opacity = 0.5; // Opacity of the headbar

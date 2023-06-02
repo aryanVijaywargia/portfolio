@@ -19,6 +19,7 @@ import { PhoneComponent } from './phone/phone.component';
 import { NavbarComponent } from './header/navbar.component';
 import { TabsComponent } from './tabs/tabs.component';
 import { ClarityModule } from '@clr/angular';
+import { TransitionDirective } from './Directives/transition.directive';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ClarityModule } from '@clr/angular';
     CardTitleComponent,
     ExperienceComponent,
     TabsComponent,
+    TransitionDirective,
     
   ],
   imports: [
