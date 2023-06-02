@@ -1,187 +1,79 @@
-<!-- <section>
-    <div class="inner">
-        <div #tabListElement class="tab-list" [style.width.px]="tabListWidth">
-            <div *ngFor="let tab of tabs; let i = index">
-                <button class="tab-button" [class.active]="activeTab === i" (click)="setActiveTab(i)">
-                    {{ tab }}
-                </button>
-            </div>
-            <div class="highlight" [style.transform]="'translateY(' + activeTab * tabHeight + 'px)'"></div>
-        </div>
-        <div class="tab-panels">
-            <div *ngFor="let tab of tabs; let i = index" class="tab-panel" [class.active]="activeTab === i">
-                <ul>
-                    <li *ngFor="let job of jobsData[i].jobs">
-                        <h3>{{ job.title }}</h3>
-                        <span class="company">{{ job.company }}</span>
-                        <span class="range">{{ job.range }}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+<div class="container" style="background-color: aqua;">
+    <div class="tabs" (click)="handleClick($event)">
+        <a class="tab tab-1" href="#" data-tab="1" [ngClass]="{'active': activeTab === 1}">Tab 1</a>
+        <a class="tab tab-2" href="#" data-tab="2" [ngClass]="{'active': activeTab === 2}">Tab 2</a>
+        <a class="tab tab-3" href="#" data-tab="3" [ngClass]="{'active': activeTab === 3}">Tab 3</a>
+        <a class="tab tab-4" href="#" data-tab="4" [ngClass]="{'active': activeTab === 4}">Tab 4</a>
+        <span class="highlighter"></span>
     </div>
-</section> -->
 
-<!-- <div class="tab-container"> -->
-<!-- List of values in a single column -->
-<!-- <ul class="value-list">
-        <li *ngFor="let value of values" [class.active]="value === activeValue" (click)="switchValue(value)">
-            {{ value }}
-        </li>
-    </ul> -->
+    <!-- --fz-xxs: 12px;
+    --fz-xs: 13px;
+    --fz-sm: 14px;
+    --fz-md: 16px;
+    --fz-lg: 18px;
+    --fz-xl: 20px;
+    --fz-xxl: 22px; -->
 
-<!-- Display the active value in a separate section -->
-<!-- <div class="active-value-section">
-        <h3>Active Value:</h3>
-        <p>{{ activeValue }}</p>
-    </div>
-</div> -->
+    <div class="content">
+        <h3 style="margin-bottom: 2px;
+            font-size: 22px;
+            font-weight: 500;
+            line-height: 1.3;">
+            <span>Experience</span>
+        </h3>
 
+        <p style="margin-bottom: 25px;
+        color: var(--light-slate);
+        font-family: var(--font-mono);
+        font-size: 13px;"> May-2018 to Present</p>
+        <div class="content__section" data-tab="1" [ngClass]="{'visible': activeTab === 1}">
+            <ul>
+                <li>Lorem ipsum dolor amet umami kogi you probably haven't heard of them activated charcoal hexagon
+                    literally.</li>
 
-<!-- tab.component.html -->
+                <li>Vice art party XOXO retro blue bottle. Squid tousled skateboard man bun pabst unicorn
+                    sriracha poutine echo park crucifix plaid health goth four dollar toast.</li>
 
-<!-- <div class="tab-container">
-    <div class="tab-column">
-        <div class="tab" *ngFor="let tab of tabs" [ngClass]="{'selected': selectedTab === tab}"
-            (click)="selectTab(tab)">
-            {{ tab.label }}
+                <li>XOXO gochujang PBR&B kombucha
+                    brooklyn street art lyft swag.</li>
+            </ul>
         </div>
-    </div>
-    <div class="value-column">
-        <div *ngIf="selectedTab" class="value">
-            {{ selectedTab.label }} Values
+        <div class="content__section" data-tab="2" [ngClass]="{'visible': activeTab === 2}">
+            <ul>
+                <li>Lorem ipsum dolor amet umami kogi you probably haven't heard of them activated charcoal hexagon
+                    literally.</li>
+
+                <li>Vice art party XOXO retro blue bottle. Squid tousled skateboard man bun pabst unicorn
+                    sriracha poutine echo park crucifix plaid health goth four dollar toast.</li>
+
+                <li>XOXO gochujang PBR&B kombucha
+                    brooklyn street art lyft swag.</li>
+            </ul>
         </div>
-        <ul *ngIf="selectedTab" class="bullets">
-            <li *ngFor="let bullet of selectedTab.bullets">{{ bullet }}</li>
-        </ul>
+        <div class="content__section" data-tab="3" [ngClass]="{'visible': activeTab === 3}">
+            <ul>
+                <li>Lorem ipsum dolor amet umami kogi you probably haven't heard of them activated charcoal hexagon
+                    literally.</li>
+
+                <li>Vice art party XOXO retro blue bottle. Squid tousled skateboard man bun pabst unicorn
+                    sriracha poutine echo park crucifix plaid health goth four dollar toast.</li>
+
+                <li>XOXO gochujang PBR&B kombucha
+                    brooklyn street art lyft swag.</li>
+            </ul>
+        </div>
+        <div class="content__section" data-tab="4" [ngClass]="{'visible': activeTab === 4}">
+            <ul>
+                <li>Lorem ipsum dolor amet umami kogi you probably haven't heard of them activated charcoal hexagon
+                    literally.</li>
+
+                <li>Vice art party XOXO retro blue bottle. Squid tousled skateboard man bun pabst unicorn
+                    sriracha poutine echo park crucifix plaid health goth four dollar toast.</li>
+
+                <li>XOXO gochujang PBR&B kombucha
+                    brooklyn street art lyft swag.</li>
+            </ul>
+        </div>
     </div>
 </div>
- -->
-
-<!-- Vertical tabs -->
-<!-- <mat-tab-group class="vertical-tabs" [selectedIndex]="selectedTabIndex">
-    <mat-tab *ngFor="let tab of tabs; let i = index">
-        <ng-container matTabLabel>{{ tab.label }}</ng-container>
-        <ng-container matTabContent>
-            <ul>
-                <li *ngFor="let item of tab.items">{{ item }}</li>
-            </ul>
-        </ng-container>
-    </mat-tab>
-</mat-tab-group> -->
-
-
-<!-- Vertical tabs -->
-<!-- <mat-tab-group class="vertical-tabs" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="onTabSelectionChanged($event)">
-    <mat-tab *ngFor="let tab of tabs">
-      <ng-container matTabLabel>{{ tab.label }}</ng-container>
-      <ng-container matTabContent>
-        <ul>
-          <li *ngFor="let item of tab.items">{{ item }}</li>
-        </ul>
-      </ng-container>
-    </mat-tab>
-  </mat-tab-group>
-   -->
-
-<!-- Vertical tabs -->
-
-
-<!-- Vertical tabs -->
-<!-- <mat-tab-group class="vertical-tabs" [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabSelectionChanged($event)">
-    <mat-tab *ngFor="let tab of tabs">
-      <ng-template mat-tab-label>
-        {{ tab.label }}
-      </ng-template>
-      <ng-template matTabContent>
-        <ul>
-          <li *ngFor="let item of tab.items">{{ item }}</li>
-        </ul>
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
-   -->
-
-
-<!-- HTML template for the tab component using mat-tab -->
-<!-- <mat-tab-group class="tab-component" [(selectedIndex)]="selectedTabIndex">
-    <mat-tab *ngFor="let tab of tabs">
-      <ng-template mat-tab-label>
-        {{ tab.label }}
-      </ng-template>
-      <div class="values-column">
-        <div *ngIf="selectedTabIndex === tab.index" class="value">
-          {{ tab.label }} Values
-        </div>
-        <ul *ngIf="selectedTabIndex === tab.index" class="bullets">
-          <li *ngFor="let bullet of tab.bullets">{{ bullet }}</li>
-        </ul>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-   -->
-
-<!-- HTML template for the tab component using MatTabsModule with toggle buttons in a column -->
-<!-- <div class="tab-component">
-    <div class="tabs-column">
-      <mat-tab-group class="tabs" [(selectedIndex)]="selectedTabIndex">
-        <mat-tab *ngFor="let tab of tabs">
-          <ng-template mat-tab-label>
-            {{ tab.label }}
-          </ng-template>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-    <div class="values-column">
-      <div *ngIf="selectedTabIndex !== null" class="value">
-        {{ tabs[selectedTabIndex].label }} Values
-      </div>
-      <ul *ngIf="selectedTabIndex !== null" class="bullets">
-        <li *ngFor="let bullet of tabs[selectedTabIndex].bullets">{{ bullet }}</li>
-      </ul>
-    </div>
-  </div> -->
-
-
-  <!-- HTML template for the tab component using MatTabsModule with toggle buttons in a column -->
-<!-- <div class="tab-component">
-    <div class="tabs-column">
-      <mat-tab-group class="tabs" [(selectedIndex)]="selectedTabIndex">
-        <mat-tab *ngFor="let tab of tabs">
-          <ng-template mat-tab-label>
-            {{ tab.label }}
-          </ng-template>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-    <div class="values-column">
-      <div *ngIf="selectedTabIndex !== null" class="value">
-        {{ tabs[selectedTabIndex].label }} Values
-      </div>
-      <ul *ngIf="selectedTabIndex !== null" class="bullets">
-        <li *ngFor="let bullet of tabs[selectedTabIndex].bullets">{{ bullet }}</li>
-      </ul>
-    </div>
-  </div> -->
-
-  <!-- HTML template for the tab component using MatTabsModule with toggle buttons in a column -->
-<div class="tab-component">
-    <div class="tabs-column">
-      <mat-tab-group class="tabs" [(selectedIndex)]="selectedTabIndex">
-        <mat-tab *ngFor="let tab of tabs">
-          <ng-template mat-tab-label>
-            {{ tab.label }}
-          </ng-template>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-    <div class="values-column">
-      <div *ngIf="selectedTabIndex !== null" class="value">
-        {{ tabs[selectedTabIndex].label }} Values
-      </div>
-      <ul *ngIf="selectedTabIndex !== null" class="bullets">
-        <li *ngFor="let bullet of tabs[selectedTabIndex].bullets">{{ bullet }}</li>
-      </ul>
-    </div>
-  </div>
-  

@@ -189,24 +189,24 @@
 // }
 
 
-// import {
-//   faAward,
-//   faBriefcase,
-//   faCertificate,
-//   faDownload,
-//   faEnvelope,
-//   faEye,
-//   faGraduationCap,
-//   faLightbulb,
-//   faRocket,
-//   faUser,
-//   faHome,
-//   faBell
-// } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAward,
+  faBriefcase,
+  faCertificate,
+  faDownload,
+  faEnvelope,
+  faEye,
+  faGraduationCap,
+  faLightbulb,
+  faRocket,
+  faUser,
+  faHome,
+  faBell
+} from "@fortawesome/free-solid-svg-icons";
 
 // import { FontAwesomeIcon } from "@fortawesome/angular-fontawesome";
 // import { HamburgerSpin } from "hamburger-css";
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
 // import { DarkModeSwitch } from "angular-toggle-dark-mode";
 // import OptionButton from "./navbar/OptionButton";
 // import { ElementRef, OnInit } from '@angular/core';
@@ -318,6 +318,77 @@ export class NavbarComponent implements OnInit {
   //   return formatter.format(number);
   // }
 
+  // constructor(private renderer: Renderer2, private el: ElementRef) { }
+
+  // @HostListener('mouseenter', ['$event'])
+  // onIconMouseEnter(event: MouseEvent) {
+  //   const icon = event.target as HTMLElement;
+  //   const text = icon.querySelector('.navbar__icon__text') as HTMLElement;
+
+  //   // Apply CSS styles and transitions for icon slide effect
+  //   this.renderer.setStyle(icon, 'transform', 'translateX(-10px)');
+  //   this.renderer.setStyle(icon, 'transition', 'transform 0.3s ease-in-out');
+
+  //   // Apply CSS styles and transitions for text fade-in effect
+  //   this.renderer.setStyle(text, 'opacity', '1');
+  //   this.renderer.setStyle(text, 'transition', 'opacity 0.3s ease-in-out');
+  // }
+
+  // @HostListener('mouseleave', ['$event'])
+  // onIconMouseLeave(event: MouseEvent) {
+  //   const icon = event.target as HTMLElement;
+  //   const text = icon.querySelector('.navbar__icon__text') as HTMLElement;
+
+  //   // Reset CSS styles and transitions for icon slide effect
+  //   this.renderer.removeStyle(icon, 'transform');
+  //   this.renderer.removeStyle(icon, 'transition');
+
+  //   // Reset CSS styles and transitions for text fade-in effect
+  //   this.renderer.removeStyle(text, 'opacity');
+  //   this.renderer.removeStyle(text, 'transition');
+  // }
+
+  
+  @ViewChild('iconText', { static: false }) iconText!: ElementRef;
+  @ViewChild('iconText2', { static: false }) iconText2!: ElementRef;
+
+  constructor(private renderer: Renderer2, private el: ElementRef) { }
+
+  ngAfterViewInit() {
+    // Hide the text initially
+    this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '0');
+    this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '0');
+  }
+
+  @HostListener('mouseenter', ['$event'])
+  onIconMouseEnter(event: MouseEvent) {
+    const icon = event.target as HTMLElement;
+
+    // Apply CSS styles and transitions for icon slide effect
+    this.renderer.setStyle(icon, 'transform', 'translateX(-10px)');
+    this.renderer.setStyle(icon, 'transition', 'transform 0.3s ease-in-out');
+
+    // Show the text with fade-in effect
+    this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '1');
+    this.renderer.setStyle(this.iconText.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
+    this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '1');
+    this.renderer.setStyle(this.iconText2.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
+  }
+
+  @HostListener('mouseleave', ['$event'])
+  onIconMouseLeave(event: MouseEvent) {
+    const icon = event.target as HTMLElement;
+
+    // Reset CSS styles and transitions for icon slide effect
+    this.renderer.removeStyle(icon, 'transform');
+    this.renderer.removeStyle(icon, 'transition');
+
+    // Hide the text with fade-out effect
+    this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '0');
+    this.renderer.setStyle(this.iconText.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
+    this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '0');
+    this.renderer.setStyle(this.iconText2.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
+  }
 
   isFixed = false; // Flag to determine if the headbar is fixed
   opacity = 0.5; // Opacity of the headbar
@@ -329,8 +400,9 @@ export class NavbarComponent implements OnInit {
     // Detect scroll position
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
+    const yOffset = 50;
     // Check if the headbar should be fixed
-    this.isFixed = scrollPosition >= window.innerHeight;
+    this.isFixed = scrollPosition + yOffset  >= window.innerHeight;
 
     // Calculate opacity based on scroll position
     this.opacity = scrollPosition >= window.innerHeight ? 1 : (scrollPosition / window.innerHeight);

@@ -1,46 +1,156 @@
-/* CSS styles for the tab component with toggle buttons in a column */
-.tab-component {
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+::selection {
+  background: yellow;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: system, -apple-system, BlinkMacSystemFont, Roboto,
+    "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  background-color: #202124;
+  color: #fafafa;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+a {
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  text-decoration-skip-ink: auto;
+  transition: color 0.25s ease;
+}
+
+p {
+  margin: 0;
+}
+
+ul{
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+
+ul li{
+  position: relative;
+    padding-left: 30px;
+    margin-bottom: 10px;
+}
+
+ul li::before {
+  content: "▹";
+  position: absolute;
+  left: 0px;
+  color: green;
+}
+
+$spacing: 20px;
+$purple: #fff;
+$tab-height: 40px;
+
+.container {
+  position: relative;
+  margin: $spacing auto;
+  padding: $spacing;
+  width: 50%;
   display: flex;
-}
+  align-items: flex-start;
 
-.tabs-column {
-  flex: 0 0 auto;
-}
+  .tabs {
+    display: block;
+    position: relative;
+    z-index: 3;
+    width: max-content;
 
-.values-column {
-  flex: 1;
-}
+    .tab {
+      width: 100px;
+      height: $tab-height;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 10px 0;
+      transition: all 0.25s ease;
+      border-left: 2px solid #5f6368;
+      color: #5f6368;
 
-::ng-deep .mat-tab-labels {
-  /* display: flex; */ 
-  display: block !important;
-}
+      &:hover {
+        color: $purple;
+      }
 
-.value {
-  font-weight: bold;
-  margin-top: 20px;
-}
+      &.active {
+        color: $purple;
+      }
 
-.bullets {
-  margin-top: 10px;
-  list-style-type: disc;
-}
+      @for $i from 1 through 4 {
+        &.tab-#{$i}.active {
+          & ~ .highlighter {
+            transform: translateY(#{($i*$tab-height) - $tab-height});
+          }
+        }
+      }
+      
+    }
 
-.mat-tab-group {
-  display: flex;
-  flex-direction: column;
-  width: 150px; /* Adjust the width to your preference */
-}
+    .highlighter {
+      display: block;
+      background: $purple;
+      width: 2px;
+      height: $tab-height;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateY(0);
+      transition: transform 0.2s ease;
+      transition-delay: 0.1s;
+      z-index: 10;
+    }
 
-.mat-tab-header {
-  flex: 0 0 auto;
-}
+    a:first-of-type {
+      border-top-left-radius: 2px;
+    }
+    a:last-of-type {
+      border-top-right-radius: 2px;
+    }
+  }
 
-.mat-tab-list {
-  display: flex;
-  flex-direction: column;
-}
+  .content {
+    position: relative;
+    padding: 0 $spacing;
 
-.mat-tab-label {
-  margin: 5px 0;
+    &__section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      z-index: 0;
+      transition: opacity 0s ease;
+
+      &.visible {
+        position: relative;
+        opacity: 1;
+        width: 100%;
+        height: auto;
+        transition: opacity 0.5s ease;
+        z-index: 2;
+      }
+    }
+  }
 }

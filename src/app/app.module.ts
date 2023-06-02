@@ -17,6 +17,8 @@ import { AboutMeComponent } from './about-me/about-me.component';
 import { CardComponent } from './card/card.component';
 import { PhoneComponent } from './phone/phone.component';
 import { NavbarComponent } from './header/navbar.component';
+import { TabsComponent } from './tabs/tabs.component';
+import { ClarityModule } from '@clr/angular';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { NavbarComponent } from './header/navbar.component';
     FaceComponent,
     CardTitleComponent,
     ExperienceComponent,
+    TabsComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -42,7 +46,7 @@ import { NavbarComponent } from './header/navbar.component';
     MatIconModule,
     ReactiveFormsModule,
     MatTabsModule,
-    
+    ClarityModule
   ],
   exports:[CommonModule],
   providers: [],

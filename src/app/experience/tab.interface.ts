@@ -3,6 +3,5 @@
 export interface Tab {
     label: string;
     bullets: string[];
-    index: number;
   }
   

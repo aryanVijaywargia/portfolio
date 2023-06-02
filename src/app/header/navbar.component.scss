@@ -56,18 +56,51 @@
   background-color: gray; /* Initial background color */
   opacity: 0; /* Initially hidden */
   transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-  justify-content: space-between;
+  // justify-content: space-between;
   padding: 0 16px; /* Add padding as needed */
   background-color: #000000; /* Set background color as needed */
-  height: 30pxpx; /* Set height as needed */
+  // height: 30px; /* Set height as needed */
+  z-index: 10000;
+  display: flex;
+
+  justify-content: center; // Center aligns the icons horizontally
+  align-items: center; // Center aligns the icons vertically
+  height: 50px; // Set the height of the navbar as desired
+  background-color: #827777; // Set the background color of the navbar as desired
+
+}
+
+.navbar__icon {
+  margin: 0 10px; // Add margin between the icons as desired
+  display: flex; // Add this to make the icons display in a row
+  align-items: center; 
 }
 
 .fixed {
   position: fixed;
   top: 0;
-  color: black; /* Color when fixed */
-  background-color: black; /* Background color when fixed */
-  opacity: 1; /* Faded in when fixed */
+  // color: black; /* Color when fixed */
+  // background-color: black; /* Background color when fixed */
+  // opacity: 1; /* Faded in when fixed */
+}
+
+ul {
+  /* List styles */
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  /* List item styles */
+  display: inline-block;
+  margin-right: 10px;
+}
+
+a {
+  /* Anchor link styles */
+  color: #000; /* Set your desired color */
+  text-decoration: none;
 }
 
 // :host {
@@ -98,5 +131,9 @@
   font-size: 24px; /* Set font size as needed */
   color: #666; /* Set color as needed */
   margin-left: 16px; /* Add margin as needed between icons */
+}
+
+.navbar__icon__text{
+  color: yellow ;
 }
 
