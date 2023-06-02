@@ -3,3 +3,5 @@ tsconfig.*.json
 tsconfig.json
 package-lock.json
 .angular
+random
+.DS_Store
