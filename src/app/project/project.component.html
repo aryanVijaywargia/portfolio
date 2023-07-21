@@ -1,0 +1,32 @@
+<section id="portfolio" class="portfolio-preview mb-24 spacing-4">
+  <header class="mx-auto grid w-full max-w-6xl px-4 md:px-8">
+    <div class="heading-pre">{{PORTFOLIO.pre}}</div>
+    <h1 class="heading-2xl -ml-1">{{PORTFOLIO.heading}}</h1>
+  </header>
+  <app-scroll-gallery [itemWidth]="342" [gapWidth]="32">
+    <ng-container *ngFor="let project of projects; let index = index">
+      <section [ngClass]="getSectionClasses(project, index)" class="card">
+        <figure class="relative flex aspect-2 w-full">
+          <img *ngIf="project" [src]="project.featuredImage" [alt]="project.name" width="400" height="200"
+            class="rounded-t-lg object-cover object-center [mask-image:linear-gradient(180deg,#fff_16.35%,rgb(255_255_255_/_0%)_91.66%)]" />
+        </figure>
+        <header>
+          <h2 class="text-2xl font-bold tracking-tighter d:text-white text-gray-800 title_txt">
+            {{ project.name }}
+          </h2>
+          <div class="mt-0.5 -ml-0.5 flex items-center gap-2 tracking-tight text-gray-600 d:text-gray-200">
+            <ng-container *ngFor="let tech of project.tech; let i = index">
+              <div *ngIf="i <= 3"
+                class="flex select-none items-center gap-1 whitespace-nowrap rounded border border-gray-700/10 bg-gray-200/30 py-[2px] px-1.5 text-[13px] font-medium hfa:bg-gray-200/60 d:bg-gray-900/20 d:text-gray-50/80 d:hfa:bg-gray-900/30">
+                {{ tech }}
+              </div>
+            </ng-container>
+          </div>
+        </header>
+        <main class="mt-2 text-[15px] tracking-tight text-gray-600 d:text-gray-200">
+          <p class="line-clamp-4">{{ project.description }}</p>
+        </main>
+      </section>
+    </ng-container>
+  </app-scroll-gallery>
+</section>
