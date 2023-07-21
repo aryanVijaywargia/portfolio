@@ -1,9 +1,18 @@
 @import '../_variables.scss';
 
-.content{
-    margin: auto;
-    width: 50%;
-    padding: 10px;
+// .content{
+//     margin: auto;
+//     width: 50%;
+//     padding: 10px;
+// }
+.content {
+    margin-top: 5rem;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    color: #c6b763;
 }
 
 
@@ -14,14 +23,13 @@
 
     border-radius: 10px;
     border: solid 5px $third-bg-color;
-
+    padding: 0px 0px 0px;
     padding-bottom: var(--card-space);
 
     background-color: $bg-color1;
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.75);
 
     color: $text-color1;
-    
 }
 
 .card__title {

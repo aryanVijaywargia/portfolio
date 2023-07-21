@@ -10,27 +10,59 @@
 </ul> -->
 
 
-<form class="card__wr1" autocomplete="off">
+<form class="card__wr1" autocomplete="off" [formGroup]="reactiveForm" (ngSubmit)="onSubmit($event)">
     <div style=" display:flex; flex-direction: row; ">
-        <div class=" form-control" style="margin-top: 30px;">
+
+        <div class="inputBox">
+            <input type="text" required="required" formControlName="name" (focus)="changeSmile(true)"
+                (blur)="changeSmile(false)">
+            <span>Name</span>
+            <i></i>
+        </div>
+
+        <div class="inputBox" style="margin-left: 5px;">
+            <input type="text" required="required" formControlName="email" (focus)="changeSmile(true)"
+                (blur)="changeSmile(false)">
+            <span>Email</span>
+            <i></i>
+        </div>
+
+        <!-- <div class="inputBox">
+            <input type="text" required="required">
+            <span>Last Name</span>
+            <i></i>
+        </div> -->
+
+
+        <!-- <div class=" form-control input1">
             <label for="name" class="card__string">Name</label>
-            <input class=" card__input" type="text" id="name">
+            <input class=" card__input" type="text" id="name" formControlName="name" (focus)="changeSmile(true)"
+                (blur)="changeSmile(false)">
+        </div> -->
 
-        </div>
-
-        <div class="form-control" style="margin-top: 30px;">
+        <!-- <div class="form-control">
             <label for="email" class="card__string">Email</label>
-            <input class=" card__input" type="text" id="email">
-
-        </div>
+            <input class=" card__input" type="text" id="email" formControlName="email" (focus)="changeSmile(true)"
+                (blur)="changeSmile(false)">
+        </div> -->
     </div>
     <!-- <label for="country" class="card__string">Name</label>
     <input class=" card__label" type="text">
     <input class="card__string" type="text">
  -->
-    <textarea id="subject" name="subject" placeholder="Message" class="card__string__messageBox"
-        oninput='this.style.height = "";this.style.height =  this.scrollHeight + "px"'></textarea>
+    <div style="display:flex; margin-top:2em" class="textBox">
+        <textarea style="height: 100px"
+            oninput='this.style.height = "";this.style.height =  this.scrollHeight + 45 + "px"'
+            formControlName="message" (focus)="changeSmile(true)" (blur)="changeSmile(false)"
+            required="required"></textarea>
+        <span>Message</span>
+    </div>
+    <!-- <textarea id="subject" name="subject" placeholder="Message" class="card__string__messageBox"
+        oninput='this.style.height = "";this.style.height =  this.scrollHeight + "px"' formControlName="message"
+        (focus)="changeSmile(true)" (blur)="changeSmile(false)"></textarea> -->
     <!-- <textarea name="text"
         ></textarea> -->
+
+    <input type="submit" value="submit" id="btn">
 
 </form>

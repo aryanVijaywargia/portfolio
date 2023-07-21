@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-card',
@@ -7,11 +8,20 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 })
 export class CardComponent implements OnInit {
 
+  
+
   constructor() { }
   @ViewChild('face', { static: false }) faceElementRef!: ElementRef;
   shouldSmile: boolean = false;
 
+  changeFaceSmile(smile:boolean){
+    this.shouldSmile = smile
+  }
+
   ngOnInit(): void {
   }
+  
+
+
 
 }
