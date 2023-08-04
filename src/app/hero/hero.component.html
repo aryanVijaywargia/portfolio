@@ -1,0 +1,55 @@
+<!-- <section class="hero relative overflow-hidden pb-40">
+    <div class="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16 md:py-32 md:px-8 lg:grid">
+      <section class="col-span-2">
+        <header>
+          <div class="heading-pre">{{ HERO.pre }}</div>
+          <h1 class="heading-hero">{{ HERO.heading }}</h1>
+          <ul class="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium">
+            <li *ngFor="let tech of HERO.tech" class="flex items-center gap-2 text-gray-500 d:text-gray-400">
+              <i [class]="'h-7 w-7 text-gray-400 d:text-gray-300/80 ' + tech.Icon"></i>
+              {{ tech.name }}
+            </li>
+          </ul>
+        </header>
+        <main>
+          <p class="mb-3 max-w-prose font-normal text-gray-500 d:text-gray-400 md:text-lg md:tracking-tight">{{ HERO.body }}</p>
+          <p class="mb-3 max-w-xl font-normal text-gray-500 md:text-lg md:tracking-tight"></p>
+        </main>
+      </section>
+    </div>
+  </section> -->
+
+
+  <div>
+    <p>Welcome to my site.</p>
+    <h1>
+      I'm <strong>Felix Tellmann</strong>, a Fullstack developer.
+    </h1>
+    <ul>
+      <li *ngFor="let techItem of tech">
+        {{ techItem.name }}
+        <ng-container *ngIf="iconService.getIcon(techItem.Icon)">
+            <!-- Using the SVG content directly -->
+            <div [innerHTML]="iconService.getIcon(techItem.Icon)"></div>
+    
+            <!-- Or, you can also create a custom component and pass the SVG content as an input -->
+            <!-- <app-custom-icon [iconContent]="iconService.getIcon(iconName)"></app-custom-icon> -->
+          </ng-container>
+    
+      </li>
+    </ul>
+    <p>
+      I love writing code that takes things next level, creating highly performant websites,
+      automated API integrations, building my own dev-tools, and creating stunning user-experiences that make you feel
+      <em
+        class="relative cursor-pointer before:absolute b:bottom-0 b:-z-10 b:h-3 b:w-full b:-rotate-2 b:animate-hint-hint b:bg-pink-400/70 b:blur-sm d:b:bg-pink-600"
+        (click)="onWowClick($event)"
+      >
+        WOW!
+      </em>
+    </p>
+    <p>I am always keen to learn and explore new technologies, frameworks, and programming languages. Currently, I'm learning about <span>.</span></p>
+  </div>
+
+
+  

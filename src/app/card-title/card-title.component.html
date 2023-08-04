@@ -14,18 +14,22 @@
     <div style=" display:flex; flex-direction: row; ">
 
         <div class="inputBox">
-            <input type="text" required="required" formControlName="name" (focus)="changeSmile(true)"
-                (blur)="changeSmile(false)">
-            <span>Name</span>
+            <input type="text" required="required" formControlName="name" (focus)="changeSmile(true); onFocus('name')"
+                (blur)="changeSmile(false); onBlur('name')">
+            <span
+                [ngClass]="{'error': submitted && lastSubmit.name && reactiveForm.controls['name'].invalid, 'active': submitted && focused.name && reactiveForm.controls['name'].invalid}">Name</span>
             <i></i>
         </div>
 
         <div class="inputBox" style="margin-left: 5px;">
-            <input type="text" required="required" formControlName="email" (focus)="changeSmile(true)"
-                (blur)="changeSmile(false)">
-            <span>Email</span>
+            <input type="text" required="required" formControlName="email" (focus)="changeSmile(true); onFocus('email')"
+                (blur)=" changeSmile(false); onBlur('email')">
+            <span
+                [ngClass]="{'error': submitted && lastSubmit.email && reactiveForm.controls['email'].invalid, 'active': submitted && focused.email && reactiveForm.controls['email'].invalid}">Email</span>
             <i></i>
         </div>
+        <!-- [class.active]="submitted && focused.message && contactForm.controls.message.invalid" -->
+
 
         <!-- <div class="inputBox">
             <input type="text" required="required">
@@ -53,9 +57,10 @@
     <div style="display:flex; margin-top:2em" class="textBox">
         <textarea style="height: 100px"
             oninput='this.style.height = "";this.style.height =  this.scrollHeight + 45 + "px"'
-            formControlName="message" (focus)="changeSmile(true)" (blur)="changeSmile(false)"
-            required="required"></textarea>
-        <span>Message</span>
+            formControlName="message" (focus)="changeSmile(true); onFocus('message')"
+            (blur)="changeSmile(false); onBlur('message')" required="required"></textarea>
+        <span
+            [ngClass]="{'error': submitted && lastSubmit.message && reactiveForm.controls['message'].invalid, 'active-text': submitted && focused.message && reactiveForm.controls['message'].invalid}">Message</span>
     </div>
     <!-- <textarea id="subject" name="subject" placeholder="Message" class="card__string__messageBox"
         oninput='this.style.height = "";this.style.height =  this.scrollHeight + "px"' formControlName="message"

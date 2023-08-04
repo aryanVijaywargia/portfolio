@@ -12,7 +12,21 @@ declare let Email: any;
 export class CardTitleComponent implements OnInit {
 
   model:any;
+  submitted:boolean = false;
+  lastSubmit = {
+    email: false,
+    name: false,
+    message: false
+  };
+
+  focused:any = {
+    email: false,
+    username: false,
+    message: false
+  }
+
   
+
   constructor(
     // private formBuilder: FormBuilder,
     ) {}
@@ -32,28 +46,49 @@ export class CardTitleComponent implements OnInit {
     this.faceSmile.emit(value);
   }
 
+  onFocus(field: string): void {
+    this.focused[field] = true;
+  }
+  onBlur(field: string): void {
+    this.focused[field] = false;
+  }
   
 
   onSubmit(event:any){
     console.log(this.reactiveForm)
-    event.preventDefault();
+    this.lastSubmit.email = this.reactiveForm.controls['email'].invalid;
+    this.lastSubmit.name = this.reactiveForm.controls['name'].invalid;
+    this.lastSubmit.message = this.reactiveForm.controls['message'].invalid;
 
+    this.submitted=true;
+    if (this.reactiveForm.invalid) {
+      this.reactiveForm.markAllAsTouched();
+      // this.submitted=false;
+    } else {
+      // carry out your submission logic here  
+      event.preventDefault();
+      this.model = this.reactiveForm.value;
+      console.log(this.model.email)
+      Email.send({
+        Host : "smtp.elasticemail.com",
+        Username : "aryanvijaywargia@gmail.com",
+        Password : "3BC9D11B809EC7BD412162DE115D5A7CBAEC",  //3BC9D11B809EC7BD412162DE115D5A7CBAEC
+        To : "aryanvijaywargia@gmail.com",
+        From : "aryanvijaywargia@gmail.com",
+        Subject : "New Contact Form Enquiry",
+        Body : `
+        <i>This is sent as a feedback from my resume page.</i> <br/> <b>Name: </b>${this.model.name} <br /> <b>Email: </b>${this.model.email}<br /> <b>Message:</b> <br /> ${this.model.message} <br><br> <b>~End of Message.~</b> `
+        }).then( console.log("Message sent")  );
 
-    this.model = this.reactiveForm.value;
+        this.reactiveForm.reset();
 
-    console.log(this.model.email)
-
-    Email.send({
-      Host : "smtp.elasticemail.com",
-      Username : "aryanvijaywargia@gmail.com",
-      Password : "3BC9D11B809EC7BD412162DE115D5A7CBAEC",  //3BC9D11B809EC7BD412162DE115D5A7CBAEC
-      To : "aryanvijaywargia@gmail.com",
-      From : "aryanvijaywargia@gmail.com",
-      Subject : "New Contact Form Enquiry",
-      Body : `
-      <i>This is sent as a feedback from my resume page.</i> <br/> <b>Name: </b>${this.model.name} <br /> <b>Email: </b>${this.model.email}<br /> <b>Message:</b> <br /> ${this.model.message} <br><br> <b>~End of Message.~</b> `
-      }).then( console.log("Message sent")  );
-      
+        // Reset flags
+        this.submitted = false;
+        this.focused = {
+          email: false,
+          name: false,
+          message: false,
+        };
+    }
   }
-
 }

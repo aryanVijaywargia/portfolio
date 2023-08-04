@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+// import { TerminalService } from './terminal.service';
 
 @Component({
   selector: 'app-hero-terminal',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./hero-terminal.component.scss']
 })
 export class HeroTerminalComponent {
+  @ViewChild('terminal') terminalContainer!: ElementRef;
 
+  constructor() { }
+
+  ngAfterViewInit() {
+    console.log(this.terminalContainer);
+    // this.terminalService.initializeTerminal(this.terminalContainer.nativeElement);
+  }
 }

@@ -25,7 +25,7 @@
     padding: 10px;
     pointer-events: none;
     font-size: 1em;
-    color: rgba(0,0,0, 0.25);
+    color: rgba(0,0,0, 0.5);
     // text-transform: uppercase;
     transition: 0.5s;
 }
@@ -33,14 +33,14 @@
 .textBox textarea:valid ~ span,
 .textBox textarea:focus ~ span
 {
-    color: black;
+    color: #2196f3;
     transform: translateX(10px) translateY(-7px);
-    font-size: 0.65em;
-    padding: 0 10px;
+    font-size: 0.75em;
+    padding: 0 5px;
     background: $bg-color1;
     border-left: 1px solid black;
     border-right: 1px solid black;
-    letter-spacing: 0.2em;
+    // letter-spacing: 0.2em;
 }
 
 .inputBox{
@@ -57,7 +57,7 @@
     outline: none;
     box-shadow: none;
     font-size: 1em;
-    letter-spacing: 0.1em;
+    // letter-spacing: 0.1em;
 }
 
 .inputBox  span{
@@ -67,7 +67,7 @@
     color: rgba(0, 0, 0, 0.5);
     // text-transform: uppercase;
     pointer-events: none;
-    letter-spacing: 0.1em;
+    // letter-spacing: 0.1em;
     padding: 10px 0 5px;
     transition: 0.5s;
 }
@@ -79,7 +79,7 @@
     color: rgba(255, 255, 255, 0.5);
     // text-transform: uppercase;
     pointer-events: none;
-    letter-spacing: 0.1em;
+    // letter-spacing: 0.1em;
 }
 
 .inputBox input:valid ~ span,
@@ -89,6 +89,32 @@
     transform: translateY(-16px);
     font-size: 0.65em;
 }
+
+// .inputBox input:invalid ~ span.error,
+// .inputBox input:focus ~ span.error
+// {
+//     color: #2196f3;
+//     transform: translateY(-16px);
+//     font-size: 0.65em;
+// }
+
+
+.error.active {
+    color: #2196f3;
+    transform: translateY(-16px)!important;
+    font-size: 0.65em!important;
+  }
+
+.error.active-text{
+    color: #2196f3;
+    transform: translateX(10px) translateY(-7px)!important;
+    font-size: 0.75em!important;
+    padding: 0 5px!important;
+    background: $bg-color1!important;
+    border-left: 1px solid black!important;
+    border-right: 1px solid black!important;
+}
+
 
 .inputBox i{
     position: absolute;
@@ -127,6 +153,20 @@
         background-position-x: 250px;
     }
 }
+
+@keyframes shake {
+    0%, 100% {transform: translateX(0);}
+    10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);}
+    20%, 40%, 60%, 80% {transform: translateX(10px);}
+  }
+  
+    .error {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    color: red !important;
+  }
 
 
 

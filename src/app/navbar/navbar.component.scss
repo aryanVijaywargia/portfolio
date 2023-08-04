@@ -1,0 +1,286 @@
+// @import '../../shared/styles/variables';
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
+
+// :host {
+//   display: block;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   z-index: 10;
+// }
+
+// .hamburger-btn {
+//   cursor: pointer;
+// }
+
+// .navbar {
+//   &.bg-navbar {
+//     // background-color: $color-primary;
+//     background-color:black;
+//   }
+// }
+
+// .option-button {
+//   &:hover {
+//     // background-color: $color-primary-dark;
+//     background-color: gray;
+//   }
+// }
+
+// @media (min-width: 950px) {
+//   .hamburger-btn {
+//     display: none;
+//   }
+
+//   .navbar {
+//     background-color: transparent;
+//   }
+
+//   .option-button {
+//     &:hover {
+//       background-color: transparent;
+//     }
+//   }
+// }
+// :host {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   padding: 0 16px; /* Add padding as needed */
+//   background-color: #000000; /* Set background color as needed */
+//   height: 64px; /* Set height as needed */
+// }
+
+/* headbar.component.scss */
+@use '../../styles.scss' as *;
+
+.headbar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  // padding: 1rem;
+  color: gray; /* Initial color */
+  background-color: gray; /* Initial background color */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  // justify-content: space-between;
+  padding: 0 16px; /* Add padding as needed */
+  background-color: pink; /* Set background color as needed */
+  // height: 30px; /* Set height as needed */
+  z-index: 10000;
+  display: flex;
+
+  justify-content: center; // Center aligns the icons horizontally
+  align-items: center; // Center aligns the icons vertically
+  height: 50px; // Set the height of the navbar as desired
+  background-color: red; // Set the background color of the navbar as desired
+
+}
+
+.navbar__icon {
+  margin: 0 10px; // Add margin between the icons as desired
+  display: flex; // Add this to make the icons display in a row
+  align-items: center; 
+}
+
+.fixed {
+  position: fixed;
+  top: 0;
+  height: 5rem;
+  // color: black; /* Color when fixed */
+  // background-color: black; /* Background color when fixed */
+  // opacity: 1; /* Faded in when fixed */
+}
+
+ul {
+  /* List styles */
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  /* List item styles */
+  display: inline-block;
+  margin-right: 10px;
+}
+
+a {
+  /* Anchor link styles */
+  color: #000; /* Set your desired color */
+  text-decoration: none;
+}
+
+
+
+.logo {
+  /* Add styles for the logo on the left */
+  font-size: 24px; /* Set font size as needed */
+  font-weight: bold; /* Set font weight as needed */
+  color: #333; /* Set color as needed */
+}
+
+.headbar-icon {
+  /* Add styles for the icons on the right */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+
+.mat-icon {
+  /* Add styles for the Material Icons */
+  font-size: 24px; /* Set font size as needed */
+  color: white; /* Set color as needed */
+  margin-left: 16px; /* Add margin as needed between icons */
+  position: relative; /* Add relative positioning to create a stacking context */
+}
+
+.navbar__icon__text {
+  color: yellow;
+  opacity: 0;
+  
+  position: absolute; /* Add absolute positioning */
+  top: 0; /* Position the text at the top */
+  // left: -100%; /* Move the text completely to the left */
+}
+
+
+
+
+
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+html,body{
+  position: absolute;
+
+  color: gray; /* Initial color */
+  background-color: gray; /* Initial background color */
+  opacity: 0; /* Initially hidden */
+  display: grid;
+  height: 100%;
+  width: 100%;
+  // place-items: center;
+  background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  z-index: 10000;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 16px; /* Adjust padding as needed */
+}
+
+
+.left-content {
+  display: flex;
+  align-items: center;
+}
+
+.right-content {
+  display: flex;
+  align-items: center;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+.wrapper .button1{
+  display: inline-block;
+  height: 45px;
+  width: 45px;
+  float: left;
+  margin: 0 10px;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease-out;
+}
+.wrapper .button1:hover{
+  width: 150px;
+  // padding-bottom: 5px;
+}
+.wrapper .button1 .icon{
+  display: inline-block;
+  height: 45px;
+  width: 45px;
+  text-align: center;
+  border-radius: 50px;
+  box-sizing: border-box;
+  line-height: 60px;
+  transition: all 0.3s ease-out;
+}
+.wrapper .button1:nth-child(1):hover .icon{
+  background: #4267B2;
+}
+.wrapper .button1:nth-child(2):hover .icon{
+  background: #1DA1F2;
+}
+.wrapper .button1:nth-child(3):hover .icon{
+  background: #E1306C;
+}
+.wrapper .button1:nth-child(4):hover .icon{
+  background: #333;
+}
+.wrapper .button1:nth-child(5):hover .icon{
+  background: #ff0000;
+}
+.wrapper .button1 .icon i{
+  font-size: 25px;
+  // line-height: 30px;
+  transition: all 0.3s ease-out;
+}
+.wrapper .button1:hover .icon i{
+  color: #fff;
+}
+.wrapper .button1 span{
+  font-size: 15px;
+  font-weight: 200;
+  // line-height: 60px;
+  margin-left: 5px;
+  transition: all 0.3s ease-out;
+  // vertical-align:middle;
+  // background-color: #14cf1b;
+  // margin-bottom: px;
+}
+
+// span{
+//   margin-bottom: 10px!important;
+// }
+
+.wrapper .button1:nth-child(1) span{
+  color: #4267B2;
+  vertical-align: 5px;
+}
+.wrapper .button1:nth-child(2) span{
+  color: #1DA1F2;
+  vertical-align: 5px;
+}
+.wrapper .button1:nth-child(3) span{
+  color: #E1306C;
+  vertical-align: 5px;
+}
+.wrapper .button1:nth-child(4) span{
+  color: #333;
+  vertical-align: 5px;
+}
+.wrapper .button1:nth-child(5) span{
+  color: #ff0000;
+  vertical-align: 5px;
+}
+

@@ -189,24 +189,25 @@
 // }
 
 
-import {
-  faAward,
-  faBriefcase,
-  faCertificate,
-  faDownload,
-  faEnvelope,
-  faEye,
-  faGraduationCap,
-  faLightbulb,
-  faRocket,
-  faUser,
-  faHome,
-  faBell
-} from "@fortawesome/free-solid-svg-icons";
+// import {
+//   faAward,
+//   faBriefcase,
+//   faCertificate,
+//   faDownload,
+//   faEnvelope,
+//   faEye,
+//   faGraduationCap,
+//   faLightbulb,
+//   faRocket,
+//   faUser,
+//   faHome,
+//   faBell
+// } from "@fortawesome/free-solid-svg-icons";
 
 // import { FontAwesomeIcon } from "@fortawesome/angular-fontawesome";
 // import { HamburgerSpin } from "hamburger-css";
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
+import { HeroHeightService } from "../hero-height.service";
 // import { DarkModeSwitch } from "angular-toggle-dark-mode";
 // import OptionButton from "./navbar/OptionButton";
 // import { ElementRef, OnInit } from '@angular/core';
@@ -259,7 +260,6 @@ export class NavbarComponent implements OnInit {
 
   // constructor() {}
 
-  ngOnInit(): void {}
 
   // ngAfterViewInit(): void {
   //   this.checkVisibility(this.skillRef, 'isSkillsVisible');
@@ -352,7 +352,7 @@ export class NavbarComponent implements OnInit {
   // @ViewChild('iconText', { static: false }) iconText!: ElementRef;
   // @ViewChild('iconText2', { static: false }) iconText2!: ElementRef;
 
-  constructor(private renderer: Renderer2, private el: ElementRef) { }
+  constructor(private renderer: Renderer2, private el: ElementRef, private heroHeightService: HeroHeightService) { }
 
   ngAfterViewInit() {
     // Hide the text initially
@@ -393,23 +393,71 @@ export class NavbarComponent implements OnInit {
   // }
 
   isFixed = false; // Flag to determine if the headbar is fixed
-  opacity = 0.5; // Opacity of the headbar
+  opacity = 0.0; // Opacity of the headbar
   homeIcon = 'home';
   notificationsIcon = 'notifications';
   profileIcon = 'person';
-  @HostListener('window:scroll')
-  onWindowScroll() {
-    // Detect scroll position
-    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  @ViewChild('header', { static: true }) header!: ElementRef;
+  // @HostListener('window:scroll')
+  // onWindowScroll() {
+  //   // Detect scroll position
+  //   const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-    const yOffset = 50;
-    // Check if the headbar should be fixed
-    this.isFixed = scrollPosition + yOffset  >= window.innerHeight;
+  //   const yOffset = 0;
+  //   // Check if the headbar should be fixed
+  //   this.isFixed = scrollPosition + yOffset  >= window.innerHeight;
+  //   if(this.isFixed){
+  //     console.log(scrollPosition);
+  //     console.log(yOffset);
+  //     console.log(window.innerHeight)
+  //   }
 
-    // Calculate opacity based on scroll position
-    this.opacity = scrollPosition >= window.innerHeight ? 1 : (scrollPosition / window.innerHeight);
+  //   // Calculate opacity based on scroll position
+  //   this.opacity = scrollPosition >= window.innerHeight ? 1 : (scrollPosition / window.innerHeight);
+  // }
+  scrollThreshold:any;
+  // ngOnInit() {
+  //   this.heroHeightService.heroHeight$.subscribe((heroHeight) => {
+  //     // Calculate the scroll position at which the header should be fixed (bottom of the hero section)
+  //     // this.scrollThreshold = heroHeight;
+  //     // Rest of your initialization code...
+  //     // const headerTop = /
+  //     this.scrollThreshold = this.header.nativeElement.offsetTop;;
+
+  //   });
+  // }
+
+  ngOnInit() {
+    // Initialize the scrollThreshold initially
+    this.updateScrollThreshold();
+  
+    // Use ResizeObserver to dynamically update scrollThreshold
+    const resizeObserver = new ResizeObserver(() => {
+      this.updateScrollThreshold();
+    });
+  
+    resizeObserver.observe(this.header.nativeElement);
   }
+  
+  private updateScrollThreshold() {
+    this.scrollThreshold = this.header.nativeElement.offsetTop;
+    console.log("THe vlaue of this.sT " +  this.scrollThreshold);
+  }
+  
 
+  @HostListener('window:scroll')
+onWindowScroll() {
+  // Detect scroll position
+  const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+ 
+  this.isFixed = scrollPosition >= this.scrollThreshold;
+
+  this.opacity = Math.min(1, scrollPosition / this.scrollThreshold);
+}
+
+
+  
   @Output() iconClick: EventEmitter<string> = new EventEmitter<string>();
 
   // homeIcon = faHome;
@@ -419,6 +467,8 @@ export class NavbarComponent implements OnInit {
   onIconClick(icon: string) {
     this.iconClick.emit(icon);
   }
+
+
 
 }
 

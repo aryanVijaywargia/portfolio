@@ -26,7 +26,7 @@ body {
     "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   margin: 0;
   background-color: #202124;
-  color: #fafafa;
+  color: #2ca028;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -63,8 +63,23 @@ ul li::before {
 }
 
 $spacing: 20px;
-$purple: #fff;
+$purple: #19e8eb;
 $tab-height: 40px;
+$green: #64ffda;
+$transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
+
+.company h3{
+  color: $green;
+}
+
+a.inline-link {
+  display: inline-block;
+  text-decoration: none;
+  text-decoration-skip-ink: auto;
+  position: relative;
+  transition: $transition;
+  color: $green;
+}
 
 .container {
   position: relative;
