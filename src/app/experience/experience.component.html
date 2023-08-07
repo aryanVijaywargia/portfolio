@@ -3,7 +3,7 @@
         <div class="heading-pre">Experience</div>
         <h1 class="heading-2xl -ml-1">Where I’ve Worked</h1>
     </header>
-    <div class="container" style="background-color: white">
+    <div class="container" style="background-color: transparent">
         <div class="tabs" (click)="handleClick($event)">
             <a class="tab tab-1" href="#" data-tab="1" [ngClass]="{'active': activeTab === 1}">Tab 1</a>
             <a class="tab tab-2" href="#" data-tab="2" [ngClass]="{'active': activeTab === 2}">Tab 2</a>
@@ -14,30 +14,27 @@
 
 
 
-        <!-- --fz-xxs: 12px;
-        --fz-xs: 13px;
-        --fz-sm: 14px;
-        --fz-md: 16px;
-        --fz-lg: 18px;
-        --fz-xl: 20px;
-        --fz-xxl: 22px; -->
-
         <div class="content">
 
-            <h3 style="margin-bottom: 2px; font-size: 22px; font-weight:500; line-height:1.3;">
+            <h3
+                style="margin-bottom: 2px; font-size: 22px; font-weight:500; line-height:1.3; color:rgb(var(--color-gray-300) / var(--tw-text-opacity))">
                 <span>Lead Engineer</span>
-                <span class="company">&nbsp;@&nbsp;
+                <span class="inline-link company">&nbsp;@&nbsp;
                     <a href="https://www.upstatement.com/" class="inline-link" rel="noopener noreferrer"
                         target="_blank">Upstatement</a>
                 </span>
             </h3>
 
-            <p style="margin-bottom: 25px;
+            <!-- <p 
+            style="margin-bottom: 25px;
             color: var(--light-slate);
             font-family: var(--font-mono);
-            font-size: 13px;"> May-2018 to Present</p>
+            font-size: 13px;"
+            >  -->
+            <p style="margin-bottom: 25px; color: rgb(var(--color-gray-400) / var(--tw-text-opacity))">
+                May-2018 to Present</p>
             <div class="content__section" data-tab="1" [ngClass]="{'visible': activeTab === 1}">
-                <ul>
+                <ul class="leading-relaxed text-gray-500 d:text-gray-100/70 [&>p+p]:mt-4">
                     <li>Lorem ipsum dolor amet umami kogi you probably haven't heard of them activated charcoal hexagon
                         literally.</li>
 
@@ -86,3 +83,34 @@
             </div>
         </div>
     </div>
+
+    <!-- 
+<section class="section jobs" id='jobs'>
+    <div class="container">
+        <div class="section-box">
+            <div class="about-title mb-5" data-aos="fade-up" data-aos-duration="1000">
+                <h3 class="e-font section-title">
+                    <span class='code-font n-section-title'>02.</span> {{"Experience.Title"}}
+                </h3>
+            </div>
+            <div class="jobs-tabs" data-aos="fade-up" data-aos-duration="1000">
+                <ul ngbNav #nav="ngbNav" [(activeId)]="active" orientation="vertical" class="nav-tabs jobs-tabs">
+                    <li *ngFor='let job of "Experience.Jobs"; let i = index' [title]="job.Tab" [ngbNavItem]="i">
+                        <a ngbNavLink>{{job.Tab}}</a>
+                        <ng-template ngbNavContent>
+                            <h4 class='title-tab-content'>{{job.Title}} | <span
+                                    class="company-tab-content">{{job.Tab}}</span></h4>
+                            <h5 class="job-time">{{job.Date}}</h5>
+                            {{job.Description | json}}
+                            <p *ngFor='let jobDescriptionParagraph of job.Description; let i = index'
+                                class="job-description" [innerHTML]="jobDescriptionParagraph "></p>
+                            <span></span>
+                        </ng-template>
+                    </li>
+                </ul>
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
+            </div>
+
+        </div>
+    </div>
+</section> -->

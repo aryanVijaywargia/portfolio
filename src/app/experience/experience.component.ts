@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Tab } from './tab.interface';
+// import { Tab } from './tab.interface';
+import { EXPERIENCE } from './experience';
 
 @Component({
   selector: 'app-experience',
@@ -23,7 +24,11 @@ export class ExperienceComponent implements OnInit {
       this.activeTab = tabNum;
     }
   }
+  // active = 0
+  // Experience:any = EXPERIENCE;
   
+  
+
 
 
 }
