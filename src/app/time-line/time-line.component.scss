@@ -1,12 +1,18 @@
-// @import '../../styles.scss'        ;
+// @use '../../styles.scss' as *;
 
-
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
 .center-icon {
     display: block;
     margin: 0 auto;
   }
 
 
-.dark .iconColor{
-    color: white;
-}
+//   .iconColor{
+//     color: white;
+// }
+
+.iconColor-lg {
+    @apply dark:[color:white];
+  }

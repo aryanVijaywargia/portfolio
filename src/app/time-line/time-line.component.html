@@ -20,18 +20,22 @@
                             (click)="setSelected(getCombinedValue(entry.year, index))">
                             <span class="sr-only">{{ entry.year }} -
                                 {{ event.heading }}</span>
-                            <div class="h-8 w-0.5 bg-gray-500 transition-all selected:h-[80px] selected:bg-sky-500"
+                            <!-- <div class="h-8 w-0.5 bg-gray-500 transition-all selected:h-[80px] selected:bg-sky-500"
                                 style="display: flex;
                             flex-direction: column-reverse;
-                            align-items: center;">
-                                <fa-icon [icon]="faCoffee" class="iconColor"
-                                    [style.vertical-align]="selected === getCombinedValue(entry.year, index) ? '-80px' : '-20px'">
+                            align-items: center;"> -->
+                            <div class="h-8 w-0.5 bg-gray-500 transition-all selected:h-[80px] selected:bg-sky-500">
+                                <fa-icon [icon]="faCoffee" class="iconColor-lg"
+                                    style="display: flex; justify-content: center; align-items: center;"
+                                    [style.margin-top]=" selected===getCombinedValue(entry.year, index) ? '80px'
+                                    : '20px'">
                                 </fa-icon>
 
                             </div>
                         </button>
-                        <div
-                            class="absolute top-0 left-px h-2.5 w-[119px] bg-[image:linear-gradient(90deg,transparent_0px,transparent_9px,var(--line-color)_10px,var(--line-color)_10px)] bg-[length:10px_10px] [--line-color:theme(colors.gray.500)]">
+                        <div class=" absolute top-0 left-px h-2.5 w-[119px]
+                                    bg-[image:linear-gradient(90deg,transparent_0px,transparent_9px,var(--line-color)_10px,var(--line-color)_10px)]
+                                    bg-[length:10px_10px] [--line-color:theme(colors.gray.500)]">
                         </div>
                         <main
                             class="pointer-events-none relative mt-32 w-[17rem] opacity-0 transition-opacity  selected:pointer-events-auto selected:opacity-100 -translate-x-1/2 text-center"
