@@ -57,6 +57,23 @@
 /* headbar.component.scss */
 @use '../../styles.scss' as *;
 
+.github-icon {
+  color: white; /* Customize the color */
+  font-size: 24px; /* Customize the size */
+}
+
+.sr-only{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 .headbar {
   position: absolute;
   bottom: 0;
@@ -175,6 +192,10 @@ html,body{
   z-index: 10000;
 }
 
+.dark-bg{
+  background-color: (var(--color-gray-900)/.4)
+}
+
 .header-content {
   display: flex;
   align-items: center;
@@ -205,7 +226,7 @@ html,body{
   float: left;
   margin: 0 10px;
   overflow: hidden;
-  background: #fff;
+  background: transparent;
   border-radius: 50px;
   cursor: pointer;
   box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
@@ -224,7 +245,13 @@ html,body{
   box-sizing: border-box;
   line-height: 60px;
   transition: all 0.3s ease-out;
+  // color:white;
 }
+
+.icon {
+  @apply dark:[color:white];
+}
+
 .wrapper .button1:nth-child(1):hover .icon{
   background: #4267B2;
 }

@@ -211,6 +211,7 @@ import { HeroHeightService } from "../hero-height.service";
 // import { DarkModeSwitch } from "angular-toggle-dark-mode";
 // import OptionButton from "./navbar/OptionButton";
 // import { ElementRef, OnInit } from '@angular/core';
+import { faStackOverflow, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: "app-navbar",
@@ -218,6 +219,7 @@ import { HeroHeightService } from "../hero-height.service";
   styleUrls: ["navbar.component.scss"],
 })
 export class NavbarComponent implements OnInit {
+  faGithub = faGithub;
   // @Input() opacity!: number;
   // @Input() heroRef!: ElementRef;
   // @Input() skillRef!: ElementRef;
@@ -428,21 +430,52 @@ export class NavbarComponent implements OnInit {
   // }
 
   ngOnInit() {
-    // Initialize the scrollThreshold initially
-    this.updateScrollThreshold();
+    // this.updateScrollThreshold();
   
-    // Use ResizeObserver to dynamically update scrollThreshold
-    const resizeObserver = new ResizeObserver(() => {
-      this.updateScrollThreshold();
+    // const resizeObserver = new ResizeObserver(() => {
+    //   this.updateScrollThreshold();
+    // });
+  
+    // resizeObserver.observe(this.header.nativeElement);
+
+    const headerInitPromise = new Promise<void>((resolve) => {
+      if (this.header.nativeElement.offsetHeight > 0) {
+        // Header element is already fully initialized
+        resolve();
+      } else {
+        // Header element is not fully initialized, wait for it to be rendered
+        const observer = new MutationObserver(() => {
+          if (this.header.nativeElement.offsetHeight > 0) {
+            observer.disconnect();
+            resolve();
+          }
+        });
+        observer.observe(this.header.nativeElement, { attributes: true });
+      }
     });
   
-    resizeObserver.observe(this.header.nativeElement);
-  }
+    // Wait for the header element to be fully initialized before setting up the ResizeObserver
+    headerInitPromise.then(() => {
+      this.updateScrollThreshold();
   
+      // Use ResizeObserver to dynamically update scrollThreshold
+      const resizeObserver = new ResizeObserver(() => {
+        this.updateScrollThreshold();
+      });
+  
+      resizeObserver.observe(this.header.nativeElement);
+    });
+  }
+
   private updateScrollThreshold() {
     this.scrollThreshold = this.header.nativeElement.offsetTop;
-    console.log("THe vlaue of this.sT " +  this.scrollThreshold);
   }
+  
+  
+  // private updateScrollThreshold() {
+  //   this.scrollThreshold = this.header.nativeElement.offsetTop;
+  //   console.log("THe vlaue of this.sT " +  this.scrollThreshold);
+  // }
   
 
   @HostListener('window:scroll')

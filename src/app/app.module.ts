@@ -5,8 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {MatIconModule} from '@angular/material/icon';
-import {MatTabsModule} from '@angular/material/tabs';
+// import {MatIconModule} from '@angular/material/icon';
+// import {MatTabsModule} from '@angular/material/tabs';
 import { TerminalComponent } from './terminal/terminal.component';
 import { SearchComponent } from './search/search.component';
 import { CardTitleComponent } from './card-title/card-title.component';
@@ -34,10 +34,17 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DemoTerminalComponent } from './demo-terminal/demo-terminal.component';
 import { TerminalNewComponent } from './terminal-new/terminal-new.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { DemoCardComponent } from './demo-card/demo-card.component';
+import { DarkmodeIconComponent } from './darkmode-icon/darkmode-icon.component';
+import { ImageSliderComponent } from './image-slider/image-slider.component';
 // import { PrismModule } from '@ngx-prism/core';
 // import { PrismModule } from '@ngx-prism/core';
 
+// import { NgbModule, NgbNav, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+// import { library } from '@fortawesome/fontawesome-svg-core';
+// import { fab } from '@fortawesome/free-brands-svg-icons';
 
+// library.add(fab);
 
 
 
@@ -67,18 +74,23 @@ import { NavbarComponent } from './navbar/navbar.component';
     HeroTerminalComponent,
     TimelineComponent,
     DemoTerminalComponent,
-    TerminalNewComponent
+    TerminalNewComponent,
+    DemoCardComponent,
+    DarkmodeIconComponent,
+    ImageSliderComponent
     // CodeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    // NgbNavModule,
     CommonModule,
     BrowserAnimationsModule,
-    MatIconModule,
+    // MatIconModule,
+    
     ReactiveFormsModule,
-    MatTabsModule,
+    // MatTabsModule,
     ClarityModule,
     FontAwesomeModule,
     // PrismModule
