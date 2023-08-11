@@ -1,166 +1,375 @@
-body {
-    /* Removes the default margin preset by the browser */
-    margin: 0;
-    min-height: 10vh;
-    /* Used to vertically center <main> when <main>'s margin is set to auto */
-    display: flex;
-    background-color: #b4c1cb;
-    /* Image for texture and lightening effect on background */
-    background-image: linear-gradient(135deg, rgba(255, 255, 255, .5) 30%, rgba(0, 0, 0, .1)),
-      url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAYAAACZ3F9/AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAEnSURBVChTPZJJcoQwDEXlqfv+d8s2m9wCsEX+kxGmXIA1/EEuP79/t5aNMYx37mLFWqu23I3VWrO1ltXazJ13rVHEoqiUwqFVFd2uRtr8zzkjx8yVZ1ZJdnVlUxQhfdPdFft8P3EOIntO0NScRAKJRBHNQIHqvC47zzMagkpexFvrL8UsejhtvfpJXZzzDTFR3eKTInR679F5PZpLQbs0h3kwElVQ0hgC2cCXW1XxjkNvS9rSQJaWLATpdVbIjkFhfYtiULPx62qKT7PmvJRbRXsEwh4Djbb7u0WIxsVtOai8IcM3zl7a/sw08jMZKkmDZObIzGLGCgzJ6JoANscNSsS1ZiRlUc42kDHpuY4uV6Ffj+N4rxPJqSHoypQbV0UxDNRDE0byD7qr9Go2pueNAAAAAElFTkSuQmCC');
-  }
+// body {
+//     /* Removes the default margin preset by the browser */
+//     margin: 0;
+//     min-height: 10vh;
+//     /* Used to vertically center <main> when <main>'s margin is set to auto */
+//     display: flex;
+//     background-color: #b4c1cb;
+//     /* Image for texture and lightening effect on background */
+//     background-image: linear-gradient(135deg, rgba(255, 255, 255, .5) 30%, rgba(0, 0, 0, .1)),
+//       url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAYAAACZ3F9/AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAEnSURBVChTPZJJcoQwDEXlqfv+d8s2m9wCsEX+kxGmXIA1/EEuP79/t5aNMYx37mLFWqu23I3VWrO1ltXazJ13rVHEoqiUwqFVFd2uRtr8zzkjx8yVZ1ZJdnVlUxQhfdPdFft8P3EOIntO0NScRAKJRBHNQIHqvC47zzMagkpexFvrL8UsejhtvfpJXZzzDTFR3eKTInR679F5PZpLQbs0h3kwElVQ0hgC2cCXW1XxjkNvS9rSQJaWLATpdVbIjkFhfYtiULPx62qKT7PmvJRbRXsEwh4Djbb7u0WIxsVtOai8IcM3zl7a/sw08jMZKkmDZObIzGLGCgzJ6JoANscNSsS1ZiRlUc42kDHpuY4uV6Ffj+N4rxPJqSHoypQbV0UxDNRDE0byD7qr9Go2pueNAAAAAElFTkSuQmCC');
+//   }
   
-  main {
-    margin: auto;
-  }
+//   main {
+//     margin: auto;
+//   }
   
-  input[type="range"] {
-    /* To remove default styles appplied by webkit browsers */
-    -webkit-appearance: none;
-    width: 15em;
-    background: transparent;
-    position: relative;
-    transition: 0.3s;
-  }
+//   input[type="range"] {
+//     /* To remove default styles appplied by webkit browsers */
+//     -webkit-appearance: none;
+//     width: 15em;
+//     background: transparent;
+//     position: relative;
+//     transition: 0.3s;
+//   }
   
-  input[type="range"]:focus {
-    /* To remove default (mostly blue) outline appplied by browsers on :focus */
-    outline: 0;
-  }
+//   input[type="range"]:focus {
+//     /* To remove default (mostly blue) outline appplied by browsers on :focus */
+//     outline: 0;
+//   }
 
-  /* SLIDER THUMB -> represented by the orange ball in the design */
-  /* Webkit based browsers (chrome, opera, ...) */
-  input[type="range"]::-webkit-slider-thumb {
-    /* Removes the default styling */
-    -webkit-appearance: none;
-    width: 3em;
-    height: 3em;
-    margin: .5em 0;
-    background: hsl(27, 98%, 50%);
-    border-radius: 100%;
-    /* The inset shadow gives depth and makes the thumb look 3 dimensional and the other one shows a subtle effect of the shadow it creates because of the light source coming from the top left of the page */
-    box-shadow: inset .8em .8em 5px -8px rgba(255, 255, 255, .4),
-      inset -.4em -.4em 10px -3px rgba(0, 0, 0, .2),
-      0.7em 0.5em 7px -0.5em rgba(0, 0, 0, .4);;
-    cursor: pointer;
-    transition: 0.3s;
-  }
+//   /* SLIDER THUMB -> represented by the orange ball in the design */
+//   /* Webkit based browsers (chrome, opera, ...) */
+//   input[type="range"]::-webkit-slider-thumb {
+//     /* Removes the default styling */
+//     -webkit-appearance: none;
+//     width: 3em;
+//     height: 3em;
+//     margin: .5em 0;
+//     background: hsl(27, 98%, 50%);
+//     border-radius: 100%;
+//     /* The inset shadow gives depth and makes the thumb look 3 dimensional and the other one shows a subtle effect of the shadow it creates because of the light source coming from the top left of the page */
+//     box-shadow: inset .8em .8em 5px -8px rgba(255, 255, 255, .4),
+//       inset -.4em -.4em 10px -3px rgba(0, 0, 0, .2),
+//       0.7em 0.5em 7px -0.5em rgba(0, 0, 0, .4);;
+//     cursor: pointer;
+//     transition: 0.3s;
+//   }
   
-  /* All the same stuff for firefox */
-  input[type=range]::-moz-range-thumb {
-    width: 3em;
-    height: 3em;
-    margin: .5em 0;
-    background: #fd8421;
-    border-radius: 100%;
-    box-shadow: inset .8em .8em 5px -8px rgba(255, 255, 255, .4),
-      inset -.4em -.4em 10px -3px rgba(0, 0, 0, .2),
-      0.7em 0.5em 7px -0.5em rgba(0, 0, 0, .4);
-    cursor: pointer;
-    border: 0;
-  }
+//   /* All the same stuff for firefox */
+//   input[type=range]::-moz-range-thumb {
+//     width: 3em;
+//     height: 3em;
+//     margin: .5em 0;
+//     background: #fd8421;
+//     border-radius: 100%;
+//     box-shadow: inset .8em .8em 5px -8px rgba(255, 255, 255, .4),
+//       inset -.4em -.4em 10px -3px rgba(0, 0, 0, .2),
+//       0.7em 0.5em 7px -0.5em rgba(0, 0, 0, .4);
+//     cursor: pointer;
+//     border: 0;
+//   }
 
-  input[type="range"]::-webkit-slider-runnable-track::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: hsl(27, 98%, 50%);
-    border-radius: 2em;
-    opacity: 0;
-    animation: trackTransition 0.3s forwards;
-  }  
+//   input[type="range"]::-webkit-slider-runnable-track::before {
+//     content: "";
+//     position: absolute;
+//     width: 100%;
+//     height: 100%;
+//     background-color: hsl(27, 98%, 50%);
+//     border-radius: 2em;
+//     opacity: 0;
+//     animation: trackTransition 0.3s forwards;
+//   }  
   
-  @keyframes trackTransition {
-    from {
-      opacity: 1;
-      transform: scaleX(0);
-    }
-    to {
-      opacity: 1;
-      transform: scaleX(1);
-    }
-  }
+//   @keyframes trackTransition {
+//     from {
+//       opacity: 1;
+//       transform: scaleX(0);
+//     }
+//     to {
+//       opacity: 1;
+//       transform: scaleX(1);
+//     }
+//   }
   
   
-  /* RUNNABLE TRACK -> represented by the indented carve in which the ball (thumb) moves */
-  /* Webkit browsers */
-  input[type="range"]::-webkit-slider-runnable-track {
-    background: transparent;
-    width: 100%;
-    height: 4em;
-    padding: 0 1em;
-    border-radius: 2em;
-    /* These shadow are what create the skeumorphic indent on the track. The first one is dark to show places in the indent that light don't reach and the second one shows places where light meets thereby creating the illusion of depth */
-    box-shadow: inset .6em 1em 10px rgba(0, 0, 0, .15),
-      inset -.6em -1em 10px rgba(255, 255, 255, .415);
-      transition: 0.3s;
-  }
+//   /* RUNNABLE TRACK -> represented by the indented carve in which the ball (thumb) moves */
+//   /* Webkit browsers */
+//   input[type="range"]::-webkit-slider-runnable-track {
+//     background: transparent;
+//     width: 100%;
+//     height: 4em;
+//     padding: 0 1em;
+//     border-radius: 2em;
+//     /* These shadow are what create the skeumorphic indent on the track. The first one is dark to show places in the indent that light don't reach and the second one shows places where light meets thereby creating the illusion of depth */
+//     box-shadow: inset .6em 1em 10px rgba(0, 0, 0, .15),
+//       inset -.6em -1em 10px rgba(255, 255, 255, .415);
+//       transition: 0.3s;
+//   }
   
-  /* For firefox */
-  input[type=range]::-moz-range-track {
-    background: transparent;
-    width: 100%;
-    height: 4em;
-    padding: 0 1em;
-    border-radius: 2em;
-    box-shadow: inset .6em 1em 10px rgba(0, 0, 0, .15),
-      inset -.6em -1em 10px rgba(255, 255, 255, .415);
-  }
+//   /* For firefox */
+//   input[type=range]::-moz-range-track {
+//     background: transparent;
+//     width: 100%;
+//     height: 4em;
+//     padding: 0 1em;
+//     border-radius: 2em;
+//     box-shadow: inset .6em 1em 10px rgba(0, 0, 0, .15),
+//       inset -.6em -1em 10px rgba(255, 255, 255, .415);
+//   }
   
-  /* For the numbering in the range's design - doesn't show on firefox but shows on chrome and opera */
-  // input[type="range"]::before {
-  //   content: "S M L";
-  //   position: absolute;
-  //   text-align: space-between;
-  //   display: flex;
-  //   justify-content: space-between;
-  //   align-items: center;
-  //   color: #c4c4c4;
-  //   font-size: 1em;
-  //   /* Serves to spread the letters to fit the whole width of the track */
-  //   letter-spacing: .65em;
-  //   top: 0;
-  //   bottom: 0;
-  //   left: 0;
-  //   right: 0;
-  //   padding: 1.6em;
-  //   /* Makes the letters look embossed adding to the skeumorphic theme of the design */
-  //   text-shadow: .5px .5px 0.9px rgba(0, 0, 0, .4);
-  //   z-index: -1;
-  // }
+//   /* For the numbering in the range's design - doesn't show on firefox but shows on chrome and opera */
+//   // input[type="range"]::before {
+//   //   content: "S M L";
+//   //   position: absolute;
+//   //   text-align: space-between;
+//   //   display: flex;
+//   //   justify-content: space-between;
+//   //   align-items: center;
+//   //   color: #c4c4c4;
+//   //   font-size: 1em;
+//   //   /* Serves to spread the letters to fit the whole width of the track */
+//   //   letter-spacing: .65em;
+//   //   top: 0;
+//   //   bottom: 0;
+//   //   left: 0;
+//   //   right: 0;
+//   //   padding: 1.6em;
+//   //   /* Makes the letters look embossed adding to the skeumorphic theme of the design */
+//   //   text-shadow: .5px .5px 0.9px rgba(0, 0, 0, .4);
+//   //   z-index: -1;
+//   // }
 
-  // input[type="range"]::before {
-  //   content: "S M L";
-  //   position: absolute;
-  //   text-align: center;
-  //   color: #c4c4c4;
-  //   font-size: 1em;
-  //   width: 100%;
-  //   top: 50%;
-  //   transform: translateY(-50%);
-  //   left: 0;
-  //   padding: 1.6em;
-  // }
+//   // input[type="range"]::before {
+//   //   content: "S M L";
+//   //   position: absolute;
+//   //   text-align: center;
+//   //   color: #c4c4c4;
+//   //   font-size: 1em;
+//   //   width: 100%;
+//   //   top: 50%;
+//   //   transform: translateY(-50%);
+//   //   left: 0;
+//   //   padding: 1.6em;
+//   // }
   
-  input[type="range"]::before {
-    content: "S M L";
-    position: absolute;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #c4c4c4;
-    font-size: 1em;
-    /* Serves to spread the letters to fit the whole width of the track */
-    letter-spacing: .65em;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.6em;
-    /* Makes the letters look embossed, adding to the skeumorphic theme of the design */
-    text-shadow: .5px .5px 0.9px rgba(0, 0, 0, .4);
-    z-index: -1;
+//   input[type="range"]::before {
+//     content: "S M L";
+//     position: absolute;
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     color: #c4c4c4;
+//     font-size: 1em;
+//     /* Serves to spread the letters to fit the whole width of the track */
+//     letter-spacing: .65em;
+//     top: 0;
+//     bottom: 0;
+//     left: 0;
+//     right: 0;
+//     padding: 1.6em;
+//     /* Makes the letters look embossed, adding to the skeumorphic theme of the design */
+//     text-shadow: .5px .5px 0.9px rgba(0, 0, 0, .4);
+//     z-index: -1;
+//   }
+  
+  
+
+html, body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  color: #000;
+  user-select: none;
+}
+
+form {
+  width: 50%; /* Set the form width to 50% of the available width */
+  max-width: 500px;
+  
+  #form-title {
+      font-weight: 400;
+      text-align: center;
   }
   
-  
+  #debt-amount-slider {
+      display: flex;
+      flex-direction: row;
+      align-content: stretch;
+      position: relative;
+      width: 100%;
+      height: 50px;
+      user-select: none;
+      
+      &:before {
+          content: " ";
+          position: absolute;
+          height: 2px;
+          width: 100%;
+          top: 50%;
+          transform: translateY(-50%);
+          background: #000;
+      }
+      
+      input, label {
+          box-sizing: border-box;
+          flex: 1;
+          user-select: none;
+          cursor: pointer;
+      }
+      
+      /* Adjust label width to distribute options evenly */
+      label {
+          position: absolute;
+          width: calc(75% / 3); /* Divide the width equally among 3 options */
+          
+          @for $i from 1 through 3 {
+              &:nth-child(#{$i * 2}) {
+                  left: calc(25% * (#{$i - 1}));
+              }
+          }
+          
+          &:before {
+              content: attr(data-debt-amount);
+              position: absolute;
+              left: 50%;
+              padding-top: 10px;
+              transform: translate(-50%, 45px);
+              font-size: 14px;
+              letter-spacing: 0.4px;
+              font-weight: 400;
+              white-space: nowrap;
+              opacity: 0.85;
+              transition: all 0.15s ease-in-out;
+          }
+    &:after {
+				content: " ";
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				width: 30px;
+				height: 30px;
+				border: 2px solid #000;
+				background: #fff;
+				border-radius: 50%;
+				pointer-events: none;
+				user-select: none;
+				z-index: 1;
+				cursor: pointer;
+				transition: all 0.15s ease-in-out;
+			}
+			&:hover:after {
+				transform: translate(-50%, -50%) scale(1.25);
+			}
+		}
+		input {
+			opacity: 0;
+			pointer-events: none;
+			&:checked {
+				+ label:before {
+					font-weight: 800;
+					opacity: 1;
+				}
+				+ label:after {
+					border-width: 4px;
+					transform: translate(-50%, -50%) scale(0.75);
+				}
+				~ #debt-amount-pos {
+					opacity: 1;
+				}
+				@for $i from 1 through 3 {
+					&:nth-child(#{$i * 2 - 1}) ~ #debt-amount-pos {
+						// left: #{($i * 20%) - 10%};
+            left: calc(25% * (#{$i - 1}));
+					}
+				}
+			}
+		}
+		#debt-amount-pos {
+			display: block;
+			position: absolute;
+			top: 50%;
+			width: 12px;
+			height: 12px;
+			background: #000;
+			border-radius: 50%;
+			transition: all 0.15s ease-in-out;
+			transform: translate(-50%, -50%);
+			border: 2px solid #fff;
+			opacity: 0;
+			z-index: 2;
+		}
+	}
+	button {
+		display: block;
+		position: relative;
+		margin: 56px auto 0;
+		padding: 10px 20px;
+		appearance: none;
+		transition: all 0.15s ease-in-out;
+		font-family: inherit;
+		font-size: 24px;
+		font-weight: 600;
+		background: #fff;
+		border: 2px solid #000;
+		border-radius: 8px;
+		outline: 0;
+		user-select: none;
+		cursor: pointer;
+		&:hover {
+			// transform: scale(1.1);
+			background: #000;
+			color: #fff;
+			&:active {
+				transform: scale(0.9);
+			}
+		}
+		&:focus {
+			background: #4caf50;
+			border-color: #4caf50;
+			color: #fff;
+			pointer-events: none;
+			&:before {
+				animation: spin 1s linear infinite;
+			}
+		}
+		&:before {
+			display: inline-block;
+			width: 0;
+			opacity: 0;
+			content: "\f3f4";
+			font-family: "Font Awesome 5 Pro";
+			font-weight: 900;
+			margin-right: 0;
+			transform: rotate(0deg);
+		}
+	}
+	&:valid {
+		#debt-amount-slider {
+			input {
+				+ label:before {
+					transform: translate(-50%, 45px) scale(0.9);
+					transition: all 0.15s linear;
+				}
+				&:checked + label:before {
+					transform: translate(-50%, 45px) scale(1.1);
+					transition: all 0.15s linear;
+				}
+			}
+		}
+	}
+	&:invalid {
+		button {
+			pointer-events: none;
+			opacity: 0.25;
+		}
+	}
+}
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+		width: 24px;
+		opacity: 1;
+		margin-right: 12px;
+	}
+	to {
+		transform: rotate(360deg);
+		width: 24px;
+		opacity: 1;
+		margin-right: 12px;
+	}
+}
