@@ -1,9 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { PhoneComponent } from '../phone/phone.component';
+import { fadeOutLeftAnimation, fadeOutLeftOnLeaveAnimation, rotateOutUpLeftAnimation, rotateOutUpLeftOnLeaveAnimation } from 'angular-animations';
 
 @Component({
   selector: 'app-image',
   templateUrl: './image.component.html',
+  animations:[
+    // rotateOutUpLeftAnimation(),
+    // rotateOutUpLeftOnLeaveAnimation()
+    fadeOutLeftOnLeaveAnimation(),
+    fadeOutLeftAnimation()
+  ]
 })
 export class ImageComponent {
   @Input() pixelDensity = 1;
@@ -50,4 +57,11 @@ export class ImageComponent {
     }
     return 'initial';
   }
+
+  showImage:boolean=true;
+
+  toggleImage() {
+    this.showImage = !this.showImage;
+  }
+
 }

@@ -1,11 +1,12 @@
-<section id="portfolio" class="portfolio-preview mb-24 spacing-4">
-  <header class="mx-auto grid w-full max-w-6xl px-4 md:px-8">
+<section id="project-section" class="portfolio-preview mb-24 spacing-4">
+  <header class="mx-auto grid w-full max-w-6xl px-4 md:px-8" data-aos="fade-up">
     <div class="heading-pre">{{PORTFOLIO.pre}}</div>
     <h1 class="heading-2xl -ml-1">{{PORTFOLIO.heading}}</h1>
   </header>
   <app-scroll-gallery [itemWidth]="342" [gapWidth]="32">
     <ng-container *ngFor="let project of projects; let index = index">
-      <section [ngClass]="getSectionClasses(project, index)" class="card">
+      <section #projectRef [ngClass]="getSectionClasses(project, index)" class="card" data-aos="fade-up"
+        [style.transform]="index % 2 === 0 ? 'rotate(1.5deg)!important' : 'rotate(-1.5deg)!important'">
         <figure class="relative flex aspect-2 w-full">
           <img *ngIf="project" [src]="project.featuredImage" [alt]="project.name" width="400" height="200"
             class="rounded-t-lg object-cover object-center [mask-image:linear-gradient(180deg,#fff_16.35%,rgb(255_255_255_/_0%)_91.66%)]" />
@@ -26,7 +27,36 @@
         <main class="mt-2 text-[15px] tracking-tight text-gray-600 d:text-gray-200">
           <p class="line-clamp-4">{{ project.description }}</p>
         </main>
+
+        <footer class="absolute bottom-3 left-0 mt-auto flex w-full items-end justify-end gap-2 px-4">
+          <div class="mr-auto text-sm font-semibold text-gray-700/80 d:text-gray-300/80">
+            {{ project.year }}
+          </div>
+          <ng-container *ngIf="project.repository">
+            <a target="_blank" [href]="project.repository"
+              class="p-1 text-gray-700/80 transition-all hfa:text-gray-900 d:text-gray-300/80 d:hfa:text-gray-50"
+              title="View repository">
+              <span class="sr-only">Link to Github repository</span>
+              <!-- You'll need to have the icon path or use Angular material/icon or some other way for the icon -->
+              <img src="path_to_github_icon" alt="Github Icon" class="h-5 w-5" />
+            </a>
+          </ng-container>
+
+          <ng-container *ngIf="project.url">
+            <a target="_blank" [href]="project.url"
+              class="p-1 text-gray-700/80 transition-all hfa:text-gray-900 d:text-gray-300/80 d:hfa:text-gray-50"
+              title="View site">
+              <span class="sr-only">Link to Project</span>
+              <!-- You'll need to have the icon path or use Angular material/icon or some other way for the icon -->
+              <img src="path_to_project_icon" alt="Project Icon" class="h-5 w-5" />
+            </a>
+          </ng-container>
+        </footer>
+
       </section>
     </ng-container>
   </app-scroll-gallery>
+
+
+
 </section>

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { TIMELINEOBJECT, TimelineEvent } from './time-line';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,7 +10,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 export class TimelineComponent implements OnInit {
   @ViewChild('scrollContainerRef', { static: true }) scrollContainerRef!: ElementRef<HTMLDivElement>;
-
+  @Output() lastBarHighlighted = new EventEmitter<void>();
   public selected: string = ''; 
   initiated = false;
   autoAnimate = true;
@@ -43,6 +43,10 @@ export class TimelineComponent implements OnInit {
     })
   );
 
+  ngAfterViewInit(){
+    this.scrollToSection();
+  }
+
   // public getCombinedValue(entry:any, index: number): string {
   //   console.log( `${entry.year}-${index}`);
   //   return `${entry.year}-${index}`;
@@ -51,6 +55,36 @@ export class TimelineComponent implements OnInit {
   public getCombinedValue(year: string, index: number): string {
     return `${year}-${index}`;
   }
+
+
+  highlightVerticalBar(year: string, index: number) {
+    const container = this.scrollContainerRef.nativeElement;
+    const targetPosition = container.scrollLeft + container.clientWidth / 2 - 60; // Adjust the offset as needed
+    const barElement = container.querySelector(`[data-bar="${year}-${index}"]`);
+  
+    if (barElement) {
+      const barPosition = barElement.getBoundingClientRect().left + container.scrollLeft;
+      const duration = 1000; // Duration of the scrolling animation in milliseconds
+  
+      this.scrollToX(duration, barPosition - targetPosition, container, () => {
+        // Highlight the bar
+        this.setSelected(`${year}-${index}`);
+        if (this.isLastBar(year, index)) {
+          // setTimeout(() => {
+            this.lastBarHighlighted.emit();
+          // }, 2000); // Add a delay before restarting the sequence
+        }
+  
+      });
+    }
+  }
+
+  isLastBar(year: string, index: number): boolean {
+    const lastEntry = this.timelineEntries[this.timelineEntries.length - 1];
+    return year === lastEntry.year && index === lastEntry.events.length - 1;
+  }
+  
+  
 
 
 

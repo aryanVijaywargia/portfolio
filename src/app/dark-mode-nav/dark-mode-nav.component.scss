@@ -1,0 +1,118 @@
+
+// *{
+//     border: 1px solid red;
+// }
+// :root{
+//     --day:#dab570;
+//     --night: #181010;
+// }
+
+$day: #ffc727;
+$night: white;
+
+#main{
+    height: 45px;
+    width: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    // top: 150px;
+    // left: 40%;
+    // border: 2px solid rgb(75, 75, 75);
+    // border-radius: 50%;
+    // background-color: rgba( 15, 23, 42, 1);
+}
+
+// #sq1.active #main:hover{
+//     border: 2px solid rgb(50,50,50);
+//     background-color: rgb(125,125,125);
+// }
+
+.container{
+    height: 25px;
+    width: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#sq1{
+    height:25px;
+    width: 25px;
+    position: absolute;
+    background-color: $day;
+}
+
+#sq2{
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    background-color: $day;
+    transform: rotateZ(45deg);
+}
+
+#cbig{
+    height: 17.5px;
+    width: 17.5px;
+    position: absolute;
+    background-color: $night;
+    border-radius: 50%;
+}
+
+#csmall{
+    height: 12.5px;
+    width: 12.5px;
+    position: absolute;
+    background-color: $day;
+    border-radius: 50%;
+}
+
+#sq1.active{
+    transform: rotateZ(-0.25turn);
+    transition: 2s;
+    background-color: $day;
+}
+
+#sq2.active{
+    transform: rotateZ(-0.125turn);
+    transition: 2s;
+    background-color: $day;
+}
+
+#cbig:active{
+    background-color: $night;
+}
+#csmall.active{
+    transform: translate(0px, 0px);
+    transition: 2s;
+    background-color: $day;
+    height: 12.5px;
+    width: 12.5px;
+}
+
+#sq1.active2{
+    transform: rotateZ(0.5turn);
+    transition: 2s;
+    background-color: $night;
+}
+
+#sq2.active2{
+    transform: rotateZ(0.62turn);
+    transition: 2s;
+    background-color: $night;
+}
+
+#cbig.active2{
+    background-color: $day;
+}
+#csmall.active2{
+    height: 15px;
+    width: 15px;
+    transform: translate(3.75px, -1.25px);
+    transition: 2s;
+    background-color: $night;
+}

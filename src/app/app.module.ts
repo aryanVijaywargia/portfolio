@@ -28,7 +28,7 @@ import { HeroComponent } from './hero/hero.component';
 import { HeroSectionComponent } from './hero-section/hero-section.component';
 import { RangeSliderComponent } from './range-slider/range-slider.component';
 import { HeroTerminalComponent } from './hero-terminal/hero-terminal.component';
-import { CodeComponent } from './code/code.component';
+// import { CodeComponent } from './code/code.component';
 import { TimelineComponent } from './time-line/time-line.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DemoTerminalComponent } from './demo-terminal/demo-terminal.component';
@@ -41,10 +41,18 @@ import { ImageSliderComponent } from './image-slider/image-slider.component';
 // import { PrismModule } from '@ngx-prism/core';
 
 // import { NgbModule, NgbNav, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-// import { library } from '@fortawesome/fontawesome-svg-core';
-// import { fab } from '@fortawesome/free-brands-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FooterComponent } from './footer/footer.component';
+import { DarkModeNavComponent } from './dark-mode-nav/dark-mode-nav.component';
+import { FormButtonComponent } from './form-button/form-button.component';
+import { NbChatModule, NbIconModule, NbLayoutModule, NbSidebarModule, NbThemeModule } from '@nebular/theme';
+import { ChatbotUiComponent } from './chatbot-ui/chatbot-ui.component';
+import { ChatbotSidenavComponent } from './chatbot-sidenav/chatbot-sidenav.component';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 
-// library.add(fab);
+library.add(fab);
 
 
 
@@ -77,23 +85,32 @@ import { ImageSliderComponent } from './image-slider/image-slider.component';
     TerminalNewComponent,
     DemoCardComponent,
     DarkmodeIconComponent,
-    ImageSliderComponent
+    ImageSliderComponent,
+    FooterComponent,
+    DarkModeNavComponent,
+    FormButtonComponent,
+    ChatbotUiComponent,
+    ChatbotSidenavComponent
     // CodeComponent
   ],
+  
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    // NgbNavModule,
     CommonModule,
     BrowserAnimationsModule,
-    // MatIconModule,
-    
+    NgbModule,
     ReactiveFormsModule,
-    // MatTabsModule,
     ClarityModule,
     FontAwesomeModule,
-    // PrismModule
+    NbChatModule,
+    NbThemeModule.forRoot(),
+    NbLayoutModule,
+    NbSidebarModule.forRoot(),
+    NbEvaIconsModule,
+    NbIconModule
+    // MatSidenavModule
   ],
   exports:[CommonModule],
   providers: [],

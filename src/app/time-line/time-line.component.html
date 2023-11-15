@@ -1,8 +1,8 @@
 <!-- <div *ngFor="let entry of timelineEntries ; let yearIndex = index;">
     <h1>{{ extractYearAndEvents(entry).year}}</h1> -->
 
-<section class="mx-auto  max-w-6xl px-4 pb-16 md:px-8">
-    <div class="-mx-4 flex h-96 overflow-x-auto py-4 px-6 xl:mx-0" (inView)="onInViewChanged($event)"
+<section class="mx-auto  max-w-6xl px-4  md:px-8">
+    <div class="-mx-4 flex h-96 overflow-x-hidden py-4 px-6 xl:mx-0" (inView)="onInViewChanged($event)"
         #scrollContainerRef>
         <div *ngFor="let entry of timelineEntries ; let yearIndex = index;">
             <div class="relative">
@@ -35,7 +35,8 @@
                         </button>
                         <div class=" absolute top-0 left-px h-2.5 w-[119px]
                                     bg-[image:linear-gradient(90deg,transparent_0px,transparent_9px,var(--line-color)_10px,var(--line-color)_10px)]
-                                    bg-[length:10px_10px] [--line-color:theme(colors.gray.500)]">
+                                    bg-[length:10px_10px] [--line-color:theme(colors.gray.500)]"
+                            [attr.data-bar]="getCombinedValue(entry.year, index)">
                         </div>
                         <main
                             class="pointer-events-none relative mt-32 w-[17rem] opacity-0 transition-opacity  selected:pointer-events-auto selected:opacity-100 -translate-x-1/2 text-center"

@@ -20,22 +20,22 @@
    -->
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <title>toggle btn</title> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- <link rel="stylesheet" href="style.css"> -->
-    <!-- <script src="app.js"></script> -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <title>toggle btn</title> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- <link rel="stylesheet" href="style.css"> -->
+  <!-- <script src="app.js"></script> -->
 </head>
 
 <div id="shape"></div>
 
 <div id="toggle"
-    style="width: 90px;border-radius: 20px; margin-left: 90%; position: absolute; margin-top: 2%; background:rgba( 15, 23, 42, 1)"
-    (click)="myFunction()">
-    <span id="toggle-btn" [ngClass]="{'span-dark': isDarkMode}">
-        <i id="change-icon1" class="fas" [ngClass]="{'fa-cloud-moon': !isDarkMode, 'moon-icon': isDarkMode}"></i>
-        <i id="change-icon2" class="fas" [ngClass]="{'fa-cloud-sun': isDarkMode, 'sun-icon': isDarkMode}"></i>
-    </span>
+  style="width: 90px;border-radius: 20px; margin-left: 90%; position: absolute; margin-top: 2%; background:rgba( 15, 23, 42, 1); cursor:pointer"
+  (click)="myFunction()">
+  <span id="toggle-btn" [ngClass]="{'span-dark': isLightMode}">
+    <i id="change-icon1" class="fas" [ngClass]="{'fa-cloud-moon': !isLightMode, 'moon-icon': isLightMode}"></i>
+    <i id="change-icon2" class="fas" [ngClass]="{'fa-cloud-sun': isLightMode, 'sun-icon': isLightMode}"></i>
+  </span>
 </div>

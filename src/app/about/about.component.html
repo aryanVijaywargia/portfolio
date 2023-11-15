@@ -1,16 +1,16 @@
-<section id="portfolio" class="portfolio-preview min-h-full spacing-4" #heroSection>
-  <header class="mx-auto grid w-full max-w-6xl px-4 md:px-8">
+<section id="about-section" class="portfolio-preview min-h-full spacing-4 scroll-smooth" #heroSection>
+  <header class="mx-auto grid w-full max-w-6xl px-4 md:px-8" data-aos="fade-up">
     <div class="heading-pre">About Me</div>
-    <h1 class="heading-2xl -ml-1">Random stuff about me</h1>
+    <h1 class="heading-2xl -ml-1">Know more</h1>
   </header>
 
   <section id="about" class="-mt-12 overflow-hidden pt-12">
-    <div style="max-width: 85rem;"
-      class="mx-auto flex flex-col justify-center gap-16 px-4 pb-16 md:px-8 lg:grid lg:grid-cols-[540px_auto] lg:pt-16">
-      <button #buttonRef
+    <div
+      class="mx-auto flex flex-col justify-center gap-16 max-w-6xl px-4 pb-16 md:px-8 lg:grid lg:grid-cols-[540px_auto] lg:pt-16">
+      <button #buttonRef data-aos="fade-up"
         class="group relative mx-auto mb-12 aspect-3/2 max-h-[405px] w-full max-w-[540px] flex-1 hfa:outline-none lg:mb-auto  lg:mr-0 lg:aspect-4/3"
-        type="button" data-event="mouseover" [attr.data-tip]="image?.alt">
-        <!-- [attr.data-tip]="images[focusImageIndex]?.alt" -->
+        type="button" data-event="mouseover" [attr.data-tip]="image?.alt" style="transform: perspective(10px);">
+        <!-- [attr.data-tip]=" images[focusImageIndex]?.alt" -->
         <!-- <span class="sr-only">Cycle through Images</span> -->
 
 
@@ -39,9 +39,11 @@
                 {{ item.caption }}
             </figcaption>
             </figure> -->
-          <app-range-slider></app-range-slider>
+          <div style="display: block; text-align: -webkit-center;" data-aos="fade-up">
+            <app-range-slider></app-range-slider>
+          </div>
           <!-- </header> -->
-          <div style="display:flex; flex-direction: row;">
+          <div style="display:flex; flex-direction: row;" data-aos="fade-up">
             <div>
               <ng-container *ngIf="rangeIndex === 'Small'">
                 <main class="tracking tight max-w-3xl leading-relaxed text-gray-500 d:text-gray-100/70 [&>p+p]:mt-4"
@@ -67,7 +69,8 @@
 
       </section>
     </div>
-    <app-time-line></app-time-line>
-
+    <div data-aos="fade-up">
+      <app-time-line #timeLineRef></app-time-line>
+    </div>
   </section>
 </section>

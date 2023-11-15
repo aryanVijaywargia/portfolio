@@ -62,26 +62,44 @@ ul li::before {
   content: "▹";
   position: absolute;
   left: 0px;
-  color: green;
+  color: rgb(var(--color-accent) / var(--tw-text-opacity));;
 }
 
 $spacing: 20px;
-$purple: #19e8eb;
+$purple: rgb(var(--color-accent) / var(--tw-text-opacity));
 $tab-height: 40px;
 $green: #64ffda;
 $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
 
 .company h3{
-  color: $green;
+  color: $purple;
 }
 
-a.inline-link {
+.inline-link {
   display: inline-block;
   text-decoration: none;
   text-decoration-skip-ink: auto;
   position: relative;
   transition: $transition;
-  color: $green;
+  // color: $green;
+  --tw-gradient-stops: var(
+    --tw-gradient-from), #0ea5e9 var(--tw-gradient-via-position), var(--tw-gradient-to);
+    --tw-gradient-to: #3b82f6 var(
+      --tw-gradient-to-position);
+  background-color: linear-gradient(to right, var(--tw-gradient-stops));
+  color: rgb(var(--color-accent) / var(--tw-text-opacity));
+}
+
+.bg_blob{
+  background-image: url("https://tailwindcss.com/_next/static/media/8-dark@tinypng.7abc66a1.png");
+  // background-size: 127.875rem 100%;
+  // height: 35rem;
+  background-size: 136.75rem 100%;
+    height: 32.625rem;
+    z-index: 1;
+    position: absolute;
+    margin-top: 135%;
+  // margin-top: 100%;
 }
 
 .container {
@@ -107,14 +125,16 @@ a.inline-link {
       padding: 10px 0;
       transition: all 0.25s ease;
       border-left: 2px solid #5f6368;
-      color: #5f6368;
+      color: rgb(var(--color-gray-500)/1);
 
       &:hover {
-        color: $purple;
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 15, 23, 42, 1);
       }
 
       &.active {
-        color: $purple;
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 15, 23, 42, 1);
       }
 
       @for $i from 1 through 4 {

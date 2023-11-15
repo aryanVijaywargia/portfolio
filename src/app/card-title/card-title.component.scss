@@ -7,7 +7,7 @@
 }
 
 .textBox textarea{
-    width: 200%;
+    width: 100%;
     padding: 10px;
     border: 2px solid rgba(0,0,0, 0.5);
     background: transparent;
@@ -40,13 +40,14 @@
     background: $bg-color1;
     border-left: 1px solid black;
     border-right: 1px solid black;
+    outline: none
     // letter-spacing: 0.2em;
 }
 
 .inputBox{
    
     position: relative;
-    width: 250px;
+    width: 50%;
 }
 
 .inputBox input{

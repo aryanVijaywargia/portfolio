@@ -1,7 +1,7 @@
 // const lunatag =  "../../assets/alpha-backpack.jpg"
 const lunatag2 = "../../assets/quadbike.jpg"
 const lunatag = "../../assets/dont-be-a-dick.jpg"
-
+// const lunatag=""
 export const ABOUT = {
     stats: [
       {

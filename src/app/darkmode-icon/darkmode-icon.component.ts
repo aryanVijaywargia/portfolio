@@ -1,6 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
+import { ThemeService } from '../theme.service';
 // import { ThemeService } from 'your-theme-service'; // Replace with your theme service import
+import { Subscription } from 'rxjs';
 // import { AnimationOptions, motion } from 'framer-motion';
 
 @Component({
@@ -11,7 +13,23 @@ import { Component } from '@angular/core';
 
 })
 export class DarkmodeIconComponent {
-  isDarkMode: boolean = false;
+  isLightMode!: boolean;
+  subscription!: Subscription;
+  constructor(private themeService:ThemeService){}
+
+  ngOnInit(){
+    this.subscription = this.themeService.booleanValue$.subscribe(value => {
+      this.isLightMode = value;
+      const toggle = document.getElementById('toggle');
+      const toggleBtn = document.getElementById('toggle-btn');
+      const shape = document.getElementById('shape');
+      toggle?.classList.toggle('toggle-dark', this.isLightMode);
+    toggleBtn?.classList.toggle('span-dark', this.isLightMode);
+    shape?.classList.toggle('shape-style', this.isLightMode);
+      // this.myFunction();
+    });
+
+  }
 
   myFunction(): void {
     const body = document.querySelector('body');
@@ -21,15 +39,15 @@ export class DarkmodeIconComponent {
     const icon1 = document.getElementById('change-icon1');
     const icon2 = document.getElementById('change-icon2');
 
-    this.isDarkMode = !this.isDarkMode;
+    this.isLightMode = !this.isLightMode;
 
     // body?.classList.toggle('body-dark', this.isDarkMode);
-    toggle?.classList.toggle('toggle-dark', this.isDarkMode);
-    toggleBtn?.classList.toggle('span-dark', this.isDarkMode);
-    shape?.classList.toggle('shape-style', this.isDarkMode);
+    toggle?.classList.toggle('toggle-dark', this.isLightMode);
+    toggleBtn?.classList.toggle('span-dark', this.isLightMode);
+    shape?.classList.toggle('shape-style', this.isLightMode);
 
     if (icon1 && icon2) {
-      if (this.isDarkMode) {
+      if (this.isLightMode) {
         icon1.classList.add('moon-icon');
         icon2.classList.add('sun-icon');
       } else {
@@ -37,5 +55,6 @@ export class DarkmodeIconComponent {
         icon2.classList.remove('sun-icon');
       }
     }
+    this.themeService.setData(this.isLightMode);
   }
 }

@@ -1,6 +1,9 @@
-<section class="hero relative overflow-hidden pb-40">
+<section class="hero relative overflow-hidden pb-40" [@bannerTrigger]>
+    <app-darkmode-icon></app-darkmode-icon>
+
     <div class="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16 md:py-32 md:px-8 lg:grid"
         style="margin-left: 3rem;">
+
         <section class="col-span-2">
             <header>
                 <div class="heading-pre" [innerHTML]="heroPre"></div>
@@ -52,6 +55,7 @@
 
 
         <app-hero-terminal></app-hero-terminal>
+
         <div class="background pointer-events-none absolute inset-0 z-0 -z-30 select-none">
             <div style="filter: blur(40px);"
                 class="relative top-1/2 left-1/2  h-2/3 w-1/2 -translate-y-[30%] rounded-full bg-gradient-radial from-emerald-600/30 to-sky-600/5 blur-2xl">
@@ -61,6 +65,7 @@
     </div>
 
 
+    <!-- <app-chatbot-ui></app-chatbot-ui> -->
 
 
 

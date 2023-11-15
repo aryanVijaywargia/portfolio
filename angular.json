@@ -30,10 +30,18 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+             
+              "node_modules/@nebular/theme/styles/prebuilt/default.css",
+              "node_modules/@nebular/theme/styles/prebuilt/dark.css",
+              "node_modules/@nebular/theme/styles/prebuilt/cosmic.css",
+              "src/styles.scss",
+              "node_modules/aos/dist/aos.css"
             ],
             "scripts": [
-              "src/assets/smtp.js"
+              "src/assets/smtp.js",
+              "node_modules/aos/dist/aos.js",
+              "node_modules/smoothscroll-polyfill/dist/smoothscroll.js"
+              
             ]
           },
           "configurations": {
@@ -95,6 +103,7 @@
               "src/assets"
             ],
             "styles": [
+              
               "src/styles.scss"
             ],
             "scripts": ["src/assets/smtp.js"]

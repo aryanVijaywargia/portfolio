@@ -1,9 +1,9 @@
-<section id="portfolio" class="portfolio-preview mb-24 min-h-full spacing-4">
-    <header class="mx-auto grid w-full max-w-6xl px-4 md:px-8">
+<section id="portfolio" class="portfolio-preview mb-24 min-h-full spacing-4" style="min-height: 100%!important">
+    <header class="mx-auto grid w-full max-w-6xl px-4 md:px-8" data-aos="fade-up">
         <div class="heading-pre">Let's Connect</div>
-        <h1 class="heading-2xl -ml-1">Know More</h1>
+        <h1 class="heading-2xl -ml-1">Get in Touch</h1>
     </header>
-    <div class="content">
+    <div class="content" style="margin-bottom:500px!important" data-aos="fade-up">
         <div class="card">
             <div class="card__cap">
                 <h1 class="card__title">
@@ -15,7 +15,7 @@
                 shouldInherit='card'
             /> -->
             </div>
-            <div class="card__body">
+            <div class="card__body" style="z-index: 100; position:relative; margin:0 10px">
                 <div class="card__photo">
                     <!-- <Face
                     shouldSmile={shouldSmile}
@@ -24,15 +24,17 @@
 
 
                 </div>
-                <div class="card__info">
-                    <!-- <Card__wr1 />
+                <div>
+                    <div class="card__info">
+                        <!-- <Card__wr1 />
                 <Card__wr2
                     onMouseOver={() => setSmile(true)}
                     onMouseLeave={() => setSmile(false)}
                 /> -->
 
-                    <app-card-title (faceSmile)="changeFaceSmile($event)"></app-card-title>
+                        <app-card-title (faceSmile)="changeFaceSmile($event)"></app-card-title>
 
+                    </div>
                 </div>
             </div>
         </div>

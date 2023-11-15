@@ -1,9 +1,8 @@
-<img
-      [src]="calcSrc()"
-      [width]="calculateWidth()"
-      [height]="calculateHeight()"
-      [style.objectFit]="objectFitStyle"
+<img [src]="calcSrc()" [width]="calculateWidth()" [height]="calculateHeight()" [style.objectFit]="objectFitStyle"
       [style.maxWidth]="maxWidth ? maxWidth + 'px' : undefined"
-      [style.maxHeight]="maxHeight ? maxHeight + 'px' : undefined"
-      [style.aspectRatio]="aspectRatio"
->
+      [style.maxHeight]="maxHeight ? maxHeight + 'px' : undefined" [style.aspectRatio]="aspectRatio" *ngIf="showImage"
+      [@fadeOutLeft] [@fadeOutLeftOnLeave] (click)="toggleImage()">
+<!-- [@rotateOutUpLeft] [@rotateOutUpLeftOnLeave]  -->
+
+
+<!-- <img > -->

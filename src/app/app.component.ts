@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { ThemeService } from './theme.service';
+import { Subscription } from 'rxjs';
+import * as AOS from 'aos';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +10,34 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  // constructor (){};
+
+  ngOnInit(){
+    AOS.init()
+    // this.router.events.subscribe((event) => {
+    document.body.classList.remove('nb-theme-dark'); 
+  // });
+  }
+
+//   ngOnInit(): void {
+    
+// }
+
+  receivedTheme: any;
+  private subscription: Subscription;
+
+  constructor(private themeService: ThemeService, private router: Router) {
+    this.subscription = this.themeService.sharedData$.subscribe(data => {
+      this.receivedTheme = data;
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+
   title = 'portfolio';
+
 }

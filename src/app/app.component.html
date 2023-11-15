@@ -5,7 +5,7 @@
       <app-terminal></app-terminal>
   </div> -->
 
-// CRAZY STUFF https://github.com/mlc-ai/web-llm
+<!-- CRAZY STUFF https://github.com/mlc-ai/web-llm -->
 
 <!-- <app-terminal></app-terminal> -->
 
@@ -14,14 +14,26 @@
 
 <!-- <div
   class="color-gray--slate bg-white [--line-color:theme(colors.gray.200/0.8)] bg-gray-900 bg-gradient-to-b from-black to-black"> -->
-<div class="dark" style="color-scheme:dark">
-
+<div [ngClass]='{"dark":!receivedTheme}' style="color-scheme:dark">
+  <!-- <div> -->
   <!-- <app-image-slider></app-image-slider> -->
 
   <div
     class="color-gray--slate bg-white [--line-color:theme(colors.gray.200/0.8)] d:bg-gray-900 d:bg-gradient-to-b d:from-black/40 d:to-black/40">
     <app-hero-section>
     </app-hero-section>
+
+    <!-- <nb-layout>
+      <nb-layout-column>
+        <main>
+          <router-outlet> -->
+    <!-- <app-chatbot-ui></app-chatbot-ui> -->
+    <!-- </router-outlet>
+        </main>
+      </nb-layout-column>
+    </nb-layout> -->
+
+    <app-chatbot-sidenav> </app-chatbot-sidenav>
 
     <!-- <app-terminal></app-terminal> -->
     <app-navbar></app-navbar>
@@ -40,12 +52,10 @@
     <app-project></app-project>
 
     <app-demo-card></app-demo-card>
+
+    <!-- <app-form-button></app-form-button> -->
+
+
+    <app-footer></app-footer>
   </div>
 </div>
-
-
-
-<!-- </div> -->
-
-
-<!-- </div> -->

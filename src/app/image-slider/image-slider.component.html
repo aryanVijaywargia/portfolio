@@ -1,0 +1,21 @@
+<!-- <div class="image-slider-container">
+    <div class="image-slide" *ngFor="let image of images; let i = index; let isFirst = first"
+        [ngClass]="{ 'active': i === currentIndex }" *ngIf="currentIndex === i ? 'in' : 'out'" [@rotateOutUpLeft] [@rotateOutUpLeftOnLeave]
+        (click)="onImageClick(i)">
+
+        <img src="{{ image }}" alt="Image {{ i }}">
+    </div>
+</div> -->
+
+<!-- <img *ngIf="showImage" [@rotateOutUpLeft] [@rotateOutUpLeftOnLeave] src="../../assets/dont-be-a-dick.jpg"
+    (click)="toggleImage()"> -->
+
+
+<div class="image-slider">
+    <ng-container *ngFor="let image of images; let i = index">
+        <img *ngIf="currentImageIndex === i" [@fadeOutLeft] [@fadeOutLeftOnLeave] [src]="image.src"
+            [style.opacity]="showImage && currentImageIndex === i ? 1 : 0.3"
+            [style.transform]="showImage && currentImageIndex === i ? 'rotate(0deg)' : 'rotate(' + (i * 5) + 'deg)'"
+            (click)="onImageClick()" />
+    </ng-container>
+</div>

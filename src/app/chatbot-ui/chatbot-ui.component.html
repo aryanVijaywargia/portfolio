@@ -1,0 +1,18 @@
+<!-- <nb-layout>
+
+    <nb-layout-column> -->
+<div style="height: 100%;" #nbChat>
+    <!-- <div class="close-button" (click)="closeSidebar()">X</div> -->
+
+    <nb-chat *ngFor="let chat of chats" [title]="chat.title" [status]="chat.status">
+
+        <nb-chat-message *ngFor="let msg of chat.messages" [type]="msg.type" [message]="msg.text" [reply]="msg.reply"
+            [sender]="msg.user.name" [date]="msg.date" [files]="msg.files" [avatar]="msg.user.avatar">
+        </nb-chat-message>
+        <nb-chat-form (send)="sendMessage(chat.messages, $event)"></nb-chat-form>
+    </nb-chat>
+</div>
+
+
+<!-- </nb-layout-column>
+</nb-layout> -->

@@ -1,0 +1,17 @@
+<footer class="print:hidden">
+    <div class="mx-auto max-w-6xl py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+        <div class="flex justify-center space-x-6 md:order-2">
+            <a *ngFor="let account of socialAccounts" [href]="account.href"
+                class="p-1 text-gray-400 hover:text-gray-500 d:text-gray-600 d:hover:text-gray-500">
+                <span class="sr-only">{{ account.name }}</span>
+                <!-- NOTE: You'll need to replace the below icon with your angular icons or image -->
+                <img [src]="account.iconPath" alt="{{ account.name }}" class="{{account.iconPath}}" class="h-5 w-5" aria-hidden="true" />
+            </a>
+        </div>
+        <div class="mt-8 md:order-1 md:mt-0">
+            <small class="block text-center text-sm text-gray-400 d:text-gray-600">
+                &copy; {{ currentYear }} Felix Tellmann, All rights reserved.
+            </small>
+        </div>
+    </div>
+</footer>

@@ -1,9 +1,18 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild, ViewChildren } from "@angular/core";
 import { HeroHeightService } from "../hero-height.service";
 // import { DarkModeSwitch } from "angular-toggle-dark-mode";
 // import OptionButton from "./navbar/OptionButton";
 // import { ElementRef, OnInit } from '@angular/core';
 import { faStackOverflow, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
+import { Router } from "@angular/router";
+import { ViewportScroller } from "@angular/common";
+// import smoothscroll from 'smoothscroll-polyfill';
+// import smoothscroll from 'smoothscroll-polyfill';
+import * as smoothscroll from "smoothscroll-polyfill";
+
+// kick off the polyfill!
+
+// kick off the polyfill!
 
 @Component({
   selector: "app-navbar",
@@ -12,6 +21,105 @@ import { faStackOverflow, faGithub, faMedium } from '@fortawesome/free-brands-sv
 })
 export class NavbarComponent implements OnInit {
   faGithub = faGithub;
+
+  // constructor() {}
+
+  constructor(private renderer: Renderer2, private header: ElementRef, private router: Router, private viewportScroller: ViewportScroller) {smoothscroll.polyfill();}
+  @ViewChildren('buttonView', { read: ElementRef }) buttonView!: ElementRef[];
+
+  // constructor() {}
+
+  // @HostListener('window:load', ['$event'])
+  // @HostListener('window:scroll', ['$event'])
+  // onScroll(event: Event): void {
+  //   this.updateActiveIcons();
+  // }
+
+  ngAfterViewInit(): void {
+    this.updateActiveIcons(); // Call initially after view initialization
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: Event): void {
+    this.updateActiveIcons();
+  }
+
+
+  private updateActiveIcons(): void {
+    const iconElements = document.querySelectorAll('.button1');
+
+    // const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+    // this.buttonView.forEach((buttonView: ElementRef) => {
+    //   const iconTop = buttonView.nativeElement.getBoundingClientRect().top + window.scrollY;
+
+    //   if (scrollPosition >= iconTop) {
+    //     this.renderer.addClass(buttonView.nativeElement, 'button1:hover');
+    //   } else {
+    //     this.renderer.removeClass(buttonView.nativeElement, 'button1:hover');
+    //   }
+    // });
+    const scrollPosition = window.scrollY + window.innerHeight / 2; // Midpoint of visible area
+
+  iconElements.forEach((icon) => {
+    const iconTop = icon.getBoundingClientRect().top + window.scrollY;
+
+    if (scrollPosition >= iconTop) {
+      icon.classList.add('button1:hover');
+    } else {
+      icon.classList.remove('button1:hover');
+    }
+  });
+  }
+
+
+// Function to add or remove the 'active' class based on scroll position
+// function updateActiveIcons() {
+  
+// }
+
+// Update active icons on page load and scroll
+// window.addEventListener('load', updateActiveIcons);
+// window.addEventListener('scroll', updateActiveIcons);
+
+
+
+  scrollToElement() {
+    const element = document.getElementById('targetElement');
+    if (element) {
+      this.viewportScroller.scrollToAnchor('targetElement');
+    }
+
+  }
+
+  // responsiveMenuVisible!: boolean;
+  // smoothscroll.polyfill();
+  // smoothscroll.polyfill();
+
+  // @ViewChild('targetElement') targetElement!: ElementRef;
+
+  // scrollToElement() {
+  //   const element = this.targetElement.nativeElement;
+  //   console.log("THis is the stuff ", element);
+  //   element.scrollIntoView({ behavior: 'smooth' });
+  // }
+
+
+  scroll(el: any) {
+    
+    if(document.querySelector(el)) {
+      console.log("THIS iS THE VALUE 1 " + el);
+      // setTimeout(() => {
+        window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+
+      document.querySelector(el).scrollIntoView({behavior: 'smooth'});
+      console.log("THIS iS THE VALUE 2 " + el);
+      // }, 100)
+    } else{
+      this.router.navigate(['/home']).then(()=> document!.getElementById(el)!.scrollIntoView({behavior: 'smooth'}) );
+    }
+    // this.responsiveMenuVisible=false;
+  }
   
   // executeScroll(ref: ElementRef): void {
   //   const isMobile = document.documentElement.clientWidth < 480;
@@ -139,7 +247,6 @@ export class NavbarComponent implements OnInit {
   isFixed: boolean = false;
   opacity: number = 0;
 
-  constructor(private header: ElementRef) {}
 
   ngOnInit() {
     this.initializeHeader();
