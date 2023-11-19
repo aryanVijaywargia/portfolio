@@ -1,21 +1,40 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { ThemeService } from '../theme.service';
 // import { ThemeService } from 'your-theme-service'; // Replace with your theme service import
 import { Subscription } from 'rxjs';
+import { ChatbotToggleService } from '../chatbot-toggle.service';
 // import { AnimationOptions, motion } from 'framer-motion';
 
 @Component({
   selector: 'app-darkmode-icon',
   templateUrl: './darkmode-icon.component.html',
   styleUrls: ['./darkmode-icon.component.scss'],
-  
+  // encapsulation: ViewEncapsulation.None,
+
 
 })
 export class DarkmodeIconComponent {
   isLightMode!: boolean;
   subscription!: Subscription;
-  constructor(private themeService:ThemeService){}
+  chatToggle: boolean=false;
+  // constructor(){
+
+  // }
+
+  constructor(private themeService:ThemeService ,private chatbotToggleService: ChatbotToggleService) {
+    this.subscription = this.chatbotToggleService.command$.subscribe((command) => {
+      this.chatToggle = command
+    });
+
+  }
+
+  toggleChat() {
+    this.chatToggle = !this.chatToggle;
+    this.chatbotToggleService.sendCommand(this.chatToggle);
+    // console.log(this.chatToggle)
+  }
+
 
   ngOnInit(){
     this.subscription = this.themeService.booleanValue$.subscribe(value => {
@@ -24,12 +43,17 @@ export class DarkmodeIconComponent {
       const toggleBtn = document.getElementById('toggle-btn');
       const shape = document.getElementById('shape');
       toggle?.classList.toggle('toggle-dark', this.isLightMode);
-    toggleBtn?.classList.toggle('span-dark', this.isLightMode);
-    shape?.classList.toggle('shape-style', this.isLightMode);
-      // this.myFunction();
+      toggleBtn?.classList.toggle('span-dark', this.isLightMode);
+      shape?.classList.toggle('shape-style', this.isLightMode);
     });
 
+    
+
   }
+
+  // toggleChat():void{
+
+  // }
 
   myFunction(): void {
     const body = document.querySelector('body');

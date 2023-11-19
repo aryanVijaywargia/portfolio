@@ -33,6 +33,7 @@
     "angular-vertical-tabs": "github:SamuelMarks/angular-vertical-material-tabs",
     "aos": "^3.0.0-beta.6",
     "bootstrap": "^5.2.3",
+    "devicon": "^2.15.1",
     "eva-icons": "^1.1.3",
     "mini-svg-data-uri": "^1.4.4",
     "party-js": "^2.2.0",

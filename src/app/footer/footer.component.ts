@@ -11,23 +11,29 @@ export class FooterComponent {
   socialAccounts = [
     {
       name: "GitHub",
-      href: "https://github.com/FelixTellmann",
-      iconPath: "path_to_github_icon" // Replace with the path to your icon or SVG
-    },
-    {
-      name: "Twitter",
-      href: "https://twitter.com/FelixTellmann",
-      iconPath: "path_to_twitter_icon" 
-    },
-    {
-      name: "Facebook",
-      href: "https://www.facebook.com/felix.tellmann/",
-      iconPath: "path_to_facebook_icon" 
+      // href: "https://github.com/FelixTellmann",
+      // iconPath: "path_to_github_icon" // Replace with the path to your icon or SVG
     },
     {
       name: "LinkedIn",
-      href: "https://www.linkedin.com/in/felixtellmann",
-      iconPath: "path_to_linkedin_icon" 
+      // href: "https://www.linkedin.com/in/felixtellmann",
+      // iconPath: "path_to_linkedin_icon" 
+    },
+    {
+      name: "Twitter",
+      // href: "https://twitter.com/FelixTellmann",
+      // iconPath: "path_to_twitter_icon" 
+    },
+    {
+      name: "Mail",
+      // href: "https://twitter.com/FelixTellmann",
+      // iconPath: "path_to_twitter_icon" 
     }
+    // {
+    //   name: "Facebook",
+    //   href: "https://www.facebook.com/felix.tellmann/",
+    //   iconPath: "path_to_facebook_icon" 
+    // },
+    
   ];
 }

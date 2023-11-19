@@ -9,6 +9,9 @@ import { ViewportScroller } from "@angular/common";
 // import smoothscroll from 'smoothscroll-polyfill';
 // import smoothscroll from 'smoothscroll-polyfill';
 import * as smoothscroll from "smoothscroll-polyfill";
+import { ThemeService } from "../theme.service";
+import { Subscription } from 'rxjs';
+import { ChatbotToggleService } from "../chatbot-toggle.service";
 
 // kick off the polyfill!
 
@@ -21,10 +24,31 @@ import * as smoothscroll from "smoothscroll-polyfill";
 })
 export class NavbarComponent implements OnInit {
   faGithub = faGithub;
-
+  private subscription: Subscription
+  receivedTheme!: boolean;
+  chatToggle: boolean = false;
   // constructor() {}
 
-  constructor(private renderer: Renderer2, private header: ElementRef, private router: Router, private viewportScroller: ViewportScroller) {smoothscroll.polyfill();}
+  constructor(private chatbotToggleService: ChatbotToggleService, private themeService: ThemeService, private renderer: Renderer2, private header: ElementRef, private router: Router, private viewportScroller: ViewportScroller) {
+    smoothscroll.polyfill();
+    this.subscription = this.themeService.sharedData$.subscribe(data => {
+      this.receivedTheme = data;
+    });
+
+    this.subscription = this.chatbotToggleService.command$.subscribe((command) => {
+      this.chatToggle = command
+    });
+
+  }
+
+  toggleChat() {
+    this.chatToggle = !this.chatToggle;
+    this.chatbotToggleService.sendCommand(this.chatToggle);
+    console.log(this.chatToggle)
+  }
+
+
+  
   @ViewChildren('buttonView', { read: ElementRef }) buttonView!: ElementRef[];
 
   // constructor() {}

@@ -1,7 +1,7 @@
 <section class="hero relative overflow-hidden pb-40" [@bannerTrigger]>
     <app-darkmode-icon></app-darkmode-icon>
 
-    <div class="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16 md:py-32 md:px-8 lg:grid"
+    <div class="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16  md:px-8 lg:grid"
         style="margin-left: 3rem;">
 
         <section class="col-span-2">
@@ -12,11 +12,43 @@
                     class="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium">
                     <li *ngFor="let techItem of tech"
                         class="flex items-center gap-2 text-gray-500-custom d:text-gray-400">
+                        <div *ngIf="techItem.name=='Typescript'" class="icon">
+                            <i style="font-size: 30px;" class="devicon-typescript-plain"></i>
+                        </div>
+
+                        <div *ngIf="techItem.name=='Angular'" class="icon">
+                            <i style="font-size: 30px;" class="fab fa-brands fa-angular"></i>
+                        </div>
+
+                        <div *ngIf="techItem.name=='Dotnet'" class="icon">
+                            <i style="font-size: 30px;" class="devicon-dotnetcore-plain"></i>
+                        </div>
+
+                        <div *ngIf="techItem.name=='Tensorflow'" class="icon">
+                            <i style="font-size: 30px;" class="devicon-tensorflow-original"></i>
+                        </div>
+
+                        <div *ngIf="techItem.name=='Python'" class="icon">
+                            <i style="font-size: 30px;" class="fab fa-brands fa-python"></i>
+                        </div>
+
+
+                        <!-- </div> -->
+
+                        <!-- <div *ngIf="techItem.name==techItem.Icon" class="icon">
+                            <i style="font-size: 40px;" class="fab fa-brands fa-angular"></i>
+                        </div>
+
+                        <div *ngIf="techItem.name==techItem.Icon" class="icon">
+                            <i style="font-size: 40px;" class="fab fa-brands fa-angular"></i>
+                        </div> -->
+
+                        <!-- <div [innerHTML]="iconService.getIcon(techItem.Icon)"
+                                class="h-7 w-7 text-gray-400 d:text-gray-300/80"></div> -->
+                        <!-- </ng-container> -->
                         {{ techItem.name }}
-                        <ng-container *ngIf="iconService.getIcon(techItem.Icon)">
-                            <div [innerHTML]="iconService.getIcon(techItem.Icon)"
-                                class="h-7 w-7 text-gray-400 d:text-gray-300/80"></div>
-                        </ng-container>
+
+
                     </li>
                 </ul>
             </header>
@@ -44,7 +76,7 @@
                 <ng-container *ngIf="heroCtai">
                     <a [routerLink]="heroCtai"
                         class="button-border inline-flex whitespace-nowrap bg-white/90 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-500 transition-all hfa:border-gray-900/70 hfa:bg-white/90 hfa:text-gray-900 d:border-gray-700/80 d:bg-transparent d:text-gray-300 d:hfa:border-gray-200/30 d:hfa:bg-gray-900/80 d:hfa:text-gray-50 md:px-12">
-                        Lets Work
+                        Resume
                     </a>
                 </ng-container>
             </footer>

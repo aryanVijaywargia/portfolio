@@ -165,7 +165,28 @@ a {
   // left: -100%; /* Move the text completely to the left */
 }
 
+.icon-robot {
+  width:30px;
+  height:30px;
+  margin-right: 5%;
+  margin-left: 5%;
+  // background: transparent;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color:white;
+  // border: 2px solid rgb(var(--color-gray-400)/0.8);
+  // @apply dark:[color:black];
+  color: #000;
 
+}
+
+.d.icon-robot{
+  background-color: rgba( 15, 23, 42, 1);
+  color: #fff
+}
 
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');

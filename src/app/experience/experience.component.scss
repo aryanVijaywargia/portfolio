@@ -4,6 +4,9 @@
 html {
   box-sizing: border-box;
 }
+// .your-container {
+//   @apply dark:your-class;
+// }
 
 *,
 *:before,
@@ -102,6 +105,15 @@ $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
   // margin-top: 100%;
 }
 
+// :root {
+//   --color-scheme: light; // Default to light mode
+// }
+
+// .dark {
+//   --color-scheme: dark; // Set to dark mode in a container with class 'dark'
+// }
+
+
 .container {
   position: relative;
   margin: $spacing auto;
@@ -129,13 +141,89 @@ $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
 
       &:hover {
         color: rgb(var(--color-accent) / var(--tw-text-opacity));
-        background: rgba( 15, 23, 42, 1);
+        background: rgba( 240,240,240, 1);
       }
 
       &.active {
         color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 240,240,240, 1);
+      }
+
+      &.d {&:hover {
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
         background: rgba( 15, 23, 42, 1);
       }
+}
+      &.d {&.active {
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 15, 23, 42, 1);
+      }}
+
+      
+
+    //   d{&:hover,
+    // &.active {
+    //   color: rgb(var(--color-accent) / var(--tw-text-opacity));
+    //   background: rgba(15, 23, 42, 1); 
+    //   //  @apply dark:[color:yellow];
+
+    // }}
+    // .your-class {
+    //   &:hover,
+    //   &.active {
+    //     // background-color: yellow;
+    //     color: rgb(var(--color-accent) / var(--tw-text-opacity));
+    //     background: rgba(15, 23, 42, 1); 
+    //   }
+    // }
+    
+   
+    // @media (prefers-color-scheme: dark), .dark & {
+    //   // Apply styles for dark mode or when the container has class 'dark'
+    //   &:hover,
+    //   &.active {
+    //     color: rgb(var(--color-accent) / var(--tw-text-opacity));
+    //     background: rgba(15, 23, 42, 1);
+    //   }
+    // }
+  
+
+    // &:hover,
+    //   &.active {
+    //     color: rgb(var(--color-accent) / var(--tw-text-opacity));
+    //     background:yellow;
+    //   }'
+    // .dark & {
+      // &:hover,
+      // &.active {
+      //   color: rgb(var(--color-accent) / var(--tw-text-opacity));
+      //   background: rgba(15, 23, 42, 1);
+      // }
+    // }
+  
+
+  // Light theme styles
+    // @media (prefers-color-scheme: light)  {
+      // Add any specific light theme styles here
+  //     & :not(body.dark){
+  //       &:hover,
+  // &.active {
+  //   color: rgb(var(--color-accent) / var(--tw-text-opacity));
+  //   background: yellow;
+  // }
+
+  //     }
+    // }
+
+    // Dark theme styles
+    // @media (prefers-color-scheme: dark){
+    //   // Add any specific dark theme styles here
+    //   & body.dark{
+    //     color: rgb(var(--color-accent) / var(--tw-text-opacity));
+    //     background: rgba(15, 23, 42, 1);
+    //   }
+    // }
+    
 
       @for $i from 1 through 4 {
         &.tab-#{$i}.active {
@@ -172,6 +260,14 @@ $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
   .content {
     position: relative;
     padding: 0 $spacing;
+    
+    .d.headerTxt{
+      color:rgb(var(--color-gray-300) / var(--tw-text-opacity))!important
+    }
+
+    .headerTxt{
+      color:rgb(var(--color-gray-700) / var(--tw-text-opacity))
+    }
 
     &__section {
       position: absolute;

@@ -46,20 +46,24 @@ export class HeroSectionComponent {
 
   tech = [
     {
+      name: 'Typescript',
+      Icon: 'Typescript',
+    },
+    {
       name: 'Angular',
-      Icon: 'cib-angular',
+      Icon: 'Angular',
     },
     {
-      name: 'Node.js',
-      Icon: 'cib-tensorflow',
+      name: 'Dotnet',
+      Icon: 'Dotnet',
     },
     {
-      name: 'Tailwind',
-      Icon: 'cib-typescript',
+      name: 'Tensorflow',
+      Icon: 'Tensorflow',
     },
     {
-      name: 'Flask',
-      Icon: 'cib-flask',
+      name: 'Python',
+      Icon: 'Python',
     },
   ] as const;
 

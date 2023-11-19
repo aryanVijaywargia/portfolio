@@ -32,8 +32,13 @@ form {
 			transform: translateY(-50%);
 			// background: #000;
       //THEME
-      background:rgb(var(--color-gray-400) / 0.8);// rgba(30, 41, 59, 1);
+      		background:rgb(var(--color-gray-400) / 0.8);// rgba(30, 41, 59, 1);
       // color: rgb(var(--color-gray-400)/1);
+		}
+		&.d{
+			&:before {
+				background: rgba(30, 41, 59, 1)!important;
+			}
 		}
 		input, label {
 			box-sizing: border-box;
@@ -64,7 +69,12 @@ form {
 				white-space: nowrap;
 				opacity: 0.85;
 				transition: all 0.15s ease-in-out;
-        color: rgb(var(--color-gray-400)/1);
+        		color: rgb(var(--color-gray-400)/1);
+			}
+			&.d{
+				&:before {
+					color: rgb(var(--color-gray-700) / var(--tw-text-opacity))!important;
+				}
 			}
 			&:after {
 				content: " ";
@@ -83,6 +93,12 @@ form {
 				z-index: 1;
 				cursor: pointer;
 				transition: all 0.15s ease-in-out;
+			}
+			&.d{
+				&:after {
+					background: white!important;
+					border: 2px solid rgba(30, 41, 59, 1);
+				}
 			}
 			&:hover:after {
 				transform: translate(-50%, -50%) scale(1.25);

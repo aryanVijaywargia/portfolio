@@ -1,15 +1,16 @@
 <form action="/p/quote.php" method="GET">
 
-    <div id="debt-amount-slider">
-        <input type="radio" name="debt-amount" id="1" value="1" required>
-        <label for="1" data-debt-amount="Small"></label>
+    <div [ngClass]="{'d':receivedTheme}" id="debt-amount-slider">
+        <input [ngClass]="{'d':receivedTheme}" type="radio" name="debt-amount" id="1" value="1" required>
+        <label [ngClass]="{'d':receivedTheme}" for="1" data-debt-amount="Small"></label>
 
-        <input type="radio" name="debt-amount" id="3" value="3" required>
-        <label for="3" data-debt-amount="Medium"></label>
+        <input [ngClass]="{'d':receivedTheme}" type="radio" name="debt-amount" id="3" value="3" required>
+        <label [ngClass]="{'d':receivedTheme}" for="3" data-debt-amount="Medium"></label>
 
-        <input type="radio" name="debt-amount" id="5" value="5" required>
-        <label for="5" data-debt-amount="Large"></label>
-        <div id="debt-amount-pos"></div>
+        <input [ngClass]="{'d':receivedTheme}" type="radio" name="debt-amount" id="5" value="5" required>
+        <label [ngClass]="{'d':receivedTheme}" for="5" data-debt-amount="Large"></label>
+
+        <div [ngClass]="{'d':receivedTheme}" id="debt-amount-pos"></div>
     </div>
 
 </form>

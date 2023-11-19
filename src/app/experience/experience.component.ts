@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 // import { Tab } from './tab.interface';
 import { EXPERIENCE } from './experience';
+import { Subscription } from 'rxjs';
+import { ThemeService } from '../theme.service';
 
 @Component({
   selector: 'app-experience',
@@ -8,8 +10,14 @@ import { EXPERIENCE } from './experience';
   styleUrls: ['./experience.component.scss']
 })
 export class ExperienceComponent implements OnInit {
+  receivedTheme: any;
+  private subscription: Subscription
+  // themeService!: ThemeService
 
-  constructor() { }
+  constructor(private themeService: ThemeService) { 
+    this.subscription = this.themeService.sharedData$.subscribe(data => {
+    this.receivedTheme = data;
+  });}
 
   ngOnInit(): void {
   }

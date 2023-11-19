@@ -3,6 +3,7 @@ import {  NbSidebarState, NbThemeService } from '@nebular/theme';
 import { NbSidebarService } from '@nebular/theme';
 import { ThemeService } from '../theme.service';
 import { Subscription } from 'rxjs';
+import { ChatbotToggleService } from '../chatbot-toggle.service';
 
 @Component({
   selector: 'app-chatbot-sidenav',
@@ -14,12 +15,20 @@ export class ChatbotSidenavComponent {
   @ViewChild('sidenav', { static: true }) sidenav!: ElementRef;
   projTheme: any;
   private sidebarStateSubscription!: Subscription;
-
-
   chatToggle:boolean = false;
-  constructor(private sidebarService: NbSidebarService, private themeService: NbThemeService, private renderer: Renderer2, private projThemeService: ThemeService, ) {
-    this.themeService.changeTheme('dark');
+  subscription: Subscription;
 
+
+  constructor(private chatbotToggleService: ChatbotToggleService, private sidebarService: NbSidebarService, private themeService: NbThemeService, private renderer: Renderer2, private projThemeService: ThemeService) {
+    this.themeService.changeTheme('dark');
+    this.subscription = this.chatbotToggleService.command$.subscribe((command) => {
+      // Handle the command received from Component A
+      this.chatToggle = command
+      this.toggleThemeClass(command);
+      // }
+      this.sidebarService.toggle(command, 'chat-sidebar');
+  
+    });
 
   }
 
@@ -31,7 +40,6 @@ export class ChatbotSidenavComponent {
       }
       else{
         this.themeService.changeTheme('dark');
-        // this.addThemeClass();
         
       }
       
@@ -91,14 +99,16 @@ export class ChatbotSidenavComponent {
 
 
   toggleChat() {
-    this.chatToggle = !this.chatToggle;
-    // if(this.chatToggle){
-      // this.toggleDarkThemeClass(true);
-    // }
-    // else{
-      this.toggleThemeClass(this.chatToggle);
-    // }
-    this.sidebarService.toggle(this.chatToggle, 'chat-sidebar');
+    // this.chatToggle = !this.chatToggle;
+    // // if(this.chatToggle){
+    //   // this.toggleDarkThemeClass(true);
+    // // }
+    // // else{
+    //   this.toggleThemeClass(this.chatToggle);
+    // // }
+    // this.sidebarService.toggle(this.chatToggle, 'chat-sidebar');
+    this.chatbotToggleService.sendCommand(false);
+
 
     // this.sidebarStateSubscription = this.sidebarService.onToggle()
     //   .subscribe(({ compact, tag }) => {

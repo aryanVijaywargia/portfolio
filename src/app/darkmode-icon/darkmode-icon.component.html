@@ -19,23 +19,45 @@
   </div>
    -->
 
-<head>
+<!-- <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <title>toggle btn</title> -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <!-- <link rel="stylesheet" href="style.css"> -->
-  <!-- <script src="app.js"></script> -->
-</head>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
+<!-- <link rel="stylesheet" href="style.css"> -->
+<!-- <script src="app.js"></script> -->
+<!-- </head> -->
+<!-- <section id="project-section" class="portfolio-preview mb-24 "> -->
 
-<div id="shape"></div>
+<div class="hero-container">
+  <div id="shape"></div>
 
-<div id="toggle"
-  style="width: 90px;border-radius: 20px; margin-left: 90%; position: absolute; margin-top: 2%; background:rgba( 15, 23, 42, 1); cursor:pointer"
-  (click)="myFunction()">
-  <span id="toggle-btn" [ngClass]="{'span-dark': isLightMode}">
-    <i id="change-icon1" class="fas" [ngClass]="{'fa-cloud-moon': !isLightMode, 'moon-icon': isLightMode}"></i>
-    <i id="change-icon2" class="fas" [ngClass]="{'fa-cloud-sun': isLightMode, 'sun-icon': isLightMode}"></i>
-  </span>
+
+
+  <div id="toggle" class="border-2 border-gray-400/50"
+    style="width: 90px;border-radius: 20px;  position: relative; margin-top: 2%; margin-left:2%; background:rgba( 15, 23, 42, 1); cursor:pointer"
+    (click)="myFunction()">
+    <span id="toggle-btn" [ngClass]="{'span-dark': isLightMode}">
+      <i id="change-icon1" class="fas" [ngClass]="{'fa-cloud-moon': !isLightMode, 'moon-icon': isLightMode}"></i>
+      <i id="change-icon2" class="fas" [ngClass]="{'fa-cloud-sun': isLightMode, 'sun-icon': isLightMode}"></i>
+    </span>
+  </div>
+
+  <div (click)="toggleChat()" style="margin-top:2%"
+    class=" group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-white bg-clip-padding text-sm font-medium text-gray-600 transition-all    d:bg-gray-700 d:text-gray-50 cursor-pointer d:hfa:bg-gray-600 hfa:bg-gray-200">
+    <i style="font-size: 20px;" class="fas fa-robot d:text-white		"></i>
+  </div>
+
+  <a target="_blank" style="margin-top:2%; margin-right:2%;" href="https://github.com/FelixTellmann/flext/stargazers"
+    rel="noopener"
+    class="group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-white bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-yellow-500/30 hfa:bg-yellow-500 hfa:text-white d:bg-gray-700 d:text-gray-50 d:hfa:bg-yellow-500"
+    data-tip="Star on Github">
+    <span class="sr-only">Star on Github</span>
+    <!-- <StarIcon class="h-4 w-4 text-yellow-500 group-hfa:text-white" /> -->
+    <i style="font-size: 20px;" class="fas fa-regular fa-star text-yellow-500 group-hfa:text-white"></i>
+    <!-- <i class="fa-regular fa-star"></i> -->
+  </a>
+
 </div>
+<!-- </section>   -->
