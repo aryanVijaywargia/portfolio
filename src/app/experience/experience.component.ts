@@ -17,7 +17,8 @@ export class ExperienceComponent implements OnInit {
   constructor(private themeService: ThemeService) { 
     this.subscription = this.themeService.sharedData$.subscribe(data => {
     this.receivedTheme = data;
-  });}
+  });
+}
 
   ngOnInit(): void {
   }

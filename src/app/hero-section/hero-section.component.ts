@@ -43,6 +43,7 @@ export class HeroSectionComponent {
         console.error('Failed to load icons:', error);
       });
   }
+  
 
   tech = [
     {

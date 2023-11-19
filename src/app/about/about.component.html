@@ -12,8 +12,6 @@
         type="button" data-event="mouseover" [attr.data-tip]="image?.alt" style="transform: perspective(10px);">
         <!-- [attr.data-tip]=" images[focusImageIndex]?.alt" -->
         <!-- <span class="sr-only">Cycle through Images</span> -->
-
-
         <app-image [maxWidth]="540" [maxHeight]="400" [src]="image.src" [alt]="image.alt" [key]="image.alt"
           [width]="2000" [height]="1500" sizes="(min-width: 580px) 540px, 400px" [preload]="true"
           [class]="'absolute left-0 top-0 rounded-xl border-2 border-gray-50/80 object-cover shadow-lg shadow-gray-700/5 transition-all duration-300 group-focus-visible:border-sky-500 d:border-gray-600/80'"
