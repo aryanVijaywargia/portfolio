@@ -1,23 +1,44 @@
-import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NbThemeModule, NbThemeService } from '@nebular/theme';
 import { Subscription } from 'rxjs';
 import { ThemeService } from '../theme.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ChatbotToggleService } from '../chatbot-toggle.service';
 
 @Component({
   selector: 'app-chatbot-ui',
   templateUrl: './chatbot-ui.component.html',
   styleUrls: ['./chatbot-ui.component.scss'],
+  animations: [
+    trigger('slideInWidth', [
+      state('true', style({ width: 'none' })),
+      state('false', style({ width: 'none' })),
+      transition('true => false', animate('300ms ease-in-out')),
+      transition('false => true', animate('300ms ease-in-out')),
+    ]),
+  ],
+
   // encapsulation: ViewEncapsulation. Emulated
 })
 export class ChatbotUiComponent implements AfterViewInit{
 
   @ViewChild('nbChat', { static: true }) nbChat!: ElementRef;
   projTheme: any;
-  // private subscription: Subscription
+  private subscription: Subscription
+  chatToggle!: boolean;
+
+  @Input() receivedValue!: boolean ; 
   
-  constructor(private themeService: NbThemeService, private renderer: Renderer2, private projThemeService: ThemeService) {
-    // this.subscription = 
-    
+  constructor(private chatbotToggleService: ChatbotToggleService, private themeService: NbThemeService, private renderer: Renderer2, private projThemeService: ThemeService) {
+
+    this.subscription = this.chatbotToggleService.command$.subscribe((command) => {
+      this.chatToggle = command
+      // this.toggleThemeClass(command);
+      // }
+      // this.sidebarService.toggle(command, 'chat-sidebar');
+  
+    });
+
   }
 
   ngOnInit(){
@@ -28,7 +49,6 @@ export class ChatbotUiComponent implements AfterViewInit{
       }
       else{
         this.themeService.changeTheme('dark');
-        // this.addThemeClass();
       }
       this.addThemeClass();
     });

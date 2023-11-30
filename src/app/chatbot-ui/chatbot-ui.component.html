@@ -1,10 +1,13 @@
 <!-- <nb-layout>
 
     <nb-layout-column> -->
-<div style="height: 100%;" #nbChat>
+<div style="height: 100%" #nbChat [ngClass]="{
+    'nav-active opacity-100 delay-[400ms]': chatToggle,
+    'pointer-events-none select-none opacity-0 delay-[900ms]': !chatToggle
+  }">
     <!-- <div class="close-button" (click)="closeSidebar()">X</div> -->
 
-    <nb-chat *ngFor="let chat of chats" [title]="chat.title" [status]="chat.status">
+    <nb-chat [@slideInOut] *ngFor="let chat of chats" [title]="chat.title" [status]="chat.status">
 
         <nb-chat-message *ngFor="let msg of chat.messages" [type]="msg.type" [message]="msg.text" [reply]="msg.reply"
             [sender]="msg.user.name" [date]="msg.date" [files]="msg.files" [avatar]="msg.user.avatar">

@@ -4,11 +4,22 @@ import { NbSidebarService } from '@nebular/theme';
 import { ThemeService } from '../theme.service';
 import { Subscription } from 'rxjs';
 import { ChatbotToggleService } from '../chatbot-toggle.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-chatbot-sidenav',
   templateUrl: './chatbot-sidenav.component.html',
-  styleUrls: ['./chatbot-sidenav.component.scss']
+  styleUrls: ['./chatbot-sidenav.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      state('true', style({ transform: 'none' })),
+      state('false', style({ transform: 'translateX(100%)' })),
+      transition('true => false', animate('300ms ease-in-out')),
+      transition('false => true', animate('300ms ease-in-out')),
+    ]),
+  ],
+
+
 })
 export class ChatbotSidenavComponent {
 
@@ -17,7 +28,16 @@ export class ChatbotSidenavComponent {
   private sidebarStateSubscription!: Subscription;
   chatToggle:boolean = false;
   subscription: Subscription;
+  sidebarOpened: boolean=false;
 
+  onSlideAnimationStart() {
+    console.log('Slide animation has started');
+  }
+  
+  onSlideAnimationDone() {
+    console.log('Slide animation has ended');
+  }
+  
 
   constructor(private chatbotToggleService: ChatbotToggleService, private sidebarService: NbSidebarService, private themeService: NbThemeService, private renderer: Renderer2, private projThemeService: ThemeService) {
     this.themeService.changeTheme('dark');
@@ -47,29 +67,6 @@ export class ChatbotSidenavComponent {
   }
   
 
-
-  // private addThemeClass() {
-  //   // Check if the sidenav ViewChild is available
-  //   if (!this.projTheme && this.sidenav && this.sidenav.nativeElement) {
-  //     const isLightTheme = this.sidenav.nativeElement.classList.contains('nb-theme-default');
-  //     if (isLightTheme) {
-  //       this.renderer.removeClass(this.sidenav.nativeElement, 'nb-theme-default');
-  //     }
-  //     this.renderer.addClass(this.sidenav.nativeElement, 'nb-theme-dark');
-  //   }
-  //   else if(this.projTheme && this.sidenav && this.sidenav.nativeElement){
-  //     const isDarkTheme = this.sidenav.nativeElement.classList.contains('nb-theme-dark');
-  //     if (isDarkTheme) {
-  //       this.renderer.removeClass(this.sidenav.nativeElement, 'nb-theme-dark');
-  //     }
-  //     this.renderer.addClass(this.sidenav.nativeElement, 'nb-theme-default')
-  //   }
-  // }
-
-
-
-  // constructor(private sidebarService: NbSidebarService) {}
-
   
   private toggleThemeClass(flag:boolean) {
     // Check if the sidenav ViewChild is available
@@ -80,16 +77,16 @@ export class ChatbotSidenavComponent {
       if (element && flag && !this.projTheme) {
         element.classList.add('nb-theme-dark');
       }
-       if (element && !flag && !this.projTheme){
-        element.classList.remove('nb-theme-dark');
-      }
+      //  if (element && !flag && !this.projTheme){
+      //   element.classList.remove('nb-theme-dark');
+      // }
 
       if (element && flag && this.projTheme) {
         element.classList.add('nb-theme-default');
       }
-       if (element && !flag && this.projTheme){
-        element.classList.remove('nb-theme-default');
-      }
+      //  if (element && !flag && this.projTheme){
+      //   element.classList.remove('nb-theme-default');
+      // }
     // }
   }
 
@@ -99,30 +96,9 @@ export class ChatbotSidenavComponent {
 
 
   toggleChat() {
-    // this.chatToggle = !this.chatToggle;
-    // // if(this.chatToggle){
-    //   // this.toggleDarkThemeClass(true);
-    // // }
-    // // else{
-    //   this.toggleThemeClass(this.chatToggle);
-    // // }
-    // this.sidebarService.toggle(this.chatToggle, 'chat-sidebar');
+  
     this.chatbotToggleService.sendCommand(false);
 
-
-    // this.sidebarStateSubscription = this.sidebarService.onToggle()
-    //   .subscribe(({ compact, tag }) => {
-    //     const sidebarElement = document.querySelector('.chat-sidenav');
-
-    //     // Check the compact property or any other relevant property for your condition
-    //     if (compact) {
-    //       sidebarElement!.classList.add('start-closing');
-    //       sidebarElement!.classList.remove('start-opening');
-    //     } else {
-    //       sidebarElement!.classList.remove('start-closing');
-    //       sidebarElement!.classList.add('start-opening');
-    //     }
-    //   });
 
 
   }
