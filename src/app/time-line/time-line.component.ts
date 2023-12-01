@@ -110,7 +110,9 @@ export class TimelineComponent implements OnInit {
   setSelected(selected: string) {
     // this.autoScroll = false;
     this.selected = selected;
-    // const [year, index] = selected.split("-");
+    
+    // let [year, index] = selected.split("-");
+    // this.highlightVerticalBar(parseInt(year).toString(), parseInt(index))
     // this.selectedIconIndex = parseInt(index, 10);
     // this.scrollToSection();
   }

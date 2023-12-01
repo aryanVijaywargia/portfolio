@@ -114,8 +114,7 @@ module.exports = {
       },
       colors: {
         hoverblueL:'rgba(100, 116, 139,1)',
-        // hoverblue: 'rgba(15, 23, 42, 1)',
-        // hovertext: '#FFF00',
+        heroIconBg:'rgba( 15, 23, 42, 1)',
         bg: "rgb(var(--color-bg) / <alpha-value>)",
         "bg-dark": "rgb(var(--color-bg-dark) / <alpha-value>)",
         "bg-secondary": "rgb(var(--color-bg-secondary) / <alpha-value>)",

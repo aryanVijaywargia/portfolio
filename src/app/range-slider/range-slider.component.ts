@@ -64,6 +64,16 @@ export class RangeSliderComponent {
 // 		e.preventDefault();
 // 	});
 // });
+
+@Output() selectedValueChange = new EventEmitter<string>();
+  selectedValue: string="Medium";
+
+  // ... other component code
+
+  onInputChange(value: string) {
+    this.selectedValue = value;
+    this.selectedValueChange.emit(this.selectedValue);
+  }
   
 }
 

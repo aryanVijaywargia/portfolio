@@ -2,8 +2,7 @@
     <h1>{{ extractYearAndEvents(entry).year}}</h1> -->
 
 <section class="mx-auto  max-w-6xl px-4  md:px-8">
-    <div class="-mx-4 flex h-96 overflow-x-hidden py-4 px-6 xl:mx-0" (inView)="onInViewChanged($event)"
-        #scrollContainerRef>
+    <div class="-mx-4 flex overflow-x-auto py-4 px-6 xl:mx-0" (inView)="onInViewChanged($event)" #scrollContainerRef>
         <div *ngFor="let entry of timelineEntries ; let yearIndex = index;">
             <div class="relative">
                 <header class="absolute left-0 -translate-x-1/2 select-none leading-4 font-semibold text-gray-400"
@@ -39,7 +38,7 @@
                             [attr.data-bar]="getCombinedValue(entry.year, index)">
                         </div>
                         <main
-                            class="pointer-events-none relative mt-32 w-[17rem] opacity-0 transition-opacity  selected:pointer-events-auto selected:opacity-100 -translate-x-1/2 text-center"
+                            class="pointer-events-none relative mt-28 w-[17rem] opacity-0 transition-opacity  selected:pointer-events-auto selected:opacity-100 -translate-x-1/2 text-center"
                             [ngClass]="{ '-translate-x-1/2 text-center': yearIndex != 0 || index != 0 }">
                             <h3 class="whitespace-nowrap font-semibold tracking-tight text-gray-800 d:text-gray-100">
                                 {{ event.heading }}

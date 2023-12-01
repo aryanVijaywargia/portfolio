@@ -4,6 +4,10 @@
   @include nb-theme-global();
 };
 
+html {
+
+  scroll-behavior: smooth !important;
+}
 
 
 // @use 'theme' as *;

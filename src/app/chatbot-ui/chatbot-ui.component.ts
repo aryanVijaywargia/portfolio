@@ -10,13 +10,16 @@ import { ChatbotToggleService } from '../chatbot-toggle.service';
   templateUrl: './chatbot-ui.component.html',
   styleUrls: ['./chatbot-ui.component.scss'],
   animations: [
-    trigger('slideInWidth', [
-      state('true', style({ width: 'none' })),
-      state('false', style({ width: 'none' })),
-      transition('true => false', animate('300ms ease-in-out')),
+    trigger('slideInOut', [
+      state('true', style({ transform: 'none' })),
+      state('false', style({ transform: 'translateX(100%)' })),
+      transition('true => false', [
+        style({ transform: 'none' }), // Start from the current position
+        animate('300ms ease-in-out', style({ transform: 'translateX(100%)' })), // Move to the right
+      ]),
       transition('false => true', animate('300ms ease-in-out')),
     ]),
-  ],
+  ]
 
   // encapsulation: ViewEncapsulation. Emulated
 })
@@ -25,11 +28,12 @@ export class ChatbotUiComponent implements AfterViewInit{
   @ViewChild('nbChat', { static: true }) nbChat!: ElementRef;
   projTheme: any;
   private subscription: Subscription
-  chatToggle!: boolean;
+  chatToggle: boolean=false;
+  receivedTheme!: any;
 
-  @Input() receivedValue!: boolean ; 
+  // @Input() receivedValue!: boolean ; 
   
-  constructor(private chatbotToggleService: ChatbotToggleService, private themeService: NbThemeService, private renderer: Renderer2, private projThemeService: ThemeService) {
+  constructor(private el: ElementRef,private chatbotToggleService: ChatbotToggleService, private themeService: NbThemeService, private renderer: Renderer2, private projThemeService: ThemeService) {
 
     this.subscription = this.chatbotToggleService.command$.subscribe((command) => {
       this.chatToggle = command
@@ -39,8 +43,17 @@ export class ChatbotUiComponent implements AfterViewInit{
   
     });
 
+    this.subscription = this.projThemeService.sharedData$.subscribe((data:any) => {
+      this.receivedTheme = data;
+    });
+
+    
   }
 
+  toggleChat() {
+    this.chatbotToggleService.sendCommand(false);
+  }
+  
   ngOnInit(){
     this.projThemeService.sharedData$.subscribe(data => {
       this.projTheme = data;
@@ -55,9 +68,37 @@ export class ChatbotUiComponent implements AfterViewInit{
   }
   
 
+  
+
+  // constructor(private el: ElementRef, private renderer: Renderer2) {}
+
   ngAfterViewInit() {
-    // Assuming you want to add the class after the view has been initialized
-    // this.addThemeClass();
+    // Accessing the nb-chat element
+    
+    const nbChatElement = this.el.nativeElement.querySelector('nb-chat');
+
+    // if(this.projTheme){
+    //   this.renderer.setStyle(nbChatElement, 'background-color', 'white')
+    // }
+
+    this.projThemeService.sharedData$.subscribe(data => {
+      if(data){
+        this.renderer.setStyle(nbChatElement, 'background-color', 'white')
+      }
+      else{
+        this.renderer.setStyle(nbChatElement, 'background-color', 'rgba(15, 23, 42, 1)')
+      }
+    })
+    // this.renderer.addClass(nbChatElement, 'd');
+
+    // Accessing the child div with class 'header'
+    const headerElement = nbChatElement.querySelector('.header');
+
+    // Adding or modifying a class
+    this.renderer.setStyle(headerElement, 'background-image', 'linear-gradient(to right,#0657d4, #0e5be9 var(--tw-gradient-via-position), #3b65f6 )');
+    // this.renderer.setStyle(headerElement, '--tw-gradient-from', '#06b6d4 var(--tw-gradient-from-position)');
+    // this.renderer.setStyle(headerElement, '--tw-gradient-stops', '#06b6d4, #0ea5e9 var(--tw-gradient-via-position), #3b82f6 ');
+    // this.renderer.setStyle(headerElement, '--tw-gradient-to', '#3b82f6 var(--tw-gradient-to-position)');
   }
 
   closeSidebar() {

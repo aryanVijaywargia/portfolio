@@ -12,7 +12,5 @@ export class HeroTerminalComponent {
   constructor() { }
 
   ngAfterViewInit() {
-    // console.log(this.terminalContainer);
-    // this.terminalService.initializeTerminal(this.terminalContainer.nativeElement);
   }
 }

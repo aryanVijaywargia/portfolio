@@ -51,9 +51,19 @@ import { NbChatModule, NbIconModule, NbLayoutModule, NbSidebarModule, NbThemeMod
 import { ChatbotUiComponent } from './chatbot-ui/chatbot-ui.component';
 import { ChatbotSidenavComponent } from './chatbot-sidenav/chatbot-sidenav.component';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { BadgeComponent } from './badge/badge.component';
+import { RouterModule, Routes } from '@angular/router';
+import { ScrollPositionDirective } from './scroll-position.directive';
+import { BurgerMenuComponent } from './burger-menu/burger-menu.component';
+import { HamburgerIconComponent } from './hamburger-icon/hamburger-icon.component';
 
 library.add(fab);
 
+
+const routes: Routes = [
+  { path: '', component: HeroSectionComponent },
+  // Add more routes as needed
+];
 
 
 @NgModule({
@@ -90,9 +100,14 @@ library.add(fab);
     DarkModeNavComponent,
     FormButtonComponent,
     ChatbotUiComponent,
-    ChatbotSidenavComponent
+    ChatbotSidenavComponent,
+    BadgeComponent,
+    ScrollPositionDirective,
+    BurgerMenuComponent,
+    HamburgerIconComponent
     // CodeComponent
   ],
+  
   
   imports: [
     BrowserModule,
@@ -109,7 +124,11 @@ library.add(fab);
     NbLayoutModule,
     NbSidebarModule.forRoot(),
     NbEvaIconsModule,
-    NbIconModule
+    NbIconModule,
+    RouterModule.forRoot(routes, {
+      useHash: true,
+      anchorScrolling: 'enabled'
+    })
     // MatSidenavModule
   ],
   exports:[CommonModule],

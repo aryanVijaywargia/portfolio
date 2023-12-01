@@ -26,7 +26,7 @@ export interface Project {
   }
 
   export enum PORTFOLIO {
-    pre= "Portfolio",
+    pre= "Projects",
     heading= "Some Things I’ve Built",
   };
   

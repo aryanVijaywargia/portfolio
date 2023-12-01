@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-demo-card',
@@ -6,7 +7,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
   styleUrls: ['./demo-card.component.scss']
 })
 export class DemoCardComponent {
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
   @ViewChild('face', { static: false }) faceElementRef!: ElementRef;
   shouldSmile: boolean = false;
 
@@ -15,6 +16,7 @@ export class DemoCardComponent {
   }
 
   ngOnInit(): void {
+    
   }
   
 

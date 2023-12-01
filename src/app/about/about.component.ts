@@ -9,18 +9,16 @@ import { TimelineComponent } from '../time-line/time-line.component';
 })
 export class AboutComponent {
   @ViewChild('buttonRef') buttonRef!: ElementRef<HTMLButtonElement>;
-  // @ViewChild('timeLineRef') timeLineRef!: ElementRef<HTMLButtonElement>;
   focusImageIndex:number = 0;
-  image:any= ABOUT.images[0]; 
+  image:any= ABOUT.images; 
+  tooltip:any = ABOUT.tooltip;
   index:number = 0;
   rangeIndex:string="";
   ABOUT = ABOUT;
-  // timelineComponent: any;
 
-  trackRangeValue(newValue: string) {
-    // this.items.push(newItem);
-    this.rangeIndex = newValue;
-  }
+  // trackRangeValue(newValue: string) {
+  //   this.rangeIndex = newValue;
+  // }
 
   @ViewChild(TimelineComponent) timelineComponent!: TimelineComponent;
 
@@ -31,6 +29,15 @@ export class AboutComponent {
   ngOnInit(){
     this.startHighlightingSequence();
   }
+
+  // rangeIndex!: number;
+
+  onSelectedValueChange(value: any) {
+    this.rangeIndex = value;
+    console.log("The vlaue of this.rangeIndex is ", this.rangeIndex)
+    // Do something with the selected value in the parent component
+  }
+
 
 
   ngAfterViewInit() {

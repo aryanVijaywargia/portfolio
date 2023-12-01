@@ -1,8 +1,31 @@
-<img [src]="calcSrc()" [width]="calculateWidth()" [height]="calculateHeight()" [style.objectFit]="objectFitStyle"
-      [style.maxWidth]="maxWidth ? maxWidth + 'px' : undefined"
-      [style.maxHeight]="maxHeight ? maxHeight + 'px' : undefined" [style.aspectRatio]="aspectRatio" *ngIf="showImage"
-      [@fadeOutLeft] [@fadeOutLeftOnLeave] (click)="toggleImage()">
 <!-- [@rotateOutUpLeft] [@rotateOutUpLeftOnLeave]  -->
+<div class="image-stack ">
+      <div style="position: fixed;" *ngFor="let image of images; let i = index" [@imageAnimation]="getAnimationState(i)"
+            [style.zIndex]="getZIndex(i)">
+            <!-- <div (@imageAnimation.done)="showNextImage()"> -->
+            <!-- <img [src]="image" (click)="toggleImage()"> -->
+            <!-- <ngb-tooltip [placement]="'top'" [ngbTooltip]="alt[i]"> -->
+
+            <img [src]="image" style="width:100%" [height]="calculateHeight()"
+                  [style.transform]="'rotate(' + getRotationAngle(i) + ')'" [style.objectFit]="objectFitStyle"
+                  [style.maxWidth]="maxWidth ? maxWidth + 'px' : undefined"
+                  [style.maxHeight]="maxHeight ? maxHeight + 'px' : undefined" [style.aspectRatio]="aspectRatio"
+                  (click)="toggleImage()" (mouseenter)="showTooltip(i)" (mouseleave)="hideTooltip()">
+
+            <div style="z-index: 99!important;font-size: 14px; background-color: white; margin-top:2%; padding: 1%; width:50%; margin-left:auto;margin-right:auto"
+                  *ngIf="activeTooltipIndex === i" class="tooltip">
+                  <div
+                        style="position: absolute; top:88%;  left: 50%;  border-width: 10px;  border-style: solid; border-color: transparent transparent white transparent;">
+                  </div>
+
+                  {{ alt[i] }}
+            </div>
+            <!-- </div> -->
+            <!-- </ngb-tooltip> -->
+      </div>
+</div>
 
 
+<!--  *ngIf="!showImage" [@fadeOutLeft] [@fadeOutLeftOnLeave] (@fadeOutLeftOnLeave.done)="showNextImage()" -->
+<!-- [@imageAnimation]="currentIndex" -->
 <!-- <img > -->

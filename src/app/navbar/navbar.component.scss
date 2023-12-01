@@ -74,28 +74,28 @@
   border-width: 0;
 }
 
-.headbar {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  // padding: 1rem;
-  color: gray; /* Initial color */
-  background-color: gray; /* Initial background color */
-  opacity: 0; /* Initially hidden */
-  transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-  // justify-content: space-between;
-  padding: 0 16px; /* Add padding as needed */
-  background-color: pink; /* Set background color as needed */
-  // height: 30px; /* Set height as needed */
-  z-index: 10000;
-  display: flex;
+// .headbar {
+//   position: absolute;
+//   bottom: 0;
+//   width: 100%;
+//   // padding: 1rem;
+//   color: gray; /* Initial color */
+//   background-color: gray; /* Initial background color */
+//   opacity: 0; /* Initially hidden */
+//   transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+//   // justify-content: space-between;
+//   padding: 0 16px; /* Add padding as needed */
+//   background-color: pink; /* Set background color as needed */
+//   // height: 30px; /* Set height as needed */
+//   z-index: 10000;
+//   display: flex;
 
-  justify-content: center; // Center aligns the icons horizontally
-  align-items: center; // Center aligns the icons vertically
-  height: 50px; // Set the height of the navbar as desired
-  background-color: red; // Set the background color of the navbar as desired
+//   justify-content: center; // Center aligns the icons horizontally
+//   align-items: center; // Center aligns the icons vertically
+//   height: 50px; // Set the height of the navbar as desired
+//   background-color: red; // Set the background color of the navbar as desired
 
-}
+// }
 
 .navbar__icon {
   margin: 0 10px; // Add margin between the icons as desired
@@ -104,7 +104,7 @@
 }
 
 .fixed {
-  position: fixed;
+  position: sticky;
   top: 0;
   height: 5rem;
   // color: black; /* Color when fixed */
@@ -168,25 +168,50 @@ a {
 .icon-robot {
   width:30px;
   height:30px;
-  margin-right: 5%;
-  margin-left: 5%;
+  margin-right: 4%;
+  margin-left: 4%;
+  padding-right: 2%;
+  padding-left: 2%;
   // background: transparent;
   border-radius: 30px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color:white;
+  // background-color:white;
   // border: 2px solid rgb(var(--color-gray-400)/0.8);
   // @apply dark:[color:black];
-  color: #000;
+  // color: #000;
 
 }
 
-.d.icon-robot{
-  background-color: rgba( 15, 23, 42, 1);
-  color: #fff
+@media screen and (max-width: 768px) {
+  .middle-content {
+    display: none!important;
+  }
+
+  // .resume-button{
+  //   display: none!important;
+  // }
 }
+
+@media screen and (max-width: 768px) {
+  .resume-button {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .hamburger-show {
+    display: none;
+  }
+
+ 
+}
+// .d.icon-robot{
+//   background-color: rgba( 15, 23, 42, 1);
+//   color: #fff
+// }
 
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
@@ -212,10 +237,23 @@ html,body{
   z-index: 10000;
 }
 
-.dark-bg{
-  background-color: (var(--color-gray-900)/.4)
+.d.dark-bg{
+  background-color: rgb(var(--color-gray-900)/.4)
 }
 
+.fa-robot{
+  color:white;
+}
+
+.d.fa-robot{
+  color:black;
+}
+.icon-robot:hover {
+  background-color: black;
+}
+.d.icon-robot:hover {
+  background-color: rgba(241, 245, 249, 0.8);
+}
 .header-content {
   display: flex;
   align-items: center;
@@ -230,9 +268,16 @@ html,body{
   align-items: center;
 }
 
+.middle-content{
+  display: flex;
+  align-items: center;
+}
+
 .right-content {
   display: flex;
   align-items: center;
+  margin-right:5%;
+ 
 }
 
 .wrapper {
@@ -273,19 +318,19 @@ html,body{
 }
 
 .wrapper .button1:nth-child(1):hover .icon{
-  background: #4267B2;
+  background: rgba(14, 165, 233, 1);;
 }
 .wrapper .button1:nth-child(2):hover .icon{
-  background: #1DA1F2;
+  background: rgba(14, 165, 233, 1);;
 }
 .wrapper .button1:nth-child(3):hover .icon{
-  background: #E1306C;
+  background: rgba(14, 165, 233, 1);;
 }
 .wrapper .button1:nth-child(4):hover .icon{
-  background: #333;
+  background: rgba(14, 165, 233, 1);;
 }
 .wrapper .button1:nth-child(5):hover .icon{
-  background: #ff0000;
+  background: rgba(14, 165, 233, 1);;
 }
 .wrapper .button1 .icon i{
   font-size: 25px;
@@ -311,23 +356,23 @@ html,body{
 // }
 
 .wrapper .button1:nth-child(1) span{
-  color: #4267B2;
+  color: rgba(14, 165, 233, 1);;
   vertical-align: 5px;
 }
 .wrapper .button1:nth-child(2) span{
-  color: #1DA1F2;
+  color: rgba(14, 165, 233, 1);;
   vertical-align: 5px;
 }
 .wrapper .button1:nth-child(3) span{
-  color: #E1306C;
+  color: rgba(14, 165, 233, 1);;
   vertical-align: 5px;
 }
 .wrapper .button1:nth-child(4) span{
-  color: #333;
+  color: rgba(14, 165, 233, 1);;
   vertical-align: 5px;
 }
 .wrapper .button1:nth-child(5) span{
-  color: #ff0000;
+  color: rgba(14, 165, 233, 1);;
   vertical-align: 5px;
 }
 

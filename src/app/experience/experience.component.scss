@@ -3,7 +3,10 @@
 
 html {
   box-sizing: border-box;
+  scroll-behavior: smooth !important;
 }
+
+
 // .your-container {
 //   @apply dark:your-class;
 // }
@@ -71,6 +74,7 @@ ul li::before {
 $spacing: 20px;
 $purple: rgb(var(--color-accent) / var(--tw-text-opacity));
 $tab-height: 40px;
+$tab-width: 100%;
 $green: #64ffda;
 $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
 
@@ -119,11 +123,19 @@ $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
   margin: $spacing auto;
   padding: $spacing;
   width: 50%;
+  // display: flex;
+  // align-items: flex-start;
   display: flex;
-  align-items: flex-start;
+  flex-direction: row;
 
   .tabs {
-    display: block;
+    // display: block;
+    // position: relative;
+    // z-index: 3;
+    // width: max-content;
+
+    display: flex;
+    flex-direction: column;
     position: relative;
     z-index: 3;
     width: max-content;
@@ -161,69 +173,7 @@ $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
 
       
 
-    //   d{&:hover,
-    // &.active {
-    //   color: rgb(var(--color-accent) / var(--tw-text-opacity));
-    //   background: rgba(15, 23, 42, 1); 
-    //   //  @apply dark:[color:yellow];
-
-    // }}
-    // .your-class {
-    //   &:hover,
-    //   &.active {
-    //     // background-color: yellow;
-    //     color: rgb(var(--color-accent) / var(--tw-text-opacity));
-    //     background: rgba(15, 23, 42, 1); 
-    //   }
-    // }
-    
    
-    // @media (prefers-color-scheme: dark), .dark & {
-    //   // Apply styles for dark mode or when the container has class 'dark'
-    //   &:hover,
-    //   &.active {
-    //     color: rgb(var(--color-accent) / var(--tw-text-opacity));
-    //     background: rgba(15, 23, 42, 1);
-    //   }
-    // }
-  
-
-    // &:hover,
-    //   &.active {
-    //     color: rgb(var(--color-accent) / var(--tw-text-opacity));
-    //     background:yellow;
-    //   }'
-    // .dark & {
-      // &:hover,
-      // &.active {
-      //   color: rgb(var(--color-accent) / var(--tw-text-opacity));
-      //   background: rgba(15, 23, 42, 1);
-      // }
-    // }
-  
-
-  // Light theme styles
-    // @media (prefers-color-scheme: light)  {
-      // Add any specific light theme styles here
-  //     & :not(body.dark){
-  //       &:hover,
-  // &.active {
-  //   color: rgb(var(--color-accent) / var(--tw-text-opacity));
-  //   background: yellow;
-  // }
-
-  //     }
-    // }
-
-    // Dark theme styles
-    // @media (prefers-color-scheme: dark){
-    //   // Add any specific dark theme styles here
-    //   & body.dark{
-    //     color: rgb(var(--color-accent) / var(--tw-text-opacity));
-    //     background: rgba(15, 23, 42, 1);
-    //   }
-    // }
-    
 
       @for $i from 1 through 4 {
         &.tab-#{$i}.active {
@@ -255,7 +205,52 @@ $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
     a:last-of-type {
       border-top-right-radius: 2px;
     }
+
+    @media (max-width: 767px) {
+      flex-direction: row;  // Change direction to column for small screens
+      align-items: center;  // Center the tabs horizontally
+      text-align: center;  // Center the text inside each tab
+      width: 100%;  // Make the tabs take the full width
+      .tab {
+        border-left: none;
+        border-bottom: 2px solid #5f6368;
+        height:100%;
+        @for $i from 1 through 4 {
+          &.tab-#{$i}.active {
+            & ~ .highlighter {
+              transform: translateX(#{($i*$tab-width) - $tab-width})!important;
+            }
+          }
+        }
+      }
+      .highlighter{
+        display: block;
+        background: $purple;
+        // width: 24%;
+        height: 2px;
+        position: absolute;
+        top: 100%;
+        // left: 0;
+        transform: translateX($tab-width)!important;
+        transition: transform 0.2s ease;
+        transition-delay: 0.1s;
+        z-index: 10;
+
+      }
+
+      
+      
+     
+    }
   }
+
+  @media (max-width: 767px) {
+    flex-direction: column;  // Change direction to column for small screens
+    align-items: center;  // Center the tabs horizontally
+    // text-align: center;  // Center the text inside each tab
+    width: 100%;  // Make the tabs take the full width
+  }
+    
 
   .content {
     position: relative;
@@ -286,6 +281,11 @@ $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
         z-index: 2;
       }
     }
+
+    @media (max-width: 767px) {
+      padding: $spacing $spacing;
+    }
+ 
   }
 }
 
@@ -425,3 +425,33 @@ $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
 //         }
 //     }
 // }
+/* Add this to your existing styles or create a new stylesheet */
+// @media screen and (max-width: 767px) {
+//   .tabs {
+//     flex-direction: column;
+//     align-items: center;
+//     text-align: center;
+//   }
+
+//   .tab {
+//     display: block;
+//     margin-bottom: 10px;
+//   }
+
+//   .highlighter {
+//     display: none;
+//   }
+
+//   .content {
+//     margin-top: 20px;
+//   }
+
+//   .content__section {
+//     display: none;
+//   }
+
+//   .content__section.visible {
+//     display: block;
+//   }
+// }
+

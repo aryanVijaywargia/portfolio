@@ -7,6 +7,12 @@
 //   font-family: "Poppins", sans-serif;
 // }
 
+html {
+
+    scroll-behavior: smooth !important;
+}
+
+
 body {
 //   height: 100vh;
   display: flex;
@@ -15,24 +21,70 @@ body {
 //   background: purple url("img/bg.svg") center/cover;
   overflow: hidden;
 }
+.random {
+    position: relative;
+}
 
 .card {
-  background: linear-gradient(
-    to bottom right,
-    rgba(255, 255, 255, 0.2),
-    rgba(255, 255, 255, 0.05)
-  );
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5), -1px -1px 2px #aaa,
-    1px 1px 2px #555;
-  backdrop-filter: blur(0.8rem);
-  -webkit-backdrop-filter: blur(0.8rem);;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  animation: 1s cubic-bezier(0.16, 1, 0.3, 1) cardEnter;
-  width: 50%;
-  margin: 0 auto;
-  margin-bottom:100px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    animation: 1s cubic-bezier(0.16, 1, 0.3, 1) cardEnter;
+    margin: 6rem auto;
+    width: 40%;
+
+    /* Add the following styles for the overlay */
+    overflow: hidden;
 }
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50%; /* Adjust this value to control the width of the overlay */
+    background: radial-gradient(at 79% -17%, hsl(162.00, 77%, 40%) 0, transparent 59%), 
+                radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
+}
+
+
+// .card {
+//   background: linear-gradient(
+//     to bottom right,
+//     rgba(255, 255, 255, 0.2),
+//     rgba(255, 255, 255, 0.05)
+//   );
+  
+
+// // backdrop-filter: blur(16px) saturate(180%);
+// //     -webkit-backdrop-filter: blur(16px) saturate(180%);
+// //     background-color: rgba(17, 25, 40, 0.75);
+// //     border-radius: 12px;
+// //     border: 1px solid rgba(255, 255, 255, 0.125);
+
+// backdrop-filter: blur(16px) saturate(180%);
+// // background-color: #1a202c; /* Equivalent to bg-gray-900 */
+
+// // background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+//   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5), -1px -1px 2px #aaa,
+//     1px 1px 2px #555;
+//   backdrop-filter: blur(0.8rem);
+//   -webkit-backdrop-filter: blur(0.8rem);;
+//   padding: 1.5rem;
+//   border-radius: 1rem;
+//   animation: 1s cubic-bezier(0.16, 1, 0.3, 1) cardEnter;
+// //   width: 50%;
+//   margin: 6rem auto;
+// //   margin-bottom:100px;
+// }
 
 .card__row {
   display: flex;
@@ -223,9 +275,9 @@ body {
     z-index: 100;
     // background-color: $third-bg-color;
     flex: 1;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    // background-color: rgba(255, 255, 255, 0.1);
+    // border-radius: 50%;
+    // border: 1px solid rgba(255, 255, 255, 0.1);
 
 }
 
