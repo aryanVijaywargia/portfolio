@@ -165,6 +165,7 @@ initial = [
   ngAfterViewChecked() {
     // this.scrollTerminalToBottom();
   }
+  
 
   scrollTerminalToBottom() {
     const terminalContainer = this.before.nativeElement.parentNode;
@@ -173,7 +174,10 @@ initial = [
   }
 
 
-  @HostListener('window:keyup', ['$event'])
+
+
+
+  @HostListener('keyup', ['$event'])
   onKeyUp(event: KeyboardEvent) {
     if (event.keyCode == 181) {
       document.location.reload();

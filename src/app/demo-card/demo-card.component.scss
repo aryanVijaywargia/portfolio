@@ -39,9 +39,32 @@ body {
     animation: 1s cubic-bezier(0.16, 1, 0.3, 1) cardEnter;
     margin: 6rem auto;
     width: 40%;
-
+    min-width: calc(450px + 2 * 6rem);
     /* Add the following styles for the overlay */
     overflow: hidden;
+
+    @media (max-width: 768px) {
+        min-width: calc(350px + 2 * 6rem);
+      }
+
+      @media (max-width: 600px) {
+        min-width: calc(250px + 2 * 6rem);
+      }
+
+      @media (max-width: 400px) {
+        transform: scale(0.75)!important;
+        min-width: calc(220px + 12rem);
+      }
+
+      @media (max-width: 360px) {
+    transform: scale(0.7) !important;
+    min-width: calc(180px + 10rem);
+    }
+
+
+    //   @media (max-width: 600px) {
+    //     min-width: calc(250px + 2 * 5rem);
+    //   }
 }
 
 .card::before {
@@ -51,8 +74,7 @@ body {
     right: 0;
     bottom: 0;
     width: 50%; /* Adjust this value to control the width of the overlay */
-    background: radial-gradient(at 79% -17%, hsl(162.00, 77%, 40%) 0, transparent 59%), 
-                radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
+    background: radial-gradient(at 93% -54%, hsl(162, 77%, 40%) 0, transparent 59%), radial-gradient(at 135% 46%, hsl(218, 39%, 11%) 0, transparent 55%);
 }
 
 
@@ -95,9 +117,9 @@ body {
 .card__title {
   font-weight: 600;
   font-size: 2.5rem;
-  color: #1d005f;
+//   color: #1d005f;
 //   margin: 1rem 0 1.5rem;
-  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 2px rgba(100, 116, 139, 0.3);
 }
 
 .card__col {
@@ -499,9 +521,9 @@ body {
 }
 
 @media screen and (max-width: 735px) {
-    .card {
-        transform: scale(0.75);
-    }
+    // .card {
+    //     transform: scale(0.5);
+    // }
 
     .card__out_typing-3,
     .card__out_typing-4,
@@ -523,11 +545,11 @@ body {
     }
 }
 
-@media screen and (max-width: 360px) {
-    .card {
-        transform: scale(0.6);
-    }
-}
+// @media screen and (max-width: 360px) {
+//     .card {
+//         transform: scale(0.75);
+//     }
+// }
 
 @media screen and (max-width : 1023px) and (orientation : landscape) {
     .card__out_typing-1,

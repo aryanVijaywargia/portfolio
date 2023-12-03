@@ -42,6 +42,8 @@ export class TimelineComponent implements OnInit {
       icons: events.map(event => event.Icon),
     })
   );
+  selectedBarYear: any;
+  selectedBarIndex: any;
 
   ngAfterViewInit(){
     this.scrollToSection();
@@ -59,7 +61,7 @@ export class TimelineComponent implements OnInit {
 
   highlightVerticalBar(year: string, index: number) {
     const container = this.scrollContainerRef.nativeElement;
-    const targetPosition = container.scrollLeft + container.clientWidth / 2 - 60; // Adjust the offset as needed
+    const targetPosition = window.scrollX + container.clientWidth / 2 ; // Use window.scrollX to get the current scroll position
     const barElement = container.querySelector(`[data-bar="${year}-${index}"]`);
   
     if (barElement) {
@@ -84,6 +86,36 @@ export class TimelineComponent implements OnInit {
     return year === lastEntry.year && index === lastEntry.events.length - 1;
   }
   
+
+  async startHighlightingSequence() {
+    if(this.timelineEntries){
+      for(let entries=0; entries<this.timelineEntries.length; entries++){
+        for (let index = 0; index < this.timelineEntries[entries].events.length; index++) {
+         
+          await this.delay(4000); 
+        
+
+          if(this.selectedBarYear){
+            // entries = this.selectedBarYear;
+            index = this.selectedBarIndex
+
+            entries = this.timelineEntries.findIndex(entry => entry.year === this.selectedBarYear.toString());
+
+            this.selectedBarYear=null;
+            this.selectedBarIndex=null;
+          }
+          
+          this.highlightVerticalBar(this.timelineEntries[entries].year, index);
+          
+                    
+        }
+      }
+    }
+  }
+
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
   
 
 
@@ -125,10 +157,21 @@ export class TimelineComponent implements OnInit {
     this.scrollToX(duration, targetPosition, container);
   }
   
+  @Output() selectedBarValue = new EventEmitter<string>();
 
-  onTimelineItemPointerOver(selected: string) {
+  onTimelineItemPointerOver(selected: any) {
     // this.autoScroll = false;
+    // this.selectedBarValue.emit(selected);
     this.setSelected(selected);
+    const parts = selected.split('-');
+
+            // Parse each part as a number
+    this.selectedBarYear = parseInt(parts[0], 10); // Parse the year part
+    this.selectedBarIndex = parseInt(parts[1], 10);
+    // this.selectedBar = undefined;
+
+    // this.highlightVerticalBar(year.xtoString(), index)
+    // this.setSelected(selected);
   }
 
   onTimelineItemFocused(selected: string) {

@@ -2,6 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ABOUT } from './ABOUT';
 import { HeroHeightService } from '../hero-height.service';
 import { TimelineComponent } from '../time-line/time-line.component';
+import { Subscription } from 'rxjs';
+import { TimeLineService } from '../time-line.service';
 
 @Component({
   selector: 'app-about',
@@ -20,14 +22,22 @@ export class AboutComponent {
   //   this.rangeIndex = newValue;
   // }
 
+  private subscription!:Subscription;
+
   @ViewChild(TimelineComponent) timelineComponent!: TimelineComponent;
 
   @ViewChild('heroSection', { static: true }) heroSection!: ElementRef;
+  selectedBar: any;
+  receivedSelectedBar!: any;
 
-  constructor(private heroHeightService: HeroHeightService) {}
+  constructor(private heroHeightService: HeroHeightService, private timeLineService:TimeLineService) {
+    // this.subscription = this.timeLineService.sharedData$.subscribe(data => {
+    //   this.receivedSelectedBar = data;
+    // });
+  }
 
   ngOnInit(){
-    this.startHighlightingSequence();
+    // this.timelineComponent.startHighlightingSequence();
   }
 
   // rangeIndex!: number;
@@ -41,30 +51,18 @@ export class AboutComponent {
 
 
   ngAfterViewInit() {
-    this.startHighlightingSequence();
+    this.timelineComponent.startHighlightingSequence();
     const heroSectionHeight = this.heroSection.nativeElement.clientHeight;
     this.heroHeightService.setHeroHeight(heroSectionHeight);
     this.timelineComponent.lastBarHighlighted.subscribe(() => {
       setTimeout(() => {
-        this.startHighlightingSequence();
+        this.timelineComponent.startHighlightingSequence();;
       }, 2000); // Add a delay before restarting the sequence
     });
   }
 
-  async startHighlightingSequence() {
-    if(this.timelineComponent && this.timelineComponent.timelineEntries){
-      for (const entry of this.timelineComponent.timelineEntries) {
-        for (let i = 0; i < entry.events.length; i++) {
-          await this.delay(4000); // Adjust the delay duration as needed
-          this.timelineComponent.highlightVerticalBar(entry.year, i);
-        }
-      }
-    }
-  }
 
-  delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
 
 }

@@ -56,6 +56,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ScrollPositionDirective } from './scroll-position.directive';
 import { BurgerMenuComponent } from './burger-menu/burger-menu.component';
 import { HamburgerIconComponent } from './hamburger-icon/hamburger-icon.component';
+import { CardSubmitButtonComponent } from './card-submit-button/card-submit-button.component';
 
 library.add(fab);
 
@@ -104,7 +105,8 @@ const routes: Routes = [
     BadgeComponent,
     ScrollPositionDirective,
     BurgerMenuComponent,
-    HamburgerIconComponent
+    HamburgerIconComponent,
+    CardSubmitButtonComponent
     // CodeComponent
   ],
   
