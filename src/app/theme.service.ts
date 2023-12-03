@@ -16,7 +16,6 @@ export class ThemeService {
     this.sharedDataSubject.next(data);
   }
 
-  // private booleanValueSubject = new BehaviorSubject<boolean>(false);
 
   get booleanValue$(): Observable<boolean> {
     return this.sharedDataSubject.asObservable();

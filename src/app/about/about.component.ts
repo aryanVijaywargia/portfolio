@@ -3,7 +3,6 @@ import { ABOUT } from './ABOUT';
 import { HeroHeightService } from '../hero-height.service';
 import { TimelineComponent } from '../time-line/time-line.component';
 import { Subscription } from 'rxjs';
-import { TimeLineService } from '../time-line.service';
 
 @Component({
   selector: 'app-about',
@@ -30,10 +29,7 @@ export class AboutComponent {
   selectedBar: any;
   receivedSelectedBar!: any;
 
-  constructor(private heroHeightService: HeroHeightService, private timeLineService:TimeLineService) {
-    // this.subscription = this.timeLineService.sharedData$.subscribe(data => {
-    //   this.receivedSelectedBar = data;
-    // });
+  constructor(private heroHeightService: HeroHeightService) {
   }
 
   ngOnInit(){
