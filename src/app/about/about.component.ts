@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ABOUT } from './ABOUT';
 import { HeroHeightService } from '../hero-height.service';
+import { TimelineComponent } from '../time-line/time-line.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-about',
@@ -9,25 +11,54 @@ import { HeroHeightService } from '../hero-height.service';
 export class AboutComponent {
   @ViewChild('buttonRef') buttonRef!: ElementRef<HTMLButtonElement>;
   focusImageIndex:number = 0;
-  image:any= ABOUT.images[0]; 
+  image:any= ABOUT.images; 
+  tooltip:any = ABOUT.tooltip;
   index:number = 0;
   rangeIndex:string="";
   ABOUT = ABOUT;
 
-  trackRangeValue(newValue: string) {
-    // this.items.push(newItem);
-    this.rangeIndex = newValue;
-  }
+  // trackRangeValue(newValue: string) {
+  //   this.rangeIndex = newValue;
+  // }
 
+  private subscription!:Subscription;
+
+  @ViewChild(TimelineComponent) timelineComponent!: TimelineComponent;
 
   @ViewChild('heroSection', { static: true }) heroSection!: ElementRef;
+  selectedBar: any;
+  receivedSelectedBar!: any;
 
-  constructor(private heroHeightService: HeroHeightService) {}
+  constructor(private heroHeightService: HeroHeightService) {
+  }
+
+  ngOnInit(){
+    // this.timelineComponent.startHighlightingSequence();
+  }
+
+  // rangeIndex!: number;
+
+  onSelectedValueChange(value: any) {
+    this.rangeIndex = value;
+    console.log("The vlaue of this.rangeIndex is ", this.rangeIndex)
+    // Do something with the selected value in the parent component
+  }
+
+
 
   ngAfterViewInit() {
+    this.timelineComponent.startHighlightingSequence();
     const heroSectionHeight = this.heroSection.nativeElement.clientHeight;
     this.heroHeightService.setHeroHeight(heroSectionHeight);
+    this.timelineComponent.lastBarHighlighted.subscribe(() => {
+      setTimeout(() => {
+        this.timelineComponent.startHighlightingSequence();;
+      }, 2000); // Add a delay before restarting the sequence
+    });
   }
+
+
+
 
 
 }

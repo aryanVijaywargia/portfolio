@@ -1,6 +1,15 @@
+
+@use '../../styles.scss' as *;
+
 html {
   box-sizing: border-box;
+  scroll-behavior: smooth !important;
 }
+
+
+// .your-container {
+//   @apply dark:your-class;
+// }
 
 *,
 *:before,
@@ -59,38 +68,74 @@ ul li::before {
   content: "▹";
   position: absolute;
   left: 0px;
-  color: green;
+  color: rgb(var(--color-accent) / var(--tw-text-opacity));;
 }
 
 $spacing: 20px;
-$purple: #19e8eb;
+$purple: rgb(var(--color-accent) / var(--tw-text-opacity));
 $tab-height: 40px;
+$tab-width: 100%;
 $green: #64ffda;
 $transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
 
 .company h3{
-  color: $green;
+  color: $purple;
 }
 
-a.inline-link {
+.inline-link {
   display: inline-block;
   text-decoration: none;
   text-decoration-skip-ink: auto;
   position: relative;
   transition: $transition;
-  color: $green;
+  // color: $green;
+  --tw-gradient-stops: var(
+    --tw-gradient-from), #0ea5e9 var(--tw-gradient-via-position), var(--tw-gradient-to);
+    --tw-gradient-to: #3b82f6 var(
+      --tw-gradient-to-position);
+  background-color: linear-gradient(to right, var(--tw-gradient-stops));
+  color: rgb(var(--color-accent) / var(--tw-text-opacity));
 }
+
+.bg_blob{
+  background-image: url("https://tailwindcss.com/_next/static/media/8-dark@tinypng.7abc66a1.png");
+  // background-size: 127.875rem 100%;
+  // height: 35rem;
+  background-size: 136.75rem 100%;
+    height: 32.625rem;
+    z-index: 1;
+    position: absolute;
+    margin-top: 135%;
+  // margin-top: 100%;
+}
+
+// :root {
+//   --color-scheme: light; // Default to light mode
+// }
+
+// .dark {
+//   --color-scheme: dark; // Set to dark mode in a container with class 'dark'
+// }
+
 
 .container {
   position: relative;
   margin: $spacing auto;
   padding: $spacing;
   width: 50%;
+  // display: flex;
+  // align-items: flex-start;
   display: flex;
-  align-items: flex-start;
+  flex-direction: row;
 
   .tabs {
-    display: block;
+    // display: block;
+    // position: relative;
+    // z-index: 3;
+    // width: max-content;
+
+    display: flex;
+    flex-direction: column;
     position: relative;
     z-index: 3;
     width: max-content;
@@ -104,15 +149,31 @@ a.inline-link {
       padding: 10px 0;
       transition: all 0.25s ease;
       border-left: 2px solid #5f6368;
-      color: #5f6368;
+      color: rgb(var(--color-gray-500)/1);
 
       &:hover {
-        color: $purple;
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 240,240,240, 1);
       }
 
       &.active {
-        color: $purple;
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 240,240,240, 1);
       }
+
+      &.d {&:hover {
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 15, 23, 42, 1);
+      }
+}
+      &.d {&.active {
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 15, 23, 42, 1);
+      }}
+
+      
+
+   
 
       @for $i from 1 through 4 {
         &.tab-#{$i}.active {
@@ -144,11 +205,64 @@ a.inline-link {
     a:last-of-type {
       border-top-right-radius: 2px;
     }
+
+    @media (max-width: 767px) {
+      flex-direction: row;  // Change direction to column for small screens
+      align-items: center;  // Center the tabs horizontally
+      text-align: center;  // Center the text inside each tab
+      width: 100%;  // Make the tabs take the full width
+      .tab {
+        border-left: none;
+        border-bottom: 2px solid #5f6368;
+        height:100%;
+        @for $i from 1 through 4 {
+          &.tab-#{$i}.active {
+            & ~ .highlighter {
+              transform: translateX(#{($i*$tab-width) - $tab-width})!important;
+            }
+          }
+        }
+      }
+      .highlighter{
+        display: block;
+        background: $purple;
+        // width: 24%;
+        height: 2px;
+        position: absolute;
+        top: 100%;
+        // left: 0;
+        transform: translateX($tab-width)!important;
+        transition: transform 0.2s ease;
+        transition-delay: 0.1s;
+        z-index: 10;
+
+      }
+
+      
+      
+     
+    }
   }
+
+  @media (max-width: 767px) {
+    flex-direction: column;  // Change direction to column for small screens
+    align-items: center;  // Center the tabs horizontally
+    // text-align: center;  // Center the text inside each tab
+    width: 100%;  // Make the tabs take the full width
+  }
+    
 
   .content {
     position: relative;
     padding: 0 $spacing;
+    
+    .d.headerTxt{
+      color:rgb(var(--color-gray-300) / var(--tw-text-opacity))!important
+    }
+
+    .headerTxt{
+      color:rgb(var(--color-gray-700) / var(--tw-text-opacity))
+    }
 
     &__section {
       position: absolute;
@@ -167,5 +281,177 @@ a.inline-link {
         z-index: 2;
       }
     }
+
+    @media (max-width: 767px) {
+      padding: $spacing $spacing;
+    }
+ 
   }
 }
+
+
+// @import "./../../../../variables.scss";
+
+
+// ::ng-deep .jobs .jobs-tabs {
+//     display: flex;
+
+//     .tab-content{
+//         margin-left: 38px;
+//     }
+
+//     ul{
+//         display: block;
+//         width: 114.33px;
+//         border: none;
+//     }
+
+//     a.active{
+//         background-color: $LightNavy !important;
+//         color: $Green !important;
+//         border-color: transparent !important;
+//         border-radius: 0px;
+//     }
+    
+//     a:hover{
+//         background-color: $LightNavy !important;
+//         color: $Green !important;
+//         border-color: transparent !important;
+//         border-radius: 0px;
+//     }
+
+//     a{
+//         display: inline-block;
+//         -webkit-text-decoration: none;
+//         text-decoration: none;
+//         -webkit-text-decoration-skip-ink: auto;
+//         text-decoration-skip-ink: auto;
+//         color: inherit;
+//         position: relative;
+//         -webkit-transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
+//         transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
+//         cursor: pointer;
+//         display: -webkit-box;
+//         display: -webkit-flex;
+//         display: -ms-flexbox;
+//         display: flex;
+//         -webkit-align-items: center;
+//         -webkit-box-align: center;
+//         -ms-flex-align: center;
+//         align-items: center;
+//         width: 100%;
+//         background-color: transparent;
+//         height: 42px;
+//         padding: 0 20px 2px;
+//         -webkit-transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
+//         transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
+//         text-align: left;
+//         white-space: nowrap;
+//         font-family: $CodeFont;
+//         font-size: 13px;
+//         color: $Slate;
+//     }
+
+//     li{
+//         border-left: 2px solid $LightestNavy;
+//         border-left-width: 2px;
+//         border-left-style: solid;
+//         border-left-color: rgb(48, 60, 85);
+//     }
+// }
+
+// .jobs{
+
+//     max-width: 700px;
+//     margin: auto;
+
+//     .title-tab-content{
+//         color: $LightestSlate;
+//         font-size: 22px;
+//         font-weight: 500;
+//         margin-bottom: 5px;
+
+//         .company-tab-content{
+//             color: $Green;
+//         }
+//     }
+
+//     .job-time{
+//         font-family: $CodeFont;
+//         font-size: 13px;
+//         font-weight: normal;
+//             -webkit-letter-spacing: 0.05em;
+//         -moz-letter-spacing: 0.05em;
+//         -ms-letter-spacing: 0.05em;
+//         letter-spacing: 0.05em;
+//         color: $LightSlate;
+//         margin-bottom: 30px;
+//     }
+    
+//     .job-description{
+//         position: relative;
+//         padding-left: 30px;
+//         margin-bottom: 10px;
+//         font-size: 18px;
+
+//         &:before {
+//             content: '▹';
+//             position: absolute;
+//             left: 0;
+//             color: $Green;
+//         }
+//     }
+// }
+
+
+
+// @media (max-width: 768px){
+//     .jobs {
+//         .job-description{
+//             padding: 0px;
+//         }
+//     }
+//     ::ng-deep .jobs-tabs{
+//         display: block !important;
+
+//         .tab-content{
+//             margin-left: 0px !important;
+//         }
+
+//         ul {
+//             display: block;
+//             width: 100% !important;
+//             margin-bottom: 50px;
+//         }
+//     }
+// }
+/* Add this to your existing styles or create a new stylesheet */
+// @media screen and (max-width: 767px) {
+//   .tabs {
+//     flex-direction: column;
+//     align-items: center;
+//     text-align: center;
+//   }
+
+//   .tab {
+//     display: block;
+//     margin-bottom: 10px;
+//   }
+
+//   .highlighter {
+//     display: none;
+//   }
+
+//   .content {
+//     margin-top: 20px;
+//   }
+
+//   .content__section {
+//     display: none;
+//   }
+
+//   .content__section.visible {
+//     display: block;
+//   }
+// }
+

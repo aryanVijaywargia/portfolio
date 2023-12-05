@@ -113,6 +113,8 @@ module.exports = {
         "8xl": "90rem",
       },
       colors: {
+        hoverblueL:'rgba(100, 116, 139,1)',
+        heroIconBg:'rgba( 15, 23, 42, 1)',
         bg: "rgb(var(--color-bg) / <alpha-value>)",
         "bg-dark": "rgb(var(--color-bg-dark) / <alpha-value>)",
         "bg-secondary": "rgb(var(--color-bg-secondary) / <alpha-value>)",

@@ -3,7 +3,19 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+
+
 @layer components {
+
+  .your-class {
+    &:hover,
+    &.active {
+      
+      background: rgba(15, 23, 42, 1); 
+    }
+  }
 
     .burger-menu {
       @apply relative h-[var(--nav-icon-size)] w-[var(--nav-icon-size)] block;

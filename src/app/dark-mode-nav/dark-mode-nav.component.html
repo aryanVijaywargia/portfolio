@@ -1,0 +1,17 @@
+<!-- <div id="main">
+    <div id="btn" class="container">
+        <div id="sq1" class="active"></div>
+        <div id="sq2" class="active"></div>
+        <div id="cbig" class="active"></div>
+        <div id="csmall" class="active"></div>
+    </div>
+</div> -->
+
+<div id="main">
+    <div (click)="toggleActive()" id="btn" class="container">
+        <div id="sq1" [ngClass]="{'active': isActive, 'active2': !isActive}"></div>
+        <div id="sq2" [ngClass]="{'active': isActive, 'active2': !isActive}"></div>
+        <div id="cbig" [ngClass]="{'active': isActive, 'active2': !isActive}"></div>
+        <div id="csmall" [ngClass]="{'active': isActive, 'active2': !isActive}"></div>
+    </div>
+</div>

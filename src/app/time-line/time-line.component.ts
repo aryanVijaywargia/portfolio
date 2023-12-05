@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { TIMELINEOBJECT, TimelineEvent } from './time-line';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,7 +10,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 export class TimelineComponent implements OnInit {
   @ViewChild('scrollContainerRef', { static: true }) scrollContainerRef!: ElementRef<HTMLDivElement>;
-
+  @Output() lastBarHighlighted = new EventEmitter<void>();
   public selected: string = ''; 
   initiated = false;
   autoAnimate = true;
@@ -42,6 +42,12 @@ export class TimelineComponent implements OnInit {
       icons: events.map(event => event.Icon),
     })
   );
+  selectedBarYear: any;
+  selectedBarIndex: any;
+
+  ngAfterViewInit(){
+    this.scrollToSection();
+  }
 
   // public getCombinedValue(entry:any, index: number): string {
   //   console.log( `${entry.year}-${index}`);
@@ -51,6 +57,66 @@ export class TimelineComponent implements OnInit {
   public getCombinedValue(year: string, index: number): string {
     return `${year}-${index}`;
   }
+
+
+  highlightVerticalBar(year: string, index: number) {
+    const container = this.scrollContainerRef.nativeElement;
+    const targetPosition = window.scrollX + container.clientWidth / 2 ; // Use window.scrollX to get the current scroll position
+    const barElement = container.querySelector(`[data-bar="${year}-${index}"]`);
+  
+    if (barElement) {
+      const barPosition = barElement.getBoundingClientRect().left + container.scrollLeft;
+      const duration = 1000; // Duration of the scrolling animation in milliseconds
+  
+      this.scrollToX(duration, barPosition - targetPosition, container, () => {
+        // Highlight the bar
+        this.setSelected(`${year}-${index}`);
+        if (this.isLastBar(year, index)) {
+          // setTimeout(() => {
+            this.lastBarHighlighted.emit();
+          // }, 2000); // Add a delay before restarting the sequence
+        }
+  
+      });
+    }
+  }
+
+  isLastBar(year: string, index: number): boolean {
+    const lastEntry = this.timelineEntries[this.timelineEntries.length - 1];
+    return year === lastEntry.year && index === lastEntry.events.length - 1;
+  }
+  
+
+  async startHighlightingSequence() {
+    if(this.timelineEntries){
+      for(let entries=0; entries<this.timelineEntries.length; entries++){
+        for (let index = 0; index < this.timelineEntries[entries].events.length; index++) {
+         
+          await this.delay(4000); 
+        
+
+          if(this.selectedBarYear){
+            // entries = this.selectedBarYear;
+            index = this.selectedBarIndex
+
+            entries = this.timelineEntries.findIndex(entry => entry.year === this.selectedBarYear.toString());
+
+            this.selectedBarYear=null;
+            this.selectedBarIndex=null;
+          }
+          
+          this.highlightVerticalBar(this.timelineEntries[entries].year, index);
+          
+                    
+        }
+      }
+    }
+  }
+
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
 
 
 
@@ -76,7 +142,9 @@ export class TimelineComponent implements OnInit {
   setSelected(selected: string) {
     // this.autoScroll = false;
     this.selected = selected;
-    // const [year, index] = selected.split("-");
+    
+    // let [year, index] = selected.split("-");
+    // this.highlightVerticalBar(parseInt(year).toString(), parseInt(index))
     // this.selectedIconIndex = parseInt(index, 10);
     // this.scrollToSection();
   }
@@ -89,10 +157,21 @@ export class TimelineComponent implements OnInit {
     this.scrollToX(duration, targetPosition, container);
   }
   
+  @Output() selectedBarValue = new EventEmitter<string>();
 
-  onTimelineItemPointerOver(selected: string) {
+  onTimelineItemPointerOver(selected: any) {
     // this.autoScroll = false;
+    // this.selectedBarValue.emit(selected);
     this.setSelected(selected);
+    const parts = selected.split('-');
+
+            // Parse each part as a number
+    this.selectedBarYear = parseInt(parts[0], 10); // Parse the year part
+    this.selectedBarIndex = parseInt(parts[1], 10);
+    // this.selectedBar = undefined;
+
+    // this.highlightVerticalBar(year.xtoString(), index)
+    // this.setSelected(selected);
   }
 
   onTimelineItemFocused(selected: string) {

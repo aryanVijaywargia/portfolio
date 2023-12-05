@@ -188,7 +188,7 @@
     position: absolute;
 
     left: 50%;
-    top: 33px;
+    top: 10%;
     height: 93px;
     width: calc(84px + 10px);
     margin-left: calc((-84px + -10px) / 2);
@@ -197,3 +197,28 @@
 
     background: $second-bg-color;
 }
+
+// @media screen and (max-width: 1440px) {
+//     .face {
+//         transform: scale(0.9);
+//     }
+// }
+
+
+@media screen and (max-width: 600px) {
+    .face {
+        transform: scale(0.75);
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .face {
+        transform: scale(0.6);
+    }
+}
+
+// @media screen and (max-width: 720px) {
+//     .face {
+//         transform: scale(0.5);
+//     }
+// }

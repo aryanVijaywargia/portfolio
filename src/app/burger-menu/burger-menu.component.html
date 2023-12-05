@@ -1,0 +1,57 @@
+<div class="md:hidden">
+    <button type="button" (click)="toggleNav()" class="relative z-1001 p-1">
+        <span class="sr-only">Mobile Navigation</span>
+        <i class="burger-menu" [class.active]="showNav">
+            <div></div>
+        </i>
+    </button>
+
+    <div [ngClass]="{
+          'fixed top-0 left-0 h-screen w-full': true,
+          'nav-active opacity-100': showNav,
+          'pointer-events-none select-none opacity-0 delay-[900ms]': !showNav
+        }">
+        <div class="absolute inset-0 -z-50 grid grid-cols-[1rem_repeat(16,minmax(0,1fr))_1rem]">
+            <div *ngFor="let index of [].constructor(18) ; trackBy: trackByIndex" [ngClass]="{
+    'pointer-events-none relative h-full -translate-y-full select-none bg-slate-900 transition-all duration-300 ease-linear': true,
+    'relative before:absolute b:top-0 b:right-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-20': index === 0,
+    'relative before:absolute b:top-0 b:left-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-20': index === 17
+  }" [style.transitionDelay]="showNav ? index * 0.01 + 's' : index * 0.025 + 's'"
+                [style.--tw-translate-y]="showNav ? '0%' : '-100%'"></div>
+
+        </div>
+
+        <section class="mt-28 p-8 spacing-24">
+            <nav class="relative text-white spacing-6">
+                <ng-container *ngFor="let navItem of HEADER.nav; let index = index; trackBy: trackByIndex">
+                    <a [href]="navItem.href"
+                        class="group flex items-baseline justify-between py-2 text-gray-300 opacity-{{ showNav ? '1' : '0' }} transition-opacity delay-200 hfa:text-sky-400">
+                        <span class=" text-[17px] font-medium"
+                            [style.transition]="showNav ? 'transform 0.15s ' + (0.4 + 0.05 * index) + 's' : 'transform 0.15s ' + 0.05 * index + 's'">
+                            {{ navItem.title }}
+                        </span>
+                        <div
+                            class="mx-2 h-px flex-1 bg-[linear-gradient(90deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] bg-[length:8px_1px] opacity-1 transition-opacity">
+                        </div>
+                        <small class=" text-gray-400"
+                            [style.transition]="showNav ? 'transform 0.15s ' + (0.4 + 0.05 * index) + 's' : 'transform 0.15s ' + 0.05 * index + 's'">
+                            {{ navItem.alt }}
+                        </small>
+                    </a>
+                </ng-container>
+
+
+            </nav>
+
+            <div class="flex translate-y-8 items-center justify-center opacity-0" [ngClass]="{
+    'translate-y-0 opacity-100 delay-500': showNav,
+    
+  }" [style.transition]="showNav ? 'transform 0.15s 0.35s, opacity 0.2s 0.35s' : 'transform 0.15s 0.05s, opacity 0.2s 0.05s'">
+                <button
+                    class="button-rainbow  whitespace-nowrap border-[4px] border-opacity-40 px-10 py-3 font-medium tracking-tight text-gray-900">
+                    Resume
+                </button>
+            </div>
+        </section>
+    </div>
+</div>

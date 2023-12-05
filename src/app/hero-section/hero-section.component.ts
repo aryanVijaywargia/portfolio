@@ -1,11 +1,27 @@
 import { Component } from '@angular/core';
 import * as party from 'party-js';
 import { IconService } from './icon.service';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-hero-section',
   templateUrl: './hero-section.component.html',
-  styleUrls: ['./hero-section.component.scss']
+  styleUrls: ['./hero-section.component.scss'],
+  animations: [
+    trigger('bannerTrigger', [
+      transition(":enter", [
+        query("*", [
+          style({ opacity: 0, transform: "translateX(-50px)" }),
+          stagger(50, [
+            animate(
+              "250ms cubic-bezier(0.35, 0, 0.25, 1)",
+              style({ opacity: 1, transform: "none" })
+            )
+          ])
+        ])
+      ])
+    ])
+  ]
 })
 export class HeroSectionComponent {
 
@@ -27,23 +43,28 @@ export class HeroSectionComponent {
         console.error('Failed to load icons:', error);
       });
   }
+  
 
   tech = [
     {
+      name: 'Typescript',
+      Icon: 'Typescript',
+    },
+    {
       name: 'Angular',
-      Icon: 'cib-angular',
+      Icon: 'Angular',
     },
     {
-      name: 'Node.js',
-      Icon: 'cib-tensorflow',
+      name: 'Dotnet',
+      Icon: 'Dotnet',
     },
     {
-      name: 'Tailwind',
-      Icon: 'cib-typescript',
+      name: 'Tensorflow',
+      Icon: 'Tensorflow',
     },
     {
-      name: 'Flask',
-      Icon: 'cib-flask',
+      name: 'Python',
+      Icon: 'Python',
     },
   ] as const;
 

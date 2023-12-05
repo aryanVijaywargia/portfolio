@@ -1,6 +1,13 @@
-<section class="relative md:h-[420px]" style="z-index: 1;">
+<section class="relative h-[420px]" style="z-index: 1;">
     <div
-        class="relative flex h-full min-w-[460px] flex-col gap-4 sm:min-w-[660px] lg:absolute lg:left-8 lg:top-16 lg:left-6 lg:top-24 lg:min-w-[560px]">
+        class="relative flex h-full min-w-[360px] flex-col gap-4 sm:min-w-[660px] lg:absolute lg:left-8 lg:top-16 lg:left-6 lg:top-24 lg:min-w-[480px]">
+        <div class="relative z-20 flex justify-end gap-1.5">
+            <app-badge [size]="'md'" [style]="'warning'" [children]="'Text'"></app-badge>
+            <app-badge [size]="'md'" [style]="'info'" [children]="'Text'"></app-badge>
+            <app-badge [size]="'md'" [style]="'attention'" [children]="'Text'"></app-badge>
+            <app-badge [size]="'md'" [style]="'success'" [children]="'Text'"></app-badge>
+            <app-badge [size]="'md'" [style]="'accent'" [children]="'Text'"></app-badge>
+        </div>
         <div class="relative flex h-full flex-col">
             <figure
                 class="relative w-full flex-col overflow-hidden rounded-md border-2 border-gray-200-custom p-2.5 shadow-2xl drop-shadow-lg d:border-gray-600/40 h-full bg-gray-900-custom">

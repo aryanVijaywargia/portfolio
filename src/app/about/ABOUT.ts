@@ -1,7 +1,7 @@
 // const lunatag =  "../../assets/alpha-backpack.jpg"
 const lunatag2 = "../../assets/quadbike.jpg"
 const lunatag = "../../assets/dont-be-a-dick.jpg"
-
+// const lunatag=""
 export const ABOUT = {
     stats: [
       {
@@ -55,13 +55,9 @@ export const ABOUT = {
       <p>Most of that is still true today.</p>
     `,
     images: [
-      {
-        src: lunatag,
-        alt: 'Pandemic pics',
-      },
-      {
-        src: lunatag2,
-        alt: 'With Liz and Alpha at House of the Machines',
-      }
+      '../../assets/DSC_4354_Original.jpg','../../assets/IMG_1426.jpg','../../assets/IMG_2734.jpg',  '../../assets/dont-be-a-dick.jpg' // '../../assets/quadbike.jpg', '../../assets/profile-lionshead.jpg', '../../assets/namibia.jpg', '../../assets/alpha-backpack.jpg'
     ],
+    tooltip:
+      ['../../assets/IMG_1426.jpg','../../assets/DSC_4354_Original.jpg','../../assets/IMG_2734.jpg','../../assets/dont-be-a-dick.jpg' , '../../assets/quadbike.jpg', '../../assets/profile-lionshead.jpg', '../../assets/namibia.jpg', '../../assets/alpha-backpack.jpg']
+    
   };

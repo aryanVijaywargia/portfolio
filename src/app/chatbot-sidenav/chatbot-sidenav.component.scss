@@ -1,0 +1,107 @@
+.chat-sidenav {
+    width: 50%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    position: fixed;
+    // z-index: 1040; /* Adjust if necessary to be above other elements */
+  }
+
+  .close-button {
+    position: absolute;
+    top: 10px; /* Adjust the top position as needed */
+    right: 10px; /* Adjust the right position as needed */
+    cursor: pointer;
+    font-size: 20px; /* Adjust the font size as needed */
+    color: #fff; /* Button color */
+    background-color: #333; /* Button background color */
+    border-radius: 50%; /* Make it a circle if desired */
+    padding: 5px 10px; /* Adjust padding as needed */
+    z-index: 5040; 
+  }
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    z-index: 500; /* Ensure the overlay appears above other content */
+    // display: none; /* Initially hidden */
+  }
+  
+  .nb-sidebar.opened + .overlay {
+    display: block; /* Display the overlay when the sidebar is open */
+  }
+
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%); /* Start off-screen to the right */
+    }
+    to {
+      transform: translateX(0); /* End at its default position */
+    }
+  }
+  
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0); /* Start at its default position */
+    }
+    to {
+      transform: translateX(100%); /* End off-screen to the right */
+    }
+  }
+  
+  /* You might need to add `!important` to override any default styles */
+.nb-sidebar {
+    animation-fill-mode: forwards; /* Makes the element stay in the final state of the animation */
+  }
+  
+  .nb-sidebar.start-closing {
+    animation: slideOutRight 0.5s ease-in-out; /* Adjust duration and timing function as needed */
+  }
+  
+  .nb-sidebar.start-opening {
+    animation: slideInRight 0.5s ease-in-out; /* Adjust duration and timing function as needed */
+  }
+  
+
+//   .nb-sidebar,
+// .nb-sidebar > div.main-container {
+//   transition: width 6s;
+// }
+//   .nb-sidebar.chat-sidenav.left.expanded .main-container.main-container-fixed {
+//     top: 0 !important; /* Set top value to 0 */
+//   }
+  
+// :ng-deep nb-sidebar .main-container {
+//     // height: var(--sidebar-height);
+//     width: 100%;
+// }
+// nb-sidebar[right]{
+//     --sidebar-width: 700px;
+//     }
+// nb-sidebar[left]{
+//     --sidebar-width: 60%;
+//     }
+//     nb-sidebar[right]{
+//     --sidebar-width: 60%;
+//     }
+
+    
+// :ng-deep  .main-container {
+//     // height: var(--sidebar-height);
+//     width: 60%!important;
+// }
+
+// ::ng-deep nb-layout .layout .layout-container nb-sidebar.fixed, nb-layout .layout .layout-container nb-sidebar .main-container-fixed {
+//     top: 0;
+// }
+
+
+// .chat-sidebar {
+//     display: flex;
+//     flex-direction: column; /* Stack children vertically */
+//   }
+  
+  

@@ -10,7 +10,7 @@
 // }
 
 
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, AfterViewChecked, ViewChild, ViewEncapsulation, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-terminal-new',
@@ -19,7 +19,7 @@ import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChi
   encapsulation: ViewEncapsulation.None
 })
 
-export class TerminalNewComponent implements OnInit {
+export class TerminalNewComponent implements OnInit, AfterViewChecked {
   private terminalCommands: string[] = [];
   private gitIndex = 0;
   private isPwd = false;
@@ -28,10 +28,10 @@ export class TerminalNewComponent implements OnInit {
 
   textValue = '';
 
-  ngAfterViewChecked() {
-    this.before.nativeElement.parentNode.scrollTop = this.before.nativeElement.parentNode.scrollHeight;
-    this.cdRef.detectChanges();
-  }
+  // ngAfterViewChecked() {
+  //   this.before.nativeElement.parentNode.scrollTop = this.before.nativeElement.parentNode.scrollHeight;
+  //   this.cdRef.detectChanges();
+  // }
 
 
 
@@ -120,7 +120,7 @@ initial = [
   "<span class=\"inherit\">Hello. For a list of commands, type <span class=\"command\">'help'</span>.</span>"
 ]
 
-  constructor(private cdRef : ChangeDetectorRef) { }
+  constructor(private cdRef : ChangeDetectorRef, private renderer: Renderer2) { }
 
   ngOnInit() {
     setTimeout(() => {
@@ -162,8 +162,22 @@ initial = [
     console.log(txt);
   }
 
+  ngAfterViewChecked() {
+    // this.scrollTerminalToBottom();
+  }
+  
 
-  @HostListener('window:keyup', ['$event'])
+  scrollTerminalToBottom() {
+    const terminalContainer = this.before.nativeElement.parentNode;
+    // terminalContainer.scrollTop = terminalContainer.scrollHeight;
+    this.renderer.setProperty(terminalContainer, 'scrollTop', terminalContainer.scrollHeight);
+  }
+
+
+
+
+
+  @HostListener('keyup', ['$event'])
   onKeyUp(event: KeyboardEvent) {
     if (event.keyCode == 181) {
       document.location.reload();
@@ -225,6 +239,7 @@ initial = [
     switch (cmd.toLowerCase()) {
       case "help":
         this.loopLines(this.help, "color2 margin pCls", 80);
+        // this.scrollTerminalToBottom();
         break;
       case "whois":
         this.loopLines(this.whois, "color2 margin pCls", 80);
@@ -271,14 +286,16 @@ initial = [
       this.before!.nativeElement.parentNode!.insertBefore(next, this.before.nativeElement);
       // window.scrollTo(0, document.body.offsetHeight);
       // this.before.nativeElement.parentNode.scrollTop = this.before.nativeElement.parentNode.scrollHeight;
-
+      this.scrollTerminalToBottom(); 
     }, time);
+    
   }
 
   loopLines(name: string[], style: string, time: number) {
     name.forEach((item, index) => {
       this.addLine(item, style, index * time);
     });
+    
   }
 
   nl2br(txt: string) {

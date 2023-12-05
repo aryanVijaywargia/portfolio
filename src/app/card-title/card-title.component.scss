@@ -5,15 +5,26 @@
     position: relative;
     width: 100%;
 }
+textarea:focus {
+    --tw-ring-color: rgba(56 189 248  0);
+    border: 2px solid rgb(14, 165, 233)!important; /* Adjust the border style and color as needed */
+    outline: none; /* Remove the default outline, if desired */
+  }
+
+  textarea:active {
+    --tw-ring-color: rgba(56 189 248  0);
+    border: 2px solid rgb(14, 165, 233)!important; /* Adjust the border style and color as needed */
+    outline: none; /* Remove the default outline, if desired */
+  }
 
 .textBox textarea{
-    width: 200%;
+    width: 75%;
     padding: 10px;
-    border: 2px solid rgba(0,0,0, 0.5);
+    border: 2px solid rgb(100 116 139);
     background: transparent;
     border-radius: 5px;
     outline: none;
-    color: black;
+    color: rgb(226 232 240);
     font-size: 1em;
     transition: 0.5s;
     resize: none;
@@ -25,7 +36,7 @@
     padding: 10px;
     pointer-events: none;
     font-size: 1em;
-    color: rgba(0,0,0, 0.5);
+    color: rgb(100 116 139);
     // text-transform: uppercase;
     transition: 0.5s;
 }
@@ -33,26 +44,27 @@
 .textBox textarea:valid ~ span,
 .textBox textarea:focus ~ span
 {
-    color: #2196f3;
+    color: white;
     transform: translateX(10px) translateY(-7px);
     font-size: 0.75em;
     padding: 0 5px;
-    background: $bg-color1;
+    background: rgb(14, 165, 233);//$bg-color1;
     border-left: 1px solid black;
     border-right: 1px solid black;
+    outline: none
     // letter-spacing: 0.2em;
 }
 
 .inputBox{
    
     position: relative;
-    width: 250px;
+    width: 50%;
 }
 
 .inputBox input{
     width: 90%;
     background: transparent;
-    color: #000; // #fff;
+    color: rgb(226 232 240); // #fff;
     border: none;
     outline: none;
     box-shadow: none;
@@ -64,7 +76,7 @@
     position: absolute;
     left: 0;
     padding: 10px 0 5px;
-    color: rgba(0, 0, 0, 0.5);
+    color: rgb(100 116 139);
     // text-transform: uppercase;
     pointer-events: none;
     // letter-spacing: 0.1em;
@@ -86,7 +98,7 @@
 .inputBox input:focus ~ span
 {
     color: #2196f3;
-    transform: translateY(-16px);
+    transform: translateY(-16px)!important;
     font-size: 0.65em;
 }
 
@@ -122,7 +134,7 @@
     bottom: 0;
     width: 90%;
     height: 2px;
-    background: #000000;
+    background: rgb(100 116 139);
     overflow: hidden;
 }
 
@@ -132,7 +144,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, #ff1b69, #ff0, #2196f3, #9c27b0, #ff1b69);
+    background: rgb(14, 165, 233);//linear-gradient(90deg, #ff1b69, #ff0, #2196f3, #9c27b0, #ff1b69);
     animation: animate 2s linear infinite;
     transition: 0.5s;
 }

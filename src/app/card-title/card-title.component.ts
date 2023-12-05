@@ -80,7 +80,7 @@ export class CardTitleComponent implements OnInit {
         <i>This is sent as a feedback from my resume page.</i> <br/> <b>Name: </b>${this.model.name} <br /> <b>Email: </b>${this.model.email}<br /> <b>Message:</b> <br /> ${this.model.message} <br><br> <b>~End of Message.~</b> `
         }).then( console.log("Message sent")  );
 
-        this.reactiveForm.reset();
+        setTimeout(() => this.reactiveForm.reset(), 5000);
 
         // Reset flags
         this.submitted = false;

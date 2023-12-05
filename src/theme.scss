@@ -1,3 +1,42 @@
+@forward '@nebular/theme/styles/theming';
+@use '@nebular/theme/styles/theming' as *;
+@use '@nebular/theme/styles/themes/default';
+@use '@nebular/theme/styles/themes/dark';
+
+$nb-enable-css-custom-properties: true; // <-- enable css custom properties
+
+
+$nb-themes: nb-register-theme(
+  (
+    // some styles we changed
+    // text-basic-color: color-basic-800,
+    // text-disabled-color: color-basic-600
+    // sidebar-width: 50%,
+    // sidebar-padding: 0,
+    // sidebar-width-compact: 50%
+    // chat-background-color: #4ba727,
+    // chat-message-background	: #4ba727
+  ),
+  default,
+  default
+);
+
+$nb-themes: nb-register-theme(
+  (
+    // some styles we changed
+    // text-basic-color: color-basic-800,
+    // text-disabled-color: color-basic-600
+    // sidebar-width: 50%,
+    // sidebar-padding: 0,
+    // sidebar-width-compact: 50%
+    // chat-background-color: #4ba727,
+    // chat-message-background	: #4ba727
+  ),
+  dark,
+  dark
+);
+
+
 @font-face {
     font-family: 'Inter var';
     font-weight: 100 900;
@@ -26,6 +65,8 @@
     font-family: Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     -webkit-font-smoothing: antialiased;
   }*/
+
+  
   
   html {
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';

@@ -81,47 +81,37 @@ export class ScrollGalleryComponent implements OnInit {
     this.scrollToBeginning();
   }
 
-  // private getScrollDirection(scrollContainer: HTMLElement): 'left' | 'right' {
-  //   const previousScroll = Number(scrollContainer.dataset['previousScroll']) || 0;
-  //   if (scrollContainer.scrollLeft < previousScroll) {
-  //     // Scrolling to the left
-  //     scrollContainer.dataset['previousScroll'] = scrollContainer.scrollLeft.toString();
-  //     return 'left';
-  //   } else {
-  //     // Scrolling to the right or no horizontal scroll change
-  //     scrollContainer.dataset['previousScroll'] = scrollContainer.scrollLeft.toString();
-  //     return 'right';
-  //   }
-  // }
+  private getScrollDirection(scrollContainer: HTMLElement): 'left' | 'right' {
+    const previousScroll = Number(scrollContainer.dataset['previousScroll']) || 0;
+    if (scrollContainer.scrollLeft < previousScroll) {
+      // Scrolling to the left
+      scrollContainer.dataset['previousScroll'] = scrollContainer.scrollLeft.toString();
+      return 'left';
+    } else {
+      // Scrolling to the right or no horizontal scroll change
+      scrollContainer.dataset['previousScroll'] = scrollContainer.scrollLeft.toString();
+      return 'right';
+    }
+  }
 
-  // @HostListener('window:scroll', ['$event.target'])
-  // onScroll(): void {
-  //   const scrollContainer = this.scrollContainerRef.nativeElement as HTMLElement;
-  //   const scrollLeft = scrollContainer.scrollLeft;
-  //   const scrollDirection = this.getScrollDirection(scrollContainer);
-
-  //   if (scrollDirection === 'left') {
-  //     // Call your function here when scrolling left
-  //     console.log("The scrollLeft val is " + scrollLeft)
-  //     this.updateScrollNavigation();
-  //   }
-  //   // this.updateScrollNavigation();
-  // }
+  @HostListener('scroll', ['$event'])
+  onScroll(event:Event): void {
+    const scrollContainer = this.scrollContainerRef.nativeElement as HTMLElement;
+   
+      this.updateScrollNavigation();
+   
+  }
   handleClickPrevious(): void {
-    if (this.isScrolling) return;
+    // if (this.isScrolling) return;
     const scrollContainer = this.scrollContainerRef.nativeElement as HTMLDivElement;
     scrollContainer.classList.remove('snap-x');
-    this.isScrolling = true;
+    // this.isScrolling = true;
 
     scrollToX(
       200,
       Math.max(scrollContainer.scrollLeft - this.itemWidth - this.gapWidth, 0),
       scrollContainer,
       () => {
-        // if(scrollContainer.scrollLeft - this.itemWidth - this.gapWidth <=0){
-        //   this.scrollNavigation.prev = false;
-        // }
-        this.isScrolling = false;
         scrollContainer.classList.add('snap-x');
         this.updateScrollNavigation();
       }
@@ -129,14 +119,11 @@ export class ScrollGalleryComponent implements OnInit {
   }
 
   handleClickNext(): void {
-    if (this.isScrolling) return;
 
     const scrollContainer = this.scrollContainerRef.nativeElement as HTMLDivElement;
     scrollContainer.classList.remove('snap-x');
-    this.isScrolling = true;
 
     scrollToX(200, scrollContainer.scrollLeft + this.itemWidth + this.gapWidth, scrollContainer, () => {
-      this.isScrolling = false;
       scrollContainer.classList.add('snap-x');
       this.updateScrollNavigation();
     });
@@ -157,10 +144,9 @@ export class ScrollGalleryComponent implements OnInit {
     if(this.scrollContainerRef!= null){
       const scrollContainer = this.scrollContainerRef.nativeElement as HTMLDivElement;
       scrollContainer.classList.remove('snap-x');
-      this.isScrolling = true;
+      
   
       scrollToX(200, 0, scrollContainer, () => {
-        this.isScrolling = false;
         scrollContainer.classList.add('snap-x');
       });
     }

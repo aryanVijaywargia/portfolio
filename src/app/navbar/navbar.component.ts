@@ -1,216 +1,23 @@
-// import {
-//   faAward,
-//   faBriefcase,
-//   faCertificate,
-//   faDownload,
-//   faEnvelope,
-//   faEye,
-//   faGraduationCap,
-//   faLightbulb,
-//   faRocket,
-//   faUser,
-// } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/angular-fontawesome";
-// import { HamburgerSpin } from "hamburger-css";
-// import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
-// import { DarkModeSwitch } from "angular-toggle-dark-mode";
-// import OptionButton from "./navbar/OptionButton";
-// import { ElementRef, OnInit } from '@angular/core';
-
-// @Component({
-//   selector: "app-navbar",
-//   templateUrl: "./navbar.component.html",
-//   styleUrls: ["./navbar.component.scss"],
-// })
-// export class NavbarComponent implements OnInit, AfterViewInit {
-//   @Input() opacity!: number;
-//   @Input() heroRef!: ElementRef;
-//   @Input() skillRef!: ElementRef;
-//   @Input() workRef!: ElementRef;
-//   @Input() experienceRef!: ElementRef;
-//   @Input() awardRef!: ElementRef;
-//   @Input() certificateRef!: ElementRef;
-//   @Input() educationRef!: ElementRef;
-//   @Input() contactRef!: ElementRef;
-//   @Input() darkMode!: boolean;
-//   @Input() audioRef!: ElementRef;
-//   @Input() stat: any;
-
-//   @ViewChild("menuRef") menuRef!: ElementRef;
-
-//   isSkillsVisible!: boolean;
-//   isWorkVisible!: boolean;
-//   isExperienceVisible!: boolean;
-//   isAwardVisible!: boolean;
-//   isCertificateVisible!: boolean;
-//   isEducationVisible!: boolean;
-//   isContactVisible!: boolean;
-//   isSkillHover!: boolean;
-//   isWorkHover!: boolean;
-//   isExperienceHover!: boolean;
-//   isAwardHover!: boolean;
-//   isCertificateHover!: boolean;
-//   isEducationHover!: boolean;
-//   isContactHover!: boolean;
-//   isMenuToggle!: boolean;
-
-//   constructor() {}
-
-//   ngOnInit(): void {}
-
-//   ngAfterViewInit(): void {
-    
-//     this.isSkillsVisible = this.useOnScreen(this.skillRef.nativeElement);
-//     this.isWorkVisible = this.useOnScreen(this.workRef.nativeElement);
-//     this.isExperienceVisible = this.useOnScreen(this.experienceRef.nativeElement);
-//     this.isAwardVisible = this.useOnScreen(this.awardRef.nativeElement);
-//     this.isCertificateVisible = this.useOnScreen(this.certificateRef.nativeElement);
-//     this.isEducationVisible = this.useOnScreen(this.educationRef.nativeElement);
-//     this.isContactVisible = this.useOnScreen(this.contactRef.nativeElement);
-//   }
-
-//   useOnScreen(ref: ElementRef, rootMargin = '0px'): boolean {
-//     const observer = new IntersectionObserver(
-//       ([entry]) => {
-//         this.isSkillsVisible = Math.ceil(entry.intersectionRatio - 0.085)> 0;
-//       },
-//       {
-//         rootMargin
-//       }
-//     );
-
-//     const currentElement = ref?.nativeElement;
-
-//     if (currentElement) {
-//       observer.observe(currentElement);
-//     }
-
-//     return this.isSkillsVisible;
-//   }
-
-//   executeScroll(ref: ElementRef): void {
-//     const isMobile = document.documentElement.clientWidth < 480;
-//     if (isMobile) {
-//       ref.nativeElement.scrollIntoView({ behavior: "smooth" });
-//     } else {
-//       const yOffset = -45;
-//       const y = ref.nativeElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
-//       window.scrollTo({ top: y, behavior: "smooth" });
-//     }
-//   }
-
-//   toggleDarkMode(): void {
-//     this.darkMode = !this.darkMode;
-//     this.audioRef.nativeElement.play();
-//   }
-
-//   formatter(number: number): string {
-//     const formatter = new Intl.NumberFormat("en", { notation: "compact" });
-//     return formatter.format(number);
-//   }
-// }
-
-
-
-
-
-
-// import {
-//   faAward,
-//   faBriefcase,
-//   faCertificate,
-//   faDownload,
-//   faEnvelope,
-//   faEye,
-//   faGraduationCap,
-//   faLightbulb,
-//   faRocket,
-//   faUser,
-// } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/angular-fontawesome";
-// import { HamburgerSpin } from "ngx-hamburger-spin";
-// import { ViewChild, ElementRef } from "@angular/core";
-// import { DarkModeSwitch } from "ngx-dark-mode-switch";
-// import OptionButton from "./navbar/OptionButton.component";
-
-// export class NavbarComponent implements OnInit {
-//   @ViewChild("menuRef") menuRef: ElementRef;
-
-//   isSkillsVisible!: boolean;
-//   isWorkVisible!: boolean;
-//   isExperienceVisible!: boolean;
-//   isAwardVisible!: boolean;
-//   isCertificateVisible!: boolean;
-//   isEducationVisible!: boolean;
-//   isContactVisible!: boolean;
-//   isSkillHover!: boolean;
-//   isWorkHover!: boolean;
-//   isExperienceHover!: boolean;
-//   isAwardHover!: boolean;
-//   isCertificateHover!: boolean;
-//   isEducationHover!: boolean;
-//   isContactHover!: boolean;
-//   isMenuToggle!: boolean;
-
-//   constructor(private audioRef: ElementRef) {}
-
-//   ngOnInit() {}
-
-//   executeScroll(ref: ElementRef) {
-//     const isMobile = window.innerWidth < 480;
-//     if (isMobile) {
-//       ref.nativeElement.scrollIntoView({ behavior: "smooth" });
-//     } else {
-//       const yOffset = -45;
-//       const y =
-//         ref.nativeElement.getBoundingClientRect().top +
-//         window.pageYOffset +
-//         yOffset;
-//       window.scrollTo({ top: y, behavior: "smooth" });
-//     }
-//   }
-
-//   toggleDarkMode() {
-//     this.darkMode = !this.darkMode;
-//     this.audioRef.nativeElement.play();
-//   }
-
-//   formatter(number) {
-//     const formatter = new Intl.NumberFormat("en", { notation: "compact" });
-//     return formatter.format(number);
-//   }
-
-//   onClickOptionButton(ref: ElementRef) {
-//     this.executeScroll(ref);
-//     setTimeout(() => {
-//       this.isMenuToggle = false;
-//     }, 500);
-//   }
-// }
-
-
-// import {
-//   faAward,
-//   faBriefcase,
-//   faCertificate,
-//   faDownload,
-//   faEnvelope,
-//   faEye,
-//   faGraduationCap,
-//   faLightbulb,
-//   faRocket,
-//   faUser,
-//   faHome,
-//   faBell
-// } from "@fortawesome/free-solid-svg-icons";
-
-// import { FontAwesomeIcon } from "@fortawesome/angular-fontawesome";
-// import { HamburgerSpin } from "hamburger-css";
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild, ViewChildren } from "@angular/core";
 import { HeroHeightService } from "../hero-height.service";
 // import { DarkModeSwitch } from "angular-toggle-dark-mode";
 // import OptionButton from "./navbar/OptionButton";
 // import { ElementRef, OnInit } from '@angular/core';
+import { faStackOverflow, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
+import { Router } from "@angular/router";
+import { ViewportScroller } from "@angular/common";
+// import smoothscroll from 'smoothscroll-polyfill';
+// import smoothscroll from 'smoothscroll-polyfill';
+import * as smoothscroll from "smoothscroll-polyfill";
+import { ThemeService } from "../theme.service";
+import { Subscription } from 'rxjs';
+import { ChatbotToggleService } from "../chatbot-toggle.service";
+import { ScrollSpyService } from "../scroll-spy.service";
+import { style } from '@angular/animations';
+
+// kick off the polyfill!
+
+// kick off the polyfill!
 
 @Component({
   selector: "app-navbar",
@@ -218,257 +25,214 @@ import { HeroHeightService } from "../hero-height.service";
   styleUrls: ["navbar.component.scss"],
 })
 export class NavbarComponent implements OnInit {
-  // @Input() opacity!: number;
-  // @Input() heroRef!: ElementRef;
-  // @Input() skillRef!: ElementRef;
-  // @Input() workRef!: ElementRef;
-  // @Input() experienceRef!: ElementRef;
-  // @Input() awardRef!: ElementRef;
-  // @Input() certificateRef!: ElementRef;
-  // @Input() educationRef!: ElementRef;
-  // @Input() contactRef!: ElementRef;
-  // @Input() darkMode!: boolean;
-  // @Input() audioRef!: ElementRef;
-  // @Input() stat: any;
-  // @Input() icon!: string;
-  // @ViewChild("menuRef") menuRef!: ElementRef;
-
-  // isSkillsVisible = false;
-  // isWorkVisible = false;
-  // isExperienceVisible = false;
-  // isAwardVisible = false;
-  // isCertificateVisible = false;
-  // isEducationVisible = false;
-  // isContactVisible = false;
-  // isSkillHover = false;
-  // isWorkHover = false;
-  // isExperienceHover = false;
-  // isAwardHover = false;
-  // isCertificateHover = false;
-  // isEducationHover = false;
-  // isContactHover = false;
-  // // isMenuToggle = false;
-  // isMenuToggle: boolean = false; // Define the isMenuToggle property with an initial value
-
-  // // Define and implement the setIsMenuToggle method
-  // faEnvelope = faEnvelope;
-  // faRocket=faRocket;
-  // faLightbulb=faLightbulb;
-  // faBriefcase=faBriefcase;
-  // faGraduationCap=faGraduationCap;
-  // faAward=faAward;
-
+  faGithub = faGithub;
+  private subscription: Subscription
+  receivedTheme!: boolean;
+  chatToggle: boolean = false;
+  // random: boolean=false;
+  navFlag: boolean=false;
+  // icons: NodeListOf<Element>;
   // constructor() {}
 
+  constructor(private scrollPositionService: ScrollSpyService, private chatbotToggleService: ChatbotToggleService, private themeService: ThemeService, private renderer: Renderer2, private header: ElementRef, private router: Router, private viewportScroller: ViewportScroller) {
+    smoothscroll.polyfill();
+    this.subscription = this.themeService.sharedData$.subscribe(data => {
+      this.receivedTheme = data;
+    });
 
-  // ngAfterViewInit(): void {
-  //   this.checkVisibility(this.skillRef, 'isSkillsVisible');
-  //   this.checkVisibility(this.workRef, 'isWorkVisible');
-  //   this.checkVisibility(this.experienceRef, 'isExperienceVisible');
-  //   this.checkVisibility(this.awardRef, 'isAwardVisible');
-  //   this.checkVisibility(this.certificateRef, 'isCertificateVisible');
-  //   this.checkVisibility(this.educationRef, 'isEducationVisible');
-  //   this.checkVisibility(this.contactRef, 'isContactVisible');
-  // }
+    this.subscription = this.chatbotToggleService.command$.subscribe((command) => {
+      this.chatToggle = command
+    });
 
-  // checkVisibility(ref: ElementRef, propName: keyof NavbarComponent, rootMargin = '0px'): void {
-  //   const observer = new IntersectionObserver(
-  //     ([entry]) => {
-  //       const isVisible = Math.ceil(entry.intersectionRatio - 0.085) > 0;
-  //       if (isVisible) {
-  //         (this[propName as keyof NavbarComponent] as boolean) = true;
-  //       }
-  //     },
-  //     {
-  //       rootMargin
-  //     }
-  //   );
-  
-  //   const currentElement = ref?.nativeElement;
-  
-  //   if (currentElement) {
-  //     observer.observe(currentElement);
-  //   }
-  // }
-
-  // setIsMenuToggle(value: boolean): void {
-  //   this.isMenuToggle = value;
-  // }
-  
-  
-
-  // executeScroll(ref: ElementRef): void {
-  //   const isMobile = document.documentElement.clientWidth < 480;
-  //   if (isMobile) {
-  //     ref.nativeElement.scrollIntoView({ behavior: "smooth" });
-  //   } else {
-  //     const yOffset = -45;
-  //     const y = ref.nativeElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
-  //     window.scrollTo({ top: y, behavior: "smooth" });
-  //   }
-  // }
-
-  // toggleDarkMode(): void {
-  //   this.darkMode = !this.darkMode;
-  //   this.audioRef.nativeElement.play();
-  // }
-
-  // formatter(number: number): string {
-  //   const formatter = new Intl.NumberFormat("en", { notation: "compact" });
-  //   return formatter.format(number);
-  // }
-
-  // constructor(private renderer: Renderer2, private el: ElementRef) { }
-
-  // @HostListener('mouseenter', ['$event'])
-  // onIconMouseEnter(event: MouseEvent) {
-  //   const icon = event.target as HTMLElement;
-  //   const text = icon.querySelector('.navbar__icon__text') as HTMLElement;
-
-  //   // Apply CSS styles and transitions for icon slide effect
-  //   this.renderer.setStyle(icon, 'transform', 'translateX(-10px)');
-  //   this.renderer.setStyle(icon, 'transition', 'transform 0.3s ease-in-out');
-
-  //   // Apply CSS styles and transitions for text fade-in effect
-  //   this.renderer.setStyle(text, 'opacity', '1');
-  //   this.renderer.setStyle(text, 'transition', 'opacity 0.3s ease-in-out');
-  // }
-
-  // @HostListener('mouseleave', ['$event'])
-  // onIconMouseLeave(event: MouseEvent) {
-  //   const icon = event.target as HTMLElement;
-  //   const text = icon.querySelector('.navbar__icon__text') as HTMLElement;
-
-  //   // Reset CSS styles and transitions for icon slide effect
-  //   this.renderer.removeStyle(icon, 'transform');
-  //   this.renderer.removeStyle(icon, 'transition');
-
-  //   // Reset CSS styles and transitions for text fade-in effect
-  //   this.renderer.removeStyle(text, 'opacity');
-  //   this.renderer.removeStyle(text, 'transition');
-  // }
-
-  
-  // @ViewChild('iconText', { static: false }) iconText!: ElementRef;
-  // @ViewChild('iconText2', { static: false }) iconText2!: ElementRef;
-
-  constructor(private renderer: Renderer2, private el: ElementRef, private heroHeightService: HeroHeightService) { }
-
-  ngAfterViewInit() {
-    // Hide the text initially
-    // this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '0');
-    // this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '0');
   }
 
-  // @HostListener('mouseenter', ['$event'])
-  // onIconMouseEnter(event: MouseEvent) {
-  //   const icon = event.target as HTMLElement;
-  //   // const iconText != event.target.children[0].children[0].children[1];
-  //   // Apply CSS styles and transitions for icon slide effect
-  //   this.renderer.setStyle(icon, 'transform', 'translateX(-30px)');
-  //   this.renderer.setStyle(icon, 'transition', 'transform 0.3s ease-in-out');
+  private scrollSubscription!: Subscription;
 
-  //   // if (!) return;
+  @ViewChild('parentDiv') parentDiv!: ElementRef;
 
-  //   // Show the text with fade-in effect
-  //   this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '1');
-  //   this.renderer.setStyle(this.iconText.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
-  //   this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '1');
-  //   this.renderer.setStyle(this.iconText2.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
-  // }
+  onZIndexRendered() {
+    const children = this.parentDiv.nativeElement.children;
+    children[0].firstChild.style.zIndex='5'
+    children[1].style.zIndex='5'
+    children[2].style.zIndex='5'
+    children[4].children[0].firstChild.style.zIndex = '5'
+  }
 
-  // @HostListener('mouseleave', ['$event'])
-  // onIconMouseLeave(event: MouseEvent) {
-  //   const icon = event.target as HTMLElement;
+  toggleChat() {
+    this.chatToggle = !this.chatToggle;
+    this.chatbotToggleService.sendCommand(this.chatToggle);
+  }
+  private isScrolling: boolean = false;
 
-  //   // Reset CSS styles and transitions for icon slide effect
-  //   this.renderer.removeStyle(icon, 'transform');
-  //   this.renderer.removeStyle(icon, 'transition');
+  toggleNav(){
+    this.navFlag = !this.navFlag;
+  }
 
-  //   // Hide the text with fade-out effect
-  //   this.renderer.setStyle(this.iconText.nativeElement, 'opacity', '0');
-  //   this.renderer.setStyle(this.iconText.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
-  //   this.renderer.setStyle(this.iconText2.nativeElement, 'opacity', '0');
-  //   this.renderer.setStyle(this.iconText2.nativeElement, 'transition', 'opacity 0.3s ease-in-out');
-  // }
+  onClickScroll(elementId:string):void{
+    this.viewportScroller.scrollToAnchor(elementId);
+  }
 
-  isFixed = false; // Flag to determine if the headbar is fixed
-  opacity = 0.0; // Opacity of the headbar
-  homeIcon = 'home';
-  notificationsIcon = 'notifications';
-  profileIcon = 'person';
-  @ViewChild('header', { static: true }) header!: ElementRef;
-  // @HostListener('window:scroll')
-  // onWindowScroll() {
-  //   // Detect scroll position
-  //   const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-  //   const yOffset = 0;
-  //   // Check if the headbar should be fixed
-  //   this.isFixed = scrollPosition + yOffset  >= window.innerHeight;
-  //   if(this.isFixed){
-  //     console.log(scrollPosition);
-  //     console.log(yOffset);
-  //     console.log(window.innerHeight)
+  
+  @ViewChildren('buttonView', { read: ElementRef }) buttonView!: ElementRef[];
+
+
+  ngAfterViewInit(): void {
+    this.updateActiveIcons(); // Call initially after view initialization
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: Event): void {
+    this.updateActiveIcons();
+  }
+
+
+  private updateActiveIcons(): void {
+    const iconElements = document.querySelectorAll('.button1');
+
+   
+    const scrollPosition = window.scrollY + window.innerHeight / 2; // Midpoint of visible area
+
+  iconElements.forEach((icon) => {
+    const iconTop = icon.getBoundingClientRect().top + window.scrollY;
+
+    if (scrollPosition >= iconTop) {
+      icon.classList.add('button1:hover');
+    } else {
+      icon.classList.remove('button1:hover');
+    }
+  });
+  }
+
+
+  // scrollToElement() {
+  //   const element = document.getElementById('targetElement');
+  //   if (element) {
+  //     this.viewportScroller.scrollToAnchor('targetElement');
   //   }
 
-  //   // Calculate opacity based on scroll position
-  //   this.opacity = scrollPosition >= window.innerHeight ? 1 : (scrollPosition / window.innerHeight);
   // }
-  scrollThreshold:any;
-  // ngOnInit() {
-  //   this.heroHeightService.heroHeight$.subscribe((heroHeight) => {
-  //     // Calculate the scroll position at which the header should be fixed (bottom of the hero section)
-  //     // this.scrollThreshold = heroHeight;
-  //     // Rest of your initialization code...
-  //     // const headerTop = /
-  //     this.scrollThreshold = this.header.nativeElement.offsetTop;;
 
-  //   });
+  // responsiveMenuVisible!: boolean;
+  // smoothscroll.polyfill();
+  // smoothscroll.polyfill();
+
+  // @ViewChild('targetElement') targetElement!: ElementRef;
+
+  // scrollToElement() {
+  //   const element = this.targetElement.nativeElement;
+  //   console.log("THis is the stuff ", element);
+  //   element.scrollIntoView({ behavior: 'smooth' });
   // }
+
+
+  // scroll(el: any) {
+  //   // console.log("The value if document.querySelector(el", document.querySelector('#'+el))
+  //   // if(document.querySelector('#'+el)) {
+  //   //   // console.log("THIS iS THE VALUE 1 " + el);
+  //   //   // setTimeout(() => {
+  //   //     // window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+  //   //     const element = document.querySelector('#'+el)
+
+  //   //     element!.scrollIntoView({behavior: 'smooth'});
+  //   //   // console.log("THIS iS THE VALUE 2 " + el);
+  //   //   // }, 100)
+  //   // } else{
+  //     this.router.navigate(['/hero-section'])
+  //   // }
+  //   // this.responsiveMenuVisible=false;
+  // }
+  
+
+  scrollThreshold!: number;
+  isFixed: boolean = false;
+  opacity: number = 0;
+
+  activeSection: string = '';
+  sectionPositions: Map<string, number> = new Map<string, number>();
 
   ngOnInit() {
-    // Initialize the scrollThreshold initially
-    this.updateScrollThreshold();
-  
-    // Use ResizeObserver to dynamically update scrollThreshold
+    this.initializeHeader();
+    this.setupResizeObserver();
+    
+  //   this.icons = document.querySelectorAll('.button1');
+  //   this.scrollSubscription = this.scrollPositionService.scrollPositionChanged.subscribe(
+      
+  //     ({ componentName, position }) => {
+  //       this.icons.forEach((icon) => {
+  //         icon.active = icon.name === componentName && position > 0;
+  //       });
+  //     }
+  //   );
+
+  //   const iconElements = document.querySelectorAll('.button1');
+
+   
+  //   const scrollPosition = window.scrollY + window.innerHeight / 2; // Midpoint of visible area
+
+  // iconElements.forEach((icon) => {
+  //   const iconTop = icon.getBoundingClientRect().top + window.scrollY;
+
+  //   if (scrollPosition >= iconTop) {
+  //     icon.classList.add('button1:hover');
+  //   } else {
+  //     icon.classList.remove('button1:hover');
+  //   }
+  // });
+    
+  }
+
+  private initializeHeader() {
+    const headerInitPromise = new Promise<void>((resolve) => {
+      if (this.header.nativeElement.offsetHeight > 0) {
+        resolve();
+      } else {
+        const observer = new MutationObserver(() => {
+          if (this.header.nativeElement.offsetHeight > 0) {
+            observer.disconnect();
+            resolve();
+          }
+        });
+        observer.observe(this.header.nativeElement, { attributes: true });
+      }
+    });
+
+    headerInitPromise.then(() => {
+      this.updateScrollThreshold();
+      this.updateNavbarBehavior();
+    });
+  }
+
+  private setupResizeObserver() {
     const resizeObserver = new ResizeObserver(() => {
       this.updateScrollThreshold();
+      this.updateNavbarBehavior();
     });
-  
+
     resizeObserver.observe(this.header.nativeElement);
   }
-  
+
   private updateScrollThreshold() {
     this.scrollThreshold = this.header.nativeElement.offsetTop;
-    console.log("THe vlaue of this.sT " +  this.scrollThreshold);
   }
-  
+
+  private updateNavbarBehavior() {
+    const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+    this.isFixed = scrollPosition >= this.scrollThreshold;
+    this.opacity = Math.min(1, scrollPosition / this.scrollThreshold);
+  }
 
   @HostListener('window:scroll')
-onWindowScroll() {
-  // Detect scroll position
-  const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-
- 
-  this.isFixed = scrollPosition >= this.scrollThreshold;
-
-  this.opacity = Math.min(1, scrollPosition / this.scrollThreshold);
-}
-
-
-  
-  @Output() iconClick: EventEmitter<string> = new EventEmitter<string>();
-
-  // homeIcon = faHome;
-  // notificationsIcon = faBell;
-  // profileIcon = faUser;
-
-  onIconClick(icon: string) {
-    this.iconClick.emit(icon);
+  onWindowScroll() {
+    this.updateNavbarBehavior();
   }
 
-
+  @HostListener('window:resize')
+  onWindowResize() {
+    this.initializeHeader();
+    this.updateNavbarBehavior();
+  }
 
 }
 
