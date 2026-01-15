@@ -1,58 +1,10 @@
-// @import '../../shared/styles/variables';
-// @tailwind base;
-// @tailwind components;
-// @tailwind utilities;
 
-// :host {
-//   display: block;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   z-index: 10;
-// }
 
-// .hamburger-btn {
-//   cursor: pointer;
-// }
 
-// .navbar {
-//   &.bg-navbar {
-//     // background-color: $color-primary;
-//     background-color:black;
-//   }
-// }
 
-// .option-button {
-//   &:hover {
-//     // background-color: $color-primary-dark;
-//     background-color: gray;
-//   }
-// }
 
-// @media (min-width: 950px) {
-//   .hamburger-btn {
-//     display: none;
-//   }
 
-//   .navbar {
-//     background-color: transparent;
-//   }
 
-//   .option-button {
-//     &:hover {
-//       background-color: transparent;
-//     }
-//   }
-// }
-// :host {
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   padding: 0 16px; /* Add padding as needed */
-//   background-color: #000000; /* Set background color as needed */
-//   height: 64px; /* Set height as needed */
-// }
 
 /* headbar.component.scss */
 @use '../../styles.scss' as *;
@@ -74,28 +26,8 @@
   border-width: 0;
 }
 
-// .headbar {
-//   position: absolute;
-//   bottom: 0;
-//   width: 100%;
-//   // padding: 1rem;
-//   color: gray; /* Initial color */
-//   background-color: gray; /* Initial background color */
-//   opacity: 0; /* Initially hidden */
-//   transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-//   // justify-content: space-between;
-//   padding: 0 16px; /* Add padding as needed */
-//   background-color: pink; /* Set background color as needed */
-//   // height: 30px; /* Set height as needed */
-//   z-index: 10000;
-//   display: flex;
 
-//   justify-content: center; // Center aligns the icons horizontally
-//   align-items: center; // Center aligns the icons vertically
-//   height: 50px; // Set the height of the navbar as desired
-//   background-color: red; // Set the background color of the navbar as desired
 
-// }
 
 .navbar__icon {
   margin: 0 10px; // Add margin between the icons as desired
@@ -107,9 +39,6 @@
   position: sticky;
   top: 0;
   height: 5rem;
-  // color: black; /* Color when fixed */
-  // background-color: black; /* Background color when fixed */
-  // opacity: 1; /* Faded in when fixed */
 }
 
 ul {
@@ -162,7 +91,6 @@ a {
   
   position: absolute; /* Add absolute positioning */
   top: 0; /* Position the text at the top */
-  // left: -100%; /* Move the text completely to the left */
 }
 
 .icon-robot {
@@ -172,16 +100,11 @@ a {
   margin-left: 4%;
   padding-right: 2%;
   padding-left: 2%;
-  // background: transparent;
   border-radius: 30px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  // background-color:white;
-  // border: 2px solid rgb(var(--color-gray-400)/0.8);
-  // @apply dark:[color:black];
-  // color: #000;
 
 }
 
@@ -190,9 +113,6 @@ a {
     display: none!important;
   }
 
-  // .resume-button{
-  //   display: none!important;
-  // }
 }
 
 @media screen and (max-width: 768px) {
@@ -208,10 +128,6 @@ a {
 
  
 }
-// .d.icon-robot{
-//   background-color: rgba( 15, 23, 42, 1);
-//   color: #fff
-// }
 
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
@@ -230,7 +146,6 @@ html,body{
   display: grid;
   height: 100%;
   width: 100%;
-  // place-items: center;
   background: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
   opacity: 0; /* Initially hidden */
   transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
@@ -299,7 +214,6 @@ html,body{
 }
 .wrapper .button1:hover{
   width: 150px;
-  // padding-bottom: 5px;
 }
 .wrapper .button1 .icon{
   display: inline-block;
@@ -310,7 +224,6 @@ html,body{
   box-sizing: border-box;
   line-height: 60px;
   transition: all 0.3s ease-out;
-  // color:white;
 }
 
 .icon {
@@ -334,7 +247,6 @@ html,body{
 }
 .wrapper .button1 .icon i{
   font-size: 25px;
-  // line-height: 30px;
   transition: all 0.3s ease-out;
 }
 .wrapper .button1:hover .icon i{
@@ -343,17 +255,10 @@ html,body{
 .wrapper .button1 span{
   font-size: 15px;
   font-weight: 200;
-  // line-height: 60px;
   margin-left: 5px;
   transition: all 0.3s ease-out;
-  // vertical-align:middle;
-  // background-color: #14cf1b;
-  // margin-bottom: px;
 }
 
-// span{
-//   margin-bottom: 10px!important;
-// }
 
 .wrapper .button1:nth-child(1) span{
   color: rgba(14, 165, 233, 1);;

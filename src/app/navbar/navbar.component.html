@@ -1,321 +1,10 @@
-<!-- Mobile
-<div class="h-full lg:hidden">
-    <div class="h-full flex justify-between px-5 bg-navbar">
-        <button aria-label="Home" class="flex items-center space-x-3" (click)="executeScroll(heroRef)">
-            <img src="/images/logos/dark-logo.webp" alt="logo" class="h-10 w-10" />
-            <div class="flex uppercase font-oswald font-bold text-2xl">
-                <p>pawaret</p>
-                <p class="text-customGrayLight">.</p>
-                <p class="text-primary">dev</p>
-            </div>
-        </button>
-        <div class="flex space-x-5 justify-center items-center">
-            <ngx-toggle-dark-mode [checked]="darkMode" (change)="toggleDarkMode()" [size]="20"
-                sunColor="white"></ngx-toggle-dark-mode>
-            <hamburger-button size="20" direction="right" duration="0.3" easing="ease-in-out" rounded
-                [label]="'Show menu'" [hideOutline]="true" [toggled]="isMenuToggle"
-                (toggle)="setIsMenuToggle(!isMenuToggle)"></hamburger-button>
-        </div>
-    </div>
-    <div #menuRef class="sticky h-fit w-full top-0 -z-10 p-5 space-y-5 transition duration-300 ease-in-out bg-[#1a1522]"
-        [ngClass]="{'-translate-y-64 opacity-0': !isMenuToggle}">
-        <div class="grid grid-cols-2 capitalize">
-            <app-option-button [name]="'Skills'" [icon]="faLightbulb"
-                (click)="executeScroll(skillRef); setIsMenuToggle(false)" [condition]="isSkillsVisible"
-                [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button>
-            <app-option-button [name]="'Experiences'" [icon]="faRocket"
-                (click)="executeScroll(experienceRef); setIsMenuToggle(false)" [condition]="isExperienceVisible"
-                [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button>
-            <app-option-button [name]="'Works'" [icon]="faBriefcase"
-                (click)="executeScroll(workRef); setIsMenuToggle(false)" [condition]="isWorkVisible" [isMobile]="true"
-                [disabled]="!isMenuToggle"></app-option-button>
-            <app-option-button [name]="'Education'" [icon]="faGraduationCap"
-                (click)="executeScroll(educationRef); setIsMenuToggle(false)" [condition]="isEducationVisible"
-                [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button>
-            <app-option-button [name]="'Awards'" [icon]="faAward"
-                (click)="executeScroll(awardRef); setIsMenuToggle(false)" [condition]="isAwardVisible" [isMobile]="true"
-                [disabled]="!isMenuToggle"></app-option-button>
-            <app-option-button [name]="'Certificates'" [icon]="faCertificate"
-                (click)="executeScroll(certificateRef); setIsMenuToggle(false)" [condition]="isCertificateVisible"
-                [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button>
-            <app-option-button [name]="'Contact'" [icon]="faEnvelope"
-                (click)="executeScroll(contactRef); setIsMenuToggle(false)" [condition]="isContactVisible"
-                [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button> -->
-
-
-
-<!-- navbar.component.html -->
-
-<!-- <div class="sticky top-0 h-16 w-full z-40 shadow-lg bg-background text-white"> -->
-<!-- Mobile -->
-<!-- <div class="h-full lg:hidden">
-        <div class="h-full flex justify-between px-5  bg-navbar">
-            <button aria-label="Home" class="flex items-center space-x-3" (click)="executeScroll(heroRef)">
-                <img src="/images/logos/dark-logo.webp" alt="logo" class="h-10 w-10" />
-                <div class="flex uppercase font-oswald font-bold text-2xl">
-                    <p>pawaret</p>
-                    <p class="text-customGrayLight">.</p>
-                    <p class="text-primary">dev</p>
-                </div>
-            </button>
-            <div class="flex space-x-5 justify-center items-center">
-                <!-- <ngx-dark-mode-switch [checked]="darkMode" (onChange)="toggleDarkMode()" [size]="20"
-                    sunColor="white"></ngx-dark-mode-switch> -->
-<!-- <ngx-hamburger size="20" direction="right" duration="0.3" easing="ease-in-out" rounded label="Show menu"
-                    hideOutline="true" [toggled]="isMenuToggle" (toggle)="setIsMenuToggle(!isMenuToggle)">
-                </ngx-hamburger> -->
-<!-- </div>
-        </div>
-        <div #menuRef
-            class="sticky h-fit w-full top-0 -z-10 p-5 space-y-5 transition duration-300 ease-in-out bg-[#1a1522]"
-            [class.-translate-y-64.opacity-0]="!isMenuToggle">
-            <div class="grid grid-cols-2 capitalize">
-                <div class="space-y-8">
-                    <app-option-button name="Skills" icon="light-bulb"
-                        (onClick)="executeScroll(skillRef); setIsMenuToggle(false)" [condition]="isSkillsVisible"
-                        [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button>
-                    <app-option-button name="Experiences" icon="rocket"
-                        (onClick)="executeScroll(experienceRef); setIsMenuToggle(false)"
-                        [condition]="isExperienceVisible" [isMobile]="true"
-                        [disabled]="!isMenuToggle"></app-option-button> -->
-<!-- <app-option-button name="Works" [icon]="faBriefcase"
-                        (onClick)="executeScroll(workRef); setIsMenuToggle(false)" [condition]="isWorkVisible"
-                        [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button> -->
-<!-- <app-option-button name="Education" icon="graduation-cap"
-                        (onClick)="executeScroll(educationRef); setIsMenuToggle(false)" [condition]="isEducationVisible"
-                        [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button>
-                </div>
-                <div class="space-y-8">
-                    <app-option-button name="Experience" icon="eye"
-                        (onClick)="executeScroll(experienceRef); setIsMenuToggle(false)"
-                        [condition]="isExperienceVisible" [isMobile]="true"
-                        [disabled]="!isMenuToggle"></app-option-button>
-                    <app-option-button name="Awards" icon="award"
-                        (onClick)="executeScroll(awardRef); setIsMenuToggle(false)" [condition]="isAwardVisible"
-                        [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button>
-                    <app-option-button name="Contact" icon="envelope"
-                        (onClick)="executeScroll(contactRef); setIsMenuToggle(false)" [condition]="isContactVisible"
-                        [isMobile]="true" [disabled]="!isMenuToggle"></app-option-button>
-                    <app-option-button name="Resume" icon="file-alt" [isMobile]="true"
-                        [disabled]="!isMenuToggle"></app-option-button>
-                </div>
-            </div>
-        </div> -->
-<!-- </div> -->
-<!-- Desktop -->
-<!-- <div class="hidden lg:block">
-        <div class="container mx-auto h-full flex justify-between items-center">
-            <button aria-label="Home" class="flex items-center space-x-3" (click)="executeScroll(heroRef)">
-                <img src="/images/logos/dark-logo.webp" alt="logo" class="h-10 w-10" />
-                <div class="flex uppercase font-oswald font-bold text-2xl">
-                    <p>pawaret</p>
-                    <p class="text-customGrayLight">.</p>
-                    <p class="text-primary">dev</p>
-                </div>
-            </button>
-            <div class="hidden lg:flex space-x-5 items-center">
-                <app-option-button name="Skills" icon="lightbulb" (onClick)="executeScroll(skillRef)"
-                    [condition]="isSkillsVisible"></app-option-button>
-                <app-option-button name="Experiences" icon="rocket" (onClick)="executeScroll(experienceRef)"
-                    [condition]="isExperienceVisible"></app-option-button>
-                <app-option-button name="Works" icon="briefcase" (onClick)="executeScroll(workRef)"
-                    [condition]="isWorkVisible"></app-option-button>
-                <app-option-button name="Education" icon="graduation-cap" (onClick)="executeScroll(educationRef)"
-                    [condition]="isEducationVisible"></app-option-button>
-                <app-option-button name="Awards" icon="fa-award" (onClick)="executeScroll(awardRef)"
-                    [condition]="isAwardVisible"></app-option-button>
-                <app-option-button name="Contact" icon="fa-envelope" (onClick)="executeScroll(contactRef)"
-                    [condition]="isContactVisible"></app-option-button> -->
-<!-- <app-option-button name="Resume" [icon]="faFileAlt" (onClick)="openResume()"></app-option-button> -->
-<!-- <ngx-dark-mode-switch [checked]="darkMode" (onChange)="toggleDarkMode()" [size]="20"
-                    sunColor="white"></ngx-dark-mode-switch> -->
-<!-- </div>
-        </div>
-    </div>
-</div> -->
-
-<!-- Main content sections go here -->
-
-
-<!-- headbar.component.html -->
-<!-- Headbar content goes here -->
-<!-- <mat-icon>notifications_none</mat-icon>
-    <div class="headbar-icon" (click)="onIconClick('home')">
-        <mat-icon>home</mat-icon>
-    </div> -->
-
-<!-- <nav>
-        <ul>
-            <li><a href="#home"><i class="fa fa-home"></i> Home</a></li>
-            <li><a href="#experience"><i class="fa fa-briefcase"></i> Experience</a></li>
-            <li><a href="#awards"><i class="fa fa-trophy"></i> Awards</a></li>
-        </ul>
-    </nav> -->
-
-<!-- <nav class="navbar"> -->
-<!-- <div class="navbar__icon">
-        <mat-icon>home</mat-icon>
-    </div> -->
-
-
-<!-- </div> -->
-<!-- <a
-    class="button-rainbow ml-4 hidden whitespace-nowrap px-4 py-1.5 text-sm font-medium tracking-tight text-gray-500 md:flex">
-    Lets Work
-</a> -->
-
-
-<!-- <div class="headbar" [ngClass]="{'fixed': isFixed}" [ngStyle]="{'opacity': opacity}"> -->
-<!-- <div class="wrapper">
-        <div class="button">
-            <div class="icon">
-                <i class="fab fa-facebook-f"></i>
-            </div>
-            <span>Facebook</span>
-        </div>
-        <div class="button">
-            <div class="icon">
-                <i class="fab fa-twitter"></i>
-            </div>
-            <span>Twitter</span>
-        </div>
-        <div class="button">
-            <div class="icon">
-                <i class="fab fa-instagram"></i>
-            </div>
-            <span>Instagram</span>
-        </div>
-        <div class="button">
-            <div class="icon">
-                <i class="fab fa-github"></i>
-            </div>
-            <span>Github</span>
-        </div>
-        <div class="button">
-            <div class="icon">
-                <i class="fab fa-youtube"></i>
-            </div>
-            <span>YouTube</span>
-        </div>
-    </div> -->
-<!-- <div class="navbar__icon" appTransition>
-        <mat-icon class="navbar__icon__content">home</mat-icon>
-        <span class="navbar__icon__text" >Home</span>
-    </div>
-    <div class="navbar__icon" appTransition>
-        <mat-icon class="navbar__icon__content">home</mat-icon>
-        <span class="navbar__icon__text">Hom</span>
-    </div>
-
-    <div class="navbar__icon" appTransition>
-        <mat-icon>notifications</mat-icon>
-        <span class="navbar__icon__text" >notifications</span>
-    </div>
-    <div class="navbar__icon">
-        <mat-icon>settings</mat-icon>
-        <span class="navbar__icon__text" >settings</span>
-    </div> -->
-
-
-<!-- </div> -->
-
-
-
-
-
-
-
-
-
-
-<!-- 
-<header class="headbar">
-    <div class="headbar-left">
-        <div class="headbar-logo">
-            <img src="assets/logo.png" alt="Logo">
-        </div>
-        <div class="headbar-title">
-            Angular Headbar
-        </div>
-    </div>
-    <div class="headbar-right">
-        <div class="headbar-icons">
-            <div class="headbar-icon" (click)="onIconClick('home')">
-                <mat-icon>home</mat-icon>
-                <h1>headnar here</h1>
-            </div>
-            <div class="headbar-icon" (click)="onIconClick('notifications')">
-                <mat-icon [matIcon]="notificationsIcon"></mat-icon>
-                <h1>headnar here</h1>
-            </div>
-            <div class="headbar-icon" (click)="onIconClick('profile')">
-                <mat-icon [matIcon]="profileIcon"></mat-icon>
-            </div>
-        </div>
-    </div>
-</header> -->
-
-
-<!-- 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
 
-
-
-<header [ngClass]="{'fixed': isFixed}" [ngStyle]="{'opacity': opacity}" #header
-    class="fixed inset-x-0 top-0 z-50 h-20 w-full border-b border-gray-800/10 bg-white/50 backdrop-blur d:border-gray-100/10 d:bg-gray-900/40 print:hidden">
-    <div
-        class="mx-auto flex h-full  grid-cols-[210px_1fr_210px] items-center gap-1 px-4 justify-center md:gap-4 md:px-8">
-        <div class="wrapper">
-            <div class="button1">
-                <div class="icon">
-                    <i class="fab fa-facebook-f"></i>
-                </div>
-                <span>Facebook</span>
-            </div>
-            <div class="button1">
-                <div class="icon">
-                    <i class="fab fa-twitter"></i>
-                </div>
-                <span>Twitter</span>
-            </div>
-            <div class="button1">
-                <div class="icon">
-                    <i class="fab fa-instagram"></i>
-                </div>
-                <span>Instagram</span>
-            </div>
-            <div class="button1">
-                <div class="icon">
-                    <i class="fab fa-github"></i>
-                </div>
-                <span>Github</span>
-            </div>
-
-        </div>
-        <a
-            class="button-border inline-flex whitespace-nowrap bg-white/90 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-500 transition-all hfa:border-gray-900/70 hfa:bg-white/90 hfa:text-gray-900 d:border-gray-700/80 d:bg-transparent d:text-gray-300 d:hfa:border-gray-200/30 d:hfa:bg-gray-900/80 d:hfa:text-gray-50 md:px-12">
-            Lets Work
-        </a>
-    </div>
-
-    <div class="background pointer-events-none absolute inset-0 z-0 select-none"></div>
-</header>
-<div class="pointer-events-none h-20 select-none transition print:hidden"></div> -->
-
-
-
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-</head>
-
-<!-- <div
-    class="mx-auto flex flex-col justify-center gap-12 max-w-6xl px-4 pb-12 md:px-8 lg:grid lg:grid-cols-[540px_auto] lg:pt-16"> -->
 <header [ngClass]="{'fixed': isFixed, 'd':!receivedTheme}" [ngStyle]="{'opacity': opacity}" #header
     class="fixed inset-x-0 top-0 z-50 h-20 w-full border-b backdrop-blur d:border-gray-100/10 dark:bg-gray-900/40 print:hidden bg-white/50">
     <div class="header-content">
-        <!-- Your content for the header goes here -->
         <div class="left-content">
             <div class="wrapper">
                 <div class="button2">
@@ -369,7 +58,105 @@
         </div>
         <div class="right-content" #parentDiv>
 
-            <app-dark-mode-nav></app-dark-mode-nav>
+            <div (click)=" toggleChat()" [ngClass]="{'d':!receivedTheme}"
+                class="icon-robot rounded transition-colors bg-gray-500/80 ">
+                <i [ngClass]="{'d':!receivedTheme}" style="font-size: 19px;" class="fas fa-robot "></i>
+            </div>
+
+            <a href="https://github.com/AryanVijaywargia" style="margin-right: 5%;"
+                class="rounded p-2 text-gray-500 transition-colors hfa:d:text-gray-100/80  d:hfa:text-white">
+                <span class="sr-only">Github</span>
+                <fa-icon [icon]="faGithub" style="font-size: 30px;"></fa-icon>
+            </a>
+
+            <a style="padding: 0.375rem 1rem;"
+                class="cursor-pointer resume-button button-rainbow button-border inline-flex whitespace-nowrap bg-white/90 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-500 transition-all hfa:border-gray-900/70 hfa:bg-white/90 hfa:text-gray-900 d:border-gray-700/80 d:bg-transparent d:text-gray-300 d:hfa:border-gray-200/30 d:hfa:bg-gray-900/80 d:hfa:text-gray-50 md:px-12">
+                Resume
+            </a>
+
+            <div (click)="toggleNav()" class="hamburger-show ">
+                <app-hamburger-icon></app-hamburger-icon>
+                <app-burger-menu (childRendered)="onZIndexRendered()" [showNav]="navFlag"></app-burger-menu>
+            </div>
+        </div>
+    </div>
+    <div class="background pointer-events-none absolute inset-0 z-0 select-none"></div>
+</header>
+<div class="pointer-events-none h-20 select-none transition print:hidden"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+
+
+<header [ngClass]="{'fixed': isFixed, 'd':!receivedTheme}" [ngStyle]="{'opacity': opacity}" #header
+    class="fixed inset-x-0 top-0 z-50 h-20 w-full border-b backdrop-blur d:border-gray-100/10 dark:bg-gray-900/40 print:hidden bg-white/50">
+    <div class="header-content">
+        
+        <div class="left-content">
+            <div class="wrapper">
+                <div class="button2">
+                    <div class="icon ">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <span>Facebook</span>
+                </div>
+                <div class="button2">
+                    <div class="icon ">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <span>Twitter</span>
+                </div>
+
+            </div>
+        </div>
+        <div class="middle-content scroll-smooth">
+            <div class="wrapper">
+                <div class="button1" (click)="onClickScroll('hero-section')" #buttonView>
+                    <div class="icon" [class.hovered]="true">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <span>Home</span>
+                </div>
+                <div class="button1" (click)="onClickScroll('about-section')" #buttonView>
+                    <div class="icon">
+                        <i class="fas fa-solid fa-user"></i>
+                    </div>
+                    <span>About Me</span>
+                </div>
+                <div class="button1" (click)="onClickScroll('experience-section')" #buttonView>
+                    <div class="icon ">
+                        <i class="fas fa-solid fa-briefcase"></i>
+                    </div>
+                    <span>Experience</span>
+                </div>
+                <div class="button1" (click)="onClickScroll('project-section')" #buttonView>
+                    <div class="icon ">
+                        <i class="fas fa-solid fa-diagram-project"></i>
+                    </div>
+                    <span>Project</span>
+                </div>
+                <div class="button1" (click)="onClickScroll('card-section')" #buttonView>
+                    <div class="icon ">
+                        <i class="fas fa-regular fa-envelope"></i>
+                    </div>
+                    <span>Contact Me</span>
+                </div>
+            </div>
+        </div>
+        <div class="right-content" #parentDiv>
 
             <div (click)=" toggleChat()" [ngClass]="{'d':!receivedTheme}"
                 class="icon-robot rounded transition-colors bg-gray-500/80 ">
@@ -388,7 +175,7 @@
             </a>
 
             <div (click)="toggleNav()" class="hamburger-show ">
-                <!-- <i style="font-size: 19px;" class="fas fa-hamburger  "></i> -->
+                
                 <app-hamburger-icon></app-hamburger-icon>
                 <app-burger-menu (childRendered)="onZIndexRendered()" [showNav]="navFlag"></app-burger-menu>
             </div>
@@ -399,4 +186,3 @@
 <div class="pointer-events-none h-20 select-none transition print:hidden"></div>
 
 
-<!-- </div> -->
