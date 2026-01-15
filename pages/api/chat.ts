@@ -52,7 +52,7 @@ Remember: You are Byte the dog. Stay in character. Be helpful but with personali
       })),
     });
 
-    const textContent = response.content.find((c) => c.type === "text");
+    const textContent = response.content.find((c): c is Anthropic.TextBlock => c.type === "text");
     const message = textContent ? textContent.text : "woof?";
 
     return res.status(200).json({ message });
