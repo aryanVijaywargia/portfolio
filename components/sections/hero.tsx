@@ -7,8 +7,26 @@ import ToggleSwitch from "components/toggle-switch";
 import { HERO } from "content/hero";
 import { useTheme } from "next-themes";
 import { FC } from "react";
+import { motion } from "framer-motion";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { DogIcon } from "components/icons/dog-icon";
+
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
 
 export const Hero: FC = () => {
   const { theme, setTheme } = useTheme();
@@ -64,11 +82,20 @@ export const Hero: FC = () => {
         />
       </div>
 
-      <div className="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16 md:px-8 md:py-32 lg:grid">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={staggerContainer}
+        className="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16 md:px-8 md:py-32 lg:grid"
+      >
         <section className="col-span-2">
           <header>
-            <div className="heading-pre">{HERO.pre}</div>
-            <h1 className="heading-hero ">{HERO.heading}</h1>
+            <motion.div variants={fadeInUp} transition={{ duration: 0.5 }} className="heading-pre">
+              {HERO.pre}
+            </motion.div>
+            <motion.h1 variants={fadeInUp} transition={{ duration: 0.5 }} className="heading-hero ">
+              {HERO.heading}
+            </motion.h1>
             {/* <h2 className="heading-hero ">
                 <Typewriter
                   loop={false}
@@ -81,23 +108,31 @@ export const Hero: FC = () => {
                   ]}
                 />
               </h2>*/}
-            <ul className="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium">
+            <motion.ul
+              variants={fadeInUp}
+              transition={{ duration: 0.5 }}
+              className="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium"
+            >
               {HERO.tech.map(({ name, Icon }) => (
                 <li className="flex items-center gap-2 text-gray-500 d:text-gray-400" key={name}>
                   <Icon className="h-7 w-7 text-gray-400 d:text-gray-300/80" />
                   {name}
                 </li>
               ))}
-            </ul>
+            </motion.ul>
           </header>
           <main>
-            <p className="mb-3 max-w-lg font-normal text-gray-500 d:text-gray-400 md:text-lg md:tracking-tight">
+            <motion.p
+              variants={fadeInUp}
+              transition={{ duration: 0.5 }}
+              className="mb-3 max-w-lg font-normal text-gray-500 d:text-gray-400 md:text-lg md:tracking-tight"
+            >
               {HERO.body}
-            </p>
+            </motion.p>
 
             <p className="mb-3 max-w-xl font-normal text-gray-500 md:text-lg md:tracking-tight"></p>
           </main>
-          <footer className="mt-6 flex flex-wrap gap-4 md:gap-8">
+          <motion.footer variants={fadeInUp} transition={{ duration: 0.5 }} className="mt-6 flex flex-wrap gap-4 md:gap-8">
             {HERO.cta1 ? (
               <Link
                 href={HERO.cta1.href}
@@ -115,9 +150,13 @@ export const Hero: FC = () => {
                 {HERO.cta2.name}
               </Link>
             ) : null}
-          </footer>
+          </motion.footer>
         </section>
-        <section className="relative md:h-[30rem]">
+        <motion.section
+          variants={fadeInUp}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="relative md:h-[30rem]"
+        >
           <div className="relative flex h-full min-w-[32rem] flex-col gap-4 pr-4 sm:min-w-[42rem] lg:absolute lg:-left-4 lg:top-24 lg:mr-4 lg:min-w-[34rem] lg:pr-8">
             <div className="relative z-20 flex justify-end gap-1.5">
               <Badge style="info">Hiker</Badge>
@@ -142,11 +181,11 @@ export const Hero: FC = () => {
               </Link>
             </div>
           </div>
-        </section>
+        </motion.section>
         <div className="background pointer-events-none absolute inset-0 -z-30 select-none">
           <div className="relative left-1/2 top-1/2 h-2/3 w-1/2 -translate-y-[30%] rounded-full bg-gradient-radial from-emerald-600/30 to-sky-600/5 blur-2xl"></div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
