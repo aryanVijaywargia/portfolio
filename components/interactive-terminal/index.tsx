@@ -9,7 +9,8 @@ type InteractiveTerminalProps = {
 };
 
 export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, language }) => {
-  const [mode, setMode] = useState<"terminal" | "editor">("terminal");
+  const [mode, setMode] = useState<"terminal" | "editor" | "chatbot">("terminal");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleSwitchToEditor = () => {
     setMode("editor");
@@ -19,7 +20,21 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     setMode("terminal");
   };
 
-  const title = mode === "terminal" ? "aryan@macbook — zsh" : "/index.tsx";
+  const handleSwitchToChatbot = () => {
+    setMode("chatbot");
+    setIsExpanded(true);
+  };
+
+  const handleExitChatbot = () => {
+    setMode("terminal");
+    setIsExpanded(false);
+  };
+
+  const title = mode === "terminal"
+    ? "aryan@macbook — zsh"
+    : mode === "editor"
+      ? "/index.tsx"
+      : "🐕 Byte v1.0 (Connected)";
 
   return (
     <figure className="terminal-window relative w-full h-full min-h-[380px] flex flex-col overflow-hidden rounded-lg shadow-2xl">
@@ -29,13 +44,13 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         <div className="flex items-center gap-2">
           {/* Red - Close */}
           <button
-            onClick={mode === "editor" ? handleSwitchToTerminal : undefined}
+            onClick={mode === "editor" ? handleSwitchToTerminal : mode === "chatbot" ? handleExitChatbot : undefined}
             className={`traffic-light w-3 h-3 rounded-full bg-[#ff5f57] flex items-center justify-center group ${
-              mode === "editor" ? "cursor-pointer" : ""
+              mode !== "terminal" ? "cursor-pointer" : ""
             }`}
-            aria-label={mode === "editor" ? "Close" : undefined}
+            aria-label={mode !== "terminal" ? "Close" : undefined}
           >
-            {mode === "editor" && (
+            {mode !== "terminal" && (
               <svg className="w-2 h-2 text-[#4a0002] opacity-0 group-hover:opacity-100" viewBox="0 0 12 12" fill="currentColor">
                 <path d="M6 4.586L9.293 1.293a1 1 0 111.414 1.414L7.414 6l3.293 3.293a1 1 0 01-1.414 1.414L6 7.414l-3.293 3.293a1 1 0 01-1.414-1.414L4.586 6 1.293 2.707a1 1 0 011.414-1.414L6 4.586z"/>
               </svg>
@@ -65,7 +80,11 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         </div>
 
         {/* Window Title */}
-        <div className="flex-1 text-center">
+        <div
+          className="flex-1 text-center cursor-pointer"
+          onClick={mode === "terminal" ? handleSwitchToChatbot : undefined}
+          title={mode === "terminal" ? "Launch Byte" : undefined}
+        >
           <span className="text-[#9d9d9d] text-xs font-medium select-none">
             {title}
           </span>
@@ -85,7 +104,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       {/* Terminal/Editor Content */}
       <main className="terminal-content flex-1 bg-[#1e1e1e] overflow-hidden">
         {mode === "terminal" ? (
-          <Terminal onSwitchToEditor={handleSwitchToEditor} />
+          <Terminal onSwitchToEditor={handleSwitchToEditor} onSwitchToChatbot={handleSwitchToChatbot} />
         ) : (
           <div className="h-full overflow-auto p-3">
             <Code className="text-[13px]" code={code} language={language} />
