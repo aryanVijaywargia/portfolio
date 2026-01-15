@@ -8,11 +8,10 @@ export const TERMINAL_CONFIG = {
 };
 
 export const SOCIAL_LINKS = {
-  github: "https://github.com/aryanvijaywargia",
-  twitter: "https://twitter.com/aryanvijaywargia",
-  linkedin: "https://www.linkedin.com/in/aryanvijaywargia",
-  instagram: "https://www.instagram.com/aryanvijaywargia",
-  email: "mailto:aryan@aryancodes.com",
+  github: "https://github.com/AryanVijaywargia",
+  linkedin: "https://www.linkedin.com/in/aryan-vijaywargia/",
+  dagshub: "https://dagshub.com/aryanVijaywargia",
+  email: "mailto:aryanvijaywargia@gmail.com",
 };
 
 export type CommandOutput = {
@@ -29,6 +28,7 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: '<span class="command">skills</span>         View technical skills' },
     { text: '<span class="command">projects</span>       View coding projects' },
     { text: '<span class="command">experience</span>     View work experience' },
+    { text: '<span class="command">education</span>      View education' },
     { text: '<span class="command">resume</span>         Open resume' },
     { text: '<span class="command">email</span>          Send me an email' },
     { text: '<span class="command">code</span>           View the code editor' },
@@ -42,17 +42,20 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
 
   whois: [
     { text: "" },
-    { text: "Hey, I'm Aryan!" },
+    { text: "Hey, I'm Aryan Vijaywargia!" },
     { text: "" },
-    { text: "I'm a Full Stack Developer who loves building things for the web." },
-    { text: "I specialize in creating highly performant websites, automated API" },
-    { text: "integrations, and stunning user experiences." },
+    { text: "I'm a Machine Learning Engineer passionate about building" },
+    { text: "intelligent systems and solving real-world problems with AI." },
     { text: "" },
-    { text: "My tech stack includes Next.js, React, TypeScript, Node.js," },
-    { text: "TailwindCSS, and various other modern technologies." },
+    { text: "I specialize in Deep Learning, Computer Vision, NLP, and" },
+    { text: "Time Series Forecasting. I've worked on earthquake prediction," },
+    { text: "pothole detection, EV charging optimization, and more." },
     { text: "" },
-    { text: "I'm always keen to learn and explore new technologies, frameworks" },
-    { text: "and programming languages." },
+    { text: "My tech stack includes Python, TensorFlow, PyTorch, Flask," },
+    { text: "TypeScript, Angular, and various ML/DL frameworks." },
+    { text: "" },
+    { text: "I'm a former GDSC Lead at NIT Agartala and love contributing" },
+    { text: "to open-source projects." },
     { text: "" },
   ],
 
@@ -65,16 +68,13 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
   social: [
     { text: "" },
     {
-      text: `github         <a href="${SOCIAL_LINKS.github}" target="_blank" class="terminal-link">github.com/aryanvijaywargia</a>`,
+      text: `github         <a href="${SOCIAL_LINKS.github}" target="_blank" class="terminal-link">github.com/AryanVijaywargia</a>`,
     },
     {
-      text: `twitter        <a href="${SOCIAL_LINKS.twitter}" target="_blank" class="terminal-link">twitter.com/aryanvijaywargia</a>`,
+      text: `linkedin       <a href="${SOCIAL_LINKS.linkedin}" target="_blank" class="terminal-link">linkedin.com/in/aryan-vijaywargia</a>`,
     },
     {
-      text: `linkedin       <a href="${SOCIAL_LINKS.linkedin}" target="_blank" class="terminal-link">linkedin.com/in/aryanvijaywargia</a>`,
-    },
-    {
-      text: `instagram      <a href="${SOCIAL_LINKS.instagram}" target="_blank" class="terminal-link">instagram.com/aryanvijaywargia</a>`,
+      text: `dagshub        <a href="${SOCIAL_LINKS.dagshub}" target="_blank" class="terminal-link">dagshub.com/aryanVijaywargia</a>`,
     },
     { text: "" },
   ],
@@ -82,19 +82,19 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
   skills: [
     { text: "" },
     { text: '<span class="skill-category">Languages:</span>' },
-    { text: "  TypeScript, JavaScript, Python, Go, SQL" },
+    { text: "  Python, C/C++, JavaScript, TypeScript, HTML/CSS, SQL" },
+    { text: "" },
+    { text: '<span class="skill-category">ML/DL Frameworks:</span>' },
+    { text: "  TensorFlow, PyTorch, Scikit-Learn, OpenCV, Keras" },
+    { text: "" },
+    { text: '<span class="skill-category">Libraries:</span>' },
+    { text: "  Flask, Dash, Plotly, Shapely, Pandas, NumPy" },
+    { text: "" },
+    { text: '<span class="skill-category">Developer Tools:</span>' },
+    { text: "  Git, GitHub, DagsHub, MLFlow, Heroku, Weights & Biases" },
     { text: "" },
     { text: '<span class="skill-category">Frontend:</span>' },
-    { text: "  React, Next.js, TailwindCSS, Framer Motion" },
-    { text: "" },
-    { text: '<span class="skill-category">Backend:</span>' },
-    { text: "  Node.js, Express, tRPC, GraphQL, Prisma" },
-    { text: "" },
-    { text: '<span class="skill-category">Database:</span>' },
-    { text: "  PostgreSQL, MySQL, MongoDB, Redis, PlanetScale" },
-    { text: "" },
-    { text: '<span class="skill-category">DevOps:</span>' },
-    { text: "  Docker, AWS, Vercel, GitHub Actions, CI/CD" },
+    { text: "  Angular, React, TailwindCSS" },
     { text: "" },
   ],
 
@@ -102,10 +102,17 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: "" },
     { text: "Here are some of my projects:" },
     { text: "" },
-    { text: '<span class="project-name">Portfolio v2</span> - This website! Built with Next.js' },
-    { text: '<span class="project-name">E-commerce Platform</span> - Full-stack shopping experience' },
-    { text: '<span class="project-name">API Gateway</span> - Microservices architecture' },
-    { text: '<span class="project-name">Dashboard Analytics</span> - Real-time data visualization' },
+    { text: '<span class="project-name">Forex Trading Recommendation System</span>' },
+    { text: "  CNN-LSTM for Twitter sentiment + FOREX time series analysis" },
+    { text: "" },
+    { text: '<span class="project-name">OpenCV Sudoku Solver</span>' },
+    { text: "  Image processing + VGG-16 for digit recognition (99.3% accuracy)" },
+    { text: "" },
+    { text: '<span class="project-name">Deep Handwriting Synthesis</span>' },
+    { text: "  Attention-based encoder-decoder RNN for handwriting generation" },
+    { text: "" },
+    { text: '<span class="project-name">Pothole & Triple Rider Detection</span>' },
+    { text: "  YOLOv5-based real-time detection from dash cameras" },
     { text: "" },
     { text: 'Type <span class="command">social</span> to find my GitHub for more projects.' },
     { text: "" },
@@ -113,17 +120,37 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
 
   experience: [
     { text: "" },
-    { text: '<span class="exp-title">Senior Full Stack Developer</span> @ Flext Solutions' },
-    { text: "  2023 - Present | Remote" },
-    { text: "  Leading development of scalable web applications" },
+    { text: '<span class="exp-title">Machine Learning Intern</span> @ IHub-Data IIIT Hyderabad' },
+    { text: "  July 2022 - December 2022" },
+    { text: "  • Built pothole & triple rider detection using YOLOv5" },
+    { text: "  • Reduced false positives by 20%" },
     { text: "" },
-    { text: '<span class="exp-title">Full Stack Developer</span> @ TechCorp Inc' },
-    { text: "  2021 - 2022 | Cape Town, SA" },
-    { text: "  Built enterprise web applications for Fortune 500 clients" },
+    { text: '<span class="exp-title">Research Assistant</span> @ ISRO-NESAC' },
+    { text: "  September 2021 - January 2022" },
+    { text: "  • LSTM models for ionospheric parameter forecasting" },
+    { text: "  • Earthquake precursor anomaly detection (F1: 0.78)" },
     { text: "" },
-    { text: '<span class="exp-title">Freelance Developer</span>' },
-    { text: "  2020 - 2021 | Remote" },
-    { text: "  Delivered 15+ custom web solutions" },
+    { text: '<span class="exp-title">ML Engineer</span> @ Omdena' },
+    { text: "  December 2021 - February 2022" },
+    { text: "  • EV charging optimization for EnergyHub" },
+    { text: "  • Time series clustering for electricity profiles" },
+    { text: "" },
+    { text: '<span class="exp-title">Research Intern</span> @ IMD' },
+    { text: "  November 2021 - June 2022" },
+    { text: "  • LSTM-based hailstorm severity prediction" },
+    { text: "" },
+  ],
+
+  education: [
+    { text: "" },
+    { text: '<span class="exp-title">National Institute of Technology Agartala</span>' },
+    { text: "  July 2019 - July 2023" },
+    { text: "  Bachelor of Technology in Computer Science & Engineering" },
+    { text: "  CGPA: 8.59" },
+    { text: "" },
+    { text: '<span class="skill-category">Certifications:</span>' },
+    { text: "  • Computer Vision Nanodegree - Udacity" },
+    { text: "  • Deep Learning Specialization - Coursera" },
     { text: "" },
   ],
 
@@ -152,7 +179,7 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
   ],
 };
 
-export const SPECIAL_COMMANDS = ["clear", "history", "email", "resume", "code", "sudo"];
+export const SPECIAL_COMMANDS = ["clear", "history", "email", "resume", "code", "sudo", "education"];
 
 export function isSpecialCommand(cmd: string): boolean {
   return SPECIAL_COMMANDS.includes(cmd.toLowerCase().trim());
