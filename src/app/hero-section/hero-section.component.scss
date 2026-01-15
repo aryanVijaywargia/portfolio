@@ -1,16 +1,6 @@
 @use '../../styles.scss' as *;
 
-// :root {
-//     --tw-bg-opacity: 1;
-//     --color-gray-900: 15 23 42;
-// }
 
-// $color-gray-900: 15 23 42;
-// $tw-bg-opacity: 1;
-// :root {
-//   --color-gray-900: rgb(#{$color-gray-900});
-//   --tw-bg-opacity: 1;
-// }
 
 .bg-red-custom:hover {
     --tw-bg-opacity: 1;
@@ -31,7 +21,6 @@
 .bg-gray-900-custom{
     --tw-bg-opacity: 1;
     --color-gray-900: 15 23 42;
-    //
     background-color: rgb(var(--color-gray-900)/var(--tw-bg-opacity) )
 }
 

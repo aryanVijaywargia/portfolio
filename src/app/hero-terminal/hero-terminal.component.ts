@@ -1,5 +1,4 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-// import { TerminalService } from './terminal.service';
 
 @Component({
   selector: 'app-hero-terminal',

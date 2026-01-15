@@ -1,12 +1,5 @@
-// import { Injectable } from '@angular/core';
 
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class TerminalService {
 
-//   constructor() { }
-// }
 import { Injectable } from '@angular/core';
 import { Terminal } from 'xterm';
 
