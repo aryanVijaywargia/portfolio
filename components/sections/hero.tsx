@@ -108,7 +108,7 @@ export const Hero: FC = () => {
           </footer>
         </section>
         <section className="relative md:h-[30rem]">
-          <div className="relative flex h-full min-w-[32rem] flex-col gap-4 pr-4 sm:min-w-[45rem] lg:absolute lg:left-0 lg:top-20 lg:min-w-[32rem] lg:pr-8">
+          <div className="relative flex h-full min-w-[32rem] flex-col gap-4 pr-4 sm:min-w-[48rem] lg:absolute lg:left-0 lg:top-32 lg:min-w-[36rem] lg:pr-8">
             <div className="relative z-20 flex justify-end gap-1.5">
               <Badge style="info">Hiker</Badge>
               <Badge style="success">Chef</Badge>
