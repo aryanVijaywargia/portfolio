@@ -29,19 +29,18 @@ export const ProfileNav: FC<ProfileNavProps> = ({ showNav }) => {
 
   return (
     <nav className="z-10 ml-auto flex items-center gap-2 pl-4">
-      {/* Byte Chatbot Button - Expanding on hover */}
+      {/* Byte Chatbot Button */}
       <button
         type="button"
         onClick={handleOpenChatbot}
         aria-label="Chat with Byte"
-        className="nav-expand-btn group flex h-10 w-10 items-center justify-start overflow-hidden rounded-full bg-gray-100 shadow-md transition-all duration-300 ease-out hover:w-28 d:bg-gray-700"
+        className={clsx(
+          "rounded p-2 text-sky-500 transition-colors d:text-sky-400 d:h:text-sky-300 md:h:text-sky-600",
+          showNav ? "h:text-sky-300" : "h:text-sky-600"
+        )}
       >
-        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full transition-colors duration-300 group-hover:bg-sky-500">
-          <DogIcon className="h-5 w-5 text-sky-500 transition-colors duration-300 group-hover:text-white" />
-        </span>
-        <span className="ml-1 whitespace-nowrap text-sm font-medium text-sky-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          Byte
-        </span>
+        <span className="sr-only">Chat with Byte</span>
+        <DogIcon className="h-5 w-5" />
       </button>
 
       {/* Theme Toggle */}
