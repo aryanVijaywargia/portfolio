@@ -172,6 +172,7 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: "" },
     { text: "Welcome to my interactive terminal portfolio!" },
     { text: 'Type <span class="command">help</span> for a list of available commands.' },
+    { text: 'Or type <span class="command">chatbot</span> to talk to Byte, my AI companion! 🐕' },
     { text: "" },
   ],
 
