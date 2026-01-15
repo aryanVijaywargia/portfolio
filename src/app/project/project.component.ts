@@ -8,7 +8,6 @@ import { style } from '@angular/animations';
   styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements AfterViewInit{
-  // @Input() filter: string;
   projects = PROJECTS; // Assuming PROJECTS is an array of project objects
   PORTFOLIO = PORTFOLIO;
   filter = 'All Projects'
@@ -18,64 +17,27 @@ export class ProjectComponent implements AfterViewInit{
   @ViewChild('projectRef' ) projectRef!: ElementRef;
 
   ngAfterViewInit(){
-    // this.solveProb()
   }
 
-  // solveProb(){
-  //   // console.log(this.projectRef)
-  //   if(this.rotationIndex===1 && this.projectRef){
-  //     // console.log("YES")
-  //     // this.projectRef.nativeElement.style.transform = "sm:rotate-[-1.5deg]"
-  //     // this.renderer.setStyle(this.projectRef.nativeElement.style, 'transform', "sm:rotate-[-1.5deg]");
 
-  //     // console.log(this.projectRef.nativeElement.style.transform)
-  //     const element = this.el.nativeElement.querySelector('.card');
-  //     if(element){
-  //       this.renderer.setStyle(element, 'transform', "rotate(-1.5deg)");
 
-  //     // Manually trigger change detection
-  //       this.cdr.detectChanges();
 
-  //     }
 
-  //   }
-  // }
   getSectionClasses(project: any, index: number): string {
     this.rotationIndex = this.projects
       .filter(({ type }) => this.filter === 'All Projects' || type.includes(this.filter))
       .findIndex(({ name }) => project.name === name);
-    // const rotationIndex = 0;
-    // if(this.projectRef){
-    //   console.log(this.projectRef.nativeElement)
-    // }
-    // this.rotationIndex = this.rotationIndex-1
-    // console.log('Rotation Index:', this.rotationIndex);
 
-    // this.solveProb()
 
-    // Use setTimeout to run the code after the current change detection cycle
-    // setTimeout(() => {
-      // Set the transform property
-      // if(this.projectRef){
-      //   const transformValue = this.rotationIndex % 2 === 0 ? 'rotate(1.5deg) !important' : 'rotate(-1.5deg) !important';
-      //   this.projectRef.nativeElement.style.transform = transformValue;
-      //   this.cdr.detectChanges();
-      // }
       
 
-      // Manually trigger change detection
       
-    // });
 
 
     return `relative h-[380px] w-[340px] min-w-[340px] snap-start rounded-xl border-2 border-gray-700/30 bg-clip-padding p-4 shadow-xl transition-[min-width,width,margin-left,opacity] duration-300 spacing-0 d:border-white/20 ${
       this.filter === 'All Projects' || project.type.includes(this.filter)
         ? 'flex'
         : '-ml-8 !w-0 !min-w-0 !overflow-hidden !border-0 !px-0 opacity-20'
-    // }
-    //  ${
-    //   this.rotationIndex % 2 === 0 && 'sm:rotate-[1.5deg] !important'
-    // } 
   } ${
       this.rotationIndex === 1 && 'sm:rotate-[-1.5deg] !important'
     }${
