@@ -2,7 +2,6 @@ import { EnvelopeIcon } from "@heroicons/react/24/solid";
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
 import { SiLinkedin } from "@react-icons/all-files/si/SiLinkedin";
 import { SiTwitter } from "@react-icons/all-files/si/SiTwitter";
-import { Image } from "components/image";
 import { Link } from "components/link";
 
 import clsx from "clsx";
@@ -13,7 +12,6 @@ import { ResumeSectionDateSidebar } from "components/resume/resume-section-data-
 import { ResumeSectionDateEvents } from "components/resume/resume-section-date-events";
 import { useResumeSectionInView } from "components/resume/use-resume-section-in-view";
 import { CV } from "content/cv";
-import ProfilePic from "public/images/about/resume-profile.jpg";
 import { FC, useEffect, useState } from "react";
 import { capitalize } from "utils/capitalize";
 import { scrollToY } from "utils/scroll-to";
@@ -71,7 +69,7 @@ export const Resume: FC = (props) => {
               <div>
                 <Link href={CV.website}>{CV.website.replace("https://", "")}</Link>
                 <span> - </span>
-                <Link href="https://github.com/FelixTellmann">github.com/FelixTellmann</Link>
+                <Link href="https://github.com/AryanVijaywargia">github.com/AryanVijaywargia</Link>
               </div>
             </div>
           </th>
@@ -81,7 +79,7 @@ export const Resume: FC = (props) => {
         <tr>
           <th>
             <small className="absolute left-1/2 bottom-0 -translate-x-1/2 pb-1 pt-3 text-[13px] font-medium tracking-tight text-gray-400">
-              View full resume at <Link href="https://flext.dev">www.flext.dev</Link>
+              View full resume at <Link href="https://aryancodes.com">www.aryancodes.com</Link>
             </small>
           </th>
         </tr>
@@ -96,35 +94,6 @@ export const Resume: FC = (props) => {
                     {CV.intro}
                   </p>
                 </ResumeSection>
-                <figure className="relative -top-2 z-10 ml-2 hidden h-56 w-44 rotate-6 bg-white print:!absolute print:!right-2 print:!top-8 print:!mt-0 print:!inline-block">
-                  <div className="absolute -inset-x-10 top-0 h-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_right,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
-                  <div className="absolute -inset-y-10 right-0 w-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_top,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
-                  <div className="absolute -inset-x-10 bottom-0 h-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_right,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
-                  <div className="absolute -inset-y-10 left-0 w-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_top,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
-                  <div className="absolute bottom-full right-0 -mb-px flex h-8 items-end overflow-hidden">
-                    <div className="-mb-px flex h-[2px] w-44 -scale-x-100">
-                      <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]" />
-                      <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]" />
-                    </div>
-                  </div>
-                  <div className="absolute top-[calc(100%-1px)] left-2 -mb-px flex h-8 items-start overflow-hidden">
-                    <div className="-mt-px flex h-[2px] w-44 -scale-x-100">
-                      <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
-                      <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
-                    </div>
-                  </div>
-                  <div className="flex h-full items-center justify-center px-2">
-                    <Image
-                      src={ProfilePic}
-                      preload
-                      className="rounded-sm shadow-xl shadow-sky-400/10"
-                      alt="Felix Tellmann Profile Pic"
-                      width="176"
-                      height="224"
-                      pixelDensity={2}
-                    />
-                  </div>
-                </figure>
                 <ResumeSection
                   title="Experience"
                   className={clsx(
@@ -388,35 +357,6 @@ export const Resume: FC = (props) => {
                 </ResumeSection>
               </main>
               <aside className="top-[144px] mb-auto hidden max-h-min print:!hidden lg:sticky lg:spacing-8">
-                <figure className="relative -top-2 z-0 ml-2 h-48 w-[9.5rem] rotate-6 print:!absolute print:!left-40 print:!top-6">
-                  <div className="absolute -inset-x-10 top-0 h-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_right,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
-                  <div className="absolute -inset-y-10 right-0 w-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_top,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
-                  <div className="absolute -inset-x-10 bottom-0 h-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_right,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
-                  <div className="absolute -inset-y-10 left-0 w-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_top,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
-                  <div className="absolute bottom-full right-0 -mb-px flex h-8 items-end overflow-hidden">
-                    <div className="-mb-px flex h-[2px] w-44 -scale-x-100">
-                      <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]" />
-                      <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]" />
-                    </div>
-                  </div>
-                  <div className="absolute top-[calc(100%-1px)] left-2 -mb-px flex h-8 items-start overflow-hidden">
-                    <div className="-mt-px flex h-[2px] w-44 -scale-x-100">
-                      <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
-                      <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
-                    </div>
-                  </div>
-                  <div className="flex h-full items-center justify-center px-2">
-                    <Image
-                      src={ProfilePic}
-                      preload
-                      className="rounded-sm shadow-xl shadow-sky-400/10"
-                      alt="Felix Tellmann Profile Pic"
-                      width="176"
-                      height="224"
-                      pixelDensity={2}
-                    />
-                  </div>
-                </figure>
                 <section className="spacing-6 print:!hidden">
                   <nav className="relative whitespace-nowrap text-[15px] font-medium text-gray-300 spacing-0">
                     <HoverEffect className="border-none border-transparent bg-gray-100" />
@@ -474,16 +414,16 @@ export const Resume: FC = (props) => {
                   {/*<h4 className="text-[13px] font-medium text-gray-700">Contact:</h4>*/}
                   <nav className="flex flex-wrap gap-2">
                     <Link
-                      href="mailto:hello@flext.dev"
+                      href="mailto:aryanvijaywargia@gmail.com"
                       target="_blank"
                       className="rounded p-1 text-gray-400 transition-all duration-75 hf:bg-gray-100 hf:text-gray-700 d:text-gray-300 d:hf:bg-gray-800/80 d:hf:text-gray-200"
-                      data-tip="hello@flext.dev"
+                      data-tip="aryanvijaywargia@gmail.com"
                     >
                       <span className="sr-only">Email me</span>
                       <EnvelopeIcon className="h-4 w-4" />
                     </Link>
                     <Link
-                      href="https://github.com/FelixTellmann"
+                      href="https://github.com/AryanVijaywargia"
                       target="_blank"
                       data-tip="Github"
                       className="rounded p-1 text-gray-400 transition-all duration-75 hf:bg-gray-100 hf:text-gray-700 d:text-gray-300 d:hf:bg-gray-800/80 d:hf:text-gray-200"
@@ -492,7 +432,7 @@ export const Resume: FC = (props) => {
                       <SiGithub className="h-4 w-4" />
                     </Link>
                     <Link
-                      href="https://twitter.com/FelixTellmann"
+                      href="https://twitter.com/AryanVijaywargia"
                       target="_blank"
                       data-tip="Twitter"
                       className="rounded p-1 text-gray-400 transition-all duration-75 hf:bg-gray-100 hf:text-gray-700 d:text-gray-300 d:hf:bg-gray-800/80 d:hf:text-gray-200"
@@ -501,7 +441,7 @@ export const Resume: FC = (props) => {
                       <SiTwitter className="h-4 w-4" />
                     </Link>
                     <Link
-                      href="https://www.linkedin.com/in/felixtellmann"
+                      href="https://www.linkedin.com/in/aryan-vijaywargia"
                       target="_blank"
                       data-tip="LinkedIn"
                       className="rounded p-1 text-gray-400 transition-all duration-75 hf:bg-gray-100 hf:text-gray-700 d:text-gray-300 d:hf:bg-gray-800/80 d:hf:text-gray-200"
@@ -511,7 +451,7 @@ export const Resume: FC = (props) => {
                     </Link>
                   </nav>
                   <h5 className="ml-1 text-[13px] text-gray-500 d:text-gray-400">
-                    Cape Town, South Africa
+                    India
                   </h5>
                 </section>
               </aside>
