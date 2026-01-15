@@ -1,13 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-
-
 // eslint-disable-next-line node/no-unpublished-require
 const plugin = require("tailwindcss/plugin");
 // eslint-disable-next-line node/no-unpublished-require
 const colors = require("tailwindcss/colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 const { default: flattenColorPalette } = require("tailwindcss/lib/util/flattenColorPalette");
-// const svgToDataUri = require("mini-svg-data-uri");
+const svgToDataUri = require("mini-svg-data-uri");
 
 function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -16,17 +14,13 @@ function hexToRgb(hex) {
 
 module.exports = {
   content: [
-    "./src/**/*.{html,ts}",
-    "./src/app/**/*.{html,ts}",
-    "./src/app/project/*.{html,ts}",
-    "./src/app/app.component.html",
-    "./src/app/app.component.ts"
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./content/**/*.{js,ts,jsx,tsx}",
+    "./client/**/*.{js,ts,jsx,tsx}",
+    "./_client/**/*.{js,ts,jsx,tsx}",
+    "./update/**/*.{js,ts,jsx,tsx}",
   ],
-  theme: {
-    extend: {},
-  },
-  // plugins: [],
-
   darkMode: "class", // or 'media' or 'class'
   // mode: process.env.NODE_ENV ? "jit" : undefined,
   mode: "jit",
@@ -113,8 +107,6 @@ module.exports = {
         "8xl": "90rem",
       },
       colors: {
-        hoverblueL:'rgba(100, 116, 139,1)',
-        heroIconBg:'rgba( 15, 23, 42, 1)',
         bg: "rgb(var(--color-bg) / <alpha-value>)",
         "bg-dark": "rgb(var(--color-bg-dark) / <alpha-value>)",
         "bg-secondary": "rgb(var(--color-bg-secondary) / <alpha-value>)",
@@ -345,12 +337,3 @@ module.exports = {
     },
   ],
 };
-
-
-
-
-
-
-
-
-

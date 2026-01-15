@@ -1,0 +1,14 @@
+node_modules
+tsconfig.*.json
+tsconfig.json
+package-lock.json
+.angular
+random
+.DS_Store
+assets
+about-me/
+code
+terminal
+phone
+Directives/
+search

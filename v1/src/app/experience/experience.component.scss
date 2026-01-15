@@ -1,0 +1,297 @@
+
+@use '../../styles.scss' as *;
+
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth !important;
+}
+
+
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+::selection {
+  background: yellow;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: system, -apple-system, BlinkMacSystemFont, Roboto,
+    "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  background-color: #202124;
+  color: #2ca028;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+a {
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  text-decoration-skip-ink: auto;
+  transition: color 0.25s ease;
+}
+
+p {
+  margin: 0;
+}
+
+ul{
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+
+ul li{
+  position: relative;
+    padding-left: 30px;
+    margin-bottom: 10px;
+}
+
+ul li::before {
+  content: "▹";
+  position: absolute;
+  left: 0px;
+  color: rgb(var(--color-accent) / var(--tw-text-opacity));;
+}
+
+$spacing: 20px;
+$purple: rgb(var(--color-accent) / var(--tw-text-opacity));
+$tab-height: 40px;
+$tab-width: 100%;
+$green: #64ffda;
+$transition: all 0.25s cubic-bezier(0.645,0.045,0.355,1);
+
+.company h3{
+  color: $purple;
+}
+
+.inline-link {
+  display: inline-block;
+  text-decoration: none;
+  text-decoration-skip-ink: auto;
+  position: relative;
+  transition: $transition;
+  --tw-gradient-stops: var(
+    --tw-gradient-from), #0ea5e9 var(--tw-gradient-via-position), var(--tw-gradient-to);
+    --tw-gradient-to: #3b82f6 var(
+      --tw-gradient-to-position);
+  background-color: linear-gradient(to right, var(--tw-gradient-stops));
+  color: rgb(var(--color-accent) / var(--tw-text-opacity));
+}
+
+.bg_blob{
+  background-image: url("https://tailwindcss.com/_next/static/media/8-dark@tinypng.7abc66a1.png");
+  background-size: 136.75rem 100%;
+    height: 32.625rem;
+    z-index: 1;
+    position: absolute;
+    margin-top: 135%;
+}
+
+
+
+
+.container {
+  position: relative;
+  margin: $spacing auto;
+  padding: $spacing;
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+
+  .tabs {
+
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 3;
+    width: max-content;
+
+    .tab {
+      width: 100px;
+      height: $tab-height;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 10px 0;
+      transition: all 0.25s ease;
+      border-left: 2px solid #5f6368;
+      color: rgb(var(--color-gray-500)/1);
+
+      &:hover {
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 240,240,240, 1);
+      }
+
+      &.active {
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 240,240,240, 1);
+      }
+
+      &.d {&:hover {
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 15, 23, 42, 1);
+      }
+}
+      &.d {&.active {
+        color: rgb(var(--color-accent) / var(--tw-text-opacity));
+        background: rgba( 15, 23, 42, 1);
+      }}
+
+      
+
+   
+
+      @for $i from 1 through 4 {
+        &.tab-#{$i}.active {
+          & ~ .highlighter {
+            transform: translateY(#{($i*$tab-height) - $tab-height});
+          }
+        }
+      }
+      
+    }
+
+    .highlighter {
+      display: block;
+      background: $purple;
+      width: 2px;
+      height: $tab-height;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateY(0);
+      transition: transform 0.2s ease;
+      transition-delay: 0.1s;
+      z-index: 10;
+    }
+
+    a:first-of-type {
+      border-top-left-radius: 2px;
+    }
+    a:last-of-type {
+      border-top-right-radius: 2px;
+    }
+
+    @media (max-width: 767px) {
+      flex-direction: row;  // Change direction to column for small screens
+      align-items: center;  // Center the tabs horizontally
+      text-align: center;  // Center the text inside each tab
+      width: 100%;  // Make the tabs take the full width
+      .tab {
+        border-left: none;
+        border-bottom: 2px solid #5f6368;
+        height:100%;
+        @for $i from 1 through 4 {
+          &.tab-#{$i}.active {
+            & ~ .highlighter {
+              transform: translateX(#{($i*$tab-width) - $tab-width})!important;
+            }
+          }
+        }
+      }
+      .highlighter{
+        display: block;
+        background: $purple;
+        height: 2px;
+        position: absolute;
+        top: 100%;
+        transform: translateX($tab-width)!important;
+        transition: transform 0.2s ease;
+        transition-delay: 0.1s;
+        z-index: 10;
+
+      }
+
+      
+      
+     
+    }
+  }
+
+  @media (max-width: 767px) {
+    flex-direction: column;  // Change direction to column for small screens
+    align-items: center;  // Center the tabs horizontally
+    width: 100%;  // Make the tabs take the full width
+  }
+    
+
+  .content {
+    position: relative;
+    padding: 0 $spacing;
+    
+    .d.headerTxt{
+      color:rgb(var(--color-gray-300) / var(--tw-text-opacity))!important
+    }
+
+    .headerTxt{
+      color:rgb(var(--color-gray-700) / var(--tw-text-opacity))
+    }
+
+    &__section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      z-index: 0;
+      transition: opacity 0s ease;
+
+      &.visible {
+        position: relative;
+        opacity: 1;
+        width: 100%;
+        height: auto;
+        transition: opacity 0.5s ease;
+        z-index: 2;
+      }
+    }
+
+    @media (max-width: 767px) {
+      padding: $spacing $spacing;
+    }
+ 
+  }
+}
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+/* Add this to your existing styles or create a new stylesheet */
+
+
+
+
+
+
