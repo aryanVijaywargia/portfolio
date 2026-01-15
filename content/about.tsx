@@ -1,135 +1,77 @@
 // @ts-ignore
-import DontBeADick from "../public/images/about/dont-be-a-dick.jpg";
-import HikingProfile from "../public/images/about/profile-lionshead.jpg";
-import Namibia from "../public/images/about/namibia.jpg";
-import QuadBike from "../public/images/about/quadbike.jpg";
-import AlphaBackpack from "../public/images/about/alpha-backpack.jpg";
-import ChristmasInWilderness from "../public/images/about/christmas-wilderness.jpg";
-import Ottertrail from "../public/images/about/ottertrail.jpg";
-import Running from "../public/images/about/running.jpg";
-import Restaurant from "../public/images/about/restaurant.jpg";
-import RestaurantDiy from "../public/images/about/restaurant-diy.jpg";
-import Wedding from "../public/images/about/wedding.jpg";
-import AlphaLionshead from "../public/images/about/alpha-mountain.jpg";
-import Kirstenbosch from "../public/images/about/kirstenbosch.jpg";
-import Camping from "../public/images/about/camping.jpg";
-import GreatIdeas from "../public/images/about/great-ideas.jpg";
-import Desert from "../public/images/about/desert.jpg";
-import AdelphiFamily from "../public/images/about/profile-adelphi.jpg";
+import AryanProfile from "../public/images/about/aryan-profile.jpg";
+import Aryan1 from "../public/images/about/aryan-1.jpg";
+import Aryan2 from "../public/images/about/aryan-2.jpg";
+import Aryan3 from "../public/images/about/aryan-3.jpg";
+import Aryan4 from "../public/images/about/aryan-4.jpg";
+import Aryan5 from "../public/images/about/aryan-5.jpg";
 
 export const ABOUT = {
   stats: [
     {
       statistic: `${
-        new Date(Date.now() - new Date("1986-01-08T01:30:00").getTime()).getFullYear() - 1970
+        new Date(Date.now() - new Date("2000-01-01T00:00:00").getTime()).getFullYear() - 1970
       }`,
-      tooltip: `${Math.round(
-        (Date.now() - new Date("1986-01-08T01:30:00").getTime()) / 1000
-      )} seconds`,
+      tooltip: `Born in 2000`,
       caption: "Years Old",
     },
     {
+      statistic: "4+",
+      tooltip: "Started ML journey in 2020",
+      caption: "Years ML/AI",
+    },
+    {
       statistic: "10+",
-      tooltip: "First line of code written in 1997",
-      caption: "Years Web Dev",
+      tooltip: "TensorFlow, PyTorch, OpenCV, Scikit-Learn, and more",
+      caption: "ML Frameworks",
     },
     {
-      statistic: "1",
-      tooltip: "Who also loves running.",
-      caption: "Amazing dog",
-    },
-    {
-      statistic: "3149",
-      tooltip: "111 GitHub Stars",
-      caption: "Commits",
+      statistic: "15+",
+      tooltip: "Research papers, projects, and professional work",
+      caption: "Projects",
     },
   ],
   description: (
     <>
       <p>
-        I'm a Cape Town based Web Developer and Entrepreneur. My focus area for the past few years
-        has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>{" "}
-        and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
-        bring delight.
+        I'm a Machine Learning Engineer from India. My focus area for the past few years
+        has been <strong>Deep Learning</strong>, <strong>Computer Vision</strong>,{" "}
+        <strong>NLP</strong>, and <strong>Time Series Forecasting</strong> to create intelligent
+        systems that solve real-world problems.
       </p>
       <p>
-        I’ve spent most of my life deeply interested in technology and food, continuously building
-        things with both. As a teenager, I was a classic computer nerd, spending most of my times
-        messing with the computer, doing 1 of 4 things: Modding games and figuring things out.
-        Tinkering with hardware, building computers. Developing websites with FrontPage 98 and
-        Flash. And of course, playing games.
+        I've worked on earthquake prediction at ISRO-NESAC, pothole detection at IHub-Data IIIT
+        Hyderabad, EV charging optimization at Omdena, and hailstorm prediction at IMD.
+        As a former GDSC Lead at NIT Agartala, I love contributing to open-source projects
+        and sharing knowledge with the developer community.
       </p>
-      <p>Most of that is still true today.</p>
+      <p>Currently exploring PyTorch, MLFlow, and building full-stack ML applications.</p>
     </>
   ),
   images: [
     {
-      src: DontBeADick,
-      alt: "With Liz and Alpha at House of the Machines",
+      src: AryanProfile,
+      alt: "Aryan Vijaywargia - Profile Photo",
     },
     {
-      src: HikingProfile,
-      alt: "Hiking up the slopes of Table mountain with Lions-head in the background",
+      src: Aryan1,
+      alt: "Aryan at a tech event",
     },
     {
-      src: Namibia,
-      alt: "Overseeing the desert in Namibia.",
+      src: Aryan2,
+      alt: "Aryan working on ML projects",
     },
     {
-      src: QuadBike,
-      alt: "Driving quadbike in the dunes of Swakopmund.",
+      src: Aryan3,
+      alt: "Aryan presenting research",
     },
     {
-      src: AlphaBackpack,
-      alt: "Hiking for 33km over Table mountain and giving Alpha a little rest in the backpack.",
+      src: Aryan4,
+      alt: "Aryan at a conference",
     },
     {
-      src: ChristmasInWilderness,
-      alt: "Family Friends posing for Christmas in Wilderness, SA.",
-    },
-    {
-      src: Ottertrail,
-      alt: "Reflection of our 5 day hike with a beautiful water shot.",
-    },
-    {
-      src: Running,
-      alt: "Running down the slopes in Newlands forest.",
-    },
-    {
-      src: Restaurant,
-      alt: "Our Restaurant that we had in Knysna, The Exchange, woodfired Grill.",
-    },
-    {
-      src: RestaurantDiy,
-      alt: "DIY upgrading our restaurant, including soundproofing.",
-    },
-    {
-      src: Wedding,
-      alt: "Walking down the isle for our wedding.",
-    },
-    {
-      src: AlphaLionshead,
-      alt: "Alpha smiling on top of Lions head",
-    },
-    {
-      src: Kirstenbosch,
-      alt: "Christmas carols in Kirstenbosch, Newlands.",
-    },
-    {
-      src: Camping,
-      alt: "Camping at Addo Elephant national Park.",
-    },
-    {
-      src: GreatIdeas,
-      alt: "Reading a new book in a Jacuzzi in Cederkloof, Citrusdal.",
-    },
-    {
-      src: Desert,
-      alt: "Standing in the desert in Namibia.",
-    },
-    {
-      src: AdelphiFamily,
-      alt: "Family pic in our home in Vredehoek, Cape Town.",
+      src: Aryan5,
+      alt: "Aryan exploring new places",
     },
   ],
 };
