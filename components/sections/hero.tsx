@@ -54,7 +54,7 @@ export const Hero: FC = () => {
         />
       </div>
 
-      <div className="relative mx-auto flex max-w-6xl grid-cols-5 flex-col gap-8 gap-y-16 px-4 py-16 md:py-32 md:px-8 lg:grid">
+      <div className="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16 md:py-32 md:px-8 lg:grid">
         <section className="col-span-2">
           <header>
             <div className="heading-pre">{HERO.pre}</div>
@@ -71,17 +71,17 @@ export const Hero: FC = () => {
                   ]}
                 />
               </h2>*/}
-            <ul className="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-4 overflow-x-auto px-4 pb-2 text-[14px] font-medium">
+            <ul className="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium">
               {HERO.tech.map(({ name, Icon }) => (
-                <li className="flex items-center gap-1.5 text-gray-500 d:text-gray-400" key={name}>
-                  <Icon className="h-6 w-6 text-gray-400 d:text-gray-300/80" />
+                <li className="flex items-center gap-2 text-gray-500 d:text-gray-400" key={name}>
+                  <Icon className="h-7 w-7 text-gray-400 d:text-gray-300/80" />
                   {name}
                 </li>
               ))}
             </ul>
           </header>
           <main>
-            <p className="mb-3 max-w-md font-normal text-gray-500 d:text-gray-400 md:text-base md:tracking-tight">
+            <p className="mb-3 max-w-lg font-normal text-gray-500 d:text-gray-400 md:text-lg md:tracking-tight">
               {HERO.body}
             </p>
 
@@ -107,8 +107,8 @@ export const Hero: FC = () => {
               : null}
           </footer>
         </section>
-        <section className="relative col-span-3 md:h-[30rem]">
-          <div className="relative flex h-full min-w-[28rem] flex-col gap-4 pr-8 sm:min-w-[36rem] lg:absolute lg:left-0 lg:top-24 lg:min-w-[32rem] lg:pr-12">
+        <section className="relative md:h-[30rem]">
+          <div className="relative flex h-full min-w-[32rem] flex-col gap-4 pr-4 sm:min-w-[42rem] lg:absolute lg:-left-4 lg:top-24 lg:min-w-[34rem] lg:mr-4 lg:pr-8">
             <div className="relative z-20 flex justify-end gap-1.5">
               <Badge style="info">Hiker</Badge>
               <Badge style="success">Chef</Badge>
