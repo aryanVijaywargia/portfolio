@@ -21,17 +21,9 @@ export class TimelineComponent implements OnInit {
   faCoffee = faCoffee;
   selectedIconIndex: number | null = null;
 
-  // setSelected(index: number) {
-  //   this.selectedIconIndex = index;
-  // }
   
   
-  // timelineEntries: [string, TimelineEvent[]][] = Object.entries(this.TIMELINEOBJECT);
 
-  // events!:[];
-  // extractYearAndEvents(entry: [string, TimelineEvent[]]): { year: string; events: TimelineEvent[] } {
-  //   return { year: entry[0], events: entry[1] };
-  // }
 
   timelineEntries: any[] = Object.entries(this.TIMELINEOBJECT).map(
     ([year, events]) => ({
@@ -49,10 +41,6 @@ export class TimelineComponent implements OnInit {
     this.scrollToSection();
   }
 
-  // public getCombinedValue(entry:any, index: number): string {
-  //   console.log( `${entry.year}-${index}`);
-  //   return `${entry.year}-${index}`;
-  // }
 
   public getCombinedValue(year: string, index: number): string {
     return `${year}-${index}`;
@@ -69,12 +57,9 @@ export class TimelineComponent implements OnInit {
       const duration = 1000; // Duration of the scrolling animation in milliseconds
   
       this.scrollToX(duration, barPosition - targetPosition, container, () => {
-        // Highlight the bar
         this.setSelected(`${year}-${index}`);
         if (this.isLastBar(year, index)) {
-          // setTimeout(() => {
             this.lastBarHighlighted.emit();
-          // }, 2000); // Add a delay before restarting the sequence
         }
   
       });
@@ -96,7 +81,6 @@ export class TimelineComponent implements OnInit {
         
 
           if(this.selectedBarYear){
-            // entries = this.selectedBarYear;
             index = this.selectedBarIndex
 
             entries = this.timelineEntries.findIndex(entry => entry.year === this.selectedBarYear.toString());
@@ -140,13 +124,8 @@ export class TimelineComponent implements OnInit {
   }
 
   setSelected(selected: string) {
-    // this.autoScroll = false;
     this.selected = selected;
     
-    // let [year, index] = selected.split("-");
-    // this.highlightVerticalBar(parseInt(year).toString(), parseInt(index))
-    // this.selectedIconIndex = parseInt(index, 10);
-    // this.scrollToSection();
   }
 
   scrollToSection() {
@@ -160,22 +139,15 @@ export class TimelineComponent implements OnInit {
   @Output() selectedBarValue = new EventEmitter<string>();
 
   onTimelineItemPointerOver(selected: any) {
-    // this.autoScroll = false;
-    // this.selectedBarValue.emit(selected);
     this.setSelected(selected);
     const parts = selected.split('-');
 
-            // Parse each part as a number
     this.selectedBarYear = parseInt(parts[0], 10); // Parse the year part
     this.selectedBarIndex = parseInt(parts[1], 10);
-    // this.selectedBar = undefined;
 
-    // this.highlightVerticalBar(year.xtoString(), index)
-    // this.setSelected(selected);
   }
 
   onTimelineItemFocused(selected: string) {
-    // this.autoScroll = false;
     this.setSelected(selected);
   }
 

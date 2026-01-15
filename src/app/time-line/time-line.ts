@@ -1,4 +1,3 @@
-// import { IconType } from 'react-icons'; // You need to find the Angular equivalent of the React icons you are using
 
 export interface TimelineEvent {
   date: string;

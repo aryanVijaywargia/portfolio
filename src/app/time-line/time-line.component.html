@@ -1,5 +1,3 @@
-<!-- <div *ngFor="let entry of timelineEntries ; let yearIndex = index;">
-    <h1>{{ extractYearAndEvents(entry).year}}</h1> -->
 
 <section class="mx-auto  max-w-6xl px-4  md:px-8">
     <div class="-mx-4 flex overflow-x-auto py-4 px-6 xl:mx-0" (inView)="onInViewChanged($event)" #scrollContainerRef>
@@ -19,10 +17,6 @@
                             (click)="setSelected(getCombinedValue(entry.year, index))">
                             <span class="sr-only">{{ entry.year }} -
                                 {{ event.heading }}</span>
-                            <!-- <div class="h-8 w-0.5 bg-gray-500 transition-all selected:h-[80px] selected:bg-sky-500"
-                                style="display: flex;
-                            flex-direction: column-reverse;
-                            align-items: center;"> -->
                             <div class="h-8 w-0.5 bg-gray-500 transition-all selected:h-[80px] selected:bg-sky-500">
                                 <fa-icon [icon]="faCoffee" class="iconColor-lg"
                                     style="display: flex; justify-content: center; align-items: center;"
