@@ -662,6 +662,8 @@ END:VCARD`;
         onClick={copyEmail}
         onMouseEnter={() => handleEmailHover(true)}
         onMouseLeave={() => handleEmailHover(false)}
+        onFocus={() => handleEmailHover(true)}
+        onBlur={() => handleEmailHover(false)}
       >
         <svg
           width="16"

@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect, KeyboardEvent } from "react";
+import { FC, useState, useRef, useEffect, KeyboardEvent, useCallback } from "react";
 import {
   TERMINAL_CONFIG,
   COMMANDS,
@@ -36,6 +36,7 @@ export const Terminal: FC<TerminalProps> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const chatbotTimeoutIds = useRef<NodeJS.Timeout[]>([]);
 
   // Initialize with banner
   useEffect(() => {
@@ -46,22 +47,65 @@ export const Terminal: FC<TerminalProps> = ({
     }, 100);
   }, []);
 
+  // Cleanup chatbot timeouts on unmount
+  useEffect(() => {
+    return () => {
+      chatbotTimeoutIds.current.forEach((id) => clearTimeout(id));
+      chatbotTimeoutIds.current = [];
+    };
+  }, []);
+
   // Handle external trigger for chatbot
   useEffect(() => {
     if (triggerChatbot) {
+      // Clear any existing timeouts
+      chatbotTimeoutIds.current.forEach((id) => clearTimeout(id));
+      chatbotTimeoutIds.current = [];
+
       // Run the chatbot loading animation
-      addLine(`${TERMINAL_CONFIG.prompt} chatbot`, "command-line", 0);
-      addLine("", undefined, 50);
-      addLine("Initializing Neural Bark Network...", "info", 130);
-      addLine("[#####-----] 50%", "info", 450);
-      addLine("[##########] 100%", "info", 850);
-      addLine("Woof! Connection established.", "info", 1250);
-      setTimeout(() => {
-        onTriggerHandled?.();
-        onSwitchToChatbot();
-      }, 1550);
+      chatbotTimeoutIds.current.push(
+        setTimeout(() => {
+          addLineImmediate(`${TERMINAL_CONFIG.prompt} chatbot`, "command-line");
+        }, 0)
+      );
+      chatbotTimeoutIds.current.push(
+        setTimeout(() => {
+          addLineImmediate("", undefined);
+        }, 50)
+      );
+      chatbotTimeoutIds.current.push(
+        setTimeout(() => {
+          addLineImmediate("Initializing Neural Bark Network...", "info");
+        }, 130)
+      );
+      chatbotTimeoutIds.current.push(
+        setTimeout(() => {
+          addLineImmediate("[#####-----] 50%", "info");
+        }, 450)
+      );
+      chatbotTimeoutIds.current.push(
+        setTimeout(() => {
+          addLineImmediate("[##########] 100%", "info");
+        }, 850)
+      );
+      chatbotTimeoutIds.current.push(
+        setTimeout(() => {
+          addLineImmediate("Woof! Connection established.", "info");
+        }, 1250)
+      );
+      chatbotTimeoutIds.current.push(
+        setTimeout(() => {
+          onTriggerHandled?.();
+          onSwitchToChatbot();
+        }, 1550)
+      );
     }
-  }, [triggerChatbot]);
+
+    return () => {
+      chatbotTimeoutIds.current.forEach((id) => clearTimeout(id));
+      chatbotTimeoutIds.current = [];
+    };
+  }, [triggerChatbot, onSwitchToChatbot, onTriggerHandled]);
 
   // Auto-scroll to bottom when output changes
   useEffect(() => {
@@ -75,14 +119,24 @@ export const Terminal: FC<TerminalProps> = ({
     inputRef.current?.focus();
   };
 
-  const addLine = (text: string, className?: string, delay: number = 0) => {
-    setTimeout(() => {
+  const addLine = (text: string, className?: string, delay: number = 0): NodeJS.Timeout => {
+    const timeoutId = setTimeout(() => {
       setLineIdCounter((prev) => {
         const newId = prev + 1;
         setOutputLines((lines) => [...lines, { id: newId, text, className }]);
         return newId;
       });
     }, delay);
+    return timeoutId;
+  };
+
+  // Add line immediately without returning timeout (for non-tracked calls)
+  const addLineImmediate = (text: string, className?: string) => {
+    setLineIdCounter((prev) => {
+      const newId = prev + 1;
+      setOutputLines((lines) => [...lines, { id: newId, text, className }]);
+      return newId;
+    });
   };
 
   const addLines = (lines: CommandOutput[], baseDelay: number = 80) => {
@@ -155,14 +209,20 @@ export const Terminal: FC<TerminalProps> = ({
           return;
 
         case "chatbot":
-          addLine("", undefined, 0);
-          addLine("Initializing Neural Bark Network...", "info", 80);
-          addLine("[#####-----] 50%", "info", 400);
-          addLine("[##########] 100%", "info", 800);
-          addLine("Woof! Connection established.", "info", 1200);
-          setTimeout(() => {
-            onSwitchToChatbot();
-          }, 1500);
+          // Clear any existing chatbot timeouts
+          chatbotTimeoutIds.current.forEach((id) => clearTimeout(id));
+          chatbotTimeoutIds.current = [];
+
+          chatbotTimeoutIds.current.push(addLine("", undefined, 0));
+          chatbotTimeoutIds.current.push(addLine("Initializing Neural Bark Network...", "info", 80));
+          chatbotTimeoutIds.current.push(addLine("[#####-----] 50%", "info", 400));
+          chatbotTimeoutIds.current.push(addLine("[##########] 100%", "info", 800));
+          chatbotTimeoutIds.current.push(addLine("Woof! Connection established.", "info", 1200));
+          chatbotTimeoutIds.current.push(
+            setTimeout(() => {
+              onSwitchToChatbot();
+            }, 1500)
+          );
           return;
 
         case "sudo":

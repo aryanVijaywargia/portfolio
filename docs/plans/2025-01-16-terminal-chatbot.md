@@ -241,18 +241,40 @@ export const Terminal: FC<TerminalProps> = ({ onSwitchToEditor, onSwitchToChatbo
 
 In the special commands switch (after the `code` case, around line 130):
 
+> **Important:** The chatbot loading sequence schedules multiple setTimeouts. To prevent memory leaks and state updates after unmount, store all timeout IDs in a ref (e.g., `chatbotTimeoutIds`) and clear them in a useEffect cleanup or before starting a new sequence.
+
 ```typescript
+// At the component level, add a ref to track timeout IDs:
+const chatbotTimeoutIds = useRef<NodeJS.Timeout[]>([]);
+
+// Add cleanup in useEffect:
+useEffect(() => {
+  return () => {
+    chatbotTimeoutIds.current.forEach((id) => clearTimeout(id));
+    chatbotTimeoutIds.current = [];
+  };
+}, []);
+
+// In the switch case:
 case "chatbot":
-  addLine("", undefined, 0);
-  addLine("Initializing Neural Bark Network...", "info", 80);
-  addLine("[#####-----] 50%", "info", 400);
-  addLine("[##########] 100%", "info", 800);
-  addLine("Woof! Connection established.", "info", 1200);
-  setTimeout(() => {
-    onSwitchToChatbot();
-  }, 1500);
+  // Clear any existing chatbot timeouts
+  chatbotTimeoutIds.current.forEach((id) => clearTimeout(id));
+  chatbotTimeoutIds.current = [];
+
+  chatbotTimeoutIds.current.push(addLine("", undefined, 0));
+  chatbotTimeoutIds.current.push(addLine("Initializing Neural Bark Network...", "info", 80));
+  chatbotTimeoutIds.current.push(addLine("[#####-----] 50%", "info", 400));
+  chatbotTimeoutIds.current.push(addLine("[##########] 100%", "info", 800));
+  chatbotTimeoutIds.current.push(addLine("Woof! Connection established.", "info", 1200));
+  chatbotTimeoutIds.current.push(
+    setTimeout(() => {
+      onSwitchToChatbot();
+    }, 1500)
+  );
   return;
 ```
+
+> **Note:** Modify the `addLine` function to return the timeout ID so it can be tracked.
 
 **Step 6: Commit**
 
@@ -260,6 +282,38 @@ case "chatbot":
 git add components/interactive-terminal/terminal-commands.ts components/interactive-terminal/terminal.tsx
 git commit -m "feat: add chatbot command with loading animation"
 ```
+
+---
+
+## Environment & Setup Prerequisites
+
+Before implementing the chatbot, ensure the following environment setup is complete:
+
+### Required Environment Variables
+
+The `/api/chat` endpoint requires an `ANTHROPIC_API_KEY` to function. Set this in `.env.local`:
+
+```env
+ANTHROPIC_API_KEY=your_api_key_here
+```
+
+### Behavior When API Key is Missing
+
+- **Production:** The API will return a 500 error with message "API key not configured"
+- **Development/Mock Mode:** Set `MOCK_CHATBOT=true` in `.env.local` to enable mock responses without an API key
+
+### Affected Runtime Components
+
+1. **`/api/chat` endpoint** - Requires the API key to call Anthropic Claude
+2. **`TerminalChatbot.sendMessage`** - Will receive error responses if API key is missing
+
+### Mock Mode (Optional)
+
+To run the chatbot without an API key (for UI development/testing):
+
+1. Set `MOCK_CHATBOT=true` in `.env.local`
+2. The API will return predefined mock responses instead of calling Anthropic
+3. Useful for frontend development and CI testing
 
 ---
 
@@ -530,21 +584,47 @@ git commit -m "feat: add expand animation and chatbot mode rendering"
 **Files:**
 - Modify: `components/interactive-terminal/terminal-chatbot.tsx`
 
-**Step 1: Add exit command detection**
+**Step 1: Add exit command detection with proper cleanup**
+
+The exit flow uses setTimeout without cancellation and lacks a guard against further input. Fix by:
+
+1. Adding an `isExiting` ref to prevent actions during exit
+2. Storing the timeout ID for cleanup
+3. Clearing the timeout on unmount or new messages
 
 In the `sendMessage` function, before the API call:
 
 ```typescript
+// At component level, add refs:
+const isExitingRef = useRef(false);
+const exitTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+// Cleanup on unmount
+useEffect(() => {
+  return () => {
+    if (exitTimeoutRef.current) {
+      clearTimeout(exitTimeoutRef.current);
+    }
+  };
+}, []);
+
 const sendMessage = async (content: string) => {
+  // Block actions while exiting
+  if (isExitingRef.current) return;
   if (!content.trim() || isLoading) return;
 
   // Handle exit command
   if (content.trim().toLowerCase() === "exit") {
+    isExitingRef.current = true;
     addMessage({ role: "user", content: "exit" });
     addMessage({ role: "assistant", content: "*yawns* Connection terminated. Companion sleeping. 💤" });
-    setTimeout(() => {
-      clearMessages();
-      onExit();
+
+    // Store timeout for cleanup
+    exitTimeoutRef.current = setTimeout(() => {
+      if (isExitingRef.current) {
+        clearMessages();
+        onExit();
+      }
     }, 1000);
     return;
   }
@@ -552,6 +632,11 @@ const sendMessage = async (content: string) => {
   // ... rest of the function
 };
 ```
+
+> **Key improvements:**
+> - `isExitingRef` prevents further input during the exit sequence
+> - `exitTimeoutRef` allows cleanup on unmount
+> - Conditional check in timeout ensures exit only happens if still exiting
 
 **Step 2: Commit**
 

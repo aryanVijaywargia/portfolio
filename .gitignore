@@ -41,4 +41,4 @@ amplifytools.xcconfig
 warehouse
 
 # Claude Code
-.claude/
+.gemini-clipboard/

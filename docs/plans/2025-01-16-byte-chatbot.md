@@ -12,10 +12,10 @@
 
 ## Task 1: Install Anthropic SDK
 
-**Files:**
+### Files
 - Modify: `package.json`
 
-**Step 1: Install the Anthropic SDK**
+### Step 1: Install the Anthropic SDK
 
 Run:
 ```bash
@@ -23,14 +23,14 @@ cd "/Users/aryanvijaywargia/Src code/portfolio" && npm install @anthropic-ai/sdk
 ```
 Expected: Package added to dependencies
 
-**Step 2: Create environment variable placeholder**
+### Step 2: Create environment variable placeholder
 
 Create `.env.local` file (if not exists) and add:
-```
+```env
 ANTHROPIC_API_KEY=your_api_key_here
 ```
 
-**Step 3: Commit**
+### Step 3: Commit
 
 ```bash
 git add package.json package-lock.json
@@ -41,10 +41,10 @@ git commit -m "chore: add anthropic sdk dependency"
 
 ## Task 2: Create Byte Knowledge Base File
 
-**Files:**
+### Files
 - Create: `content/byte-knowledge.ts`
 
-**Step 1: Create the knowledge base file**
+### Step 1: Create the knowledge base file
 
 ```typescript
 // content/byte-knowledge.ts
@@ -92,7 +92,7 @@ Response style:
 `;
 ```
 
-**Step 2: Commit**
+### Step 2: Commit
 
 ```bash
 git add content/byte-knowledge.ts
@@ -103,7 +103,7 @@ git commit -m "feat: add byte knowledge base template"
 
 ## Task 3: Create Chat API Route
 
-**Files:**
+### Files
 - Create: `pages/api/chat.ts`
 
 **Step 1: Create the API route**
@@ -188,7 +188,7 @@ git commit -m "feat: add chat api route with anthropic integration"
 
 ## Task 4: Create Chatbot Store
 
-**Files:**
+### Files
 - Create: `components/_stores/chatbot-store.tsx`
 
 **Step 1: Create the Zustand store**
@@ -250,7 +250,7 @@ git commit -m "feat: add chatbot zustand store"
 
 ## Task 5: Create BytePanel Component
 
-**Files:**
+### Files
 - Create: `components/byte-chat/byte-panel.tsx`
 
 **Step 1: Create the slide-out panel component**
@@ -470,7 +470,7 @@ git commit -m "feat: add byte chat panel component"
 
 ## Task 6: Wire Up BytePanel to App
 
-**Files:**
+### Files
 - Modify: `pages/_app.tsx` or `components/_stores/_context-providers.tsx`
 
 **Step 1: Read _app.tsx to understand structure**
@@ -492,7 +492,7 @@ git commit -m "feat: add byte panel to app layout"
 
 ## Task 7: Connect Hero Chat Button
 
-**Files:**
+### Files
 - Modify: `components/sections/hero.tsx`
 
 **Step 1: Import and wire up the button**
@@ -530,7 +530,7 @@ git commit -m "feat: wire hero chat button to byte panel"
 
 ## Task 8: Add Chat Button to Navbar
 
-**Files:**
+### Files
 - Modify: `components/layout/header.settings.tsx`
 
 **Step 1: Add chat button to navbar**
