@@ -11,7 +11,7 @@ export const HERO = {
   pre: "Welcome to my site.",
   heading: (
     <>
-      I'm <strong>Aryan Vijaywargia</strong>, a Machine Learning Engineer.
+      I'm <strong>Aryan Vijaywargia</strong>, a Fullstack Engineer.
     </>
   ),
   tech: [
