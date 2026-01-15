@@ -17,9 +17,16 @@ type OutputLine = {
 type TerminalProps = {
   onSwitchToEditor: () => void;
   onSwitchToChatbot: () => void;
+  triggerChatbot?: boolean;
+  onTriggerHandled?: () => void;
 };
 
-export const Terminal: FC<TerminalProps> = ({ onSwitchToEditor, onSwitchToChatbot }) => {
+export const Terminal: FC<TerminalProps> = ({
+  onSwitchToEditor,
+  onSwitchToChatbot,
+  triggerChatbot,
+  onTriggerHandled,
+}) => {
   const [outputLines, setOutputLines] = useState<OutputLine[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -38,6 +45,23 @@ export const Terminal: FC<TerminalProps> = ({ onSwitchToEditor, onSwitchToChatbo
       inputRef.current?.focus();
     }, 100);
   }, []);
+
+  // Handle external trigger for chatbot
+  useEffect(() => {
+    if (triggerChatbot) {
+      // Run the chatbot loading animation
+      addLine(`${TERMINAL_CONFIG.prompt} chatbot`, "command-line", 0);
+      addLine("", undefined, 50);
+      addLine("Initializing Neural Bark Network...", "info", 130);
+      addLine("[#####-----] 50%", "info", 450);
+      addLine("[##########] 100%", "info", 850);
+      addLine("Woof! Connection established.", "info", 1250);
+      setTimeout(() => {
+        onTriggerHandled?.();
+        onSwitchToChatbot();
+      }, 1550);
+    }
+  }, [triggerChatbot]);
 
   // Auto-scroll to bottom when output changes
   useEffect(() => {

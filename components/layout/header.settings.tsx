@@ -13,7 +13,7 @@ type ProfileNavProps = {
 
 export const ProfileNav: FC<ProfileNavProps> = ({ showNav }) => {
   const { theme, setTheme } = useTheme();
-  const { openChat } = useChatbot();
+  const { requestChatbot } = useChatbot();
 
   const handleOpenChatbot = () => {
     // Scroll to terminal section
@@ -21,9 +21,9 @@ export const ProfileNav: FC<ProfileNavProps> = ({ showNav }) => {
     if (terminalSection) {
       terminalSection.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-    // Open chatbot after a short delay to let scroll complete
+    // Trigger chatbot after a short delay to let scroll complete
     setTimeout(() => {
-      openChat();
+      requestChatbot();
     }, 300);
   };
 

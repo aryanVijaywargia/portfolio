@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal } from "./terminal";
 import { TerminalChatbot } from "./terminal-chatbot";
@@ -14,15 +14,7 @@ type InteractiveTerminalProps = {
 export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, language }) => {
   const [mode, setMode] = useState<"terminal" | "editor" | "chatbot">("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isOpen: chatbotRequested, closeChat } = useChatbot();
-
-  // Listen for external trigger to open chatbot
-  useEffect(() => {
-    if (chatbotRequested && !isExpanded) {
-      setMode("chatbot");
-      setIsExpanded(true);
-    }
-  }, [chatbotRequested, isExpanded]);
+  const { triggerChatbot, clearTrigger, closeChat } = useChatbot();
 
   const handleSwitchToEditor = () => {
     setMode("editor");
@@ -40,7 +32,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const handleExitChatbot = () => {
     setMode("terminal");
     setIsExpanded(false);
-    closeChat(); // Reset the store state
+    closeChat();
+    clearTrigger();
   };
 
   return (
@@ -228,6 +221,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               <Terminal
                 onSwitchToEditor={handleSwitchToEditor}
                 onSwitchToChatbot={handleSwitchToChatbot}
+                triggerChatbot={triggerChatbot}
+                onTriggerHandled={clearTrigger}
               />
             ) : (
               <div className="h-full overflow-auto p-3">

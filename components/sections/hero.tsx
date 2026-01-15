@@ -10,7 +10,7 @@ import { useChatbot } from "components/_stores/chatbot-store";
 
 export const Hero: FC = () => {
   const { theme, setTheme } = useTheme();
-  const { openChat } = useChatbot();
+  const { requestChatbot } = useChatbot();
 
   const handleOpenChatbot = () => {
     // Scroll to terminal section
@@ -18,9 +18,9 @@ export const Hero: FC = () => {
     if (terminalSection) {
       terminalSection.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-    // Open chatbot after a short delay to let scroll complete
+    // Trigger chatbot after a short delay to let scroll complete
     setTimeout(() => {
-      openChat();
+      requestChatbot();
     }, 300);
   };
 
