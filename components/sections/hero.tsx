@@ -6,15 +6,30 @@ import ToggleSwitch from "components/toggle-switch";
 import { HERO } from "content/hero";
 import { useTheme } from "next-themes";
 import { FC } from "react";
+import { useChatbot } from "components/_stores/chatbot-store";
 
 export const Hero: FC = () => {
   const { theme, setTheme } = useTheme();
+  const { openChat } = useChatbot();
+
+  const handleOpenChatbot = () => {
+    // Scroll to terminal section
+    const terminalSection = document.getElementById("terminal-section");
+    if (terminalSection) {
+      terminalSection.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    // Open chatbot after a short delay to let scroll complete
+    setTimeout(() => {
+      openChat();
+    }, 300);
+  };
 
   return (
     <section className="hero relative overflow-hidden pb-40">
       {/* Top Action Bar */}
       <div className="absolute top-4 right-4 z-50 flex items-center gap-3 md:top-6 md:right-8">
         <button
+          onClick={handleOpenChatbot}
           className="group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-blue-500/30 hfa:bg-blue-500 hfa:text-white d:bg-gray-700 d:text-gray-50 d:hfa:bg-blue-500"
           data-tip="Chat with Byte"
           aria-label="Chat with Byte"
@@ -100,7 +115,7 @@ export const Hero: FC = () => {
               <Badge style="accent">Mixologist</Badge>
               <Badge style="plain">Space Enthusiast</Badge>
             </div>
-            <div className="relative flex h-full flex-col">
+            <div id="terminal-section" className="relative flex h-full flex-col">
               <InteractiveTerminal code={HERO.code} language="tsx" />
               <div className="absolute -right-5 -bottom-5 -z-10 h-[calc(100%+1.25rem)] w-[calc(100%+1.25rem)] rounded-lg border border-gray-400/20 bg-gray-100/70 [mask-image:linear-gradient(-30deg,#fff_16.35%,rgb(255_255_255_/_0%)_61.66%)] d:border-gray-700/20 d:bg-gray-900/40"></div>
             </div>

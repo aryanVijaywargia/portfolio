@@ -1,9 +1,11 @@
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
+import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/solid";
 import { Link } from "components/link";
 import clsx from "clsx";
 import DarkmodeIcon from "components/darkmode-icon";
 import { useTheme } from "next-themes";
 import { FC } from "react";
+import { useChatbot } from "components/_stores/chatbot-store";
 
 type ProfileNavProps = {
   showNav: boolean;
@@ -11,10 +13,35 @@ type ProfileNavProps = {
 
 export const ProfileNav: FC<ProfileNavProps> = ({ showNav }) => {
   const { theme, setTheme } = useTheme();
+  const { openChat } = useChatbot();
+
+  const handleOpenChatbot = () => {
+    // Scroll to terminal section
+    const terminalSection = document.getElementById("terminal-section");
+    if (terminalSection) {
+      terminalSection.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    // Open chatbot after a short delay to let scroll complete
+    setTimeout(() => {
+      openChat();
+    }, 300);
+  };
 
   return (
     <nav className="z-10 ml-auto flex gap-1 pl-4">
       {/*<div className="my-2 mx-4 border-l border-l-gray-200"></div>*/}
+      <button
+        type="button"
+        className={clsx(
+          "rounded p-2 text-gray-500 transition-colors d:text-gray-300 d:h:text-gray-50 md:h:text-gray-900",
+          showNav ? "h:text-gray-200" : "h:text-gray-900"
+        )}
+        onClick={handleOpenChatbot}
+        aria-label="Chat with Byte"
+      >
+        <span className="sr-only">Chat with Byte</span>
+        <ChatBubbleLeftRightIcon className="h-5 w-5" />
+      </button>
       <button
         type="button"
         className={clsx(
