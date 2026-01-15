@@ -47,7 +47,7 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [...messages, { role: "user", content: content.trim() }].map(m => ({
+          messages: [...messages, { role: "user", content: content.trim() }].map((m) => ({
             role: m.role,
             content: m.content,
           })),
@@ -61,7 +61,10 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
         addMessage({ role: "assistant", content: data.message });
       }
     } catch (error) {
-      addMessage({ role: "assistant", content: "*confused bark* Something went wrong. Try again?" });
+      addMessage({
+        role: "assistant",
+        content: "*confused bark* Something went wrong. Try again?",
+      });
     } finally {
       setLoading(false);
     }
@@ -81,18 +84,18 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
   };
 
   return (
-    <div className="terminal-chatbot h-full flex flex-col bg-[#1e1e1e] font-mono text-[13px]">
+    <div className="terminal-chatbot flex h-full flex-col bg-[#1e1e1e] font-mono text-[13px]">
       {/* ASCII Dog Header */}
-      <div className="text-center py-2 border-b border-[#3c3c3c]">
-        <pre className="text-[#4EC9B0] text-[10px] leading-tight inline-block">{BYTE_ASCII}</pre>
-        <div className="text-[#DCDCAA] text-sm mt-1">Byte - AI Companion</div>
-        <div className="text-[#6A6A6A] text-xs">Type 'exit' or press Esc to return</div>
+      <div className="border-b border-[#3c3c3c] py-2 text-center">
+        <pre className="inline-block text-[10px] leading-tight text-[#4EC9B0]">{BYTE_ASCII}</pre>
+        <div className="mt-1 text-sm text-[#DCDCAA]">Byte - AI Companion</div>
+        <div className="text-xs text-[#6A6A6A]">Type 'exit' or press Esc to return</div>
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-auto p-3 space-y-2">
+      <div className="flex-1 space-y-2 overflow-auto p-3">
         {messages.length === 0 && (
-          <div className="text-[#6A6A6A] text-center py-4">
+          <div className="py-4 text-center text-[#6A6A6A]">
             *wags tail* Woof! I'm Byte. Ask me anything about Aryan!
           </div>
         )}
@@ -108,21 +111,22 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
           </div>
         ))}
         {isLoading && (
-          <div className="text-[#4EC9B0] animate-pulse">
-            byte <span className="text-[#6A6A6A]">›</span> <span className="text-[#98C379]">*sniffs around*...</span>
+          <div className="animate-pulse text-[#4EC9B0]">
+            byte <span className="text-[#6A6A6A]">›</span>{" "}
+            <span className="text-[#98C379]">*sniffs around*...</span>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
       {/* Quick Actions */}
-      <div className="px-3 py-2 border-t border-[#3c3c3c] flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 border-t border-[#3c3c3c] px-3 py-2">
         {QUICK_ACTIONS.map((action) => (
           <button
             key={action.label}
             onClick={() => handleQuickAction(action.message)}
             disabled={isLoading}
-            className="px-2 py-1 text-xs bg-[#3c3c3c] text-[#D4D4D4] rounded hover:bg-[#4c4c4c] disabled:opacity-50 transition-colors"
+            className="rounded bg-[#3c3c3c] px-2 py-1 text-xs text-[#D4D4D4] transition-colors hover:bg-[#4c4c4c] disabled:opacity-50"
           >
             [ {action.label} ]
           </button>
@@ -130,9 +134,9 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
       </div>
 
       {/* Input Area */}
-      <div className="p-3 border-t border-[#3c3c3c]">
+      <div className="border-t border-[#3c3c3c] p-3">
         <div className="flex items-center">
-          <span className="text-[#4EC9B0] select-none">you ›</span>
+          <span className="select-none text-[#4EC9B0]">you ›</span>
           <input
             ref={inputRef}
             type="text"
@@ -141,7 +145,7 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
             onKeyDown={handleKeyDown}
             placeholder="Ask Byte something..."
             disabled={isLoading}
-            className="flex-1 bg-transparent text-[#D4D4D4] outline-none border-none ml-2 placeholder-[#6A6A6A]"
+            className="ml-2 flex-1 border-none bg-transparent text-[#D4D4D4] placeholder-[#6A6A6A] outline-none"
             autoFocus
           />
         </div>
@@ -149,7 +153,7 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
 
       <style jsx>{`
         .terminal-chatbot {
-          font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+          font-family: "Menlo", "Monaco", "Courier New", monospace;
         }
         .message {
           word-break: break-word;
