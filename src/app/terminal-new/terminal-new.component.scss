@@ -1,7 +1,6 @@
 .terminalCls {
     margin: 0;
     padding: 15px 20px;
-    // min-height: 99%;
     width: 100%;
     min-width: 150px;
     color: rgb(74 222 128/var(--tw-text-opacity));
@@ -82,7 +81,6 @@
     line-height: 1.3em;
     margin: 0;
     overflow: scroll;
-    // white-space: nowrap;
     margin: 0;
     letter-spacing: 0.05em;
     animation: typing 0.5s steps(30, end);
@@ -109,7 +107,6 @@
   }
   .command {
     color: #73ABAD;
-    // text-shadow: 0 0 5px #73ABAD; 
   }
   .error {
     color: rgb(251 146 60/var(--tw-text-opacity));

@@ -1,13 +1,5 @@
-// import { Component } from '@angular/core';
 
-// @Component({
-//   selector: 'app-terminal-new',
-//   templateUrl: './terminal-new.component.html',
-//   styleUrls: ['./terminal-new.component.scss']
-// })
-// export class TerminalNewComponent {
 
-// }
 
 
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, AfterViewChecked, ViewChild, ViewEncapsulation, Renderer2 } from '@angular/core';
@@ -28,10 +20,6 @@ export class TerminalNewComponent implements OnInit, AfterViewChecked {
 
   textValue = '';
 
-  // ngAfterViewChecked() {
-  //   this.before.nativeElement.parentNode.scrollTop = this.before.nativeElement.parentNode.scrollHeight;
-  //   this.cdRef.detectChanges();
-  // }
 
 
 
@@ -40,9 +28,7 @@ export class TerminalNewComponent implements OnInit, AfterViewChecked {
   @ViewChild('before', { static: true })  before!: ElementRef;
   @ViewChild('liner', { static: true })  liner!: ElementRef;
   @ViewChild('texter', { static: true })  texter!: ElementRef;
-  // private password = 'your_password_here'; // Replace 'your_password_here' with the actual password
 
-  // @ViewChild('texter') texter!: ElementRef;
 
 
 private  youtube = "https://www.youtube.com/fknight/";
@@ -104,7 +90,6 @@ help = [
   "<br>",
   '<span class="command">whois</span>          Who is Aryan?',
   '<span class="command">whoami</span>         Who are you?',
-  // '<span class="command">video</span>          View YouTube videos',
   '<span class="command">social</span>         Display social networks',
   '<span class="command">secret</span>         Find the password',
   '<span class="command">projects</span>       View coding projects',
@@ -134,9 +119,6 @@ initial = [
     return document.getElementById(elid);
   }
 
-  // private nl2br(txt: string): string {
-  //   return txt.replace(/\n/g, '');
-  // }
 
    typeIt( e:KeyboardEvent) {
     e = e || window.event;
@@ -163,13 +145,11 @@ initial = [
   }
 
   ngAfterViewChecked() {
-    // this.scrollTerminalToBottom();
   }
   
 
   scrollTerminalToBottom() {
     const terminalContainer = this.before.nativeElement.parentNode;
-    // terminalContainer.scrollTop = terminalContainer.scrollHeight;
     this.renderer.setProperty(terminalContainer, 'scrollTop', terminalContainer.scrollHeight);
   }
 
@@ -239,7 +219,6 @@ initial = [
     switch (cmd.toLowerCase()) {
       case "help":
         this.loopLines(this.help, "color2 margin pCls", 80);
-        // this.scrollTerminalToBottom();
         break;
       case "whois":
         this.loopLines(this.whois, "color2 margin pCls", 80);
@@ -281,11 +260,8 @@ initial = [
       const next = document.createElement("p");
       next.innerHTML = t;
       next.className = style;
-      // const container = this.before.nativeElement.parentNode;
 
       this.before!.nativeElement.parentNode!.insertBefore(next, this.before.nativeElement);
-      // window.scrollTo(0, document.body.offsetHeight);
-      // this.before.nativeElement.parentNode.scrollTop = this.before.nativeElement.parentNode.scrollHeight;
       this.scrollTerminalToBottom(); 
     }, time);
     
@@ -302,32 +278,10 @@ initial = [
     return txt.replace(/\n/g, '');
   }
 
-  // @HostListener('window:load', ['$event'])
-  // init() {
-  //   this.cursor!.nativeElement.style!.left = "0px";
-  // }
 
-  // get before(): HTMLElement | null {
-  //   return document.getElementById("before");
-  // }
 
-  // get liner(): HTMLElement | null {
-  //   return document.getElementById("liner");
-  // }
 
-  // get command(): HTMLElement | null {
-  //   return document.getElementById("typer");
-  // }
 
-  // get textarea(): HTMLTextAreaElement | null {
-  //   return document.getElementById("texter") as HTMLTextAreaElement;
-  // }
 
-  // get terminal(): HTMLElement | null {
-  //   return document.getElementById("terminal");
-  // }
 
-  // get cursor(): HTMLElement | null {
-  //   return document.getElementById("cursor");
-  // }
 }

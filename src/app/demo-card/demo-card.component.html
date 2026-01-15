@@ -6,40 +6,30 @@
 
     <div class="random">
         <div class="card" data-aos="fade-up">
-            <!-- <div class="card"> -->
+            
             <div class="card__cap">
                 <h1 class="card__title text-gray-500">
                     Contact card
                 </h1>
-                <!-- <SocLinks
-                onMouseOver={() => setSmile(true)}
-                onMouseLeave={() => setSmile(false)}
-                shouldInherit='card'
-            /> -->
+                
             </div>
             <div class="card__body gap-4" style="z-index: 100; position:relative; ">
 
                 <div class="card__photo">
-                    <!-- <Face
-                    shouldSmile={shouldSmile}
-                /> -->
+                    
                     <app-face #face [shouldSmile]="shouldSmile"></app-face>
 
 
                 </div>
                 <div style="flex: 4">
                     <div class="card__info">
-                        <!-- <Card__wr1 />
-                <Card__wr2
-                    onMouseOver={() => setSmile(true)}
-                    onMouseLeave={() => setSmile(false)}
-                /> -->
+                        
 
                         <app-card-title (faceSmile)="changeFaceSmile($event)"></app-card-title>
 
                     </div>
                 </div>
-                <!-- </div> -->
+                
             </div>
 
 
