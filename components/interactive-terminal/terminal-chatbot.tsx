@@ -38,6 +38,17 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
   const sendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return;
 
+    // Handle exit command
+    if (content.trim().toLowerCase() === "exit") {
+      addMessage({ role: "user", content: "exit" });
+      addMessage({ role: "assistant", content: "*yawns* Connection terminated. Companion sleeping. 💤" });
+      setTimeout(() => {
+        clearMessages();
+        onExit();
+      }, 1000);
+      return;
+    }
+
     addMessage({ role: "user", content: content.trim() });
     setInput("");
     setLoading(true);
