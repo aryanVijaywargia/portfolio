@@ -6,11 +6,13 @@ import { IoLogoVercel } from "@react-icons/all-files/io5/IoLogoVercel";
 import { MdDesktopMac } from "@react-icons/all-files/md/MdDesktopMac";
 import { SiAdobeillustrator } from "@react-icons/all-files/si/SiAdobeillustrator";
 import { SiAdobephotoshop } from "@react-icons/all-files/si/SiAdobephotoshop";
+import { SiAngular } from "@react-icons/all-files/si/SiAngular";
 import { SiCss3 } from "@react-icons/all-files/si/SiCss3";
 import { SiEslint } from "@react-icons/all-files/si/SiEslint";
 import { SiFacebook } from "@react-icons/all-files/si/SiFacebook";
 import { SiFigma } from "@react-icons/all-files/si/SiFigma";
 import { SiFirebase } from "@react-icons/all-files/si/SiFirebase";
+import { SiFlask } from "@react-icons/all-files/si/SiFlask";
 import { SiFramer } from "@react-icons/all-files/si/SiFramer";
 import { SiGit } from "@react-icons/all-files/si/SiGit";
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
@@ -33,12 +35,15 @@ import { SiNpm } from "@react-icons/all-files/si/SiNpm";
 import { SiPhp } from "@react-icons/all-files/si/SiPhp";
 import { SiPostman } from "@react-icons/all-files/si/SiPostman";
 import { SiPrettier } from "@react-icons/all-files/si/SiPrettier";
+import { SiPython } from "@react-icons/all-files/si/SiPython";
+import { SiPytorch } from "@react-icons/all-files/si/SiPytorch";
 import { SiReact } from "@react-icons/all-files/si/SiReact";
 import { SiRedis } from "@react-icons/all-files/si/SiRedis";
 import { SiRuby } from "@react-icons/all-files/si/SiRuby";
 import { SiShopify } from "@react-icons/all-files/si/SiShopify";
 import { SiSketch } from "@react-icons/all-files/si/SiSketch";
 import { SiTailwindcss } from "@react-icons/all-files/si/SiTailwindcss";
+import { SiTensorflow } from "@react-icons/all-files/si/SiTensorflow";
 import { SiTypescript } from "@react-icons/all-files/si/SiTypescript";
 import { SiWebpack } from "@react-icons/all-files/si/SiWebpack";
 import { SiWordpress } from "@react-icons/all-files/si/SiWordpress";
@@ -383,5 +388,25 @@ export const TECH = {
   slack: {
     name: "Slack",
     Icon: ({ className }) => <SiInstagram className={className} />,
+  },
+  python: {
+    name: "Python",
+    Icon: ({ className }) => <SiPython className={className} />,
+  },
+  tensorflow: {
+    name: "TensorFlow",
+    Icon: ({ className }) => <SiTensorflow className={className} />,
+  },
+  pytorch: {
+    name: "PyTorch",
+    Icon: ({ className }) => <SiPytorch className={className} />,
+  },
+  angular: {
+    name: "Angular",
+    Icon: ({ className }) => <SiAngular className={className} />,
+  },
+  flask: {
+    name: "Flask",
+    Icon: ({ className }) => <SiFlask className={className} />,
   },
 } as const;
