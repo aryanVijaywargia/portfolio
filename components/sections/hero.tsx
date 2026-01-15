@@ -1,6 +1,7 @@
 import { ChatBubbleLeftRightIcon, HeartIcon, MoonIcon, StarIcon, SunIcon } from "@heroicons/react/24/solid";
 import { Link } from "components/link";
 import { Badge } from "components/badge";
+import { useChatbot } from "components/_stores/chatbot-store";
 import { InteractiveTerminal } from "components/interactive-terminal";
 import ToggleSwitch from "components/toggle-switch";
 import { HERO } from "content/hero";
@@ -9,6 +10,7 @@ import { FC } from "react";
 
 export const Hero: FC = () => {
   const { theme, setTheme } = useTheme();
+  const { openChat } = useChatbot();
 
   return (
     <section className="hero relative overflow-hidden pb-40">
@@ -16,8 +18,9 @@ export const Hero: FC = () => {
       <div className="absolute top-4 right-4 z-50 flex items-center gap-3 md:top-6 md:right-8">
         <button
           className="group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-blue-500/30 hfa:bg-blue-500 hfa:text-white d:bg-gray-700 d:text-gray-50 d:hfa:bg-blue-500"
-          data-tip="Chat with AI"
-          aria-label="Chat with AI"
+          data-tip="Chat with Byte"
+          aria-label="Chat with Byte"
+          onClick={openChat}
         >
           <ChatBubbleLeftRightIcon className="h-5 w-5 text-blue-500 group-hfa:text-white" />
         </button>
