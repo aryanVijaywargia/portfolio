@@ -2,6 +2,7 @@ import { trpc } from "components/_app/trpc";
 import { ContextProviders } from "components/_stores/_context-providers";
 import { LoadInitialData } from "components/_stores/_load-initial-data";
 
+import { BytePanel } from "components/byte-chat";
 import { Footer } from "components/layout/footer";
 import { Header } from "components/layout/header";
 import { SEO } from "content/seo";
@@ -54,6 +55,7 @@ const App = ({ pageProps, Component }: AppProps) => {
         <Component {...pageProps} />
       </main>
       <Footer />
+      <BytePanel />
       {/*<Stars />*/}
     </Loaders>
   );
