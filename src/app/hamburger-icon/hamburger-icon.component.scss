@@ -11,10 +11,6 @@ body {
     --bar-h: 2px;
     --bar-color: white;
     position: absolute;
-    // top: 50%;
-    // left: 50%;
-    // margin-left: calc(-var(--bar-w) / 2);
-    // margin-top: calc(-var(--bar-w) / 2);
     width: var(--bar-w);
     height: calc((var(--bar-w) * 3) / 4);
     cursor: pointer;
@@ -24,7 +20,6 @@ body {
       left: 0;
       width: var(--bar-w);
       height: var(--bar-h);
-    //   background-color: var(--bar-color);
   
       &:nth-child(1) {
         top: 0;
@@ -39,8 +34,5 @@ body {
       }
     }
 
-    // b.d{
-    //     background-color: dark;
-    // }
   } /* McButton */
   

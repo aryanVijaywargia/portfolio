@@ -1,5 +1,5 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
-import { ThemeService } from '../theme.service';
+import { ThemeService } from '../shared/services/theme.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -11,9 +11,9 @@ export class HamburgerIconComponent {
   receivedTheme!: boolean;
 
   constructor(private el: ElementRef, private renderer: Renderer2, private themeService: ThemeService) { }
-  McButton!:any;
-  private subscription!:Subscription
-  
+  McButton!: any;
+  private subscription!: Subscription
+
   ngOnInit() {
 
     this.McButton = this.el.nativeElement.querySelector('[data=hamburger-menu]');

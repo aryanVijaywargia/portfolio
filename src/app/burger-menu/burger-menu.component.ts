@@ -37,7 +37,6 @@ export class BurgerMenuComponent {
     ],
   };
 
-  // @Input() showNav!: boolean;
   @Input() showNav: boolean = true;
   @Output() setShowNav = new EventEmitter<boolean>();
 
@@ -48,7 +47,6 @@ export class BurgerMenuComponent {
   @Output() childRendered: EventEmitter<void> = new EventEmitter<void>();
 
   ngAfterViewInit() {
-    // Notify the parent component that the child is completely rendered
     this.childRendered.emit();
   }
 
