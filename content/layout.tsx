@@ -3,7 +3,6 @@ import {
   HomeIcon,
   UserIcon,
   BriefcaseIcon,
-  DocumentTextIcon,
   EnvelopeIcon,
   CodeBracketIcon,
 } from "@heroicons/react/24/solid";
@@ -58,13 +57,6 @@ export const HEADER = {
       alt: "Get in touch.",
       desktop: true,
       Icon: EnvelopeIcon,
-    },
-    {
-      href: "/resume",
-      title: "Resume",
-      alt: "My professional resume",
-      desktop: true,
-      Icon: DocumentTextIcon,
     },
   ] as NavItem[],
   profileNav: [],
