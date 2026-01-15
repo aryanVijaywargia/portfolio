@@ -157,7 +157,7 @@ export const Experience = () => {
                             )}
                           </div>
                           <div className="text-gray-400 text-xs">
-                            <span>Author: Felix Tellmann &lt;felix@flext.dev&gt;</span>
+                            <span>Author: Aryan Vijaywargia &lt;aryanvijaywargia@gmail.com&gt;</span>
                             <span className="ml-4">
                               Date: {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
                             </span>

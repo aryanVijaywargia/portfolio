@@ -74,16 +74,16 @@ export const ResumeFooter = () => {
         <section className="mt-2 justify-end spacing-1">
           <nav className="flex flex-wrap gap-2">
             <Link
-              href="mailto:hello@flext.dev"
+              href="mailto:aryanvijaywargia@gmail.com"
               target="_blank"
               className="rounded p-1 text-gray-400 transition-all duration-75 hf:bg-gray-100 hf:text-gray-700 d:text-gray-300 d:hf:bg-gray-800/80 d:hf:text-gray-200"
-              data-tip="hello@flext.dev"
+              data-tip="aryanvijaywargia@gmail.com"
             >
               <span className="sr-only">Email me</span>
               <EnvelopeIcon className="h-4 w-4" />
             </Link>
             <Link
-              href="https://github.com/FelixTellmann"
+              href="https://github.com/AryanVijaywargia"
               target="_blank"
               data-tip="Github"
               className="rounded p-1 text-gray-400 transition-all duration-75 hf:bg-gray-100 hf:text-gray-700 d:text-gray-300 d:hf:bg-gray-800/80 d:hf:text-gray-200"
@@ -92,7 +92,7 @@ export const ResumeFooter = () => {
               <SiGithub className="h-4 w-4" />
             </Link>
             <Link
-              href="https://twitter.com/FelixTellmann"
+              href="https://twitter.com/AryanVijaywargia"
               target="_blank"
               data-tip="Twitter"
               className="rounded p-1 text-gray-400 transition-all duration-75 hf:bg-gray-100 hf:text-gray-700 d:text-gray-300 d:hf:bg-gray-800/80 d:hf:text-gray-200"
@@ -101,7 +101,7 @@ export const ResumeFooter = () => {
               <SiTwitter className="h-4 w-4" />
             </Link>
             <Link
-              href="https://www.linkedin.com/in/felixtellmann"
+              href="https://www.linkedin.com/in/aryan-vijaywargia"
               target="_blank"
               data-tip="LinkedIn"
               className="rounded p-1 text-gray-400 transition-all duration-75 hf:bg-gray-100 hf:text-gray-700 d:text-gray-300 d:hf:bg-gray-800/80 d:hf:text-gray-200"
@@ -111,7 +111,7 @@ export const ResumeFooter = () => {
             </Link>
           </nav>
           <h5 className="ml-1 text-[13px] text-gray-500 d:text-gray-400">
-            Cape Town, South Africa
+            Agartala, India
           </h5>
         </section>
       </section>
