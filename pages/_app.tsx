@@ -4,6 +4,7 @@ import { LoadInitialData } from "components/_stores/_load-initial-data";
 
 import { Footer } from "components/layout/footer";
 import { Header } from "components/layout/header";
+import { IntroAnimation } from "components/intro-animation";
 import { SEO } from "content/seo";
 import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
@@ -22,10 +23,20 @@ const Loaders: FC<PropsWithChildren> = ({ children }) => {
 const App = ({ pageProps, Component }: AppProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [showIntro, setShowIntro] = useState(false);
 
   useEffect(() => {
     if (window) {
+      // Check if this is the first visit in this session
+      const hasSeenIntro = sessionStorage.getItem("hasSeenIntro");
+      const isHomePage = router.pathname === "/";
+
+      if (!hasSeenIntro && isHomePage) {
+        setShowIntro(true);
+      }
+
       setLoading(false);
+
       if (process.env.NODE_ENV !== "development") {
         console.log(
           "%cHEY YOU! I see you sneaking in my code. This Page is custom built by Aryan Vijaywargia. I mainly used Next.js, TailwindCSS, Typescript, Vercel, and TRPC as the main tech here. Questions? Just drop me an email at aryanvijaywargia@gmail.com! You can find me on GitHub: https://github.com/AryanVijaywargia",
@@ -33,7 +44,12 @@ const App = ({ pageProps, Component }: AppProps) => {
         );
       }
     }
-  }, []);
+  }, [router.pathname]);
+
+  const handleIntroComplete = () => {
+    sessionStorage.setItem("hasSeenIntro", "true");
+    setShowIntro(false);
+  };
 
   if (loading) {
     return <></>;
@@ -49,6 +65,7 @@ const App = ({ pageProps, Component }: AppProps) => {
         description={SEO.description}
         openGraph={SEO.openGraph}
       />
+      {showIntro && <IntroAnimation onComplete={handleIntroComplete} />}
       <Header />
       <main className="min-h-screen print:!mx-auto print:!w-[1024px]">
         <Component {...pageProps} />
