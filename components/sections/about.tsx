@@ -17,43 +17,37 @@ export const About: FC<AboutProps> = (props) => {
     if (focusImageIndex === images.length - 1) {
       setFocusImageIndex((current) => current + 1);
       setImages((current) => current.sort(() => 0.5 - Math.random()));
-      setTimeout(
-        () => {
-          setFocusImageIndex(0);
-          setTooltip(true);
-          const trigger = new Event("mouseover");
-          setTimeout(
-            () => {
-              buttonRef.current?.dispatchEvent(trigger);
-            },
-            50
-          );
-        },
-        350
-      );
+      setTimeout(() => {
+        setFocusImageIndex(0);
+        setTooltip(true);
+        const trigger = new Event("mouseover");
+        setTimeout(() => {
+          buttonRef.current?.dispatchEvent(trigger);
+        }, 50);
+      }, 350);
     }
 
     if (focusImageIndex < images.length - 1) {
       setFocusImageIndex((current) => current + 1);
-      setTimeout(
-        () => {
-          setTooltip(true);
-          const trigger = new Event("mouseover");
-          setTimeout(
-            () => {
-              buttonRef.current?.dispatchEvent(trigger);
-            },
-            50
-          );
-        },
-        50
-      );
+      setTimeout(() => {
+        setTooltip(true);
+        const trigger = new Event("mouseover");
+        setTimeout(() => {
+          buttonRef.current?.dispatchEvent(trigger);
+        }, 50);
+      }, 50);
     }
   }, [focusImageIndex, images.length, setTooltip]);
 
   return (
     <section id="about" className="-mt-12 overflow-hidden pt-12">
-      <div className="mx-auto flex max-w-6xl flex-col justify-center gap-16 px-4 pb-16 md:px-8 lg:grid lg:grid-cols-[540px_auto] lg:pt-16">
+      {/* Section Header */}
+      <header className="mx-auto mb-8 grid w-full max-w-6xl px-4 md:px-8">
+        <div className="heading-pre">Get to Know Me</div>
+        <h1 className="heading-2xl -ml-1">About Me</h1>
+      </header>
+
+      <div className="mx-auto flex max-w-6xl flex-col justify-center gap-16 px-4 pb-16 md:px-8 lg:grid lg:grid-cols-[540px_auto] lg:pt-8">
         <button
           ref={buttonRef}
           className="group relative mx-auto mb-12 aspect-3/2 max-h-[405px] w-full max-w-[540px] flex-1 hfa:outline-none lg:mb-auto  lg:mr-0 lg:aspect-4/3"

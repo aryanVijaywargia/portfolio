@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import clsx from "clsx";
-import { 
+import {
   ChevronDownIcon,
   ChevronUpIcon,
   MinusIcon,
@@ -10,9 +10,15 @@ import {
   CodeBracketSquareIcon,
   UserGroupIcon,
   ChartBarIcon,
-  ArrowRightIcon
+  ArrowRightIcon,
 } from "@heroicons/react/24/outline";
-import { EXPERIENCE_DATA, EXPERIENCE_STATS, EXPERIENCE_BRANCHES, EXPERIENCE_CONTRIBUTORS, ExperienceItem } from "content/experience";
+import {
+  EXPERIENCE_DATA,
+  EXPERIENCE_STATS,
+  EXPERIENCE_BRANCHES,
+  EXPERIENCE_CONTRIBUTORS,
+  ExperienceItem,
+} from "content/experience";
 
 export const Experience = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -27,10 +33,10 @@ export const Experience = () => {
   // Typing animation effect
   useEffect(() => {
     if (!isInView) return;
-    
+
     setIsTyping(true);
     let currentIndex = 0;
-    
+
     const typeInterval = setInterval(() => {
       if (currentIndex <= targetText.length) {
         setTypedText(targetText.slice(0, currentIndex));
@@ -47,45 +53,59 @@ export const Experience = () => {
   // Cursor blinking effect
   useEffect(() => {
     const cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev);
+      setShowCursor((prev) => !prev);
     }, 530);
 
     return () => clearInterval(cursorInterval);
   }, []);
 
-  const getTypeColor = (type: ExperienceItem['type']) => {
+  const getTypeColor = (type: ExperienceItem["type"]) => {
     switch (type) {
-      case 'employment': return 'text-cyan-400';
-      case 'freelance': return 'text-purple-400';
-      case 'project': return 'text-green-400';
-      case 'education': return 'text-yellow-400';
-      default: return 'text-gray-400';
+      case "employment":
+        return "text-cyan-400";
+      case "freelance":
+        return "text-purple-400";
+      case "project":
+        return "text-green-400";
+      case "education":
+        return "text-yellow-400";
+      default:
+        return "text-gray-400";
     }
   };
 
-  const getTypeBadge = (type: ExperienceItem['type']) => {
+  const getTypeBadge = (type: ExperienceItem["type"]) => {
     switch (type) {
-      case 'employment': return 'EMP';
-      case 'freelance': return 'FREE';
-      case 'project': return 'OSS';
-      case 'education': return 'EDU';
-      default: return 'UNK';
+      case "employment":
+        return "EMP";
+      case "freelance":
+        return "FREE";
+      case "project":
+        return "OSS";
+      case "education":
+        return "EDU";
+      default:
+        return "UNK";
     }
   };
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: '2-digit' 
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
     });
   };
 
   return (
-    <section ref={sectionRef} className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
+    <section
+      id="experience"
+      ref={sectionRef}
+      className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-16"
+    >
       {/* Section Header */}
-      <header className="mx-auto grid w-full max-w-6xl px-4 md:px-8 mb-16">
+      <header className="mx-auto mb-8 grid w-full max-w-6xl px-4 md:px-8">
         <div className="heading-pre">Interactive Experience</div>
         <h1 className="heading-2xl -ml-1">Work History as Code</h1>
       </header>
@@ -101,7 +121,7 @@ export const Experience = () => {
                 <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
                 <div className="h-3 w-3 rounded-full bg-green-500"></div>
               </div>
-              <div className="flex items-center gap-2 text-sm font-mono text-gray-400">
+              <div className="flex items-center gap-2 font-mono text-sm text-gray-400">
                 <CodeBracketSquareIcon className="h-4 w-4" />
                 <span>work-experience.terminal</span>
               </div>
@@ -114,7 +134,9 @@ export const Experience = () => {
               <div className="mb-6 flex items-center gap-2">
                 <span className="text-cyan-400">$</span>
                 <span className="text-gray-300">{typedText}</span>
-                <span className={`text-gray-300 ${showCursor ? 'opacity-100' : 'opacity-0'}`}>|</span>
+                <span className={`text-gray-300 ${showCursor ? "opacity-100" : "opacity-0"}`}>
+                  |
+                </span>
               </div>
 
               {/* Experience Commits */}
@@ -130,39 +152,46 @@ export const Experience = () => {
                     {/* Commit Header */}
                     <button
                       onClick={() => setExpandedId(expandedId === exp.id ? null : exp.id)}
-                      className="w-full text-left transition-all hover:bg-gray-800/30 rounded-md p-3 -m-3"
+                      className="-m-3 w-full rounded-md p-3 text-left transition-all hover:bg-gray-800/30"
                     >
                       <div className="flex items-start gap-4">
                         {/* Commit Hash & Icon */}
                         <div className="flex flex-shrink-0 items-center gap-3">
-                          <span className="text-yellow-400 font-bold">{exp.hash}</span>
-                          <div className={`rounded p-1 ${getTypeColor(exp.type)} bg-current bg-opacity-10`}>
+                          <span className="font-bold text-yellow-400">{exp.hash}</span>
+                          <div
+                            className={`rounded p-1 ${getTypeColor(
+                              exp.type
+                            )} bg-current bg-opacity-10`}
+                          >
                             <exp.Icon className="h-4 w-4" />
                           </div>
                         </div>
 
                         {/* Commit Info */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-cyan-400 text-xs font-semibold">
+                        <div className="min-w-0 flex-1">
+                          <div className="mb-1 flex items-center gap-2">
+                            <span className="text-xs font-semibold text-cyan-400">
                               {getTypeBadge(exp.type)}
                             </span>
-                            <span className="text-white font-medium">
+                            <span className="font-medium text-white">
                               {exp.position} @ {exp.company}
                             </span>
                             {!exp.endDate && (
-                              <span className="bg-green-500/20 text-green-400 text-xs px-2 py-0.5 rounded">
+                              <span className="rounded bg-green-500/20 px-2 py-0.5 text-xs text-green-400">
                                 Current
                               </span>
                             )}
                           </div>
-                          <div className="text-gray-400 text-xs">
-                            <span>Author: Aryan Vijaywargia &lt;aryanvijaywargia@gmail.com&gt;</span>
+                          <div className="text-xs text-gray-400">
+                            <span>
+                              Author: Aryan Vijaywargia &lt;aryanvijaywargia@gmail.com&gt;
+                            </span>
                             <span className="ml-4">
-                              Date: {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
+                              Date: {formatDate(exp.startDate)} -{" "}
+                              {exp.endDate ? formatDate(exp.endDate) : "Present"}
                             </span>
                           </div>
-                          <div className="text-gray-300 mt-1">{exp.description}</div>
+                          <div className="mt-1 text-gray-300">{exp.description}</div>
                         </div>
 
                         {/* Expand Icon */}
@@ -181,7 +210,7 @@ export const Experience = () => {
                       {expandedId === exp.id && (
                         <motion.div
                           initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
+                          animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden"
@@ -189,11 +218,11 @@ export const Experience = () => {
                           <div className="ml-12 mt-4 space-y-4 border-l-2 border-gray-700 pl-6">
                             {/* Achievements Diff */}
                             <div>
-                              <h4 className="text-green-400 font-semibold mb-2">+ Achievements:</h4>
+                              <h4 className="mb-2 font-semibold text-green-400">+ Achievements:</h4>
                               <div className="space-y-1">
                                 {exp.achievements.map((achievement, i) => (
                                   <div key={i} className="flex items-start gap-2 text-sm">
-                                    <PlusIcon className="h-3 w-3 text-green-400 mt-0.5 flex-shrink-0" />
+                                    <PlusIcon className="mt-0.5 h-3 w-3 flex-shrink-0 text-green-400" />
                                     <span className="text-gray-300">{achievement}</span>
                                   </div>
                                 ))}
@@ -202,12 +231,14 @@ export const Experience = () => {
 
                             {/* Technologies */}
                             <div>
-                              <h4 className="text-blue-400 font-semibold mb-2">📁 Technologies Modified:</h4>
+                              <h4 className="mb-2 font-semibold text-blue-400">
+                                📁 Technologies Modified:
+                              </h4>
                               <div className="flex flex-wrap gap-2">
                                 {exp.technologies.map((tech, i) => (
-                                  <span 
+                                  <span
                                     key={i}
-                                    className="bg-blue-500/20 text-blue-400 text-xs px-2 py-1 rounded border border-blue-500/30"
+                                    className="rounded border border-blue-500/30 bg-blue-500/20 px-2 py-1 text-xs text-blue-400"
                                   >
                                     {tech}
                                   </span>
@@ -217,7 +248,9 @@ export const Experience = () => {
 
                             {/* Projects */}
                             <div>
-                              <h4 className="text-purple-400 font-semibold mb-2">🔀 Branch Merges:</h4>
+                              <h4 className="mb-2 font-semibold text-purple-400">
+                                🔀 Branch Merges:
+                              </h4>
                               <div className="space-y-1">
                                 {exp.projects.map((project, i) => (
                                   <div key={i} className="flex items-center gap-2 text-sm">
@@ -247,26 +280,26 @@ export const Experience = () => {
             transition={{ delay: 0.5 }}
             className="rounded-lg border border-gray-700/50 bg-[#1a1a2e] p-6"
           >
-            <h3 className="flex items-center gap-2 font-semibold text-cyan-400 mb-4">
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-cyan-400">
               <ChartBarIcon className="h-5 w-5" />
               Repository Stats
             </h3>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-400">Total Commits:</span>
-                <span className="text-white font-mono">{EXPERIENCE_STATS.totalCommits}</span>
+                <span className="font-mono text-white">{EXPERIENCE_STATS.totalCommits}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Years Active:</span>
-                <span className="text-white font-mono">{EXPERIENCE_STATS.yearsExperience}</span>
+                <span className="font-mono text-white">{EXPERIENCE_STATS.yearsExperience}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Technologies:</span>
-                <span className="text-white font-mono">{EXPERIENCE_STATS.technologies}</span>
+                <span className="font-mono text-white">{EXPERIENCE_STATS.technologies}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Projects:</span>
-                <span className="text-white font-mono">{EXPERIENCE_STATS.projects}</span>
+                <span className="font-mono text-white">{EXPERIENCE_STATS.projects}</span>
               </div>
             </div>
           </motion.div>
@@ -278,7 +311,7 @@ export const Experience = () => {
             transition={{ delay: 0.7 }}
             className="rounded-lg border border-gray-700/50 bg-[#1a1a2e] p-6"
           >
-            <h3 className="flex items-center gap-2 font-semibold text-cyan-400 mb-4">
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-cyan-400">
               <ArrowRightIcon className="h-5 w-5" />
               Branches
             </h3>
@@ -286,7 +319,7 @@ export const Experience = () => {
               {EXPERIENCE_BRANCHES.map((branch, index) => (
                 <div key={branch.name} className="flex items-center justify-between text-sm">
                   <span className="text-gray-300">{branch.name}</span>
-                  <span className="text-gray-400 font-mono">({branch.count})</span>
+                  <span className="font-mono text-gray-400">({branch.count})</span>
                 </div>
               ))}
             </div>
@@ -299,7 +332,7 @@ export const Experience = () => {
             transition={{ delay: 0.9 }}
             className="rounded-lg border border-gray-700/50 bg-[#1a1a2e] p-6"
           >
-            <h3 className="flex items-center gap-2 font-semibold text-cyan-400 mb-4">
+            <h3 className="mb-4 flex items-center gap-2 font-semibold text-cyan-400">
               <UserGroupIcon className="h-5 w-5" />
               Contributors
             </h3>
