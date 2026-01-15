@@ -4,14 +4,10 @@
 .face {
     position: relative;
 
-    // --pad-val: 20px;
 
     height: 200px;
-    // padding: var(--pad-val);
 
-    // margin: -10px 0 0;
     width: 100%;
-    // width: calc(100% - var(--pad-val)*2);
 
     --face-transition: all ease .4s;
     --face-color: #ffcd94;
@@ -198,11 +194,6 @@
     background: $second-bg-color;
 }
 
-// @media screen and (max-width: 1440px) {
-//     .face {
-//         transform: scale(0.9);
-//     }
-// }
 
 
 @media screen and (max-width: 600px) {
@@ -217,8 +208,3 @@
     }
 }
 
-// @media screen and (max-width: 720px) {
-//     .face {
-//         transform: scale(0.5);
-//     }
-// }
