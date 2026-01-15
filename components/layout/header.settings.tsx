@@ -68,13 +68,12 @@ export const ProfileNav: FC<ProfileNavProps> = ({ showNav }) => {
         <SiGithub className="h-5 w-5" />
       </Link>
 
-      {/* Contact CTA */}
+      {/* Resume CTA */}
       <Link
-        target="_blank"
-        href="mailto:aryanvijaywargia@gmail.com"
+        href="/resume"
         className="button-rainbow ml-4 hidden whitespace-nowrap px-4 py-1.5 text-sm font-medium tracking-tight text-gray-500 md:flex"
       >
-        Lets work
+        Resume
       </Link>
     </nav>
   );
