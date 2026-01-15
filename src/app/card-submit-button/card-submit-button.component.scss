@@ -36,7 +36,6 @@ svg {
   display: flex;
   align-items: center;
   justify-content: center;
-//   margin-bottom: 50px;
   font-family: 'Work Sans', sans-serif;
   transition: all .5s ease-in-out;
   outline: none;
@@ -47,9 +46,6 @@ svg {
   height: $btn_h;
   border: 3px solid;
   border-radius: $btn_h / 2;
-//   font-size: 30px;
-//   font-weight: 600;
-//   letter-spacing: 1.5px;
 }
 
 .btn-sm {
@@ -209,7 +205,6 @@ svg {
     .icon-error svg {
       opacity: 1;
       stroke-dashoffset: 0;
-    //   stroke: white; /* Set the stroke color for the error */
     }
   
     .env-visible{

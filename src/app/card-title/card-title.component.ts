@@ -28,7 +28,6 @@ export class CardTitleComponent implements OnInit {
   
 
   constructor(
-    // private formBuilder: FormBuilder,
     ) {}
     reactiveForm!: FormGroup;
 
@@ -63,9 +62,7 @@ export class CardTitleComponent implements OnInit {
     this.submitted=true;
     if (this.reactiveForm.invalid) {
       this.reactiveForm.markAllAsTouched();
-      // this.submitted=false;
     } else {
-      // carry out your submission logic here  
       event.preventDefault();
       this.model = this.reactiveForm.value;
       console.log(this.model.email)
@@ -82,7 +79,6 @@ export class CardTitleComponent implements OnInit {
 
         setTimeout(() => this.reactiveForm.reset(), 5000);
 
-        // Reset flags
         this.submitted = false;
         this.focused = {
           email: false,

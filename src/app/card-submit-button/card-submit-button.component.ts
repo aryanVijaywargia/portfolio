@@ -7,7 +7,6 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 })
 export class CardSubmitButtonComponent {
 
-  // component.ts
 
   @ViewChild('jsBtn') jsBtn!: ElementRef;
   @ViewChild('jsTimer') jsTimer!: ElementRef;
@@ -24,7 +23,6 @@ export class CardSubmitButtonComponent {
     button.classList.add('do-submit');
 
 
-    // manually feed amountLoaded as if receiving 0-100% values
     
     setTimeout(() => this.doTimer(0), 1200);
     
@@ -38,8 +36,6 @@ export class CardSubmitButtonComponent {
       setTimeout(() => button.classList.add('do-error'), 1200);
       setTimeout(() => this.jsBtn.nativeElement.style.top = '0%', 1200);
       
-      // button.classList.remove('do-submit');
-      // button.classList.add('do-error');
     }
     
 
@@ -52,8 +48,6 @@ export class CardSubmitButtonComponent {
       setTimeout(() => button.classList.remove('do-submit'), 2000);
       setTimeout(() =>  button.classList.add('do-error'), 2000);
       setTimeout(() => this.jsBtn.nativeElement.style.top = '0%', 2000);
-      // button.classList.remove('do-submit');
-      // button.classList.add('do-error');
     }
     
 
@@ -65,13 +59,9 @@ export class CardSubmitButtonComponent {
       setTimeout(() => button.classList.remove('do-submit'), 2800);
       setTimeout(() => button.classList.add('do-error'), 2800);
       setTimeout(() => this.jsBtn.nativeElement.style.top = '0%', 2800);
-      // button.classList.remove('do-submit');
-      // button.classList.add('do-error');
     }
    
     
-    // setTimeout(() => this.doTimer(75), 2000);
-    // setTimeout(() => this.doTimer(100), 2800);
     
     setTimeout(() => this.resetButton(), 5000);
   }
@@ -109,7 +99,6 @@ export class CardSubmitButtonComponent {
   @Output() submitClicked: EventEmitter<void> = new EventEmitter<void>();
 
   onButtonClick() {
-    // Emit the event when the button is clicked
     this.submitClicked.emit();
   }
 

@@ -37,7 +37,6 @@ textarea:focus {
     pointer-events: none;
     font-size: 1em;
     color: rgb(100 116 139);
-    // text-transform: uppercase;
     transition: 0.5s;
 }
 
@@ -52,7 +51,6 @@ textarea:focus {
     border-left: 1px solid black;
     border-right: 1px solid black;
     outline: none
-    // letter-spacing: 0.2em;
 }
 
 .inputBox{
@@ -69,7 +67,6 @@ textarea:focus {
     outline: none;
     box-shadow: none;
     font-size: 1em;
-    // letter-spacing: 0.1em;
 }
 
 .inputBox  span{
@@ -77,9 +74,7 @@ textarea:focus {
     left: 0;
     padding: 10px 0 5px;
     color: rgb(100 116 139);
-    // text-transform: uppercase;
     pointer-events: none;
-    // letter-spacing: 0.1em;
     padding: 10px 0 5px;
     transition: 0.5s;
 }
@@ -89,9 +84,7 @@ textarea:focus {
     left: 0;
     padding: 10px 0 5px;
     color: rgba(255, 255, 255, 0.5);
-    // text-transform: uppercase;
     pointer-events: none;
-    // letter-spacing: 0.1em;
 }
 
 .inputBox input:valid ~ span,
@@ -102,13 +95,6 @@ textarea:focus {
     font-size: 0.65em;
 }
 
-// .inputBox input:invalid ~ span.error,
-// .inputBox input:focus ~ span.error
-// {
-//     color: #2196f3;
-//     transform: translateY(-16px);
-//     font-size: 0.65em;
-// }
 
 
 .error.active {
@@ -224,8 +210,6 @@ textarea:focus {
 
 .card__input {
     display: inline-block;
-    // margin-bottom: 8px;
-    // width: 66px;
     background-color: $bg-color1;
     font-size: 10px;
     font-weight: bold;
@@ -245,16 +229,10 @@ textarea:focus {
     border-bottom: 4px solid #1b283b; 
     margin-left: 50px;
     margin-bottom: 8px;
-    // width: 66px;
 }
 
-// input{
-//     font-family: $hand-font2;
-// }
 .card__string {
-    // margin-bottom: 8px;
     padding-right: 10px;
-    // border-bottom: 4px solid $third-bg-color;
     background-color: $bg-color1;
     display: flex;
     justify-content: center;
@@ -278,9 +256,6 @@ textarea:focus {
     display: flex;
     justify-content: center;
     align-items: baseline;
-    // border-top-style: hidden;
-    // border-right-style: hidden;
-    // border-left-style: hidden;
     border-bottom-style: groove;
     outline: none;
     margin-left: 50px;
@@ -290,7 +265,6 @@ textarea:focus {
     resize: none;
     font-size: 14px;
     font-weight: bold;
-    // flex: 1;
 }
 
 label{
@@ -370,13 +344,7 @@ label{
     animation-duration: 8.5s;
 }
 
-// input.ng-invalid.ng-touched{
-//     border: red 1px solid;
-// }
 
-// textarea.ng-invalid.ng-touched{
-//     border: red 2px solid;
-// }
 
 @keyframes card_logo {
     0%, 94% {
