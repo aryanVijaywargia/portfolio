@@ -1,10 +1,10 @@
-import FlextLogo from "public/logo.svg";
+import AryanLogo from "public/logo.svg";
 
 export const HEADER = {
   logo: {
     href: "/",
-    title: <FlextLogo />,
-    alt: "Flext Logo",
+    title: <AryanLogo />,
+    alt: "Aryan Vijaywargia Logo",
   },
   nav: [
     {

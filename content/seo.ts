@@ -1,29 +1,29 @@
 export const SEO = {
-  title: "Felix Tellmann - Fullstack Developer - TS, Next, Tailwind, Shopify",
-  url: "https://flext.dev",
+  title: "Aryan Vijaywargia - ML Engineer - Python, TensorFlow, TypeScript, Angular",
+  url: "https://aryancodes.com",
   description:
-    "I'm a self-taught Full-stack developer and entrepreneur living in Cape Town. I enjoy creating things that live on the internet, whether that be websites, applications, or anything in between.",
-  siteName: "Flext.dev",
-  github: "https://github.com/FelixTellmann/flext",
-  avatar: "https://avatars.githubusercontent.com/u/22034038",
-  author: "Felix Tellmann",
+    "I'm a Machine Learning Engineer and Full-stack Developer. I enjoy building intelligent systems, ML models for real-world applications, and creating stunning user experiences.",
+  siteName: "AryanCodes",
+  github: "https://github.com/AryanVijaywargia",
+  avatar: "https://avatars.githubusercontent.com/u/AryanVijaywargia",
+  author: "Aryan Vijaywargia",
   twitter: {
-    handle: "@Tellmann",
-    site: "@FelixTellmann",
+    handle: "@AryanVijaywargia",
+    site: "@AryanVijaywargia",
     cardType: "summary_large_image",
   },
   openGraph: {
     type: "website",
     locale: "en_IE",
-    url: "https://flext.dev",
-    site_name: "Flext.dev",
-    title: "Felix Tellmann",
+    url: "https://aryancodes.com",
+    site_name: "AryanCodes",
+    title: "Aryan Vijaywargia",
     description:
-      "Lets make things better with quality code - Learn Web Development / API's / Automations / Serverless / Architecture / and more.",
+      "Machine Learning Engineer - Python, TensorFlow, PyTorch, Deep Learning, Computer Vision, NLP",
     images: [
       {
-        url: "https://flext.dev/images/sharing-image.jpg",
-        alt: "Felix Tellmann - Full-stack Engineer - Next.js, Typescript, Tailwindcss, Shopify",
+        url: "https://aryancodes.com/images/sharing-image.jpg",
+        alt: "Aryan Vijaywargia - ML Engineer - Python, TensorFlow, TypeScript",
         width: 1200,
         height: 630,
       },
@@ -32,12 +32,12 @@ export const SEO = {
 };
 
 export const BLOG_SEO = {
-  title: "Felix Tellmann - Blog",
+  title: "Aryan Vijaywargia - Blog",
   description:
-    "Learn Web Development - TypeScript / React / APIs / Automations / Serverless / Architecture / and more. - Lets make things better with quality code",
+    "Learn Machine Learning, Deep Learning, Computer Vision, NLP, and Full-stack Development - Python, TensorFlow, PyTorch, and more.",
   openGraph: {
-    title: "Felix Tellmann - Blog",
+    title: "Aryan Vijaywargia - Blog",
     description:
-      "Learn Web Development - TypeScript / React / APIs / Automations / Serverless / Architecture / and more. - Lets make things better with quality code",
+      "Learn Machine Learning, Deep Learning, Computer Vision, NLP, and Full-stack Development - Python, TensorFlow, PyTorch, and more.",
   },
 };
