@@ -16,9 +16,10 @@ type OutputLine = {
 
 type TerminalProps = {
   onSwitchToEditor: () => void;
+  onSwitchToChatbot: () => void;
 };
 
-export const Terminal: FC<TerminalProps> = ({ onSwitchToEditor }) => {
+export const Terminal: FC<TerminalProps> = ({ onSwitchToEditor, onSwitchToChatbot }) => {
   const [outputLines, setOutputLines] = useState<OutputLine[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -127,6 +128,17 @@ export const Terminal: FC<TerminalProps> = ({ onSwitchToEditor }) => {
           setTimeout(() => {
             onSwitchToEditor();
           }, 300);
+          return;
+
+        case "chatbot":
+          addLine("", undefined, 0);
+          addLine("Initializing Neural Bark Network...", "info", 80);
+          addLine("[#####-----] 50%", "info", 400);
+          addLine("[##########] 100%", "info", 800);
+          addLine("Woof! Connection established.", "info", 1200);
+          setTimeout(() => {
+            onSwitchToChatbot();
+          }, 1500);
           return;
 
         case "sudo":
