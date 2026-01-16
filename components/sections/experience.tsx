@@ -1,351 +1,242 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import clsx from "clsx";
 import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  MinusIcon,
-  PlusIcon,
-  XMarkIcon,
-  CodeBracketSquareIcon,
-  UserGroupIcon,
-  ChartBarIcon,
-  ArrowRightIcon,
-} from "@heroicons/react/24/outline";
-import {
   EXPERIENCE_DATA,
-  EXPERIENCE_STATS,
-  EXPERIENCE_BRANCHES,
-  EXPERIENCE_CONTRIBUTORS,
   ExperienceItem,
 } from "content/experience";
 
+// Format index number with leading zero
+const formatIndex = (index: number): string => {
+  return String(index + 1).padStart(2, "0");
+};
+
+// Format date range
+const formatDateRange = (startDate: string, endDate: string | null): string => {
+  const start = new Date(startDate);
+  const end = endDate ? new Date(endDate) : null;
+
+  const startStr = start.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric",
+  });
+  const endStr = end
+    ? end.toLocaleDateString("en-US", { month: "short", year: "numeric" })
+    : "Present";
+
+  return `${startStr} — ${endStr}`;
+};
+
+// Get accent color based on type
+const getAccentColor = (type: ExperienceItem["type"]): string => {
+  switch (type) {
+    case "employment":
+      return "text-emerald-500 d:text-emerald-400";
+    case "freelance":
+      return "text-violet-500 d:text-violet-400";
+    case "project":
+      return "text-sky-500 d:text-sky-400";
+    case "education":
+      return "text-amber-500 d:text-amber-400";
+    default:
+      return "text-gray-500 d:text-gray-400";
+  }
+};
+
+// Experience Row Component
+const ExperienceRow = ({
+  experience,
+  index,
+}: {
+  experience: ExperienceItem;
+  index: number;
+}) => {
+  const rowRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(rowRef, { once: true, margin: "-50px" });
+
+  return (
+    <motion.div
+      ref={rowRef}
+      initial={{ opacity: 0, y: 60 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: index * 0.1 }}
+      className="group relative"
+    >
+      {/* Row Container */}
+      <div className="relative grid grid-cols-1 gap-6 border-t border-gray-200 py-10 transition-colors duration-300 group-hover:bg-gray-50/50 md:grid-cols-12 md:gap-8 md:py-14 d:border-gray-800 d:group-hover:bg-gray-900/30">
+        {/* Large Index Number - Left Column */}
+        <div className="relative hidden md:col-span-2 md:flex md:items-start md:justify-end md:pr-8 lg:col-span-2">
+          <span
+            className={clsx(
+              "select-none font-serif text-7xl font-bold leading-none tracking-tighter transition-all duration-500 lg:text-8xl xl:text-9xl",
+              "text-transparent",
+              "[-webkit-text-stroke:1.5px_theme(colors.gray.300)]",
+              "group-hover:[-webkit-text-stroke:1.5px_theme(colors.gray.400)]",
+              "d:[-webkit-text-stroke:1.5px_theme(colors.gray.700)]",
+              "d:group-hover:[-webkit-text-stroke:1.5px_theme(colors.gray.500)]",
+              "group-hover:translate-x-1 group-hover:scale-105"
+            )}
+          >
+            {formatIndex(index)}
+          </span>
+        </div>
+
+        {/* Mobile Index Number - Watermark Style */}
+        <div className="pointer-events-none absolute right-4 top-6 md:hidden">
+          <span className="font-serif text-5xl font-bold leading-none tracking-tighter text-gray-100 d:text-gray-800/50">
+            {formatIndex(index)}
+          </span>
+        </div>
+
+        {/* Content - Right Column */}
+        <div className="relative md:col-span-10 lg:col-span-10">
+          {/* Header Row */}
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-4">
+            {/* Role Title */}
+            <h3 className="font-serif text-2xl font-bold tracking-tight text-gray-900 d:text-white sm:text-3xl">
+              {experience.position}
+            </h3>
+
+            {/* Company Name */}
+            <span className={clsx("text-lg font-medium", getAccentColor(experience.type))}>
+              {experience.company}
+            </span>
+
+            {/* Date Range */}
+            <span className="text-sm font-medium tracking-wide text-gray-400 sm:ml-auto d:text-gray-500">
+              {formatDateRange(experience.startDate, experience.endDate)}
+              {!experience.endDate && (
+                <span className="ml-2 inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700 d:bg-emerald-900/30 d:text-emerald-400">
+                  Current
+                </span>
+              )}
+            </span>
+          </div>
+
+          {/* Location */}
+          <p className="mb-4 text-sm text-gray-500 d:text-gray-400">
+            {experience.location}
+          </p>
+
+          {/* Description */}
+          <p className="mb-6 max-w-3xl text-base leading-relaxed text-gray-600 d:text-gray-300">
+            {experience.description}
+          </p>
+
+          {/* Achievements - Expandable on hover */}
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={isInView ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+            className="overflow-hidden"
+          >
+            <ul className="mb-6 space-y-2">
+              {experience.achievements.slice(0, 3).map((achievement, i) => (
+                <li
+                  key={i}
+                  className="flex items-start gap-3 text-sm text-gray-500 d:text-gray-400"
+                >
+                  <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gray-300 d:bg-gray-600" />
+                  <span>{achievement}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Technologies */}
+          <div className="flex flex-wrap gap-2">
+            {experience.technologies.slice(0, 6).map((tech, i) => (
+              <span
+                key={i}
+                className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-600 transition-colors group-hover:border-gray-300 group-hover:bg-gray-100 d:border-gray-700 d:bg-gray-800 d:text-gray-400 d:group-hover:border-gray-600 d:group-hover:bg-gray-700"
+              >
+                {tech}
+              </span>
+            ))}
+            {experience.technologies.length > 6 && (
+              <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-400 d:border-gray-700 d:bg-gray-800">
+                +{experience.technologies.length - 6}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 export const Experience = () => {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [isTyping, setIsTyping] = useState(false);
-  const [typedText, setTypedText] = useState("");
-  const [showCursor, setShowCursor] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-
-  const targetText = "git log --work-experience --interactive";
-
-  // Typing animation effect
-  useEffect(() => {
-    if (!isInView) return;
-
-    setIsTyping(true);
-    let currentIndex = 0;
-
-    const typeInterval = setInterval(() => {
-      if (currentIndex <= targetText.length) {
-        setTypedText(targetText.slice(0, currentIndex));
-        currentIndex++;
-      } else {
-        setIsTyping(false);
-        clearInterval(typeInterval);
-      }
-    }, 50);
-
-    return () => clearInterval(typeInterval);
-  }, [isInView]);
-
-  // Cursor blinking effect
-  useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 530);
-
-    return () => clearInterval(cursorInterval);
-  }, []);
-
-  const getTypeColor = (type: ExperienceItem["type"]) => {
-    switch (type) {
-      case "employment":
-        return "text-cyan-400";
-      case "freelance":
-        return "text-purple-400";
-      case "project":
-        return "text-green-400";
-      case "education":
-        return "text-yellow-400";
-      default:
-        return "text-gray-400";
-    }
-  };
-
-  const getTypeBadge = (type: ExperienceItem["type"]) => {
-    switch (type) {
-      case "employment":
-        return "EMP";
-      case "freelance":
-        return "FREE";
-      case "project":
-        return "OSS";
-      case "education":
-        return "EDU";
-      default:
-        return "UNK";
-    }
-  };
-
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    });
-  };
+  const headerRef = useRef<HTMLDivElement>(null);
+  const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
 
   return (
     <section
       id="experience"
       ref={sectionRef}
-      className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-16"
+      className="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24"
     >
       {/* Section Header */}
-      <header className="mx-auto mb-8 grid w-full max-w-6xl px-4 md:px-8">
-        <div className="heading-pre">Interactive Experience</div>
-        <h1 className="heading-2xl -ml-1">Work History as Code</h1>
+      <header ref={headerRef} className="mb-12 md:mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+          className="heading-pre"
+        >
+          Career Journey
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="heading-2xl mb-4"
+        >
+          Experience
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="max-w-2xl text-lg text-gray-600 d:text-gray-400"
+        >
+          A curated timeline of my professional journey, from coding bootcamp to
+          leading development teams on production applications.
+        </motion.p>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-4">
-        {/* Main Terminal Window */}
-        <div className="lg:col-span-3">
-          <div className="overflow-hidden rounded-lg border border-gray-700/50 bg-[#1a1a2e] shadow-2xl">
-            {/* Terminal Header */}
-            <div className="flex items-center justify-between border-b border-gray-700/50 bg-gray-800/50 px-4 py-3">
-              <div className="flex items-center gap-2">
-                <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                <div className="h-3 w-3 rounded-full bg-green-500"></div>
-              </div>
-              <div className="flex items-center gap-2 font-mono text-sm text-gray-400">
-                <CodeBracketSquareIcon className="h-4 w-4" />
-                <span>work-experience.terminal</span>
-              </div>
-              <div className="w-16"></div>
-            </div>
+      {/* Experience List */}
+      <div className="relative">
+        {EXPERIENCE_DATA.map((experience, index) => (
+          <ExperienceRow
+            key={experience.id}
+            experience={experience}
+            index={index}
+          />
+        ))}
 
-            {/* Terminal Content */}
-            <div className="p-6 font-mono text-sm">
-              {/* Command Input */}
-              <div className="mb-6 flex items-center gap-2">
-                <span className="text-cyan-400">$</span>
-                <span className="text-gray-300">{typedText}</span>
-                <span className={`text-gray-300 ${showCursor ? "opacity-100" : "opacity-0"}`}>
-                  |
-                </span>
-              </div>
-
-              {/* Experience Commits */}
-              <div className="space-y-4">
-                {EXPERIENCE_DATA.map((exp, index) => (
-                  <motion.div
-                    key={exp.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ delay: index * 0.2 + 1 }}
-                    className="group"
-                  >
-                    {/* Commit Header */}
-                    <button
-                      onClick={() => setExpandedId(expandedId === exp.id ? null : exp.id)}
-                      className="-m-3 w-full rounded-md p-3 text-left transition-all hover:bg-gray-800/30"
-                    >
-                      <div className="flex items-start gap-4">
-                        {/* Commit Hash & Icon */}
-                        <div className="flex flex-shrink-0 items-center gap-3">
-                          <span className="font-bold text-yellow-400">{exp.hash}</span>
-                          <div
-                            className={`rounded p-1 ${getTypeColor(
-                              exp.type
-                            )} bg-current bg-opacity-10`}
-                          >
-                            <exp.Icon className="h-4 w-4" />
-                          </div>
-                        </div>
-
-                        {/* Commit Info */}
-                        <div className="min-w-0 flex-1">
-                          <div className="mb-1 flex items-center gap-2">
-                            <span className="text-xs font-semibold text-cyan-400">
-                              {getTypeBadge(exp.type)}
-                            </span>
-                            <span className="font-medium text-white">
-                              {exp.position} @ {exp.company}
-                            </span>
-                            {!exp.endDate && (
-                              <span className="rounded bg-green-500/20 px-2 py-0.5 text-xs text-green-400">
-                                Current
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-xs text-gray-400">
-                            <span>
-                              Author: Aryan Vijaywargia &lt;aryanvijaywargia@gmail.com&gt;
-                            </span>
-                            <span className="ml-4">
-                              Date: {formatDate(exp.startDate)} -{" "}
-                              {exp.endDate ? formatDate(exp.endDate) : "Present"}
-                            </span>
-                          </div>
-                          <div className="mt-1 text-gray-300">{exp.description}</div>
-                        </div>
-
-                        {/* Expand Icon */}
-                        <div className="flex-shrink-0">
-                          {expandedId === exp.id ? (
-                            <ChevronUpIcon className="h-4 w-4 text-gray-400" />
-                          ) : (
-                            <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-                          )}
-                        </div>
-                      </div>
-                    </button>
-
-                    {/* Expanded Content */}
-                    <AnimatePresence>
-                      {expandedId === exp.id && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="ml-12 mt-4 space-y-4 border-l-2 border-gray-700 pl-6">
-                            {/* Achievements Diff */}
-                            <div>
-                              <h4 className="mb-2 font-semibold text-green-400">+ Achievements:</h4>
-                              <div className="space-y-1">
-                                {exp.achievements.map((achievement, i) => (
-                                  <div key={i} className="flex items-start gap-2 text-sm">
-                                    <PlusIcon className="mt-0.5 h-3 w-3 flex-shrink-0 text-green-400" />
-                                    <span className="text-gray-300">{achievement}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Technologies */}
-                            <div>
-                              <h4 className="mb-2 font-semibold text-blue-400">
-                                📁 Technologies Modified:
-                              </h4>
-                              <div className="flex flex-wrap gap-2">
-                                {exp.technologies.map((tech, i) => (
-                                  <span
-                                    key={i}
-                                    className="rounded border border-blue-500/30 bg-blue-500/20 px-2 py-1 text-xs text-blue-400"
-                                  >
-                                    {tech}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Projects */}
-                            <div>
-                              <h4 className="mb-2 font-semibold text-purple-400">
-                                🔀 Branch Merges:
-                              </h4>
-                              <div className="space-y-1">
-                                {exp.projects.map((project, i) => (
-                                  <div key={i} className="flex items-center gap-2 text-sm">
-                                    <ArrowRightIcon className="h-3 w-3 text-purple-400" />
-                                    <span className="text-gray-300">{project}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-            transition={{ delay: 0.5 }}
-            className="rounded-lg border border-gray-700/50 bg-[#1a1a2e] p-6"
-          >
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-cyan-400">
-              <ChartBarIcon className="h-5 w-5" />
-              Repository Stats
-            </h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Total Commits:</span>
-                <span className="font-mono text-white">{EXPERIENCE_STATS.totalCommits}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Years Active:</span>
-                <span className="font-mono text-white">{EXPERIENCE_STATS.yearsExperience}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Technologies:</span>
-                <span className="font-mono text-white">{EXPERIENCE_STATS.technologies}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Projects:</span>
-                <span className="font-mono text-white">{EXPERIENCE_STATS.projects}</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Branches */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-            transition={{ delay: 0.7 }}
-            className="rounded-lg border border-gray-700/50 bg-[#1a1a2e] p-6"
-          >
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-cyan-400">
-              <ArrowRightIcon className="h-5 w-5" />
-              Branches
-            </h3>
-            <div className="space-y-2">
-              {EXPERIENCE_BRANCHES.map((branch, index) => (
-                <div key={branch.name} className="flex items-center justify-between text-sm">
-                  <span className="text-gray-300">{branch.name}</span>
-                  <span className="font-mono text-gray-400">({branch.count})</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Contributors */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-            transition={{ delay: 0.9 }}
-            className="rounded-lg border border-gray-700/50 bg-[#1a1a2e] p-6"
-          >
-            <h3 className="mb-4 flex items-center gap-2 font-semibold text-cyan-400">
-              <UserGroupIcon className="h-5 w-5" />
-              Contributors
-            </h3>
-            <div className="space-y-2">
-              {EXPERIENCE_CONTRIBUTORS.map((contributor, index) => (
-                <div key={index} className="text-sm text-gray-300">
-                  {contributor}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
+        {/* Bottom Border */}
+        <div className="border-t border-gray-200 d:border-gray-800" />
       </div>
+
+      {/* Footer Note */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        className="mt-12 text-center"
+      >
+        <p className="text-sm text-gray-400 d:text-gray-500">
+          Want to know more?{" "}
+          <a
+            href="#contact"
+            className="font-medium text-gray-600 underline underline-offset-4 transition-colors hover:text-gray-900 d:text-gray-300 d:hover:text-white"
+          >
+            Let's connect
+          </a>
+        </p>
+      </motion.div>
     </section>
   );
 };
