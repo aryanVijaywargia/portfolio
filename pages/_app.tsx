@@ -8,6 +8,7 @@ import { SEO } from "content/seo";
 import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
+import { motion, AnimatePresence } from "framer-motion";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import "styles/tailwind.css";
 
@@ -50,9 +51,18 @@ const App = ({ pageProps, Component }: AppProps) => {
         openGraph={SEO.openGraph}
       />
       <Header />
-      <main className="min-h-screen print:!mx-auto print:!w-[1024px]">
-        <Component {...pageProps} />
-      </main>
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={router.pathname}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="min-h-screen print:!mx-auto print:!w-[1024px]"
+        >
+          <Component {...pageProps} />
+        </motion.main>
+      </AnimatePresence>
       <Footer />
       {/*<Stars />*/}
     </Loaders>

@@ -1,4 +1,20 @@
 import AryanLogo from "public/logo.svg";
+import {
+  HomeIcon,
+  UserIcon,
+  BriefcaseIcon,
+  EnvelopeIcon,
+  CodeBracketIcon,
+} from "@heroicons/react/24/solid";
+import { FC } from "react";
+
+type NavItem = {
+  href: string;
+  title: string;
+  alt: string;
+  desktop: boolean;
+  Icon?: FC<{ className?: string }>;
+};
 
 export const HEADER = {
   logo: {
@@ -12,37 +28,36 @@ export const HEADER = {
       title: "Home",
       alt: "Country roads..",
       desktop: false,
+      Icon: HomeIcon,
     },
     {
       href: "/#about",
       title: "About",
       alt: "More about me.",
       desktop: true,
+      Icon: UserIcon,
+    },
+    {
+      href: "/#experience",
+      title: "Experience",
+      alt: "My work experience.",
+      desktop: true,
+      Icon: BriefcaseIcon,
     },
     {
       href: "/#portfolio",
-      title: "Portfolio",
+      title: "Projects",
       alt: "Work I've done.",
       desktop: true,
+      Icon: CodeBracketIcon,
     },
     {
-      href: "/books",
-      title: "Books",
-      alt: "Books I've read.",
+      href: "/#contact",
+      title: "Contact",
+      alt: "Get in touch.",
       desktop: true,
-    } /*
-    {
-      href: "/gallery",
-      title: "Gallery",
-      alt: "Images and stuff",
-      desktop: true,
-    },*/,
-    {
-      href: "/resume",
-      title: "Resume",
-      alt: "My professional resume",
-      desktop: true,
+      Icon: EnvelopeIcon,
     },
-  ],
+  ] as NavItem[],
   profileNav: [],
 };

@@ -11,7 +11,7 @@ export const HERO = {
   pre: "Welcome to my site.",
   heading: (
     <>
-      I'm <strong>Aryan Vijaywargia</strong>, a Machine Learning Engineer.
+      I'm <strong>Aryan Vijaywargia</strong>, a Fullstack Engineer.
     </>
   ),
   tech: [
@@ -59,12 +59,12 @@ export const HERO = {
     </>
   ),
   cta1: {
-    href: "mailto:aryanvijaywargia@gmail.com",
-    name: "Let's Work",
-  },
-  cta2: {
     href: "/resume",
     name: "Resume",
+  },
+  cta2: {
+    href: "mailto:aryanvijaywargia@gmail.com",
+    name: "Contact Me",
   },
   code: `${heroCode}`,
 };

@@ -9,9 +9,8 @@ import Aryan5 from "../public/images/about/aryan-5.jpg";
 export const ABOUT = {
   stats: [
     {
-      statistic: `${
-        new Date(Date.now() - new Date("2000-01-01T00:00:00").getTime()).getFullYear() - 1970
-      }`,
+      statistic: `${new Date(Date.now() - new Date("2000-01-01T00:00:00").getTime()).getFullYear() - 1970
+        }`,
       tooltip: `Born in 2000`,
       caption: "Years Old",
     },
@@ -34,7 +33,7 @@ export const ABOUT = {
   description: (
     <>
       <p>
-        I'm a Machine Learning Engineer from India. My focus area for the past few years
+        I'm a Fullstack Engineer from India. My focus area for the past few years
         has been <strong>Deep Learning</strong>, <strong>Computer Vision</strong>,{" "}
         <strong>NLP</strong>, and <strong>Time Series Forecasting</strong> to create intelligent
         systems that solve real-world problems.
