@@ -15,7 +15,7 @@ export const ResumeFooter = () => {
   return (
     <footer
       className={clsx(
-        "fixed inset-x-0 bottom-0 z-40 px-4 py-2 transition-all ease-linear [--resume-footer-bg:theme(colors.gray.50)] print:!hidden lg:hidden",
+        "fixed inset-x-0 bottom-0 z-40 px-4 py-2 transition-all ease-linear [--resume-footer-bg:theme(colors.gray.50)] lg:hidden print:!hidden",
         active ? "max-h-72" : "max-h-10"
       )}
     >
@@ -25,9 +25,9 @@ export const ResumeFooter = () => {
           background: `radial-gradient(61px 61px,#0000 24px,var(--resume-footer-bg) 0px) 0px -24px/100% 48px no-repeat, linear-gradient(0deg, transparent 0px, transparent 24px, var(--resume-footer-bg) 24px, var(--resume-footer-bg) 100%) 0px 24px/100% 100%`,
         }}
       >
-        <div className="absolute top-0 left-0 w-[calc(50%-24px)] border-t border-t-gray-900/10" />
-        <div className="absolute top-0 right-0 w-[calc(50%-24px)] border-t border-t-gray-900/10" />
-        <div className="absolute top-0 left-1/2 h-6 w-12 -translate-x-1/2 rounded-br-full rounded-bl-full border-b border-l border-r border-gray-900/10" />
+        <div className="absolute left-0 top-0 w-[calc(50%-24px)] border-t border-t-gray-900/10" />
+        <div className="absolute right-0 top-0 w-[calc(50%-24px)] border-t border-t-gray-900/10" />
+        <div className="absolute left-1/2 top-0 h-6 w-12 -translate-x-1/2 rounded-bl-full rounded-br-full border-b border-l border-r border-gray-900/10" />
       </div>
       <button
         className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gray-100 bg-gray-50 p-3 text-gray-600 drop-shadow-md hf:text-gray-900 hf:drop-shadow"
@@ -110,9 +110,7 @@ export const ResumeFooter = () => {
               <SiLinkedin className="h-4 w-4" />
             </Link>
           </nav>
-          <h5 className="ml-1 text-[13px] text-gray-500 d:text-gray-400">
-            Agartala, India
-          </h5>
+          <h5 className="ml-1 text-[13px] text-gray-500 d:text-gray-400">Agartala, India</h5>
         </section>
       </section>
     </footer>

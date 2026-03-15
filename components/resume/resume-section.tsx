@@ -66,7 +66,7 @@ export const ResumeSection: FC<PropsWithChildren<{ title: string; className?: st
     <section
       id={toKebabCase(title)}
       className={clsx(
-        "relative -mx-4 scroll-mt-[122px] overflow-hidden px-4 spacing-4 print:!overflow-visible md:overflow-visible",
+        "relative -mx-4 scroll-mt-[122px] overflow-hidden px-4 spacing-4 md:overflow-visible print:!overflow-visible",
         className
       )}
       ref={sectionRef}
@@ -82,7 +82,7 @@ export const ResumeSection: FC<PropsWithChildren<{ title: string; className?: st
           </span>
           <button
             type="button"
-            className="group mr-2 ml-auto rounded p-2 text-gray-400/90 transition-colors hfa:outline-none hf:bg-gray-100 hf:text-gray-900 print:!hidden"
+            className="group ml-auto mr-2 rounded p-2 text-gray-400/90 transition-colors hfa:outline-none hf:bg-gray-100 hf:text-gray-900 print:!hidden"
             onClick={() => toggleSectionShowing(key)}
           >
             <span className="sr-only">Toggle Section Visibility</span>

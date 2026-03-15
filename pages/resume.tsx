@@ -60,7 +60,7 @@ export const Resume: FC = (props) => {
                 ))}
               </h2>
             </header>
-            <div className="mt-1 ml-auto mt-auto flex-1 items-end justify-end text-right text-[15px] text-gray-500 spacing-0">
+            <div className="ml-auto mt-1 mt-auto flex-1 items-end justify-end text-right text-[15px] text-gray-500 spacing-0">
               <div>
                 <Link href={`tel:${CV.mobile.href}`}>{CV.mobile.number}</Link>
                 <span> - </span>
@@ -78,7 +78,7 @@ export const Resume: FC = (props) => {
       <tfoot className="fixed inset-x-0 bottom-0 hidden w-full text-center print:!table-footer-group">
         <tr>
           <th>
-            <small className="absolute left-1/2 bottom-0 -translate-x-1/2 pb-1 pt-3 text-[13px] font-medium tracking-tight text-gray-400">
+            <small className="absolute bottom-0 left-1/2 -translate-x-1/2 pb-1 pt-3 text-[13px] font-medium tracking-tight text-gray-400">
               View full resume at <Link href="https://aryancodes.com">www.aryancodes.com</Link>
             </small>
           </th>
@@ -87,7 +87,7 @@ export const Resume: FC = (props) => {
       <tbody className="block print:table-row-group print:!h-screen print:!min-h-screen">
         <tr className="block print:!table-row">
           <td className="block print:!table-cell">
-            <article className="relative mx-auto mb-16 grid max-w-6xl gap-12 px-4 py-16 print:!flex print:!py-0 print:!pl-24 md:px-8 lg:grid-cols-[1fr_200px] print:[&_*]:![-webkit-print-color-adjust:exact] print:[&_*]:![color-adjust:exact] print:[&_*]:![print-color-adjust:exact]">
+            <article className="relative mx-auto mb-16 grid max-w-6xl gap-12 px-4 py-16 md:px-8 lg:grid-cols-[1fr_200px] print:!flex print:!py-0 print:!pl-24 print:[&_*]:![-webkit-print-color-adjust:exact] print:[&_*]:![color-adjust:exact] print:[&_*]:![print-color-adjust:exact]">
               <main className="snap-y snap-normal spacing-10">
                 <ResumeSection title="Intro" className="break-inside-avoid print:!max-w-3xl">
                   <p className="text-[15px] leading-relaxed text-gray-500 d:text-gray-300 d:text-gray-300 print:!-ml-24 print:!max-w-3xl print:!text-base">
@@ -356,7 +356,7 @@ export const Resume: FC = (props) => {
                   <div className="h-24"></div>
                 </ResumeSection>
               </main>
-              <aside className="top-[144px] mb-auto hidden max-h-min print:!hidden lg:sticky lg:spacing-8">
+              <aside className="top-[144px] mb-auto hidden max-h-min lg:sticky lg:spacing-8 print:!hidden">
                 <section className="spacing-6 print:!hidden">
                   <nav className="relative whitespace-nowrap text-[15px] font-medium text-gray-300 spacing-0">
                     <HoverEffect className="border-none border-transparent bg-gray-100" />
@@ -450,9 +450,7 @@ export const Resume: FC = (props) => {
                       <SiLinkedin className="h-4 w-4" />
                     </Link>
                   </nav>
-                  <h5 className="ml-1 text-[13px] text-gray-500 d:text-gray-400">
-                    India
-                  </h5>
+                  <h5 className="ml-1 text-[13px] text-gray-500 d:text-gray-400">India</h5>
                 </section>
               </aside>
               <ResumeFooter />

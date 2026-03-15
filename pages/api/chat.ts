@@ -17,10 +17,7 @@ type ChatResponse = {
   error?: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ChatResponse>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ChatResponse>) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "", error: "Method not allowed" });
   }
@@ -32,7 +29,8 @@ export default async function handler(
 
   try {
     const { messages = [] } = (req.body || {}) as ChatRequest;
-    const lastMessage = messages.length > 0 ? messages[messages.length - 1]?.content?.toLowerCase() || "" : "";
+    const lastMessage =
+      messages.length > 0 ? messages[messages.length - 1]?.content?.toLowerCase() || "" : "";
 
     // Mock mode for UI testing when using placeholder key
     if (apiKey === "your_api_key_here") {
@@ -46,16 +44,23 @@ export default async function handler(
 
       // Simple keyword matching for demo
       let response = mockResponses[Math.floor(Math.random() * mockResponses.length)];
-      if (lastMessage.includes("hello") || lastMessage.includes("hi") || lastMessage.includes("hey")) {
-        response = "*wags tail excitedly* Woof! Hey there! I'm Byte, Aryan's witty canine assistant. I'm in demo mode right now, but feel free to test the UI!";
+      if (
+        lastMessage.includes("hello") ||
+        lastMessage.includes("hi") ||
+        lastMessage.includes("hey")
+      ) {
+        response =
+          "*wags tail excitedly* Woof! Hey there! I'm Byte, Aryan's witty canine assistant. I'm in demo mode right now, but feel free to test the UI!";
       } else if (lastMessage.includes("aryan") || lastMessage.includes("who")) {
-        response = "*puffs chest proudly* Aryan? That's my human! He's a full-stack developer who dabbles in ML/AI. In demo mode I can't tell you much more, but the real me knows everything!";
+        response =
+          "*puffs chest proudly* Aryan? That's my human! He's a full-stack developer who dabbles in ML/AI. In demo mode I can't tell you much more, but the real me knows everything!";
       } else if (lastMessage.includes("project")) {
-        response = "*sniffs around* Projects? Aryan has some cool ones! But in demo mode, my memory is a bit... fuzzy. Add the real API key for the full scoop!";
+        response =
+          "*sniffs around* Projects? Aryan has some cool ones! But in demo mode, my memory is a bit... fuzzy. Add the real API key for the full scoop!";
       }
 
       // Simulate slight delay for realism
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       return res.status(200).json({ message: response });
     }
 
@@ -86,7 +91,7 @@ Remember: You are Byte the dog. Stay in character. Be helpful but with personali
     console.error("Chat API error:", error);
     return res.status(500).json({
       message: "",
-      error: "Something went wrong. Even dogs have bad days."
+      error: "Something went wrong. Even dogs have bad days.",
     });
   }
 }

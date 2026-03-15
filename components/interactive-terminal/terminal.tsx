@@ -1,12 +1,6 @@
 import { FC, useState, useRef, useEffect, KeyboardEvent, useCallback } from "react";
-import {
-  TERMINAL_CONFIG,
-  COMMANDS,
-  SOCIAL_LINKS,
-  getCommandOutput,
-  isSpecialCommand,
-  CommandOutput,
-} from "./terminal-commands";
+import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, getCommandOutput, isSpecialCommand, CommandOutput } from "./terminal-commands";
+import { RickIntro } from "./rick-intro";
 
 type OutputLine = {
   id: number;
@@ -17,6 +11,7 @@ type OutputLine = {
 type TerminalProps = {
   onSwitchToEditor: () => void;
   onSwitchToChatbot: () => void;
+  onSwitchToGameMenu: () => void;
   triggerChatbot?: boolean;
   onTriggerHandled?: () => void;
 };
@@ -24,9 +19,11 @@ type TerminalProps = {
 export const Terminal: FC<TerminalProps> = ({
   onSwitchToEditor,
   onSwitchToChatbot,
+  onSwitchToGameMenu,
   triggerChatbot,
   onTriggerHandled,
 }) => {
+  const [showIntro, setShowIntro] = useState(true);
   const [outputLines, setOutputLines] = useState<OutputLine[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -38,14 +35,19 @@ export const Terminal: FC<TerminalProps> = ({
   const terminalRef = useRef<HTMLDivElement>(null);
   const chatbotTimeoutIds = useRef<NodeJS.Timeout[]>([]);
 
-  // Initialize with banner
+  // Initialize with banner after intro completes
   useEffect(() => {
-    addLines(COMMANDS.banner, 0);
-    // Focus input after mount
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  }, []);
+    if (!showIntro) {
+      addLines(COMMANDS.banner, 0);
+      // Focus input after mount
+      setTimeout(
+        () => {
+          inputRef.current?.focus();
+        },
+        100
+      );
+    }
+  }, [showIntro]);
 
   // Cleanup chatbot timeouts on unmount
   useEffect(() => {
@@ -64,40 +66,61 @@ export const Terminal: FC<TerminalProps> = ({
 
       // Run the chatbot loading animation
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate(`${TERMINAL_CONFIG.prompt} chatbot`, "command-line");
-        }, 0)
+        setTimeout(
+          () => {
+            addLineImmediate(`${TERMINAL_CONFIG.prompt} chatbot`, "command-line");
+          },
+          0
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("", undefined);
-        }, 50)
+        setTimeout(
+          () => {
+            addLineImmediate("", undefined);
+          },
+          50
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("Initializing Neural Bark Network...", "info");
-        }, 130)
+        setTimeout(
+          () => {
+            addLineImmediate("Initializing Neural Bark Network...", "info");
+          },
+          130
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("[#####-----] 50%", "info");
-        }, 450)
+        setTimeout(
+          () => {
+            addLineImmediate("[#####-----] 50%", "info");
+          },
+          450
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("[##########] 100%", "info");
-        }, 850)
+        setTimeout(
+          () => {
+            addLineImmediate("[##########] 100%", "info");
+          },
+          850
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("Woof! Connection established.", "info");
-        }, 1250)
+        setTimeout(
+          () => {
+            addLineImmediate("Woof! Connection established.", "info");
+          },
+          1250
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          onTriggerHandled?.();
-          onSwitchToChatbot();
-        }, 1550)
+        setTimeout(
+          () => {
+            onTriggerHandled?.();
+            onSwitchToChatbot();
+          },
+          1550
+        )
       );
     }
 
@@ -119,14 +142,17 @@ export const Terminal: FC<TerminalProps> = ({
     inputRef.current?.focus();
   };
 
-  const addLine = (text: string, className?: string, delay: number = 0): NodeJS.Timeout => {
-    const timeoutId = setTimeout(() => {
-      setLineIdCounter((prev) => {
-        const newId = prev + 1;
-        setOutputLines((lines) => [...lines, { id: newId, text, className }]);
-        return newId;
-      });
-    }, delay);
+  const addLine = (text: string, className?: string, delay = 0): NodeJS.Timeout => {
+    const timeoutId = setTimeout(
+      () => {
+        setLineIdCounter((prev) => {
+          const newId = prev + 1;
+          setOutputLines((lines) => [...lines, { id: newId, text, className }]);
+          return newId;
+        });
+      },
+      delay
+    );
     return timeoutId;
   };
 
@@ -139,7 +165,7 @@ export const Terminal: FC<TerminalProps> = ({
     });
   };
 
-  const addLines = (lines: CommandOutput[], baseDelay: number = 80) => {
+  const addLines = (lines: CommandOutput[], baseDelay = 80) => {
     lines.forEach((line, index) => {
       addLine(line.text, line.className, index * baseDelay);
     });
@@ -189,23 +215,32 @@ export const Terminal: FC<TerminalProps> = ({
 
         case "email":
           addLine("Opening email client...", "info", 80);
-          setTimeout(() => {
-            window.open(SOCIAL_LINKS.email, "_blank");
-          }, 500);
+          setTimeout(
+            () => {
+              window.open(SOCIAL_LINKS.email, "_blank");
+            },
+            500
+          );
           return;
 
         case "resume":
           addLine("Opening resume...", "info", 80);
-          setTimeout(() => {
-            window.open("/resume", "_blank");
-          }, 500);
+          setTimeout(
+            () => {
+              window.open("/resume", "_blank");
+            },
+            500
+          );
           return;
 
         case "code":
           addLine("Opening code editor...", "info", 80);
-          setTimeout(() => {
-            onSwitchToEditor();
-          }, 300);
+          setTimeout(
+            () => {
+              onSwitchToEditor();
+            },
+            300
+          );
           return;
 
         case "chatbot":
@@ -214,14 +249,31 @@ export const Terminal: FC<TerminalProps> = ({
           chatbotTimeoutIds.current = [];
 
           chatbotTimeoutIds.current.push(addLine("", undefined, 0));
-          chatbotTimeoutIds.current.push(addLine("Initializing Neural Bark Network...", "info", 80));
+          chatbotTimeoutIds.current.push(
+            addLine("Initializing Neural Bark Network...", "info", 80)
+          );
           chatbotTimeoutIds.current.push(addLine("[#####-----] 50%", "info", 400));
           chatbotTimeoutIds.current.push(addLine("[##########] 100%", "info", 800));
           chatbotTimeoutIds.current.push(addLine("Woof! Connection established.", "info", 1200));
           chatbotTimeoutIds.current.push(
-            setTimeout(() => {
-              onSwitchToChatbot();
-            }, 1500)
+            setTimeout(
+              () => {
+                onSwitchToChatbot();
+              },
+              1500
+            )
+          );
+          return;
+
+        case "game":
+          addLine("", undefined, 0);
+          addLine("Loading Games Menu...", "info", 80);
+          addLine("[##########] 100%", "info", 400);
+          setTimeout(
+            () => {
+              onSwitchToGameMenu();
+            },
+            600
           );
           return;
 
@@ -237,11 +289,7 @@ export const Terminal: FC<TerminalProps> = ({
     if (output) {
       addLines(output, 80);
     } else {
-      addLine(
-        `Command not found: ${cmd}. Type 'help' for available commands.`,
-        "error",
-        80
-      );
+      addLine(`Command not found: ${cmd}. Type 'help' for available commands.`, "error", 80);
     }
   };
 
@@ -253,7 +301,8 @@ export const Terminal: FC<TerminalProps> = ({
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (commandHistory.length > 0) {
-        const newIndex = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
+        const newIndex =
+          historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
         setHistoryIndex(newIndex);
         setCurrentInput(commandHistory[newIndex] || "");
       }
@@ -274,9 +323,13 @@ export const Terminal: FC<TerminalProps> = ({
 
   const displayInput = isPasswordMode ? "*".repeat(currentInput.length) : currentInput;
 
+  if (showIntro) {
+    return <RickIntro onComplete={() => setShowIntro(false)} />;
+  }
+
   return (
     <div
-      className="terminal-wrapper h-full bg-[#1e1e1e] rounded-b-md overflow-auto"
+      className="terminal-wrapper h-full overflow-auto rounded-b-md bg-white dark:bg-[#1e1e1e]"
       onClick={handleTerminalClick}
       ref={terminalRef}
     >
@@ -292,14 +345,16 @@ export const Terminal: FC<TerminalProps> = ({
 
         {/* Input Line - inline with output */}
         <div className="terminal-input-line flex items-center font-mono text-[13px]">
-          <span className="prompt text-[#4EC9B0] select-none whitespace-nowrap">{TERMINAL_CONFIG.prompt}</span>
+          <span className="prompt select-none whitespace-nowrap text-[#0d7377] dark:text-[#4EC9B0]">
+            {TERMINAL_CONFIG.prompt}
+          </span>
           <input
             ref={inputRef}
             type="text"
             value={currentInput}
             onChange={(e) => setCurrentInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="terminal-input flex-1 bg-transparent text-[#D4D4D4] outline-none border-none ml-1"
+            className="terminal-input ml-1 flex-1 border-none bg-transparent text-[#383a42] dark:text-[#D4D4D4] outline-none"
             autoFocus
             spellCheck={false}
             autoComplete="off"
@@ -311,67 +366,119 @@ export const Terminal: FC<TerminalProps> = ({
       <style jsx>{`
         .terminal-wrapper {
           cursor: text;
-          font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+          font-family: "Menlo", "Monaco", "Courier New", monospace;
         }
 
         .terminal-line {
-          color: #D4D4D4;
+          color: #383a42;
           white-space: pre-wrap;
           word-break: break-word;
           min-height: 1.5em;
         }
 
+        :global(.dark) .terminal-line {
+          color: #d4d4d4;
+        }
+
         .terminal-line.command-line {
-          color: #D4D4D4;
+          color: #383a42;
+        }
+
+        :global(.dark) .terminal-line.command-line {
+          color: #d4d4d4;
         }
 
         .terminal-line.error {
-          color: #F14C4C;
+          color: #e45649;
+        }
+
+        :global(.dark) .terminal-line.error {
+          color: #f14c4c;
         }
 
         .terminal-line.info {
-          color: #3794FF;
+          color: #4078f2;
+        }
+
+        :global(.dark) .terminal-line.info {
+          color: #3794ff;
         }
 
         .terminal-line :global(.command) {
-          color: #4EC9B0;
+          color: #0d7377;
+        }
+
+        :global(.dark) .terminal-line :global(.command) {
+          color: #4ec9b0;
         }
 
         .terminal-line :global(.terminal-link) {
-          color: #3794FF;
+          color: #4078f2;
           text-decoration: underline;
         }
 
+        :global(.dark) .terminal-line :global(.terminal-link) {
+          color: #3794ff;
+        }
+
         .terminal-line :global(.terminal-link:hover) {
-          color: #75BEFF;
+          color: #6699e6;
+        }
+
+        :global(.dark) .terminal-line :global(.terminal-link:hover) {
+          color: #75beff;
         }
 
         .terminal-line :global(.skill-category) {
-          color: #C586C0;
+          color: #a626a4;
           font-weight: 600;
+        }
+
+        :global(.dark) .terminal-line :global(.skill-category) {
+          color: #c586c0;
         }
 
         .terminal-line :global(.project-name) {
-          color: #DCDCAA;
+          color: #986801;
+        }
+
+        :global(.dark) .terminal-line :global(.project-name) {
+          color: #dcdcaa;
         }
 
         .terminal-line :global(.exp-title) {
-          color: #4EC9B0;
+          color: #0d7377;
           font-weight: 600;
         }
 
+        :global(.dark) .terminal-line :global(.exp-title) {
+          color: #4ec9b0;
+        }
+
         .terminal-line :global(.inherit) {
-          color: #D4D4D4;
+          color: #383a42;
+        }
+
+        :global(.dark) .terminal-line :global(.inherit) {
+          color: #d4d4d4;
         }
 
         .prompt {
-          color: #4EC9B0;
+          color: #0d7377;
+        }
+
+        :global(.dark) .prompt {
+          color: #4ec9b0;
         }
 
         .terminal-input {
           font-family: inherit;
           font-size: inherit;
-          caret-color: #D4D4D4;
+          caret-color: #383a42;
+        }
+
+        :global(.dark) .terminal-input {
+          caret-color: #d4d4d4;
         }
 
         .terminal-input:focus {
@@ -381,7 +488,11 @@ export const Terminal: FC<TerminalProps> = ({
         }
 
         .terminal-input::placeholder {
-          color: #6A6A6A;
+          color: #a0a0a0;
+        }
+
+        :global(.dark) .terminal-input::placeholder {
+          color: #6a6a6a;
         }
       `}</style>
     </div>

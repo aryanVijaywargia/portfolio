@@ -63,7 +63,7 @@ export const Resume: FC = (props) => {
                 ))}
               </h2>
             </header>
-            <div className="mt-1 ml-auto flex-1 items-end justify-end text-right text-[15px] text-gray-500 spacing-0">
+            <div className="ml-auto mt-1 flex-1 items-end justify-end text-right text-[15px] text-gray-500 spacing-0">
               <div>
                 <Link href={`tel:${CV?.mobile.href}`}>{CV?.mobile.number}</Link>
                 <span> - </span>
@@ -90,7 +90,7 @@ export const Resume: FC = (props) => {
       <tbody className="block print:table-row-group print:!h-screen print:!min-h-screen">
         <tr className="block print:!table-row">
           <td className="block print:!table-cell">
-            <article className="relative mx-auto mb-16 grid max-w-6xl gap-12 px-4 py-16 print:!flex print:!py-0 print:!pl-24 md:px-8 lg:grid-cols-[1fr_200px] print:[&_*]:![-webkit-print-color-adjust:exact] print:[&_*]:![color-adjust:exact] print:[&_*]:![print-color-adjust:exact]">
+            <article className="relative mx-auto mb-16 grid max-w-6xl gap-12 px-4 py-16 md:px-8 lg:grid-cols-[1fr_200px] print:!flex print:!py-0 print:!pl-24 print:[&_*]:![-webkit-print-color-adjust:exact] print:[&_*]:![color-adjust:exact] print:[&_*]:![print-color-adjust:exact]">
               <main className="snap-y snap-normal spacing-10">
                 <ResumeSection title="Intro" className="break-inside-avoid print:!max-w-3xl">
                   <p className="text-[15px] leading-relaxed text-gray-500 d:text-gray-300 print:!-ml-24 print:!max-w-3xl print:!text-base">
@@ -108,7 +108,7 @@ export const Resume: FC = (props) => {
                       <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]" />
                     </div>
                   </div>
-                  <div className="absolute top-[calc(100%-1px)] left-2 -mb-px flex h-8 items-start overflow-hidden">
+                  <div className="absolute left-2 top-[calc(100%-1px)] -mb-px flex h-8 items-start overflow-hidden">
                     <div className="-mt-px flex h-[2px] w-44 -scale-x-100">
                       <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
                       <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
@@ -444,7 +444,7 @@ export const Resume: FC = (props) => {
                   <div className="h-24"></div>
                 </ResumeSection>
               </main>
-              <aside className="top-[144px] mb-auto hidden max-h-min print:!hidden lg:sticky lg:spacing-8">
+              <aside className="top-[144px] mb-auto hidden max-h-min lg:sticky lg:spacing-8 print:!hidden">
                 <figure className="relative -top-2 z-0 ml-2 h-48 w-[9.5rem] rotate-6 print:!absolute print:!left-40 print:!top-6">
                   <div className="absolute -inset-x-10 top-0 h-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_right,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
                   <div className="absolute -inset-y-10 right-0 w-0.5 bg-gray-900/[0.1] [mask-image:linear-gradient(to_top,transparent,white_4rem,white_calc(100%-4rem),transparent)] d:bg-gray-50/20" />
@@ -456,7 +456,7 @@ export const Resume: FC = (props) => {
                       <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]" />
                     </div>
                   </div>
-                  <div className="absolute top-[calc(100%-1px)] left-2 -mb-px flex h-8 items-start overflow-hidden">
+                  <div className="absolute left-2 top-[calc(100%-1px)] -mb-px flex h-8 items-start overflow-hidden">
                     <div className="-mt-px flex h-[2px] w-44 -scale-x-100">
                       <div className="w-full flex-none blur-sm [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>
                       <div className="-ml-[100%] w-full flex-none blur-[1px] [background-image:linear-gradient(90deg,rgba(56,189,248,0)_0%,#0EA5E9_32.29%,rgba(236,72,153,0.3)_67.19%,rgba(236,72,153,0)_100%)]"></div>

@@ -39,9 +39,12 @@ export const Hero: FC = () => {
       terminalSection.scrollIntoView({ behavior: "smooth", block: "center" });
     }
     // Trigger chatbot after a short delay to let scroll complete
-    setTimeout(() => {
-      requestChatbot();
-    }, 300);
+    setTimeout(
+      () => {
+        requestChatbot();
+      },
+      300
+    );
   };
 
   return (
@@ -132,24 +135,28 @@ export const Hero: FC = () => {
 
             <p className="mb-3 max-w-xl font-normal text-gray-500 md:text-lg md:tracking-tight"></p>
           </main>
-          <motion.footer variants={fadeInUp} transition={{ duration: 0.5 }} className="mt-6 flex flex-wrap gap-4 md:gap-8">
-            {HERO.cta1 ? (
-              <Link
-                href={HERO.cta1.href}
-                className="button-rainbow inline-flex whitespace-nowrap bg-gray-800 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-50 hfa:border-gray-300/90 hfa:bg-gray-900 hfa:text-white d:hfa:border-gray-700/30 md:px-12"
-              >
-                {HERO.cta1.name}
-              </Link>
-            ) : null}
+          <motion.footer
+            variants={fadeInUp}
+            transition={{ duration: 0.5 }}
+            className="mt-6 flex flex-wrap gap-4 md:gap-8"
+          >
+            {HERO.cta1
+              ? <Link
+                  href={HERO.cta1.href}
+                  className="button-rainbow inline-flex whitespace-nowrap bg-gray-800 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-50 hfa:border-gray-300/90 hfa:bg-gray-900 hfa:text-white d:hfa:border-gray-700/30 md:px-12"
+                >
+                  {HERO.cta1.name}
+                </Link>
+              : null}
 
-            {HERO.cta2 ? (
-              <Link
-                href={HERO.cta2.href}
-                className="button-border inline-flex whitespace-nowrap bg-white/90 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-500 transition-all hfa:border-gray-900/70 hfa:bg-white/90 hfa:text-gray-900 d:border-gray-700/80 d:bg-transparent d:text-gray-300 d:hfa:border-gray-200/30 d:hfa:bg-gray-900/80 d:hfa:text-gray-50 md:px-12"
-              >
-                {HERO.cta2.name}
-              </Link>
-            ) : null}
+            {HERO.cta2
+              ? <Link
+                  href={HERO.cta2.href}
+                  className="button-border inline-flex whitespace-nowrap bg-white/90 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-500 transition-all hfa:border-gray-900/70 hfa:bg-white/90 hfa:text-gray-900 d:border-gray-700/80 d:bg-transparent d:text-gray-300 d:hfa:border-gray-200/30 d:hfa:bg-gray-900/80 d:hfa:text-gray-50 md:px-12"
+                >
+                  {HERO.cta2.name}
+                </Link>
+              : null}
           </motion.footer>
         </section>
         <motion.section

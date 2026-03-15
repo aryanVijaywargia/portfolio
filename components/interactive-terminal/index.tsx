@@ -2,6 +2,9 @@ import { FC, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal } from "./terminal";
 import { TerminalChatbot } from "./terminal-chatbot";
+import { SnakeGame } from "./snake-game";
+import { DungeonGame } from "./dungeon-game";
+import { GameMenu } from "./game-menu";
 import { CopyButton } from "components/copy-button";
 import { Code, CodeGroupProps } from "components/typography/code";
 import { useChatbot } from "components/_stores/chatbot-store";
@@ -12,7 +15,9 @@ type InteractiveTerminalProps = {
 };
 
 export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, language }) => {
-  const [mode, setMode] = useState<"terminal" | "editor" | "chatbot">("terminal");
+  const [mode, setMode] = useState<
+    "terminal" | "editor" | "chatbot" | "game-menu" | "snake" | "dungeon"
+  >("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
   const { triggerChatbot, clearTrigger, closeChat } = useChatbot();
@@ -35,6 +40,28 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     setIsExpanded(false);
     closeChat();
     clearTrigger();
+  };
+
+  const handleSwitchToGame = () => {
+    setMode("game-menu");
+    setIsTerminalMaximized(true);
+  };
+
+  const handleExitGame = () => {
+    setMode("terminal");
+    setIsTerminalMaximized(false);
+  };
+
+  const handleSelectGame = (gameId: string) => {
+    if (gameId === "snake") {
+      setMode("snake");
+    } else if (gameId === "dungeon") {
+      setMode("dungeon");
+    }
+  };
+
+  const handleExitToGameMenu = () => {
+    setMode("game-menu");
   };
 
   const handleMaximizeTerminal = () => {
@@ -66,7 +93,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               onClick={(e) => e.stopPropagation()}
             >
               {/* macOS Window Title Bar */}
-              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#2a2a2a] bg-[#3c3c3c] px-3">
+              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] dark:border-[#2a2a2a] dark:bg-[#3c3c3c] px-3">
                 {/* Traffic Light Buttons */}
                 <div className="flex items-center gap-2">
                   {/* Red - Close */}
@@ -113,7 +140,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
                 {/* Window Title */}
                 <div className="flex-1 text-center">
-                  <span className="select-none text-xs font-medium text-[#9d9d9d]">
+                  <span className="select-none text-xs font-medium text-[#6b6b6b] dark:text-[#9d9d9d]">
                     🐕 Byte v1.0 (Connected)
                   </span>
                 </div>
@@ -123,7 +150,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               </header>
 
               {/* Chatbot Content */}
-              <main className="terminal-content flex-1 overflow-hidden bg-[#1e1e1e]">
+              <main className="terminal-content flex-1 overflow-hidden bg-white dark:bg-[#1e1e1e]">
                 <TerminalChatbot onExit={handleExitChatbot} />
               </main>
 
@@ -165,7 +192,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               onClick={(e) => e.stopPropagation()}
             >
               {/* macOS Window Title Bar */}
-              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#2a2a2a] bg-[#3c3c3c] px-3">
+              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] dark:border-[#2a2a2a] dark:bg-[#3c3c3c] px-3">
                 {/* Traffic Light Buttons */}
                 <div className="flex items-center gap-2">
                   {/* Red - Close */}
@@ -215,11 +242,25 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
                 {/* Window Title */}
                 <div
                   className="flex-1 cursor-pointer text-center"
-                  onClick={handleSwitchToChatbot}
-                  title="Launch Byte"
+                  onClick={
+                    mode === "snake" || mode === "dungeon" || mode === "game-menu"
+                      ? undefined
+                      : handleSwitchToChatbot
+                  }
+                  title={
+                    mode === "snake" || mode === "dungeon" || mode === "game-menu"
+                      ? undefined
+                      : "Launch Byte"
+                  }
                 >
-                  <span className="select-none text-xs font-medium text-[#9d9d9d]">
-                    aryan@macbook — zsh
+                  <span className="select-none text-xs font-medium text-[#6b6b6b] dark:text-[#9d9d9d]">
+                    {mode === "snake"
+                      ? "🐍 Snake — Terminal"
+                      : mode === "dungeon"
+                      ? "⚔️ Dungeon Quest — Terminal"
+                      : mode === "game-menu"
+                      ? "🎮 Games — Terminal"
+                      : "aryan@macbook — zsh"}
                   </span>
                 </div>
 
@@ -227,14 +268,21 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
                 <div className="w-14" />
               </header>
 
-              {/* Terminal Content */}
-              <main className="terminal-content flex-1 overflow-hidden bg-[#1e1e1e]">
-                <Terminal
-                  onSwitchToEditor={handleSwitchToEditor}
-                  onSwitchToChatbot={handleSwitchToChatbot}
-                  triggerChatbot={triggerChatbot}
-                  onTriggerHandled={clearTrigger}
-                />
+              {/* Terminal/Game Content */}
+              <main className="terminal-content flex-1 overflow-hidden bg-white dark:bg-[#1e1e1e]">
+                {mode === "game-menu"
+                  ? <GameMenu onSelectGame={handleSelectGame} onExit={handleExitGame} />
+                  : mode === "snake"
+                  ? <SnakeGame onGameEnd={handleExitToGameMenu} />
+                  : mode === "dungeon"
+                  ? <DungeonGame onGameEnd={handleExitToGameMenu} />
+                  : <Terminal
+                      onSwitchToEditor={handleSwitchToEditor}
+                      onSwitchToChatbot={handleSwitchToChatbot}
+                      onSwitchToGameMenu={handleSwitchToGame}
+                      triggerChatbot={triggerChatbot}
+                      onTriggerHandled={clearTrigger}
+                    />}
               </main>
 
               <style jsx>{`
@@ -260,7 +308,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       {!isExpanded && !isTerminalMaximized && (
         <figure className="terminal-window relative flex h-full min-h-[380px] w-full flex-col overflow-hidden rounded-lg shadow-2xl">
           {/* macOS Window Title Bar */}
-          <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#2a2a2a] bg-[#3c3c3c] px-3">
+          <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] dark:border-[#2a2a2a] dark:bg-[#3c3c3c] px-3">
             {/* Traffic Light Buttons */}
             <div className="flex items-center gap-2">
               {/* Red - Close */}
@@ -316,7 +364,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               onClick={mode === "terminal" ? handleSwitchToChatbot : undefined}
               title={mode === "terminal" ? "Launch Byte" : undefined}
             >
-              <span className="select-none text-xs font-medium text-[#9d9d9d]">
+              <span className="select-none text-xs font-medium text-[#6b6b6b] dark:text-[#9d9d9d]">
                 {mode === "terminal" ? "aryan@macbook — zsh" : "/index.tsx"}
               </span>
             </div>
@@ -332,20 +380,21 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
             </div>
           </header>
 
-          {/* Terminal/Editor Content */}
-          <main className="terminal-content flex-1 overflow-hidden bg-[#1e1e1e]">
-            {mode === "terminal" ? (
-              <Terminal
-                onSwitchToEditor={handleSwitchToEditor}
-                onSwitchToChatbot={handleSwitchToChatbot}
-                triggerChatbot={triggerChatbot}
-                onTriggerHandled={clearTrigger}
-              />
-            ) : (
-              <div className="h-full overflow-auto p-3">
-                <Code className="text-[13px]" code={code} language={language} />
-              </div>
-            )}
+          {/* Terminal/Editor/Game Content */}
+          <main className="terminal-content flex-1 overflow-hidden bg-white dark:bg-[#1e1e1e]">
+            {mode === "terminal"
+              ? <Terminal
+                  onSwitchToEditor={handleSwitchToEditor}
+                  onSwitchToChatbot={handleSwitchToChatbot}
+                  onSwitchToGameMenu={handleSwitchToGame}
+                  triggerChatbot={triggerChatbot}
+                  onTriggerHandled={clearTrigger}
+                />
+              : mode === "editor"
+              ? <div className="h-full overflow-auto p-3">
+                  <Code className="text-[13px]" code={code} language={language} />
+                </div>
+              : null}
           </main>
 
           <style jsx>{`

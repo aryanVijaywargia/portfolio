@@ -31,13 +31,13 @@ export const TwitterProfile: FC<TwitterProfileProps> = ({
         <Link
           target="_blank"
           href={`https://twitter.com/${username}`}
-          className="butter-border my-auto ml-auto flex items-center justify-center rounded-full bg-sky-500/90 py-1.5 px-4 text-xs text-white transition-colors hfa:bg-sky-600/80 d:bg-sky-600/90 d:hfa:bg-sky-500/80"
+          className="butter-border my-auto ml-auto flex items-center justify-center rounded-full bg-sky-500/90 px-4 py-1.5 text-xs text-white transition-colors hfa:bg-sky-600/80 d:bg-sky-600/90 d:hfa:bg-sky-500/80"
         >
           Follow
         </Link>
       </header>
       <main>
-        <p className="pr-2 text-[13px] tracking-tight text-gray-500/90 line-clamp-3 d:text-gray-300/90">
+        <p className="line-clamp-3 pr-2 text-[13px] tracking-tight text-gray-500/90 d:text-gray-300/90">
           {description}
         </p>
       </main>
