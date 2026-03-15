@@ -34,7 +34,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                     name="Tag Filter"
                     value={type}
                   />
-                  <div className="cursor-pointer appearance-none whitespace-nowrap rounded-full border border-gray-200 bg-gray-400/10 py-1 px-3 text-[13px] font-medium text-gray-400 transition-colors peer-checked:text-gray-900 hfa:text-gray-500 d:border-gray-700 d:peer-checked:text-gray-50 d:hfa:text-gray-300">
+                  <div className="cursor-pointer appearance-none whitespace-nowrap rounded-full border border-gray-200 bg-gray-400/10 px-3 py-1 text-[13px] font-medium text-gray-400 transition-colors peer-checked:text-gray-900 hfa:text-gray-500 d:border-gray-700 d:peer-checked:text-gray-50 d:hfa:text-gray-300">
                     {type}
                   </div>
                 </label>
@@ -60,7 +60,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                 rotationIndex % 2 === 0 && "sm:rotate-[1.5deg]",
                 rotationIndex % 2 === 1 && "sm:rotate-[-1.5deg]",
                 index % 8 === 0 &&
-                  "shadow-[currentBg] bg-[linear-gradient(40deg,var(--tw-gradient-stops))] from-pink-300/80 to-violet-500/40 shadow-violet-500/20",
+                  "bg-[linear-gradient(40deg,var(--tw-gradient-stops))] from-pink-300/80 to-violet-500/40 shadow-[currentBg] shadow-violet-500/20",
                 index % 8 === 1 &&
                   "bg-[linear-gradient(120deg,var(--tw-gradient-stops))] from-yellow-300/80 to-rose-600/80 shadow-rose-600/20",
                 index % 8 === 2 &&
@@ -92,13 +92,13 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                 <h2 className="text-2xl font-bold tracking-tighter text-gray-800 d:text-white">
                   {project.name}
                 </h2>
-                <div className="mt-0.5 -ml-0.5 flex items-center gap-2 tracking-tight text-gray-600 d:text-gray-200">
+                <div className="-ml-0.5 mt-0.5 flex items-center gap-2 tracking-tight text-gray-600 d:text-gray-200">
                   {project.tech?.map(({ name, Icon }, i) => {
                     if (i > 3) return null;
                     return (
                       <div
                         key={name}
-                        className="flex select-none items-center gap-1 whitespace-nowrap rounded border border-gray-700/10 bg-gray-200/30 py-[2px] px-1.5 text-[13px] font-medium hfa:bg-gray-200/60 d:bg-gray-900/20 d:text-gray-50/80 d:hfa:bg-gray-900/30"
+                        className="flex select-none items-center gap-1 whitespace-nowrap rounded border border-gray-700/10 bg-gray-200/30 px-1.5 py-[2px] text-[13px] font-medium hfa:bg-gray-200/60 d:bg-gray-900/20 d:text-gray-50/80 d:hfa:bg-gray-900/30"
                       >
                         {name}
                       </div>

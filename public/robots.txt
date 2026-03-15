@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://flext.dev
+Host: https://aryancodes.com
 
 # Sitemaps
-Sitemap: https://flext.dev/sitemap.xml
+Sitemap: https://aryancodes.com/sitemap.xml

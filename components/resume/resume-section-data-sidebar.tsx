@@ -16,19 +16,19 @@ export const ResumeSectionDateSidebar: FC<ResumeSectionDateSidebarProps> = ({
   sidebar = "",
 }) => {
   return (
-    <aside className="absolute top-1 left-[4.5rem] hidden h-full print:!left-4 print:!block md:block xl:left-6 2xl:left-4 ">
-      <h3 className="absolute top-0 right-full pr-6 text-right text-xs font-medium leading-[16px] text-gray-400 print:!pr-8 print:!text-sm print:!text-gray-600 xl:pr-8">
+    <aside className="absolute left-[4.5rem] top-1 hidden h-full md:block xl:left-6 2xl:left-4 print:!left-4 print:!block ">
+      <h3 className="absolute right-full top-0 pr-6 text-right text-xs font-medium leading-[16px] text-gray-400 xl:pr-8 print:!pr-8 print:!text-sm print:!text-gray-600">
         {sidebar
           ? <span className="whitespace-nowrap">{sidebar}</span>
           : <>
               {showDateRange
                 ? <div className="spacing-1">
-                    <div className="whitespace-nowrap print:!mr-0 xl:mr-2">
+                    <div className="whitespace-nowrap xl:mr-2 print:!mr-0">
                       {new Date(dateFrom)?.toLocaleDateString("en-GB", {
                         month: "short",
                         year: "numeric",
                       })}
-                      <span className="hidden print:!inline xl:inline"> -</span>
+                      <span className="hidden xl:inline print:!inline"> -</span>
                     </div>
                     <div className="whitespace-nowrap">
                       {Date.now() > new Date(dateTo).getTime()

@@ -14,9 +14,9 @@ export const ResumeSectionDateEvents = ({
 }) => {
   const { filter } = useResumeSectionInView();
   return (
-    <main className="ml-0 spacing-1 print:!ml-12 md:ml-24 xl:ml-14 2xl:ml-12">
+    <main className="ml-0 spacing-1 md:ml-24 xl:ml-14 2xl:ml-12 print:!ml-12">
       <h3 className="items-baseline text-sm tracking-tight spacing-1 ">
-        <strong className="text-[17px] font-bold text-gray-900 d:text-gray-100 print:!text-sm print:!text-[18px] print:!font-semibold">
+        <strong className="text-[17px] font-bold text-gray-900 d:text-gray-100 print:!text-[18px] print:!text-sm print:!font-semibold">
           {name}
         </strong>{" "}
         <span className="flex flex-wrap items-baseline gap-x-2 gap-y-0 print:!text-[16px]">
@@ -29,7 +29,7 @@ export const ResumeSectionDateEvents = ({
           <span className="text-gray-400/80 print:!text-gray-500">
             {city && country
               ? <>
-                  <span className="hidden print:!inline sm:inline">{city},</span> {country}
+                  <span className="hidden sm:inline print:!inline">{city},</span> {country}
                 </>
               : <>
                   {city}
@@ -37,7 +37,7 @@ export const ResumeSectionDateEvents = ({
                 </>}
           </span>
         </span>
-        <div className="flex gap-2 whitespace-nowrap text-xs font-semibold text-gray-500 d:text-gray-400 print:!hidden md:hidden">
+        <div className="flex gap-2 whitespace-nowrap text-xs font-semibold text-gray-500 d:text-gray-400 md:hidden print:!hidden">
           {showDateRange
             ? <>
                 <span>

@@ -77,7 +77,7 @@ export const Timeline: FC<TimelineProps> = ({}) => {
 
   return (
     <section className="mx-auto  max-w-6xl px-4 pb-16 md:px-8">
-      <div className="-mx-4 flex h-96 overflow-x-auto py-4 px-6 xl:mx-0" ref={scrollContainerRef}>
+      <div className="-mx-4 flex h-96 overflow-x-auto px-6 py-4 xl:mx-0" ref={scrollContainerRef}>
         {Object.entries(TIMELINEOBJECT).map(([year, events], yearIndex, years) => (
           <div key={year} className="relative">
             <header className="absolute left-0 -translate-x-1/2 select-none text-xs font-semibold text-gray-400">
@@ -116,7 +116,7 @@ export const Timeline: FC<TimelineProps> = ({}) => {
                       <div className="h-8 w-0.5 bg-gray-500 transition-all selected:h-[80px] selected:bg-sky-500"></div>
                       <Icon className="mt-2 h-5 w-5 text-gray-500 transition-all d:text-gray-400 selected:text-gray-900 d:selected:text-white" />
                     </button>
-                    <div className="absolute top-0 left-px h-2.5 w-[119px] bg-[image:linear-gradient(90deg,transparent_0px,transparent_9px,var(--line-color)_10px,var(--line-color)_10px)] bg-[length:10px_10px] [--line-color:theme(colors.gray.500)]"></div>
+                    <div className="absolute left-px top-0 h-2.5 w-[119px] bg-[image:linear-gradient(90deg,transparent_0px,transparent_9px,var(--line-color)_10px,var(--line-color)_10px)] bg-[length:10px_10px] [--line-color:theme(colors.gray.500)]"></div>
                     <main
                       className={clsx(
                         "pointer-events-none relative mt-32 w-[17rem] opacity-0 transition-opacity  selected:pointer-events-auto selected:opacity-100",

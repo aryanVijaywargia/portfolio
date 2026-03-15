@@ -78,12 +78,12 @@ const BookItem = (props: {
         </picture>
         <footer className="absolute -bottom-2 right-4 flex gap-2">
           {book.rating
-            ? <div className="rounded-md bg-white py-1 px-2 drop-shadow-md">
+            ? <div className="rounded-md bg-white px-2 py-1 drop-shadow-md">
                 <StarRating rating={book.rating} />
               </div>
             : null}
           <button
-            className="flex items-center justify-center gap-1 rounded-md bg-white py-1 px-1.5 text-gray-300 drop-shadow-md transition-all h:text-red-500"
+            className="flex items-center justify-center gap-1 rounded-md bg-white px-1.5 py-1 text-gray-300 drop-shadow-md transition-all h:text-red-500"
             disabled={book.upvoted}
             onClick={() => addVote(book.id)}
           >

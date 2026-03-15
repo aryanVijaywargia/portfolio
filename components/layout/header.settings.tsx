@@ -22,9 +22,12 @@ export const ProfileNav: FC<ProfileNavProps> = ({ showNav }) => {
       terminalSection.scrollIntoView({ behavior: "smooth", block: "center" });
     }
     // Trigger chatbot after a short delay to let scroll complete
-    setTimeout(() => {
-      requestChatbot();
-    }, 300);
+    setTimeout(
+      () => {
+        requestChatbot();
+      },
+      300
+    );
   };
 
   return (

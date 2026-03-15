@@ -57,7 +57,7 @@ const backgroundShapes = [
   },
 ];
 
-const FloatingShape: FC<{ shape: (typeof backgroundShapes)[0]; index: number }> = ({
+const FloatingShape: FC<{ shape: typeof backgroundShapes[0]; index: number }> = ({
   shape,
   index,
 }) => {
@@ -118,26 +118,27 @@ export const Contact: FC = () => {
     };
 
     // Typewriter effect function
-    const typeWriter = (
-      element: HTMLElement,
-      text: string,
-      delay: number = 0,
-      speed: number = 150
-    ) => {
+    const typeWriter = (element: HTMLElement, text: string, delay = 0, speed = 150) => {
       return new Promise<void>((resolve) => {
-        setTimeout(() => {
-          let i = 0;
-          element.textContent = "";
-          const typing = setInterval(() => {
-            if (i < text.length) {
-              element.textContent += text.charAt(i);
-              i++;
-            } else {
-              clearInterval(typing);
-              resolve();
-            }
-          }, speed);
-        }, delay);
+        setTimeout(
+          () => {
+            let i = 0;
+            element.textContent = "";
+            const typing = setInterval(
+              () => {
+                if (i < text.length) {
+                  element.textContent += text.charAt(i);
+                  i++;
+                } else {
+                  clearInterval(typing);
+                  resolve();
+                }
+              },
+              speed
+            );
+          },
+          delay
+        );
       });
     };
 
@@ -210,18 +211,24 @@ export const Contact: FC = () => {
         element.style.zIndex = "50"; // Lower z-index than contact card
 
         // Slide in animation with much longer spacing (6 seconds between notifications)
-        setTimeout(() => {
-          element.style.left = `${endX}%`;
-          element.style.top = `${endY}%`;
-          element.style.transform = "translate(0, 0)";
-          element.style.opacity = "1";
+        setTimeout(
+          () => {
+            element.style.left = `${endX}%`;
+            element.style.top = `${endY}%`;
+            element.style.transform = "translate(0, 0)";
+            element.style.opacity = "1";
 
-          // Auto-close after longer delay (8-10 seconds visible)
-          setTimeout(() => {
-            element.style.opacity = "0";
-            element.style.transform = "scale(0.8)";
-          }, 8000 + Math.random() * 2000);
-        }, index * 6000 + Math.random() * 1000); // 6 seconds between notifications
+            // Auto-close after longer delay (8-10 seconds visible)
+            setTimeout(
+              () => {
+                element.style.opacity = "0";
+                element.style.transform = "scale(0.8)";
+              },
+              8000 + Math.random() * 2000
+            );
+          },
+          index * 6000 + Math.random() * 1000
+        ); // 6 seconds between notifications
       });
     };
 
@@ -240,12 +247,18 @@ export const Contact: FC = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setTimeout(() => {
-              animateDesktopNotifications();
-            }, 500);
-            setTimeout(() => {
-              animateContactInfo();
-            }, 1000);
+            setTimeout(
+              () => {
+                animateDesktopNotifications();
+              },
+              500
+            );
+            setTimeout(
+              () => {
+                animateContactInfo();
+              },
+              1000
+            );
             observer.unobserve(entry.target);
           }
         });

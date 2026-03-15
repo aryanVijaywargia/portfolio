@@ -67,13 +67,13 @@ export const ScrollGallery: FC<
     <>
       <div className="relative">
         <main
-          className="sm:scrollbar-none group relative flex snap-x snap-mandatory scroll-pl-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] gap-8 overflow-x-auto py-12 px-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] [--slider-padding:2rem]"
+          className="sm:scrollbar-none group relative flex snap-x snap-mandatory scroll-pl-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] gap-8 overflow-x-auto px-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] py-12 [--slider-padding:2rem]"
           ref={scrollContainerRef}
         >
           {children}
         </main>
         <button
-          className="absolute left-10 bottom-0 hidden items-center gap-2 py-2 px-4 text-sm text-gray-500 transition-all duration-75 disabled:text-gray-300 h:text-gray-900 disabled:h:text-gray-300 d:text-gray-300 d:disabled:text-gray-700 d:hfa:text-gray-50 d:disabled:hfa:text-gray-700 md:flex"
+          className="absolute bottom-0 left-10 hidden items-center gap-2 px-4 py-2 text-sm text-gray-500 transition-all duration-75 disabled:text-gray-300 h:text-gray-900 disabled:h:text-gray-300 d:text-gray-300 d:disabled:text-gray-700 d:hfa:text-gray-50 d:disabled:hfa:text-gray-700 md:flex"
           onClick={handleClickPrevious}
           disabled={!scrollNavigation.prev}
         >
@@ -82,7 +82,7 @@ export const ScrollGallery: FC<
         </button>
 
         <button
-          className="absolute right-10 bottom-0 hidden items-center gap-2 py-2 px-4 text-sm text-gray-500 transition-all duration-75 disabled:text-gray-300 h:text-gray-900 h:text-gray-900 disabled:h:text-gray-300 d:text-gray-300 d:disabled:text-gray-700 d:hfa:text-gray-50 d:disabled:hfa:text-gray-700 md:flex"
+          className="absolute bottom-0 right-10 hidden items-center gap-2 px-4 py-2 text-sm text-gray-500 transition-all duration-75 disabled:text-gray-300 h:text-gray-900 h:text-gray-900 disabled:h:text-gray-300 d:text-gray-300 d:disabled:text-gray-700 d:hfa:text-gray-50 d:disabled:hfa:text-gray-700 md:flex"
           onClick={handleClickNext}
           disabled={!scrollNavigation.next}
         >

@@ -1,24 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import clsx from "clsx";
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  MinusIcon,
-  PlusIcon,
-  XMarkIcon,
-  CodeBracketSquareIcon,
-  UserGroupIcon,
-  ChartBarIcon,
-  ArrowRightIcon,
-} from "@heroicons/react/24/outline";
-import {
-  EXPERIENCE_DATA,
-  EXPERIENCE_STATS,
-  EXPERIENCE_BRANCHES,
-  EXPERIENCE_CONTRIBUTORS,
-  ExperienceItem,
-} from "content/experience";
+import { ChevronDownIcon, ChevronUpIcon, MinusIcon, PlusIcon, XMarkIcon, CodeBracketSquareIcon, UserGroupIcon, ChartBarIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { EXPERIENCE_DATA, EXPERIENCE_STATS, EXPERIENCE_BRANCHES, EXPERIENCE_CONTRIBUTORS, ExperienceItem } from "content/experience";
 
 export const Experience = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -37,24 +21,30 @@ export const Experience = () => {
     setIsTyping(true);
     let currentIndex = 0;
 
-    const typeInterval = setInterval(() => {
-      if (currentIndex <= targetText.length) {
-        setTypedText(targetText.slice(0, currentIndex));
-        currentIndex++;
-      } else {
-        setIsTyping(false);
-        clearInterval(typeInterval);
-      }
-    }, 50);
+    const typeInterval = setInterval(
+      () => {
+        if (currentIndex <= targetText.length) {
+          setTypedText(targetText.slice(0, currentIndex));
+          currentIndex++;
+        } else {
+          setIsTyping(false);
+          clearInterval(typeInterval);
+        }
+      },
+      50
+    );
 
     return () => clearInterval(typeInterval);
   }, [isInView]);
 
   // Cursor blinking effect
   useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 530);
+    const cursorInterval = setInterval(
+      () => {
+        setShowCursor((prev) => !prev);
+      },
+      530
+    );
 
     return () => clearInterval(cursorInterval);
   }, []);
@@ -196,11 +186,9 @@ export const Experience = () => {
 
                         {/* Expand Icon */}
                         <div className="flex-shrink-0">
-                          {expandedId === exp.id ? (
-                            <ChevronUpIcon className="h-4 w-4 text-gray-400" />
-                          ) : (
-                            <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-                          )}
+                          {expandedId === exp.id
+                            ? <ChevronUpIcon className="h-4 w-4 text-gray-400" />
+                            : <ChevronDownIcon className="h-4 w-4 text-gray-400" />}
                         </div>
                       </div>
                     </button>

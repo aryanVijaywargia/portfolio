@@ -47,7 +47,7 @@ export const MobileNav: FC<HeaderMobileNavProps> = ({ showNav, setShowNav }) => 
       <MobileNavButton size="24px" border="2px" onClick={toggleNav} active={showNav} />
       <div
         className={clsx(
-          " fixed top-0 left-0 h-screen w-full",
+          " fixed left-0 top-0 h-screen w-full",
           showNav
             ? "nav-active opacity-100"
             : "pointer-events-none select-none opacity-0 delay-[900ms]"
@@ -60,9 +60,9 @@ export const MobileNav: FC<HeaderMobileNavProps> = ({ showNav, setShowNav }) => 
                 className={clsx(
                   "pointer-events-none relative h-full -translate-y-full select-none bg-slate-900 transition-all duration-300 ease-linear",
                   index === 0 &&
-                    "relative before:absolute b:top-0 b:right-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-20",
+                    "relative before:absolute b:right-0 b:top-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-20",
                   index === 17 &&
-                    "relative before:absolute b:top-0 b:left-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-20"
+                    "relative before:absolute b:left-0 b:top-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-20"
                 )}
                 style={{
                   transitionDelay: showNav ? `${index * 0.01}s` : `${index * 0.025}s`,
