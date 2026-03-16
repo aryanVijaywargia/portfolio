@@ -1,3 +1,4 @@
+import { useAchievements } from "components/achievements";
 import { useDebouncedEffect } from "components/_hooks/use-debounce-effect";
 import clsx from "clsx";
 import { TIMELINEOBJECT } from "content/timeline";
@@ -14,6 +15,13 @@ export const Timeline: FC<TimelineProps> = ({}) => {
   const [autoAnimate, setAutoAnimate] = useState(true);
   const [autoScroll, setAutoScroll] = useState(true);
   const inView = useInView(scrollContainerRef);
+  const { trackAchievementEvent } = useAchievements();
+
+  const handleManualSelect = (year: string, index: number) => {
+    setAutoScroll(false);
+    setSelected(`${year}-${index}`);
+    trackAchievementEvent({ type: "timeline:year-viewed", year });
+  };
 
   useEffect(() => {
     if (!initiated && inView) {
@@ -95,22 +103,10 @@ export const Timeline: FC<TimelineProps> = ({}) => {
                   >
                     <button
                       className=" absolute flex -translate-x-1/2 flex-col items-center px-3 hfa:outline-none"
-                      onMouseOver={() => {
-                        setAutoScroll(false);
-                        setSelected(`${year}-${index}`);
-                      }}
-                      onPointerOver={() => {
-                        setAutoScroll(false);
-                        setSelected(`${year}-${index}`);
-                      }}
-                      onFocus={() => {
-                        setAutoScroll(false);
-                        setSelected(`${year}-${index}`);
-                      }}
-                      onClick={() => {
-                        setAutoScroll(false);
-                        setSelected(`${year}-${index}`);
-                      }}
+                      onMouseOver={() => handleManualSelect(year, index)}
+                      onPointerOver={() => handleManualSelect(year, index)}
+                      onFocus={() => handleManualSelect(year, index)}
+                      onClick={() => handleManualSelect(year, index)}
                     >
                       <span className="sr-only">{`${year} - ${heading}`}</span>
                       <div className="h-8 w-0.5 bg-gray-500 transition-all selected:h-[80px] selected:bg-sky-500"></div>

@@ -1,3 +1,4 @@
+import { useAchievements } from "components/achievements";
 import { LinkIcon } from "@heroicons/react/24/solid";
 import { FaGithub } from "@react-icons/all-files/fa/FaGithub";
 import { Image } from "components/image";
@@ -12,6 +13,18 @@ type PortfolioPreviewProps = {};
 
 export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
   const [filter, setFilter] = useState("All Projects");
+  const { trackAchievementEvent } = useAchievements();
+
+  const handleFilterChange = useCallback((value: string) => {
+    setFilter(value);
+    if (value !== "All Projects") {
+      trackAchievementEvent({ type: "portfolio:filter-used", filter: value });
+    }
+  }, [trackAchievementEvent]);
+
+  const handleProjectLinkOpen = useCallback(() => {
+    trackAchievementEvent({ type: "portfolio:link-opened" });
+  }, [trackAchievementEvent]);
 
   return (
     <section id="portfolio" className="portfolio-preview mb-24 min-h-full spacing-4">
@@ -21,7 +34,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
         <div className="relative -mx-4 overflow-x-auto px-4 pb-2">
           <fieldset
             className="flex gap-3"
-            onChange={(e) => setFilter((e.target as HTMLInputElement).value)}
+            onChange={(e) => handleFilterChange((e.target as HTMLInputElement).value)}
           >
             <legend className="sr-only">Filter by Tag</legend>
             {["All Projects", ...new Set(PROJECTS.map((p) => p.type).flat())].map((type, index) => {
@@ -117,6 +130,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                   ? <Link
                       target="_blank"
                       href={project.repository}
+                      onClick={handleProjectLinkOpen}
                       className="p-1 text-gray-700/80 transition-all hfa:text-gray-900 d:text-gray-300/80 d:hfa:text-gray-50"
                       data-tip="View repository"
                     >
@@ -128,6 +142,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                   ? <Link
                       target="_blank"
                       href={project.url}
+                      onClick={handleProjectLinkOpen}
                       className="p-1 text-gray-700/80 transition-all hfa:text-gray-900 d:text-gray-300/80 d:hfa:text-gray-50"
                       data-tip="View site"
                     >

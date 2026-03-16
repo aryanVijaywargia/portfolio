@@ -1,4 +1,5 @@
-import { FC, useState } from "react";
+import { useAchievements } from "components/achievements";
+import { FC, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal } from "./terminal";
 import { TerminalChatbot } from "./terminal-chatbot";
@@ -21,6 +22,28 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
   const { triggerChatbot, clearTrigger, closeChat } = useChatbot();
+  const { trackAchievementEvent } = useAchievements();
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    const isModalOpen = isExpanded || isTerminalMaximized;
+    if (isModalOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        document.body.style.overflow = "";
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isExpanded, isTerminalMaximized]);
 
   const handleSwitchToEditor = () => {
     setMode("editor");
@@ -43,6 +66,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   };
 
   const handleSwitchToGame = () => {
+    trackAchievementEvent({ type: "arcade:opened" });
     setMode("game-menu");
     setIsTerminalMaximized(true);
   };
@@ -69,6 +93,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   };
 
   const handleMinimizeTerminal = () => {
+    setMode("terminal");
     setIsTerminalMaximized(false);
   };
 
@@ -93,7 +118,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               onClick={(e) => e.stopPropagation()}
             >
               {/* macOS Window Title Bar */}
-              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] dark:border-[#2a2a2a] dark:bg-[#3c3c3c] px-3">
+              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#2a2a2a] dark:bg-[#3c3c3c]">
                 {/* Traffic Light Buttons */}
                 <div className="flex items-center gap-2">
                   {/* Red - Close */}
@@ -150,8 +175,11 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               </header>
 
               {/* Chatbot Content */}
-              <main className="terminal-content flex-1 overflow-hidden bg-white dark:bg-[#1e1e1e]">
-                <TerminalChatbot onExit={handleExitChatbot} />
+              <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
+                <TerminalChatbot
+                  onExit={handleExitChatbot}
+                  onMessageSent={() => trackAchievementEvent({ type: "chatbot:message-sent" })}
+                />
               </main>
 
               <style jsx>{`
@@ -192,7 +220,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               onClick={(e) => e.stopPropagation()}
             >
               {/* macOS Window Title Bar */}
-              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] dark:border-[#2a2a2a] dark:bg-[#3c3c3c] px-3">
+              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#2a2a2a] dark:bg-[#3c3c3c]">
                 {/* Traffic Light Buttons */}
                 <div className="flex items-center gap-2">
                   {/* Red - Close */}
@@ -269,19 +297,35 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               </header>
 
               {/* Terminal/Game Content */}
-              <main className="terminal-content flex-1 overflow-hidden bg-white dark:bg-[#1e1e1e]">
+              <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
                 {mode === "game-menu"
                   ? <GameMenu onSelectGame={handleSelectGame} onExit={handleExitGame} />
                   : mode === "snake"
-                  ? <SnakeGame onGameEnd={handleExitToGameMenu} />
+                  ? <SnakeGame
+                      onGameEnd={handleExitToGameMenu}
+                      onScoreChange={(score) =>
+                        trackAchievementEvent({ type: "snake:score", score })
+                      }
+                    />
                   : mode === "dungeon"
-                  ? <DungeonGame onGameEnd={handleExitToGameMenu} />
+                  ? <DungeonGame
+                      onGameEnd={handleExitToGameMenu}
+                      onEscape={() => trackAchievementEvent({ type: "dungeon:escaped" })}
+                    />
                   : <Terminal
                       onSwitchToEditor={handleSwitchToEditor}
                       onSwitchToChatbot={handleSwitchToChatbot}
                       onSwitchToGameMenu={handleSwitchToGame}
                       triggerChatbot={triggerChatbot}
                       onTriggerHandled={clearTrigger}
+                      onValidCommand={(command) =>
+                        trackAchievementEvent({ type: "terminal:valid-command", command })
+                      }
+                      onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
+                      onSecretDiscovered={() =>
+                        trackAchievementEvent({ type: "terminal:secret-discovered" })
+                      }
+                      onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
                     />}
               </main>
 
@@ -308,7 +352,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       {!isExpanded && !isTerminalMaximized && (
         <figure className="terminal-window relative flex h-full min-h-[380px] w-full flex-col overflow-hidden rounded-lg shadow-2xl">
           {/* macOS Window Title Bar */}
-          <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] dark:border-[#2a2a2a] dark:bg-[#3c3c3c] px-3">
+          <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#2a2a2a] dark:bg-[#3c3c3c]">
             {/* Traffic Light Buttons */}
             <div className="flex items-center gap-2">
               {/* Red - Close */}
@@ -381,7 +425,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           </header>
 
           {/* Terminal/Editor/Game Content */}
-          <main className="terminal-content flex-1 overflow-hidden bg-white dark:bg-[#1e1e1e]">
+          <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
             {mode === "terminal"
               ? <Terminal
                   onSwitchToEditor={handleSwitchToEditor}
@@ -389,6 +433,14 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
                   onSwitchToGameMenu={handleSwitchToGame}
                   triggerChatbot={triggerChatbot}
                   onTriggerHandled={clearTrigger}
+                  onValidCommand={(command) =>
+                    trackAchievementEvent({ type: "terminal:valid-command", command })
+                  }
+                  onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
+                  onSecretDiscovered={() =>
+                    trackAchievementEvent({ type: "terminal:secret-discovered" })
+                  }
+                  onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
                 />
               : mode === "editor"
               ? <div className="h-full overflow-auto p-3">

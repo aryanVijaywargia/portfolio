@@ -1,3 +1,4 @@
+import { useAchievements } from "components/achievements";
 import { HeartIcon, MoonIcon, StarIcon, SunIcon } from "@heroicons/react/24/solid";
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
 import { Link } from "components/link";
@@ -31,6 +32,7 @@ const staggerContainer = {
 export const Hero: FC = () => {
   const { theme, setTheme } = useTheme();
   const { requestChatbot } = useChatbot();
+  const { trackAchievementEvent } = useAchievements();
 
   const handleOpenChatbot = () => {
     // Scroll to terminal section
@@ -45,6 +47,15 @@ export const Hero: FC = () => {
       },
       300
     );
+  };
+
+  const handleThemeToggle = (isDark: boolean) => {
+    setTheme(isDark ? "dark" : "light");
+    trackAchievementEvent({ type: "hero:theme-toggled" });
+  };
+
+  const handleWowClick = () => {
+    trackAchievementEvent({ type: "hero:wow-clicked" });
   };
 
   return (
@@ -79,7 +90,7 @@ export const Hero: FC = () => {
         </Link>
         <ToggleSwitch
           enabled={theme === "dark"}
-          setEnabled={(bool) => setTheme(bool ? "dark" : "light")}
+          setEnabled={handleThemeToggle}
           enabledIcon={<MoonIcon className="h-3 w-3 text-slate-400" />}
           disabledIcon={<SunIcon className="h-4 w-4 text-orange-400" />}
         />
@@ -130,7 +141,7 @@ export const Hero: FC = () => {
               transition={{ duration: 0.5 }}
               className="mb-3 max-w-lg font-normal text-gray-500 d:text-gray-400 md:text-lg md:tracking-tight"
             >
-              {HERO.body}
+              {HERO.body(handleWowClick)}
             </motion.p>
 
             <p className="mb-3 max-w-xl font-normal text-gray-500 md:text-lg md:tracking-tight"></p>
@@ -165,27 +176,16 @@ export const Hero: FC = () => {
           className="relative md:h-[30rem]"
         >
           <div className="relative flex h-full min-w-[32rem] flex-col gap-4 pr-4 sm:min-w-[42rem] lg:absolute lg:-left-4 lg:top-24 lg:mr-4 lg:min-w-[34rem] lg:pr-8">
-            <div className="relative z-20 flex justify-end gap-1.5">
+            <div id="terminal-section" className="relative flex h-full flex-col">
+              <InteractiveTerminal code={HERO.code} language="tsx" />
+              <div className="absolute -bottom-5 -right-5 -z-10 h-[calc(100%+1.25rem)] w-[calc(100%+1.25rem)] rounded-lg border border-gray-400/20 bg-gray-100/70 [mask-image:linear-gradient(-30deg,#fff_16.35%,rgb(255_255_255_/_0%)_61.66%)] d:border-gray-700/20 d:bg-gray-900/40"></div>
+            </div>
+            <div className="relative z-20 mt-0.5 flex flex-wrap justify-end gap-1.5">
               <Badge style="info">Hiker</Badge>
               <Badge style="success">Chef</Badge>
               <Badge style="warning">Runner</Badge>
               <Badge style="accent">Mixologist</Badge>
               <Badge style="plain">Space Enthusiast</Badge>
-            </div>
-            <div id="terminal-section" className="relative flex h-full flex-col">
-              <InteractiveTerminal code={HERO.code} language="tsx" />
-              <div className="absolute -bottom-5 -right-5 -z-10 h-[calc(100%+1.25rem)] w-[calc(100%+1.25rem)] rounded-lg border border-gray-400/20 bg-gray-100/70 [mask-image:linear-gradient(-30deg,#fff_16.35%,rgb(255_255_255_/_0%)_61.66%)] d:border-gray-700/20 d:bg-gray-900/40"></div>
-            </div>
-            <div className="z-10 mt-1 flex gap-2 lg:-mt-2 lg:ml-16">
-              <Link
-                target="_blank"
-                href="https://www.buymeacoffee.com/aryanvijaywargia"
-                className="group flex items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding px-3 py-1.5 text-sm font-medium text-gray-600 transition-all hfa:border-rose-500/30 hfa:bg-rose-500 hfa:text-white d:bg-gray-700 d:text-gray-50 d:hfa:bg-rose-500"
-                data-tip="Buy me a coffee"
-              >
-                <HeartIcon className="mr-1 h-4 w-4 animate-heartbeat text-red-600 transition-all group-hfa:text-white" />
-                Support
-              </Link>
             </div>
           </div>
         </motion.section>

@@ -25,6 +25,7 @@ type GameState = "start" | "playing" | "combat" | "victory" | "gameover";
 
 interface DungeonGameProps {
   onGameEnd: () => void;
+  onEscape?: () => void;
 }
 
 const DUNGEON_WIDTH = 40;
@@ -118,7 +119,7 @@ const LEVELS = [
   },
 ];
 
-export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd }) => {
+export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd, onEscape }) => {
   const [gameState, setGameState] = useState<GameState>("start");
   const [level, setLevel] = useState(0);
   const [player, setPlayer] = useState<Position>({ x: 2, y: 12 });
@@ -268,6 +269,7 @@ export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd }) => {
           addMessage("Level complete! +100 pts");
           return;
         } else {
+          onEscape?.();
           setGameState("victory");
           setScore((prev) => prev + 500);
           addMessage("You escaped the dungeon! Victory!");
@@ -302,7 +304,7 @@ export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd }) => {
 
       setPlayer({ x: newX, y: newY });
     },
-    [gameState, player, level, enemies, items, playerMaxHp, initLevel, addMessage]
+    [gameState, player, level, enemies, items, playerMaxHp, initLevel, addMessage, onEscape]
   );
 
   useEffect(() => {

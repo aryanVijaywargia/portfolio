@@ -1,3 +1,4 @@
+import { AchievementsSection } from "components/achievements";
 import { About } from "components/sections/about";
 import { Contact } from "components/sections/contact";
 import { Experience } from "components/sections/experience";
@@ -17,6 +18,7 @@ export const Index: FC = () => {
       <Timeline />
       <Experience />
       <PortfolioPreview />
+      <AchievementsSection />
       <Contact />
     </>
   );
