@@ -9,6 +9,7 @@ type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
 
 interface SnakeGameProps {
   onGameEnd: () => void;
+  onScoreChange?: (score: number) => void;
 }
 
 const GRID_WIDTH = 40;
@@ -17,7 +18,7 @@ const INITIAL_SPEED = 150;
 const SPEED_INCREMENT = 5;
 const MIN_SPEED = 60;
 
-export const SnakeGame: FC<SnakeGameProps> = ({ onGameEnd }) => {
+export const SnakeGame: FC<SnakeGameProps> = ({ onGameEnd, onScoreChange }) => {
   const [snake, setSnake] = useState<Position[]>([{ x: 20, y: 10 }]);
   const [food, setFood] = useState<Position>({ x: 30, y: 10 });
   const [direction, setDirection] = useState<Direction>("RIGHT");
@@ -38,6 +39,10 @@ export const SnakeGame: FC<SnakeGameProps> = ({ onGameEnd }) => {
       setHighScore(parseInt(saved, 10));
     }
   }, []);
+
+  useEffect(() => {
+    onScoreChange?.(score);
+  }, [onScoreChange, score]);
 
   // Generate random food position
   const generateFood = useCallback((currentSnake: Position[]): Position => {

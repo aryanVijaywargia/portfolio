@@ -1,3 +1,4 @@
+import { useAchievements } from "components/achievements";
 import { FC, useEffect, useRef } from "react";
 
 const contactData = {
@@ -104,6 +105,7 @@ const FloatingShape: FC<{ shape: typeof backgroundShapes[0]; index: number }> = 
 
 export const Contact: FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const { trackAchievementEvent } = useAchievements();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -280,6 +282,7 @@ export const Contact: FC = () => {
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(contactData.email);
+      trackAchievementEvent({ type: "contact:action", action: "copy-email" });
       console.log("Email copied to clipboard");
     } catch (err) {
       console.error("Failed to copy email:", err);
@@ -325,6 +328,7 @@ export const Contact: FC = () => {
   };
 
   const downloadVCard = () => {
+    trackAchievementEvent({ type: "contact:action", action: "download-vcard" });
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:${contactData.name}
@@ -669,28 +673,45 @@ END:VCARD`;
         </div>
       </div>
 
-      {/* Email Me Button */}
-      <button
-        className="email-button"
-        onClick={copyEmail}
-        onMouseEnter={() => handleEmailHover(true)}
-        onMouseLeave={() => handleEmailHover(false)}
-        onFocus={() => handleEmailHover(true)}
-        onBlur={() => handleEmailHover(false)}
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
+      <div className="contact-actions">
+        <button
+          className="email-button"
+          onClick={copyEmail}
+          onMouseEnter={() => handleEmailHover(true)}
+          onMouseLeave={() => handleEmailHover(false)}
+          onFocus={() => handleEmailHover(true)}
+          onBlur={() => handleEmailHover(false)}
         >
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-          <polyline points="22,6 12,13 2,6" />
-        </svg>
-        Email Me
-      </button>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+          Email Me
+        </button>
+
+        <button className="email-button secondary-action" onClick={downloadVCard}>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M12 3v12" />
+            <path d="M7 10l5 5 5-5" />
+            <path d="M5 21h14" />
+          </svg>
+          Save vCard
+        </button>
+      </div>
 
       {/* Tech Element */}
       <div className="tech-element">
@@ -854,8 +875,16 @@ END:VCARD`;
           font-size: 1.1rem;
         }
 
-        .email-button {
+        .contact-actions {
           margin-top: 1.5rem;
+          display: flex;
+          gap: 0.75rem;
+          position: relative;
+          z-index: 100;
+          flex-wrap: wrap;
+        }
+
+        .email-button {
           background: #16213e;
           border: 2px solid #0f4c75;
           color: #3282b8;
@@ -884,6 +913,16 @@ END:VCARD`;
         .email-button:focus {
           outline: 2px solid #3282b8;
           outline-offset: 2px;
+        }
+
+        .secondary-action {
+          background: transparent;
+          color: #8dcff0;
+        }
+
+        .secondary-action:hover {
+          background: rgba(15, 76, 117, 0.24);
+          color: #d7f3ff;
         }
 
         .tech-element {

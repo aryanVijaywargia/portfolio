@@ -1,3 +1,4 @@
+import { useAchievements } from "components/achievements";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import clsx from "clsx";
@@ -11,6 +12,16 @@ export const Experience = () => {
   const [showCursor, setShowCursor] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const { trackAchievementEvent } = useAchievements();
+
+  const handleCommitToggle = (id: string) => {
+    const nextExpandedId = expandedId === id ? null : id;
+    setExpandedId(nextExpandedId);
+
+    if (nextExpandedId) {
+      trackAchievementEvent({ type: "experience:expanded", id });
+    }
+  };
 
   const targetText = "git log --work-experience --interactive";
 
@@ -141,7 +152,7 @@ export const Experience = () => {
                   >
                     {/* Commit Header */}
                     <button
-                      onClick={() => setExpandedId(expandedId === exp.id ? null : exp.id)}
+                      onClick={() => handleCommitToggle(exp.id)}
                       className="-m-3 w-full rounded-md p-3 text-left transition-all hover:bg-gray-800/30"
                     >
                       <div className="flex items-start gap-4">

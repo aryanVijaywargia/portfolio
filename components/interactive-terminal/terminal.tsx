@@ -14,6 +14,10 @@ type TerminalProps = {
   onSwitchToGameMenu: () => void;
   triggerChatbot?: boolean;
   onTriggerHandled?: () => void;
+  onValidCommand?: (command: string) => void;
+  onSourceDiver?: () => void;
+  onSecretDiscovered?: () => void;
+  onRootAccess?: () => void;
 };
 
 export const Terminal: FC<TerminalProps> = ({
@@ -22,6 +26,10 @@ export const Terminal: FC<TerminalProps> = ({
   onSwitchToGameMenu,
   triggerChatbot,
   onTriggerHandled,
+  onValidCommand,
+  onSourceDiver,
+  onSecretDiscovered,
+  onRootAccess,
 }) => {
   const [showIntro, setShowIntro] = useState(true);
   const [outputLines, setOutputLines] = useState<OutputLine[]>([]);
@@ -191,6 +199,7 @@ export const Terminal: FC<TerminalProps> = ({
     if (isPasswordMode) {
       if (cmd === TERMINAL_CONFIG.password) {
         addLines(COMMANDS.social, 80);
+        onRootAccess?.();
       } else {
         addLine("Wrong password", "error", 80);
       }
@@ -200,6 +209,8 @@ export const Terminal: FC<TerminalProps> = ({
 
     // Handle special commands
     if (isSpecialCommand(normalizedCmd)) {
+      onValidCommand?.(normalizedCmd);
+
       switch (normalizedCmd) {
         case "clear":
           clearTerminal();
@@ -235,6 +246,7 @@ export const Terminal: FC<TerminalProps> = ({
 
         case "code":
           addLine("Opening code editor...", "info", 80);
+          onSourceDiver?.();
           setTimeout(
             () => {
               onSwitchToEditor();
@@ -287,6 +299,10 @@ export const Terminal: FC<TerminalProps> = ({
     // Handle regular commands
     const output = getCommandOutput(normalizedCmd);
     if (output) {
+      onValidCommand?.(normalizedCmd);
+      if (normalizedCmd === "secret") {
+        onSecretDiscovered?.();
+      }
       addLines(output, 80);
     } else {
       addLine(`Command not found: ${cmd}. Type 'help' for available commands.`, "error", 80);

@@ -1,3 +1,4 @@
+import { useAchievements } from "components/achievements";
 import { useTooltipStore } from "components/_stores/tooltip-store";
 import { Image } from "components/image";
 import { ABOUT } from "content/about";
@@ -11,10 +12,12 @@ export const About: FC<AboutProps> = (props) => {
   const [images, setImages] = useState(ABOUT.images);
   const [tooltip, setTooltip] = useTooltipStore();
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { trackAchievementEvent } = useAchievements();
 
   const handleImageClick = useCallback(() => {
     setTooltip(false);
     if (focusImageIndex === images.length - 1) {
+      trackAchievementEvent({ type: "about:cycle-complete" });
       setFocusImageIndex((current) => current + 1);
       setImages((current) => current.sort(() => 0.5 - Math.random()));
       setTimeout(
@@ -49,7 +52,7 @@ export const About: FC<AboutProps> = (props) => {
         50
       );
     }
-  }, [focusImageIndex, images.length, setTooltip]);
+  }, [focusImageIndex, images.length, setTooltip, trackAchievementEvent]);
 
   return (
     <section id="about" className="-mt-12 overflow-hidden pt-12">

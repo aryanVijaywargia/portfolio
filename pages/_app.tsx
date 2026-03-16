@@ -1,3 +1,4 @@
+import { AchievementProvider } from "components/achievements";
 import { trpc } from "components/_app/trpc";
 import { ContextProviders } from "components/_stores/_context-providers";
 import { LoadInitialData } from "components/_stores/_load-initial-data";
@@ -27,12 +28,6 @@ const App = ({ pageProps, Component }: AppProps) => {
   useEffect(() => {
     if (window) {
       setLoading(false);
-      if (process.env.NODE_ENV !== "development") {
-        console.log(
-          "%cHEY YOU! I see you sneaking in my code. This Page is custom built by Aryan Vijaywargia. I mainly used Next.js, TailwindCSS, Typescript, Vercel, and TRPC as the main tech here. Questions? Just drop me an email at aryanvijaywargia@gmail.com! You can find me on GitHub: https://github.com/AryanVijaywargia",
-          "background: rgb(0,0,0);color: #fafafa;font-size: 24px;font-weight: bold;padding: 25px 10px;text-align: center;text-shadow: 2px 2px 0 rgba(45, 45, 45);"
-        );
-      }
     }
   }, []);
 
@@ -42,29 +37,31 @@ const App = ({ pageProps, Component }: AppProps) => {
 
   return (
     <Loaders>
-      <DefaultSeo
-        {...SEO}
-        canonical={`${SEO.url}${router.asPath}`}
-        twitter={SEO.twitter}
-        title={SEO.title}
-        description={SEO.description}
-        openGraph={SEO.openGraph}
-      />
-      <Header />
-      <AnimatePresence mode="wait">
-        <motion.main
-          key={router.pathname}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="min-h-screen print:!mx-auto print:!w-[1024px]"
-        >
-          <Component {...pageProps} />
-        </motion.main>
-      </AnimatePresence>
-      <Footer />
-      {/*<Stars />*/}
+      <AchievementProvider>
+        <DefaultSeo
+          {...SEO}
+          canonical={`${SEO.url}${router.asPath}`}
+          twitter={SEO.twitter}
+          title={SEO.title}
+          description={SEO.description}
+          openGraph={SEO.openGraph}
+        />
+        <Header />
+        <AnimatePresence mode="wait">
+          <motion.main
+            key={router.pathname}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="min-h-screen print:!mx-auto print:!w-[1024px]"
+          >
+            <Component {...pageProps} />
+          </motion.main>
+        </AnimatePresence>
+        <Footer />
+        {/*<Stars />*/}
+      </AchievementProvider>
     </Loaders>
   );
 };

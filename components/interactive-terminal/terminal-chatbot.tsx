@@ -12,9 +12,10 @@ const QUICK_ACTIONS = [
 
 type TerminalChatbotProps = {
   onExit: () => void;
+  onMessageSent?: (message: string) => void;
 };
 
-export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
+export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSent }) => {
   const [input, setInput] = useState("");
   const { messages, isLoading, addMessage, setLoading, clearMessages } = useChatbot();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -45,6 +46,7 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit }) => {
     }
 
     addMessage({ role: "user", content: content.trim() });
+    onMessageSent?.(content.trim());
     setInput("");
     setLoading(true);
 
