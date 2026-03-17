@@ -1,4 +1,4 @@
-import { AchievementsSection, ConstellationSection } from "components/achievements";
+import { AchievementsSection } from "components/achievements";
 import { About } from "components/sections/about";
 import { Experience } from "components/sections/experience";
 import { Hero } from "components/sections/hero";
@@ -19,7 +19,6 @@ export const Index: FC = () => {
       <Experience />
       <PortfolioPreview />
       <AchievementsSection />
-      <ConstellationSection />
       <Quiz />
     </>
   );

@@ -30,23 +30,51 @@ export const ABOUT = {
       caption: "Projects",
     },
   ],
-  description: (
-    <>
+  descriptions: {
+    brief: (
       <p>
-        I'm a Fullstack Engineer from India. My focus area for the past few years
-        has been <strong>Deep Learning</strong>, <strong>Computer Vision</strong>,{" "}
-        <strong>NLP</strong>, and <strong>Time Series Forecasting</strong> to create intelligent
-        systems that solve real-world problems.
+        I'm a Cape Town based Web Developer and Entrepreneur. My focus area for the past few years
+        has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>,
+        and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
+        bring delight.
       </p>
-      <p>
-        I've worked on earthquake prediction at ISRO-NESAC, pothole detection at IHub-Data IIIT
-        Hyderabad, EV charging optimization at Omdena, and hailstorm prediction at IMD.
-        As a former GDSC Lead at NIT Agartala, I love contributing to open-source projects
-        and sharing knowledge with the developer community.
-      </p>
-      <p>Currently exploring PyTorch, MLFlow, and building full-stack ML applications.</p>
-    </>
-  ),
+    ),
+    standard: (
+      <>
+        <p>
+          I'm a Cape Town based Web Developer and Entrepreneur. My focus area for the past few years
+          has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>,
+          and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
+          bring delight.
+        </p>
+        <p>
+          I've spent most of my life deeply interested in technology and food, continuously building
+          things with both. As a teenager, I was a classic computer nerd, spending most of my times
+          messing with the computer, doing 1 of 4 things: Modding games and figuring things out.
+          Tinkering with hardware, building computers. Developing websites with FrontPage 98 and
+          Flash. And of course, playing games.
+        </p>
+      </>
+    ),
+    detailed: (
+      <>
+        <p>
+          I'm a Cape Town based Web Developer and Entrepreneur. My focus area for the past few years
+          has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>,
+          and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
+          bring delight.
+        </p>
+        <p>
+          I've spent most of my life deeply interested in technology and food, continuously building
+          things with both. As a teenager, I was a classic computer nerd, spending most of my times
+          messing with the computer, doing 1 of 4 things: Modding games and figuring things out.
+          Tinkering with hardware, building computers. Developing websites with FrontPage 98 and
+          Flash. And of course, playing games.
+        </p>
+        <p>Most of that is still true today.</p>
+      </>
+    ),
+  },
   images: [
     {
       src: AryanProfile,
