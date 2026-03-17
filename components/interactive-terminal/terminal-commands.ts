@@ -25,6 +25,7 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: '<span class="command">whois</span>          Who is Aryan?' },
     { text: '<span class="command">whoami</span>         Who are you?' },
     { text: '<span class="command">social</span>         Display social networks' },
+    { text: '<span class="command">contact</span>        Show business card' },
     { text: '<span class="command">skills</span>         View technical skills' },
     { text: '<span class="command">resume</span>         Open resume' },
     { text: '<span class="command">code</span>           View the code editor' },
@@ -93,6 +94,40 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: "" },
     { text: '<span class="skill-category">Frontend:</span>' },
     { text: "  Angular, React, TailwindCSS" },
+    { text: "" },
+  ],
+
+  contact: [
+    { text: "" },
+    { text: "  ╭──────────────────────────────────────────────────────╮" },
+    { text: "  │                                                      │" },
+    {
+      text: '  │   <span class="exp-title">ARYAN VIJAYWARGIA</span>                               │',
+    },
+    {
+      text: '  │   <span class="skill-category">Machine Learning Engineer</span>                       │',
+    },
+    { text: "  │   India                                              │" },
+    { text: "  │                                                      │" },
+    { text: "  │──────────────────────────────────────────────────────│" },
+    { text: "  │                                                      │" },
+    {
+      text: `  │   <span class="skill-category">email</span>      <a href="${SOCIAL_LINKS.email}" class="terminal-link">aryanvijaywargia@gmail.com</a>        │`,
+    },
+    {
+      text: '  │   <span class="skill-category">web</span>        <a href="https://aryancodes.com" target="_blank" class="terminal-link">aryancodes.com</a>                    │',
+    },
+    {
+      text: `  │   <span class="skill-category">github</span>     <a href="${SOCIAL_LINKS.github}" target="_blank" class="terminal-link">AryanVijaywargia</a>                 │`,
+    },
+    {
+      text: `  │   <span class="skill-category">linkedin</span>   <a href="${SOCIAL_LINKS.linkedin}" target="_blank" class="terminal-link">aryan-vijaywargia</a>                │`,
+    },
+    {
+      text: `  │   <span class="skill-category">dagshub</span>    <a href="${SOCIAL_LINKS.dagshub}" target="_blank" class="terminal-link">aryanVijaywargia</a>                 │`,
+    },
+    { text: "  │                                                      │" },
+    { text: "  ╰──────────────────────────────────────────────────────╯" },
     { text: "" },
   ],
 

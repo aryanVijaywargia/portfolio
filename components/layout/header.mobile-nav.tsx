@@ -116,9 +116,12 @@ export const MobileNav: FC<HeaderMobileNavProps> = ({ showNav, setShowNav }) => 
                 : `transform 0.15s ${0.05}s, opacity 0.2s 0.05s`,
             }}
           >
-            <button className="button-rainbow  whitespace-nowrap border-[4px] border-opacity-40 px-10 py-3 font-medium tracking-tight text-gray-900 ">
-              Lets work
-            </button>
+            <a
+              href="mailto:aryanvijaywargia@gmail.com"
+              className="button-rainbow  whitespace-nowrap border-[4px] border-opacity-40 px-10 py-3 font-medium tracking-tight text-gray-900 "
+            >
+              Email Me
+            </a>
           </div>
         </section>
       </div>
