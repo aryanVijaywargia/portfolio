@@ -1,18 +1,6 @@
 import { ACHIEVEMENTS, ACHIEVEMENT_CATEGORY_LABELS, ACHIEVEMENT_ORDER, AchievementCategory, AchievementDefinition, AchievementId } from "./achievementsList";
 import clsx from "clsx";
-import {
-  ArrowPathIcon,
-  LockClosedIcon,
-  CameraIcon,
-  ClockIcon,
-  CodeBracketIcon,
-  FireIcon,
-  KeyIcon,
-  CommandLineIcon,
-  EyeIcon,
-  ShieldCheckIcon,
-  CheckCircleIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowPathIcon, LockClosedIcon, CameraIcon, ClockIcon, CodeBracketIcon, FireIcon, KeyIcon, CommandLineIcon, EyeIcon, ShieldCheckIcon, CheckCircleIcon, AcademicCapIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
@@ -45,7 +33,9 @@ type AchievementEvent =
   | { type: "contact:action"; action: "copy-email" | "download-vcard" }
   | { type: "arcade:opened" }
   | { type: "snake:score"; score: number }
-  | { type: "dungeon:escaped" };
+  | { type: "dungeon:escaped" }
+  | { type: "quiz:completed" }
+  | { type: "quiz:perfect-score" };
 
 type AchievementProgress = {
   unlockedIds: AchievementId[];
@@ -66,6 +56,8 @@ type AchievementProgress = {
   sourceDiverOpened: boolean;
   secretDiscovered: boolean;
   rootAccessGranted: boolean;
+  quizCompleted: boolean;
+  quizPerfectScore: boolean;
 };
 
 type AchievementContextValue = {
@@ -99,6 +91,8 @@ const DEFAULT_PROGRESS: AchievementProgress = {
   sourceDiverOpened: false,
   secretDiscovered: false,
   rootAccessGranted: false,
+  quizCompleted: false,
+  quizPerfectScore: false,
 };
 
 const AchievementContext = createContext<AchievementContextValue>({
@@ -125,6 +119,8 @@ const getAchievementIdsToUnlock = (progress: AchievementProgress) => {
   if (progress.devtoolsOpened) nextUnlocks.push("HACKER");
   if (progress.sourceDiverOpened) nextUnlocks.push("SOURCE_DIVER");
   if (progress.secretDiscovered && progress.rootAccessGranted) nextUnlocks.push("ROOT_ACCESS");
+  if (progress.quizCompleted) nextUnlocks.push("POP_QUIZ_SURVIVOR");
+  if (progress.quizPerfectScore) nextUnlocks.push("BYTE_APPROVED");
 
   return nextUnlocks;
 };
@@ -187,6 +183,12 @@ const applyAchievementEvent = (
     case "dungeon:escaped":
       next.dungeonEscaped = true;
       break;
+    case "quiz:completed":
+      next.quizCompleted = true;
+      break;
+    case "quiz:perfect-score":
+      next.quizPerfectScore = true;
+      break;
   }
 
   const unlockedIds = Array.from(
@@ -205,26 +207,76 @@ const ACHIEVEMENT_ICONS: Record<AchievementId, React.ComponentType<{ className?:
   HACKER: CommandLineIcon,
   SOURCE_DIVER: EyeIcon,
   ROOT_ACCESS: ShieldCheckIcon,
+  POP_QUIZ_SURVIVOR: AcademicCapIcon,
+  BYTE_APPROVED: SparklesIcon,
 };
 
 const getCategoryAccent = (category: AchievementCategory) => {
   switch (category) {
     case "hero":
-      return { border: "border-l-sky-500", iconBg: "bg-sky-50 d:bg-sky-500/10", iconText: "text-sky-600 d:text-sky-400", badge: "text-sky-600 d:text-sky-400", dot: "bg-sky-500" };
+      return {
+        border: "border-l-sky-500",
+        iconBg: "bg-sky-50 d:bg-sky-500/10",
+        iconText: "text-sky-600 d:text-sky-400",
+        badge: "text-sky-600 d:text-sky-400",
+        dot: "bg-sky-500",
+      };
     case "terminal":
-      return { border: "border-l-cyan-500", iconBg: "bg-cyan-50 d:bg-cyan-500/10", iconText: "text-cyan-600 d:text-cyan-400", badge: "text-cyan-600 d:text-cyan-400", dot: "bg-cyan-500" };
+      return {
+        border: "border-l-cyan-500",
+        iconBg: "bg-cyan-50 d:bg-cyan-500/10",
+        iconText: "text-cyan-600 d:text-cyan-400",
+        badge: "text-cyan-600 d:text-cyan-400",
+        dot: "bg-cyan-500",
+      };
     case "explorer":
-      return { border: "border-l-indigo-500", iconBg: "bg-indigo-50 d:bg-indigo-500/10", iconText: "text-indigo-600 d:text-indigo-400", badge: "text-indigo-600 d:text-indigo-400", dot: "bg-indigo-500" };
+      return {
+        border: "border-l-indigo-500",
+        iconBg: "bg-indigo-50 d:bg-indigo-500/10",
+        iconText: "text-indigo-600 d:text-indigo-400",
+        badge: "text-indigo-600 d:text-indigo-400",
+        dot: "bg-indigo-500",
+      };
     case "projects":
-      return { border: "border-l-violet-500", iconBg: "bg-violet-50 d:bg-violet-500/10", iconText: "text-violet-600 d:text-violet-400", badge: "text-violet-600 d:text-violet-400", dot: "bg-violet-500" };
+      return {
+        border: "border-l-violet-500",
+        iconBg: "bg-violet-50 d:bg-violet-500/10",
+        iconText: "text-violet-600 d:text-violet-400",
+        badge: "text-violet-600 d:text-violet-400",
+        dot: "bg-violet-500",
+      };
     case "contact":
-      return { border: "border-l-emerald-500", iconBg: "bg-emerald-50 d:bg-emerald-500/10", iconText: "text-emerald-600 d:text-emerald-400", badge: "text-emerald-600 d:text-emerald-400", dot: "bg-emerald-500" };
+      return {
+        border: "border-l-emerald-500",
+        iconBg: "bg-emerald-50 d:bg-emerald-500/10",
+        iconText: "text-emerald-600 d:text-emerald-400",
+        badge: "text-emerald-600 d:text-emerald-400",
+        dot: "bg-emerald-500",
+      };
     case "games":
-      return { border: "border-l-amber-500", iconBg: "bg-amber-50 d:bg-amber-500/10", iconText: "text-amber-600 d:text-amber-400", badge: "text-amber-600 d:text-amber-400", dot: "bg-amber-500" };
+      return {
+        border: "border-l-amber-500",
+        iconBg: "bg-amber-50 d:bg-amber-500/10",
+        iconText: "text-amber-600 d:text-amber-400",
+        badge: "text-amber-600 d:text-amber-400",
+        dot: "bg-amber-500",
+      };
     case "hidden":
-      return { border: "border-l-fuchsia-500", iconBg: "bg-fuchsia-50 d:bg-fuchsia-500/10", iconText: "text-fuchsia-600 d:text-fuchsia-400", badge: "text-fuchsia-600 d:text-fuchsia-400", dot: "bg-fuchsia-500" };
+      return {
+        border: "border-l-fuchsia-500",
+        iconBg: "bg-fuchsia-50 d:bg-fuchsia-500/10",
+        iconText: "text-fuchsia-600 d:text-fuchsia-400",
+        badge: "text-fuchsia-600 d:text-fuchsia-400",
+        dot: "bg-fuchsia-500",
+      };
     default:
-      return { border: "border-l-gray-500", iconBg: "bg-gray-50 d:bg-gray-500/10", iconText: "text-gray-600 d:text-gray-400", badge: "text-gray-600 d:text-gray-400", dot: "bg-gray-500" };
+      return {
+        border: "border-l-gray-500",
+        iconBg: "bg-gray-50 d:bg-gray-500/10",
+        iconText: "text-gray-600 d:text-gray-400",
+        badge: "text-gray-600 d:text-gray-400",
+        dot: "bg-gray-500",
+      };
   }
 };
 
@@ -439,7 +491,12 @@ const AchievementToasts: React.FC<{ latestAchievementId: AchievementId | null }>
           >
             <Link href="/#achievements">
               <a className="pointer-events-auto flex items-center gap-3.5 rounded-xl border border-gray-200 bg-white px-4 py-3.5 shadow-xl shadow-gray-900/10 transition-transform hfa:scale-[1.01] d:border-gray-700 d:bg-gray-800 d:shadow-black/30">
-                <div className={clsx("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", accent.iconBg)}>
+                <div
+                  className={clsx(
+                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
+                    accent.iconBg
+                  )}
+                >
                   <Icon className={clsx("h-5 w-5", accent.iconText)} />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -477,17 +534,25 @@ const AchievementCard: React.FC<{ achievementId: AchievementId }> = ({ achieveme
         accent.border
       )}
     >
-      <div className={clsx("flex h-10 w-10 shrink-0 items-center justify-center rounded-lg", accent.iconBg)}>
+      <div
+        className={clsx(
+          "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
+          accent.iconBg
+        )}
+      >
         <Icon className={clsx("h-5 w-5", accent.iconText)} />
       </div>
       <div className="min-w-0 flex-1">
-        <h3 className="text-sm font-semibold text-gray-900 d:text-white">
-          {achievement.title}
-        </h3>
+        <h3 className="text-sm font-semibold text-gray-900 d:text-white">{achievement.title}</h3>
         <p className="mt-1 text-[13px] leading-relaxed text-gray-500 d:text-gray-400">
           {achievement.description}
         </p>
-        <span className={clsx("mt-2 inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider", accent.badge)}>
+        <span
+          className={clsx(
+            "mt-2 inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider",
+            accent.badge
+          )}
+        >
           <span className={clsx("h-1.5 w-1.5 rounded-full", accent.dot)} />
           {ACHIEVEMENT_CATEGORY_LABELS[achievement.category]}
         </span>
@@ -544,20 +609,18 @@ export const AchievementsSection: React.FC = () => {
         </div>
       </header>
 
-      {unlockedCount > 0 ? (
-        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {unlockedAchievementIds.map((achievementId) => (
-            <AchievementCard key={achievementId} achievementId={achievementId} />
-          ))}
-        </div>
-      ) : (
-        <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-6 py-12 text-center d:border-gray-700 d:bg-gray-800/40">
-          <LockClosedIcon className="mx-auto h-8 w-8 text-gray-300 d:text-gray-600" />
-          <p className="mt-3 text-sm text-gray-400 d:text-gray-500">
-            No achievements unlocked yet. Keep exploring.
-          </p>
-        </div>
-      )}
+      {unlockedCount > 0
+        ? <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {unlockedAchievementIds.map((achievementId) => (
+              <AchievementCard key={achievementId} achievementId={achievementId} />
+            ))}
+          </div>
+        : <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-6 py-12 text-center d:border-gray-700 d:bg-gray-800/40">
+            <LockClosedIcon className="mx-auto h-8 w-8 text-gray-300 d:text-gray-600" />
+            <p className="mt-3 text-sm text-gray-400 d:text-gray-500">
+              No achievements unlocked yet. Keep exploring.
+            </p>
+          </div>}
     </section>
   );
 };
