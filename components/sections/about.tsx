@@ -2,7 +2,10 @@ import { useAchievements } from "components/achievements";
 import { useTooltipStore } from "components/_stores/tooltip-store";
 import { Image } from "components/image";
 import { ABOUT } from "content/about";
+import clsx from "clsx";
 import { FC, useCallback, useRef, useState } from "react";
+
+type DescriptionSize = "brief" | "standard" | "detailed";
 
 type AboutProps = {};
 
@@ -13,6 +16,7 @@ export const About: FC<AboutProps> = (props) => {
   const [tooltip, setTooltip] = useTooltipStore();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { trackAchievementEvent } = useAchievements();
+  const [descriptionSize, setDescriptionSize] = useState<DescriptionSize>("standard");
 
   const handleImageClick = useCallback(() => {
     setTooltip(false);
@@ -126,9 +130,70 @@ export const About: FC<AboutProps> = (props) => {
               );
             })}
           </header>
-          <main className="tracking tight max-w-3xl leading-relaxed text-gray-500 d:text-gray-100/70 [&>p+p]:mt-4">
-            {ABOUT.description}
-          </main>
+          {/* Mobile: S M L toggle */}
+          <div className="flex select-none items-center justify-center gap-4 sm:hidden">
+            {(
+              [
+                { key: "brief", label: "S" },
+                { key: "standard", label: "M" },
+                { key: "detailed", label: "L" },
+              ] as const
+            ).map(({ key, label }) => {
+              const isActive = descriptionSize === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setDescriptionSize(key)}
+                  className={clsx(
+                    "font-mono text-base font-semibold tracking-widest transition-all duration-300 outline-none",
+                    isActive
+                      ? "text-cyan-500"
+                      : "text-gray-500 d:text-gray-700"
+                  )}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+          {/* Description with right-side toggle */}
+          <div className="flex items-start">
+            <main className="tracking tight max-w-xl flex-1 leading-relaxed text-gray-500 d:text-gray-100/70 [&>p+p]:mt-4">
+              {ABOUT.descriptions[descriptionSize]}
+            </main>
+            {/* Right toggle labels */}
+            <div className="ml-auto hidden flex-shrink-0 select-none flex-col justify-between pl-8 sm:flex" style={{ minHeight: 120 }}>
+              {(["brief", "standard", "detailed"] as const).map((size) => {
+                const isActive = descriptionSize === size;
+                return (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => setDescriptionSize(size)}
+                    className={clsx(
+                      "group flex items-center gap-2 py-1 text-left outline-none transition-all duration-300",
+                      isActive
+                        ? "text-cyan-500"
+                        : "text-gray-400/40 hover:text-gray-400 d:text-gray-700 d:hover:text-gray-500"
+                    )}
+                  >
+                    <span
+                      className={clsx(
+                        "block h-[1.5px] rounded-full transition-all duration-300",
+                        isActive
+                          ? "w-5 bg-cyan-500"
+                          : "w-3 bg-gray-300 group-hover:w-4 d:bg-gray-700"
+                      )}
+                    />
+                    <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em]">
+                      {size}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </section>
       </div>
     </section>
