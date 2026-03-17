@@ -72,6 +72,20 @@ const ACHIEVEMENTS_MAP = {
     category: "hidden",
     hidden: true,
   },
+  POP_QUIZ_SURVIVOR: {
+    title: "Pop Quiz Survivor",
+    description: "Completed the portfolio quiz without rage-quitting.",
+    hint: "There's a quiz section near the bottom of the site. Finish it.",
+    category: "explorer",
+    hidden: true,
+  },
+  BYTE_APPROVED: {
+    title: "Byte Approved",
+    description: "Scored a perfect 7/7 on the portfolio quiz.",
+    hint: "Byte only respects perfection. Answer every question correctly.",
+    category: "hidden",
+    hidden: true,
+  },
 } as const;
 
 export const ACHIEVEMENTS: Record<keyof typeof ACHIEVEMENTS_MAP, AchievementDefinition> =
@@ -88,6 +102,8 @@ export const ACHIEVEMENT_ORDER = [
   "HACKER",
   "SOURCE_DIVER",
   "ROOT_ACCESS",
+  "POP_QUIZ_SURVIVOR",
+  "BYTE_APPROVED",
 ] as AchievementId[];
 
 export const ACHIEVEMENT_CATEGORY_LABELS: Record<AchievementCategory, string> = {

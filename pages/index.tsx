@@ -4,6 +4,7 @@ import { Contact } from "components/sections/contact";
 import { Experience } from "components/sections/experience";
 import { Hero } from "components/sections/hero";
 import { PortfolioPreview } from "components/sections/portfolio-preview";
+import { Quiz } from "components/sections/quiz";
 import { Timeline } from "components/sections/timeline";
 import party from "party-js";
 import { FC } from "react";
@@ -19,6 +20,7 @@ export const Index: FC = () => {
       <Experience />
       <PortfolioPreview />
       <AchievementsSection />
+      <Quiz />
       <Contact />
     </>
   );

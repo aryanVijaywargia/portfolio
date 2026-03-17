@@ -1,17 +1,18 @@
-import { Link } from "components/link";
 import clsx from "clsx";
-import { HoverEffect } from "components/layout/header.desktop-nav.hover-effect";
 
 import { HEADER } from "content/layout";
 import { useRouter } from "next/router";
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useRef, useCallback } from "react";
 
 export const DesktopNav: FC = () => {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<string>("");
+  const scrollingRef = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
+      if (scrollingRef.current) return;
+
       const sections = ["about", "experience", "portfolio", "contact"];
       const scrollPosition = window.scrollY + window.innerHeight / 3;
 
@@ -67,70 +68,98 @@ export const DesktopNav: FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [router.asPath]);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    // Handle hash links with smooth scroll
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("/#")) {
       e.preventDefault();
+      e.stopPropagation();
       const sectionId = href.replace("/#", "");
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-        // Update URL without reload
-        window.history.pushState(null, "", href);
+        // Set active immediately for instant visual feedback
+        setActiveSection(href);
+        scrollingRef.current = true;
+
+        const targetY = element.getBoundingClientRect().top + window.scrollY;
+        const startY = window.scrollY;
+        const diff = targetY - startY;
+        const duration = Math.min(800, Math.max(400, Math.abs(diff) * 0.3));
+        let start: number | null = null;
+
+        const easeInOutCubic = (t: number) =>
+          t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+        const step = (timestamp: number) => {
+          if (!start) start = timestamp;
+          const elapsed = timestamp - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = easeInOutCubic(progress);
+
+          window.scrollTo(0, startY + diff * eased);
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            scrollingRef.current = false;
+            window.history.pushState(null, "", href);
+          }
+        };
+
+        requestAnimationFrame(step);
       }
     }
-  };
+  }, []);
 
   return (
-    <>
-      <nav className="sm:scrollbar-none header-nav group relative isolate mt-auto hidden h-full items-center justify-center gap-2 overflow-visible px-2 md:flex">
-        <HoverEffect />
-        {HEADER.nav
-          .filter(({ desktop }) => desktop)
-          .map((link, i) => {
-            // Only use scroll-based detection for hash links, use router for regular pages
-            const isHashLink = link.href.startsWith("/#");
-            const isActive = isHashLink
-              ? activeSection === link.href
-              : activeSection === link.href || router.asPath.split(/[#?]/)[0] === link.href;
-            const Icon = link.Icon;
-            return (
-              <div className="my-auto flex items-center" key={link.href + link.title + i}>
-                <Link
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
+    <nav className="sm:scrollbar-none header-nav group relative isolate mt-auto hidden h-full items-center justify-center gap-3 overflow-visible px-2 md:flex">
+      {HEADER.nav
+        .filter(({ desktop }) => desktop)
+        .map((link, i) => {
+          const isHashLink = link.href.startsWith("/#");
+          const isActive = isHashLink
+            ? activeSection === link.href
+            : activeSection === link.href || router.asPath.split(/[#?]/)[0] === link.href;
+          const Icon = link.Icon;
+          return (
+            <a
+              key={link.href + link.title + i}
+              href={link.href}
+              onClick={(e) => handleNavClick(e, link.href)}
+              className={clsx(
+                "group/nav relative flex h-10 min-w-[2.5rem] items-center justify-center rounded-full outline-none",
+                "transition-[background-color,box-shadow,padding] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
+                isActive
+                  ? "bg-sky-500 pl-3 pr-1 shadow-lg shadow-sky-500/30"
+                  : "bg-gray-200/80 px-0 hover:pl-3 hover:pr-1 d:bg-gray-700"
+              )}
+            >
+              <span
+                className={clsx(
+                  "flex h-5 w-5 flex-shrink-0 items-center justify-center transition-colors duration-200",
+                  isActive ? "text-white" : "text-gray-600 d:text-gray-300"
+                )}
+              >
+                {Icon && <Icon className="h-5 w-5" />}
+              </span>
+              <div
+                className={clsx(
+                  "overflow-hidden transition-[max-width,opacity] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
+                  isActive
+                    ? "max-w-[6rem] opacity-100"
+                    : "max-w-0 opacity-0 group-hover/nav:max-w-[6rem] group-hover/nav:opacity-100"
+                )}
+              >
+                <span
                   className={clsx(
-                    "group/nav relative z-10 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full outline-none transition-all duration-300 ease-out",
-                    isActive
-                      ? "w-auto bg-sky-500 px-1 shadow-lg shadow-sky-500/30"
-                      : "bg-gray-200/80 hover:w-auto hover:bg-sky-500 hover:px-1 hover:shadow-lg hover:shadow-sky-500/30 d:bg-gray-700"
+                    "whitespace-nowrap pl-2 pr-2 text-sm font-medium",
+                    isActive ? "text-white" : "text-gray-600 d:text-gray-300"
                   )}
                 >
-                  <span
-                    className={clsx(
-                      "flex h-8 w-8 flex-shrink-0 items-center justify-center transition-all duration-300",
-                      isActive
-                        ? "text-white"
-                        : "text-gray-600 group-hover/nav:text-white d:text-gray-300"
-                    )}
-                  >
-                    {Icon && <Icon className="h-5 w-5" />}
-                  </span>
-                  <span
-                    className={clsx(
-                      "whitespace-nowrap text-sm font-medium transition-all duration-300",
-                      isActive
-                        ? "ml-0.5 w-auto pr-2 text-white opacity-100"
-                        : "ml-0 w-0 pr-0 opacity-0 group-hover/nav:ml-0.5 group-hover/nav:w-auto group-hover/nav:pr-2 group-hover/nav:text-white group-hover/nav:opacity-100"
-                    )}
-                  >
-                    {link.title}
-                  </span>
-                </Link>
+                  {link.title}
+                </span>
               </div>
-            );
-          })}
-      </nav>
-    </>
+            </a>
+          );
+        })}
+    </nav>
   );
 };
