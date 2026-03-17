@@ -2,13 +2,30 @@ import { useAchievements } from "components/achievements";
 import { QUIZ_QUESTIONS, QUIZ_RESULT_TIERS } from "content/quiz";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
-import { FC, useCallback, useRef, useState } from "react";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 const TOTAL = QUIZ_QUESTIONS.length;
 
 const getResultTier = (score: number) =>
   QUIZ_RESULT_TIERS.find((t) => score >= t.minScore && score <= t.maxScore) ??
   QUIZ_RESULT_TIERS[QUIZ_RESULT_TIERS.length - 1];
+
+// ── Score Counter (animates 0 → target) ───────────────────────────
+
+const ScoreCounter: FC<{ target: number }> = ({ target }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (target === 0 || count >= target) return;
+    const timer = setTimeout(() => setCount((c) => c + 1), 180);
+    return () => clearTimeout(timer);
+  }, [count, target]);
+
+  return <>{count}</>;
+};
+
+// ── Quiz ──────────────────────────────────────────────────────────
 
 export const Quiz: FC = () => {
   const { trackAchievementEvent } = useAchievements();
@@ -54,117 +71,140 @@ export const Quiz: FC = () => {
           }
         }
       },
-      850
+      900
     );
   };
 
   const tier = getResultTier(score);
 
   return (
-    <section id="quiz" className="mx-auto max-w-6xl px-4 pb-20 md:px-8">
-      <header className="mb-8">
+    <section id="quiz" className="relative mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-32">
+      {/* Header */}
+      <header className="mb-16 md:mb-24">
         <div className="heading-pre">Pop Quiz</div>
-        <h2 className="heading-2xl -ml-1">How well do you know this site?</h2>
-        <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-gray-500 d:text-gray-400">
-          Seven questions. No googling. Byte is watching.
-        </p>
+        <div className="flex items-start justify-between gap-6">
+          <div>
+            <h2 className="heading-2xl -ml-1">
+              How well do you
+              <br className="hidden sm:block" /> know this site?
+            </h2>
+            <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-gray-500 d:text-gray-400">
+              Seven questions. No googling. Byte is watching.
+            </p>
+          </div>
+
+          {/* Progress dots */}
+          {!isFinished && (
+            <div className="flex shrink-0 items-center gap-2 pt-3">
+              {Array.from({ length: TOTAL }, (_, i) => {
+                const answered =
+                  i < currentIndex || (i === currentIndex && selectedOption !== null);
+                const active = i === currentIndex && selectedOption === null;
+                return (
+                  <motion.div
+                    key={i}
+                    layout
+                    className={clsx(
+                      "rounded-full transition-colors duration-500",
+                      answered && "h-2 w-2 bg-emerald-500",
+                      active && "h-2.5 w-2.5 bg-accent",
+                      !answered && !active && "h-2 w-2 bg-gray-200 d:bg-gray-700"
+                    )}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
       </header>
 
-      <div className="relative mx-auto max-w-2xl">
-        {/* Progress bar */}
-        {!isFinished && (
-          <div className="mb-6">
-            <div className="mb-1.5 flex items-center justify-between">
-              <span className="text-xs font-medium text-gray-500 d:text-gray-400">
-                Question {currentIndex + 1} of {TOTAL}
-              </span>
-              <span className="text-xs tabular-nums text-gray-400 d:text-gray-500">
-                {score} correct
-              </span>
-            </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 d:bg-gray-700">
-              <motion.div
-                className="h-full rounded-full bg-sky-500"
-                animate={{
-                  width: `${((currentIndex + (selectedOption !== null ? 1 : 0)) / TOTAL) * 100}%`,
-                }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-              />
-            </div>
-          </div>
-        )}
+      {/* Quiz body */}
+      <div className="relative mx-auto max-w-3xl">
+        <AnimatePresence mode="wait">
+          {!isFinished
+            ? <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.32, ease: [0.25, 1, 0.5, 1] }}
+                className="relative"
+              >
+                {/* Giant watermark number */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="pointer-events-none absolute -left-3 -top-10 select-none font-mono text-[8rem] font-black leading-none tracking-tighter text-gray-900/[0.04] d:text-white/[0.03] md:-left-10 md:-top-16 md:text-[12rem]"
+                >
+                  {String(currentIndex + 1).padStart(2, "0")}
+                </motion.div>
 
-        {/* Question card */}
-        <AnimatePresence>
-          {!isFinished && (
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm d:border-gray-700 d:bg-gray-800/80"
-            >
-              {/* Question header */}
-              <div className="border-b border-gray-100 bg-gray-50/60 px-5 py-3.5 d:border-gray-700/60 d:bg-gray-800/60">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/10 text-[11px] font-bold tabular-nums text-sky-600 d:bg-sky-500/20 d:text-sky-400">
-                    {currentIndex + 1}
-                  </span>
-                  <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 d:text-gray-500">
-                    Question
-                  </span>
-                </div>
-              </div>
-
-              {/* Question body */}
-              <div className="px-5 pb-5 pt-4">
-                <p className="mb-5 text-[15px] font-medium leading-relaxed text-gray-800 d:text-gray-100">
+                {/* Question text */}
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.06, duration: 0.3 }}
+                  className="relative text-xl font-semibold leading-snug text-gray-900 d:text-white md:text-[1.625rem] md:leading-snug"
+                >
                   {question.question}
-                </p>
+                </motion.p>
 
-                <div className="space-y-2.5">
+                {/* Options */}
+                <div className="mt-10 space-y-1 md:mt-12">
                   {question.options.map((option, i) => {
                     const isSelected = selectedOption === i;
                     const isCorrect = option.isCorrect === true;
                     const isRevealed = selectedOption !== null;
 
-                    let stateClasses =
-                      "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50 d:border-gray-600 d:bg-gray-700/50 d:hover:border-gray-500 d:hover:bg-gray-700";
-
-                    if (isRevealed && isCorrect) {
-                      stateClasses =
-                        "border-emerald-400 bg-emerald-50 d:border-emerald-500/60 d:bg-emerald-500/10";
-                    } else if (isRevealed && isSelected && !isCorrect) {
-                      stateClasses = "border-red-400 bg-red-50 d:border-red-500/60 d:bg-red-500/10";
-                    } else if (isRevealed) {
-                      stateClasses =
-                        "border-gray-200 bg-gray-50/50 opacity-60 d:border-gray-700 d:bg-gray-800/40";
-                    }
-
                     return (
                       <motion.button
                         key={i}
                         type="button"
-                        disabled={selectedOption !== null}
+                        disabled={isRevealed}
                         onClick={() => handleSelect(i)}
-                        whileHover={selectedOption === null ? { y: -1 } : undefined}
-                        whileTap={selectedOption === null ? { scale: 0.99 } : undefined}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{
+                          opacity: 1,
+                          x: isRevealed && isSelected && !isCorrect ? [0, -6, 6, -3, 0] : 0,
+                        }}
+                        transition={{
+                          opacity: { duration: 0.25, delay: 0.1 + i * 0.04 },
+                          x:
+                            isRevealed && isSelected && !isCorrect
+                              ? { duration: 0.4, ease: "easeOut" }
+                              : { duration: 0.25, delay: 0.1 + i * 0.04 },
+                        }}
                         className={clsx(
-                          "flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-sm transition-all duration-200",
-                          stateClasses,
-                          selectedOption === null && "cursor-pointer",
-                          selectedOption !== null && "cursor-default"
+                          "group flex w-full items-center gap-4 border-l-2 py-3.5 pl-5 pr-4 text-left transition-all duration-200",
+                          // Default: transparent border, hover reveals accent
+                          !isRevealed &&
+                            "cursor-pointer border-transparent hfa:border-accent hfa:bg-gray-50/80 d:hfa:border-sky-400 d:hfa:bg-white/[0.02]",
+                          // Correct answer highlight
+                          isRevealed &&
+                            isCorrect &&
+                            "border-emerald-500 bg-emerald-50/70 d:border-emerald-400 d:bg-emerald-500/[0.06]",
+                          // Wrong selection
+                          isRevealed &&
+                            isSelected &&
+                            !isCorrect &&
+                            "border-red-500 bg-red-50/60 d:border-red-400 d:bg-red-500/[0.06]",
+                          // Uninvolved (revealed, not selected, not correct)
+                          isRevealed && !isSelected && !isCorrect && "border-transparent opacity-30"
                         )}
                       >
+                        {/* Letter indicator */}
                         <span
                           className={clsx(
-                            "flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[11px] font-bold",
-                            isRevealed && isCorrect
-                              ? "bg-emerald-500 text-white"
-                              : isRevealed && isSelected && !isCorrect
-                              ? "bg-red-500 text-white"
-                              : "bg-gray-100 text-gray-500 d:bg-gray-600 d:text-gray-300"
+                            "shrink-0 font-mono text-xs font-bold tracking-widest transition-colors duration-200",
+                            !isRevealed &&
+                              "text-gray-400 group-hover:text-accent group-focus:text-accent d:text-gray-600 d:group-hover:text-sky-400",
+                            isRevealed && isCorrect && "text-emerald-600 d:text-emerald-400",
+                            isRevealed && isSelected && !isCorrect && "text-red-600 d:text-red-400",
+                            isRevealed &&
+                              !isSelected &&
+                              !isCorrect &&
+                              "text-gray-400 d:text-gray-600"
                           )}
                         >
                           {isRevealed && isCorrect
@@ -173,14 +213,35 @@ export const Quiz: FC = () => {
                             ? "\u2717"
                             : String.fromCharCode(65 + i)}
                         </span>
+
+                        {/* Separator */}
                         <span
                           className={clsx(
-                            "flex-1",
-                            isRevealed && isCorrect
-                              ? "font-medium text-emerald-700 d:text-emerald-400"
-                              : isRevealed && isSelected && !isCorrect
-                              ? "text-red-700 d:text-red-400"
-                              : "text-gray-700 d:text-gray-200"
+                            "text-gray-200 transition-colors duration-200 d:text-gray-700",
+                            isRevealed && isCorrect && "text-emerald-300 d:text-emerald-700",
+                            isRevealed && isSelected && !isCorrect && "text-red-300 d:text-red-700"
+                          )}
+                        >
+                          &mdash;
+                        </span>
+
+                        {/* Label */}
+                        <span
+                          className={clsx(
+                            "text-[15px] transition-colors duration-200",
+                            !isRevealed &&
+                              "text-gray-600 group-hover:text-gray-900 d:text-gray-400 d:group-hover:text-white",
+                            isRevealed &&
+                              isCorrect &&
+                              "font-medium text-emerald-800 d:text-emerald-300",
+                            isRevealed &&
+                              isSelected &&
+                              !isCorrect &&
+                              "text-red-700 line-through decoration-red-300/50 d:text-red-300 d:decoration-red-500/40",
+                            isRevealed &&
+                              !isSelected &&
+                              !isCorrect &&
+                              "text-gray-500 d:text-gray-500"
                           )}
                         >
                           {option.label}
@@ -189,99 +250,119 @@ export const Quiz: FC = () => {
                     );
                   })}
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
-        {/* Result card */}
-        <AnimatePresence>
-          {isFinished && tier && (
-            <motion.div
-              key="result"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ type: "spring", stiffness: 380, damping: 26 }}
-              className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm d:border-gray-700 d:bg-gray-800/80"
-            >
-              {/* Score header */}
-              <div className="border-b border-gray-100 bg-gray-50/60 px-5 py-3.5 d:border-gray-700/60 d:bg-gray-800/60">
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 d:text-gray-500">
-                    Results
+                {/* Running score (subtle) */}
+                <div className="mt-8 flex justify-end">
+                  <span className="font-mono text-xs tabular-nums text-gray-300 d:text-gray-700">
+                    {score}/{currentIndex + (selectedOption !== null ? 1 : 0)}
                   </span>
                 </div>
-              </div>
+              </motion.div>
+            : /* ── Result ── */
+              <motion.div
+                key="result"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+              >
+                <div className="flex flex-col gap-10 md:flex-row md:items-start md:gap-16">
+                  {/* Score column */}
+                  <div className="shrink-0">
+                    <div className="flex items-baseline gap-1">
+                      <motion.span
+                        className="text-[6rem] font-black leading-none tracking-tighter text-gray-900 d:text-white md:text-[8rem]"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: 0.15,
+                          duration: 0.5,
+                          ease: [0.25, 1, 0.5, 1],
+                        }}
+                      >
+                        <ScoreCounter target={score} />
+                      </motion.span>
+                      <motion.span
+                        className="text-2xl font-light text-gray-300 d:text-gray-600 md:text-3xl"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                      >
+                        /{TOTAL}
+                      </motion.span>
+                    </div>
 
-              <div className="px-5 pb-6 pt-6 text-center">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 20, delay: 0.15 }}
-                  className="mb-4 text-4xl"
-                >
-                  {tier.emoji}
-                </motion.div>
-
-                <div className="mb-2 flex items-center justify-center gap-2">
-                  <span className="text-3xl font-bold tabular-nums text-gray-900 d:text-white">
-                    {score}
-                  </span>
-                  <span className="text-lg text-gray-400 d:text-gray-500">/ {TOTAL}</span>
-                </div>
-
-                <h3 className="mb-2 text-lg font-semibold text-gray-800 d:text-gray-100">
-                  {tier.title}
-                </h3>
-                <p className="mx-auto max-w-md text-sm leading-relaxed text-gray-500 d:text-gray-400">
-                  {tier.description}
-                </p>
-
-                {/* CTAs */}
-                <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-                  <button
-                    type="button"
-                    onClick={handleRetry}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hfa:border-gray-300 hfa:bg-gray-50 d:border-gray-600 d:bg-gray-700 d:text-gray-200 d:hfa:border-gray-500 d:hfa:bg-gray-600"
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182"
+                    {/* Score bar */}
+                    <div className="mt-3 h-1 w-32 overflow-hidden rounded-full bg-gray-100 d:bg-gray-800 md:w-40">
+                      <motion.div
+                        className={clsx(
+                          "h-full rounded-full",
+                          score >= 6 ? "bg-emerald-500" : score >= 4 ? "bg-sky-500" : "bg-amber-500"
+                        )}
+                        initial={{ width: "0%" }}
+                        animate={{ width: `${(score / TOTAL) * 100}%` }}
+                        transition={{
+                          delay: 0.6,
+                          duration: 0.8,
+                          ease: [0.25, 1, 0.5, 1],
+                        }}
                       />
-                    </svg>
-                    Try Again
-                  </button>
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-sky-500 px-4 py-2 text-sm font-medium text-white transition-colors hfa:bg-sky-600"
-                  >
-                    Get in Touch
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                      stroke="currentColor"
+                    </div>
+                  </div>
+
+                  {/* Tier info column */}
+                  {tier && (
+                    <motion.div
+                      className="flex-1 pt-2 md:pt-4"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        delay: 0.35,
+                        duration: 0.5,
+                        ease: [0.25, 1, 0.5, 1],
+                      }}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-                      />
-                    </svg>
-                  </a>
+                      <span className="mb-3 inline-block text-2xl">{tier.emoji}</span>
+                      <h3 className="text-xl font-bold leading-snug text-gray-900 d:text-white md:text-2xl">
+                        {tier.title}
+                      </h3>
+                      <p className="mt-3 max-w-md text-[15px] leading-relaxed text-gray-500 d:text-gray-400">
+                        {tier.description}
+                      </p>
+
+                      {/* Actions */}
+                      <div className="mt-8 flex flex-wrap items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={handleRetry}
+                          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hfa:border-gray-300 hfa:bg-gray-50 d:border-gray-700 d:text-gray-300 d:hfa:border-gray-600 d:hfa:bg-gray-800"
+                        >
+                          <ArrowPathIcon className="h-4 w-4" />
+                          Try Again
+                        </button>
+                        <a
+                          href="mailto:aryanvijaywargia@gmail.com"
+                          className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hfa:bg-gray-800 d:bg-white d:text-gray-900 d:hfa:bg-gray-100"
+                        >
+                          Get in Touch
+                          <svg
+                            className="h-3.5 w-3.5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2.5}
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
+                            />
+                          </svg>
+                        </a>
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>}
         </AnimatePresence>
       </div>
     </section>
