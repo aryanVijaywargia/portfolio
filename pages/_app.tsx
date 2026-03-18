@@ -1,5 +1,4 @@
 import { AchievementProvider } from "components/achievements";
-import { trpc } from "components/_app/trpc";
 import { ContextProviders } from "components/_stores/_context-providers";
 import { LoadInitialData } from "components/_stores/_load-initial-data";
 import { PortfolioModeProvider, usePortfolioMode } from "components/_stores/portfolio-mode-context";
@@ -87,4 +86,4 @@ const App = ({ pageProps, Component }: AppProps) => {
   );
 };
 
-export default trpc.withTRPC(App);
+export default App;
