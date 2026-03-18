@@ -1,5 +1,5 @@
 import AryanLogo from "public/logo.svg";
-import { HomeIcon, UserIcon, BriefcaseIcon, CodeBracketIcon } from "@heroicons/react/24/solid";
+import { HomeIcon, UserIcon, BriefcaseIcon, CodeBracketIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import { FC } from "react";
 
 type NavItem = {
@@ -44,6 +44,13 @@ export const HEADER = {
       alt: "Work I've done.",
       desktop: true,
       Icon: CodeBracketIcon,
+    },
+    {
+      href: "/#contact",
+      title: "Contact",
+      alt: "Get in touch.",
+      desktop: true,
+      Icon: EnvelopeIcon,
     },
   ] as NavItem[],
   profileNav: [],
