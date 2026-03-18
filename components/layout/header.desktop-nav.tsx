@@ -13,7 +13,7 @@ export const DesktopNav: FC = () => {
     const handleScroll = () => {
       if (scrollingRef.current) return;
 
-      const sections = ["about", "experience", "portfolio"];
+      const sections = ["about", "experience", "portfolio", "contact"];
       const scrollPosition = window.scrollY + window.innerHeight / 3;
 
       // Check if we're at the top (home)

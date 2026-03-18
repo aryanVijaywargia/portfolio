@@ -1,5 +1,6 @@
 import { AchievementsSection } from "components/achievements";
 import { About } from "components/sections/about";
+import { Contact } from "components/sections/contact";
 import { Experience } from "components/sections/experience";
 import { Hero } from "components/sections/hero";
 import { PortfolioPreview } from "components/sections/portfolio-preview";
@@ -20,6 +21,7 @@ export const Index: FC = () => {
       <PortfolioPreview />
       <AchievementsSection />
       <Quiz />
+      <Contact />
     </>
   );
 };
