@@ -40,5 +40,18 @@ amplifytools.xcconfig
 .contentlayer
 warehouse
 
+# OS files
+.DS_Store
+
+# IDE files
+*.iml
+
+# Build artifacts
+tsconfig.tsbuildinfo
+.angular/cache/
+
+# Package manager
+package-lock.json
+
 # Claude Code
 .gemini-clipboard/
