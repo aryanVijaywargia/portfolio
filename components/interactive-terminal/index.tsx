@@ -9,6 +9,7 @@ import { GameMenu } from "./game-menu";
 import { CopyButton } from "components/copy-button";
 import { Code, CodeGroupProps } from "components/typography/code";
 import { useChatbot } from "components/_stores/chatbot-store";
+import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
 
 type InteractiveTerminalProps = {
   code: string | string[];
@@ -23,6 +24,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
   const { triggerChatbot, clearTrigger, closeChat } = useChatbot();
   const { trackAchievementEvent } = useAchievements();
+  const { activateBatman, deactivateBatman } = usePortfolioMode();
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -298,35 +300,37 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
               {/* Terminal/Game Content */}
               <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
-                {mode === "game-menu"
-                  ? <GameMenu onSelectGame={handleSelectGame} onExit={handleExitGame} />
-                  : mode === "snake"
-                  ? <SnakeGame
-                      onGameEnd={handleExitToGameMenu}
-                      onScoreChange={(score) =>
-                        trackAchievementEvent({ type: "snake:score", score })
-                      }
-                    />
-                  : mode === "dungeon"
-                  ? <DungeonGame
-                      onGameEnd={handleExitToGameMenu}
-                      onEscape={() => trackAchievementEvent({ type: "dungeon:escaped" })}
-                    />
-                  : <Terminal
-                      onSwitchToEditor={handleSwitchToEditor}
-                      onSwitchToChatbot={handleSwitchToChatbot}
-                      onSwitchToGameMenu={handleSwitchToGame}
-                      triggerChatbot={triggerChatbot}
-                      onTriggerHandled={clearTrigger}
-                      onValidCommand={(command) =>
-                        trackAchievementEvent({ type: "terminal:valid-command", command })
-                      }
-                      onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
-                      onSecretDiscovered={() =>
-                        trackAchievementEvent({ type: "terminal:secret-discovered" })
-                      }
-                      onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
-                    />}
+                {mode === "game-menu" ? (
+                  <GameMenu onSelectGame={handleSelectGame} onExit={handleExitGame} />
+                ) : mode === "snake" ? (
+                  <SnakeGame
+                    onGameEnd={handleExitToGameMenu}
+                    onScoreChange={(score) => trackAchievementEvent({ type: "snake:score", score })}
+                  />
+                ) : mode === "dungeon" ? (
+                  <DungeonGame
+                    onGameEnd={handleExitToGameMenu}
+                    onEscape={() => trackAchievementEvent({ type: "dungeon:escaped" })}
+                  />
+                ) : (
+                  <Terminal
+                    onSwitchToEditor={handleSwitchToEditor}
+                    onSwitchToChatbot={handleSwitchToChatbot}
+                    onSwitchToGameMenu={handleSwitchToGame}
+                    triggerChatbot={triggerChatbot}
+                    onTriggerHandled={clearTrigger}
+                    onValidCommand={(command) =>
+                      trackAchievementEvent({ type: "terminal:valid-command", command })
+                    }
+                    onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
+                    onSecretDiscovered={() =>
+                      trackAchievementEvent({ type: "terminal:secret-discovered" })
+                    }
+                    onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
+                    onBatmanTheme={activateBatman}
+                    onExitBatman={deactivateBatman}
+                  />
+                )}
               </main>
 
               <style jsx>{`
@@ -426,27 +430,29 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
           {/* Terminal/Editor/Game Content */}
           <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
-            {mode === "terminal"
-              ? <Terminal
-                  onSwitchToEditor={handleSwitchToEditor}
-                  onSwitchToChatbot={handleSwitchToChatbot}
-                  onSwitchToGameMenu={handleSwitchToGame}
-                  triggerChatbot={triggerChatbot}
-                  onTriggerHandled={clearTrigger}
-                  onValidCommand={(command) =>
-                    trackAchievementEvent({ type: "terminal:valid-command", command })
-                  }
-                  onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
-                  onSecretDiscovered={() =>
-                    trackAchievementEvent({ type: "terminal:secret-discovered" })
-                  }
-                  onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
-                />
-              : mode === "editor"
-              ? <div className="h-full overflow-auto p-3">
-                  <Code className="text-[13px]" code={code} language={language} />
-                </div>
-              : null}
+            {mode === "terminal" ? (
+              <Terminal
+                onSwitchToEditor={handleSwitchToEditor}
+                onSwitchToChatbot={handleSwitchToChatbot}
+                onSwitchToGameMenu={handleSwitchToGame}
+                triggerChatbot={triggerChatbot}
+                onTriggerHandled={clearTrigger}
+                onValidCommand={(command) =>
+                  trackAchievementEvent({ type: "terminal:valid-command", command })
+                }
+                onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
+                onSecretDiscovered={() =>
+                  trackAchievementEvent({ type: "terminal:secret-discovered" })
+                }
+                onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
+                onBatmanTheme={activateBatman}
+                onExitBatman={deactivateBatman}
+              />
+            ) : mode === "editor" ? (
+              <div className="h-full overflow-auto p-3">
+                <Code className="text-[13px]" code={code} language={language} />
+              </div>
+            ) : null}
           </main>
 
           <style jsx>{`

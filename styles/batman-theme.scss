@@ -1,0 +1,367 @@
+/* ═══════════════════════════════════════════════════════════
+   BATMAN THEME — Dark Knight Design System
+   Inspired by nitishkr.fun noir aesthetic
+   ═══════════════════════════════════════════════════════════ */
+
+[data-portfolio-mode="batman"] {
+  /* ── Core Palette ── */
+  --bat-bg: #041716;
+  --bat-bg-card: #081f1d;
+  --bat-bg-card-hover: #0a2a27;
+  --bat-fg: #a3dbcf;
+  --bat-fg-muted: #529f91;
+  --bat-fg-dim: #2d6b5e;
+  --bat-primary: #00a692;
+  --bat-primary-glow: rgba(0, 166, 146, 0.35);
+  --bat-accent: #00473c;
+  --bat-accent-light: #006b5a;
+  --bat-muted: #00372f;
+  --bat-border: #0a3d35;
+  --bat-border-glow: rgba(0, 166, 146, 0.2);
+  --bat-error: #ff4444;
+  --bat-surface: #0a0a0a;
+
+  /* ── Typography ── */
+  --bat-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --bat-sans: 'Inter', 'Space Grotesk', -apple-system, sans-serif;
+  --bat-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
+
+  /* ── Override Tailwind base colors ── */
+  --color-bg: 4 23 22;
+  --color-bg-dark: 4 23 22;
+  --color-card: 8 31 29;
+  --color-card-dark: 8 31 29;
+  --color-accent: 0 166 146;
+  --color-accent-dark: 0 166 146;
+  --color-accent-contrast: 0 166 146;
+  --color-accent-contrast-dark: 0 166 146;
+}
+
+/* ── Global Background ── */
+[data-portfolio-mode="batman"],
+[data-portfolio-mode="batman"] body {
+  background-color: var(--bat-bg) !important;
+  background-image:
+    linear-gradient(rgba(0, 71, 60, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 71, 60, 0.1) 1px, transparent 1px) !important;
+  background-size: 40px 40px !important;
+  color: var(--bat-fg) !important;
+}
+
+/* ── Typography Overrides ── */
+[data-portfolio-mode="batman"] {
+  h1, h2, h3 {
+    font-family: var(--bat-serif) !important;
+    color: var(--bat-fg) !important;
+  }
+
+  h4, h5, h6 {
+    color: var(--bat-fg-muted) !important;
+  }
+
+  p, span, li, div {
+    color: var(--bat-fg-muted);
+  }
+
+  /* ── Links ── */
+  a {
+    color: var(--bat-primary) !important;
+    transition: all 0.3s ease;
+
+    &:hover, &:focus {
+      color: var(--bat-fg) !important;
+      text-shadow: 0 0 12px var(--bat-primary-glow);
+    }
+  }
+
+  /* ── Image Treatment ── */
+  img:not(.bat-no-filter) {
+    filter: saturate(0.25) sepia(0.1) hue-rotate(120deg) brightness(0.8);
+    transition: filter 0.5s ease;
+
+    &:hover {
+      filter: saturate(0.5) sepia(0.05) hue-rotate(120deg) brightness(0.9);
+    }
+  }
+
+  /* ── Buttons ── */
+  button, .button-rainbow, .button-border {
+    background: var(--bat-accent) !important;
+    color: var(--bat-fg) !important;
+    border-color: var(--bat-border) !important;
+    transition: all 0.3s ease !important;
+
+    &:hover, &:focus {
+      background: var(--bat-accent-light) !important;
+      box-shadow: 0 0 20px var(--bat-primary-glow) !important;
+      border-color: var(--bat-primary) !important;
+    }
+  }
+
+  /* ── Cards ── */
+  .card, [class*="card"] {
+    background: var(--bat-bg-card) !important;
+    border-color: var(--bat-border) !important;
+  }
+
+  /* ── Input Fields ── */
+  input, textarea, select {
+    background: var(--bat-surface) !important;
+    color: var(--bat-fg) !important;
+    border-color: var(--bat-border) !important;
+
+    &:focus {
+      border-color: var(--bat-primary) !important;
+      box-shadow: 0 0 0 2px var(--bat-primary-glow) !important;
+      outline: none !important;
+    }
+
+    &::placeholder {
+      color: var(--bat-fg-dim) !important;
+    }
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar {
+    width: 8px;
+    background: var(--bat-bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--bat-accent);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--bat-primary);
+    }
+  }
+
+  /* ── Header Override ── */
+  header {
+    background: rgba(4, 23, 22, 0.85) !important;
+    border-color: var(--bat-border) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+
+  /* ── Footer Override ── */
+  footer {
+    background: transparent !important;
+    border-top: 1px solid var(--bat-border);
+
+    small, p, span {
+      color: var(--bat-fg-dim) !important;
+    }
+  }
+
+  /* ── Terminal Overrides ── */
+  .terminal-wrapper {
+    background: var(--bat-surface) !important;
+  }
+
+  .terminal-titlebar {
+    background: #0d1f1d !important;
+    border-color: var(--bat-border) !important;
+  }
+
+  .terminal-line {
+    color: var(--bat-fg) !important;
+  }
+
+  .terminal-line.error {
+    color: var(--bat-error) !important;
+  }
+
+  .terminal-line.info {
+    color: var(--bat-primary) !important;
+  }
+
+  .terminal-line .command {
+    color: var(--bat-primary) !important;
+  }
+
+  .terminal-line .terminal-link {
+    color: var(--bat-primary) !important;
+  }
+
+  .terminal-line .skill-category {
+    color: #7ee8d2 !important;
+  }
+
+  .terminal-line .exp-title {
+    color: var(--bat-primary) !important;
+  }
+
+  .prompt {
+    color: var(--bat-primary) !important;
+  }
+
+  .terminal-input {
+    color: var(--bat-fg) !important;
+    caret-color: var(--bat-primary) !important;
+  }
+
+  /* ── Badge Overrides ── */
+  .badge, [class*="badge"] {
+    background: var(--bat-accent) !important;
+    color: var(--bat-fg) !important;
+    border-color: var(--bat-border) !important;
+  }
+
+  /* ── Dividers ── */
+  hr, [class*="divider"], [class*="border-"] {
+    border-color: var(--bat-border) !important;
+  }
+
+  /* ── Selection ── */
+  ::selection {
+    background: var(--bat-primary);
+    color: var(--bat-bg);
+  }
+
+  /* ── Background gradient overrides ── */
+  .background {
+    opacity: 0 !important;
+  }
+
+  /* ── Tooltip overrides ── */
+  .__react_component_tooltip {
+    background: var(--bat-bg-card) !important;
+    color: var(--bat-fg) !important;
+    border: 1px solid var(--bat-border) !important;
+
+    &::after {
+      border-top-color: var(--bat-bg-card) !important;
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BATMAN-SPECIFIC SECTION STYLES (for Batman home components)
+   ═══════════════════════════════════════════════════════════ */
+
+.bat-section {
+  position: relative;
+  padding: 6rem 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--bat-border) 20%,
+      var(--bat-primary) 50%,
+      var(--bat-border) 80%,
+      transparent 100%
+    );
+  }
+}
+
+.bat-heading {
+  font-family: var(--bat-serif);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
+  color: var(--bat-fg);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.bat-heading-huge {
+  font-family: var(--bat-serif);
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 900;
+  color: var(--bat-fg);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.bat-subtext {
+  font-family: var(--bat-sans);
+  color: var(--bat-fg-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.bat-card {
+  background: var(--bat-bg-card);
+  border: 1px solid var(--bat-border);
+  border-radius: 4px;
+  transition: all 0.4s ease;
+
+  &:hover {
+    border-color: var(--bat-primary);
+    box-shadow: 0 0 30px var(--bat-primary-glow);
+    background: var(--bat-bg-card-hover);
+  }
+}
+
+.bat-glow-text {
+  text-shadow: 0 0 20px var(--bat-primary-glow), 0 0 40px rgba(0, 166, 146, 0.15);
+}
+
+.bat-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--bat-border) 15%,
+    var(--bat-primary) 50%,
+    var(--bat-border) 85%,
+    transparent 100%
+  );
+  border: none;
+}
+
+.bat-timeline-line {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--bat-border);
+  }
+}
+
+.bat-timeline-node {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bat-primary);
+  box-shadow: 0 0 12px var(--bat-primary-glow);
+  position: relative;
+  z-index: 1;
+}
+
+.bat-nav-link {
+  font-family: var(--bat-sans);
+  font-size: 1.1rem;
+  color: var(--bat-fg-muted);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    color: var(--bat-fg) !important;
+    text-shadow: 0 0 12px var(--bat-primary-glow);
+    transform: translateX(4px);
+  }
+
+  &::after {
+    content: '\2192';
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::after {
+    transform: translateX(4px);
+  }
+}

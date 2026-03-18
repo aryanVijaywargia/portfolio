@@ -5,6 +5,7 @@ export const TERMINAL_CONFIG = {
   hostname: "aryancodes.com",
   prompt: "visitor@aryancodes.com:~$",
   password: "aryancodes",
+  batmanPassword: "darknight",
 };
 
 export const SOCIAL_LINKS = {
@@ -35,6 +36,7 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: '<span class="command">game</span>           Open the games menu' },
     { text: '<span class="command">clear</span>          Clear terminal' },
     { text: '<span class="command">banner</span>         Display the header' },
+    { text: '<span class="command">exitbat</span>        Exit Batman mode (if active)' },
     { text: '<span class="command">help</span>           Show this help message' },
     { text: "" },
   ],
@@ -134,6 +136,7 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
   secret: [
     { text: "" },
     { text: '<span class="command">sudo</span>           Only use if you know the password' },
+    { text: "                    Hint: there might be more than one..." },
     { text: "" },
   ],
 
@@ -158,7 +161,16 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
   ],
 };
 
-export const SPECIAL_COMMANDS = ["clear", "history", "resume", "code", "sudo", "chatbot", "game"];
+export const SPECIAL_COMMANDS = [
+  "clear",
+  "history",
+  "resume",
+  "code",
+  "sudo",
+  "chatbot",
+  "game",
+  "exitbat",
+];
 
 export function isSpecialCommand(cmd: string): boolean {
   return SPECIAL_COMMANDS.includes(cmd.toLowerCase().trim());
