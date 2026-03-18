@@ -77,105 +77,103 @@ export const BatContact: FC = () => {
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
             {/* Left: Contact Form */}
             <motion.div variants={fadeIn} transition={{ duration: 0.6 }}>
-              {submitted ? (
-                <div className="bat-card p-10 text-center">
-                  <p
-                    className="text-xl font-bold"
-                    style={{ fontFamily: "var(--bat-serif)", color: "var(--bat-primary)" }}
-                  >
-                    Message Received.
-                  </p>
-                  <p className="mt-3" style={{ color: "var(--bat-fg-muted)" }}>
-                    I&apos;ll get back to you soon.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label
-                      className="mb-2 block text-xs uppercase tracking-widest"
-                      style={{ color: "var(--bat-fg-dim)" }}
+              {submitted
+                ? <div className="bat-card p-10 text-center">
+                    <p
+                      className="text-xl font-bold"
+                      style={{ fontFamily: "var(--bat-serif)", color: "var(--bat-primary)" }}
                     >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      value={formState.name}
-                      onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                      required
-                      className="w-full rounded-sm px-4 py-3 text-sm"
-                      style={{
-                        background: "var(--bat-surface)",
-                        border: "1px solid var(--bat-border)",
-                        color: "var(--bat-fg)",
-                        fontFamily: "var(--bat-sans)",
-                      }}
-                      placeholder="Your name"
-                    />
+                      Message Received.
+                    </p>
+                    <p className="mt-3" style={{ color: "var(--bat-fg-muted)" }}>
+                      I&apos;ll get back to you soon.
+                    </p>
                   </div>
+                : <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                      <label
+                        className="mb-2 block text-xs uppercase tracking-widest"
+                        style={{ color: "var(--bat-fg-dim)" }}
+                      >
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        value={formState.name}
+                        onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                        required
+                        className="w-full rounded-sm px-4 py-3 text-sm"
+                        style={{
+                          background: "var(--bat-surface)",
+                          border: "1px solid var(--bat-border)",
+                          color: "var(--bat-fg)",
+                          fontFamily: "var(--bat-sans)",
+                        }}
+                        placeholder="Your name"
+                      />
+                    </div>
 
-                  <div>
-                    <label
-                      className="mb-2 block text-xs uppercase tracking-widest"
-                      style={{ color: "var(--bat-fg-dim)" }}
+                    <div>
+                      <label
+                        className="mb-2 block text-xs uppercase tracking-widest"
+                        style={{ color: "var(--bat-fg-dim)" }}
+                      >
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        value={formState.email}
+                        onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                        required
+                        className="w-full rounded-sm px-4 py-3 text-sm"
+                        style={{
+                          background: "var(--bat-surface)",
+                          border: "1px solid var(--bat-border)",
+                          color: "var(--bat-fg)",
+                          fontFamily: "var(--bat-sans)",
+                        }}
+                        placeholder="your@email.com"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        className="mb-2 block text-xs uppercase tracking-widest"
+                        style={{ color: "var(--bat-fg-dim)" }}
+                      >
+                        Message
+                      </label>
+                      <textarea
+                        value={formState.message}
+                        onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                        required
+                        rows={5}
+                        className="w-full resize-none rounded-sm px-4 py-3 text-sm"
+                        style={{
+                          background: "var(--bat-surface)",
+                          border: "1px solid var(--bat-border)",
+                          color: "var(--bat-fg)",
+                          fontFamily: "var(--bat-sans)",
+                        }}
+                        placeholder="Tell me about your project..."
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full rounded-sm px-6 py-3 text-sm font-medium uppercase tracking-widest transition-all"
+                      style={{
+                        background: "var(--bat-accent)",
+                        color: "var(--bat-fg)",
+                        border: "1px solid var(--bat-border)",
+                        fontFamily: "var(--bat-sans)",
+                        cursor: isSubmitting ? "wait" : "pointer",
+                      }}
                     >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={formState.email}
-                      onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                      required
-                      className="w-full rounded-sm px-4 py-3 text-sm"
-                      style={{
-                        background: "var(--bat-surface)",
-                        border: "1px solid var(--bat-border)",
-                        color: "var(--bat-fg)",
-                        fontFamily: "var(--bat-sans)",
-                      }}
-                      placeholder="your@email.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      className="mb-2 block text-xs uppercase tracking-widest"
-                      style={{ color: "var(--bat-fg-dim)" }}
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      value={formState.message}
-                      onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                      required
-                      rows={5}
-                      className="w-full resize-none rounded-sm px-4 py-3 text-sm"
-                      style={{
-                        background: "var(--bat-surface)",
-                        border: "1px solid var(--bat-border)",
-                        color: "var(--bat-fg)",
-                        fontFamily: "var(--bat-sans)",
-                      }}
-                      placeholder="Tell me about your project..."
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full rounded-sm px-6 py-3 text-sm font-medium uppercase tracking-widest transition-all"
-                    style={{
-                      background: "var(--bat-accent)",
-                      color: "var(--bat-fg)",
-                      border: "1px solid var(--bat-border)",
-                      fontFamily: "var(--bat-sans)",
-                      cursor: isSubmitting ? "wait" : "pointer",
-                    }}
-                  >
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </button>
-                </form>
-              )}
+                      {isSubmitting ? "Sending..." : "Send Message"}
+                    </button>
+                  </form>}
             </motion.div>
 
             {/* Right: Social Links */}
