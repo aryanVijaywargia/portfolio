@@ -8,10 +8,7 @@ const contactSchema = z.object({
   message: z.string().min(10).max(5000),
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -38,7 +35,10 @@ export default async function handler(
       replyTo: email,
       subject: `Portfolio Contact: ${name}`,
       text: `From: ${name} (${email})\n\n${message}`,
-      html: `<p><strong>From:</strong> ${name} (${email})</p><p>${message.replace(/\n/g, "<br>")}</p>`,
+      html: `<p><strong>From:</strong> ${name} (${email})</p><p>${message.replace(
+        /\n/g,
+        "<br>"
+      )}</p>`,
     });
 
     return res.status(200).json({ success: true });
