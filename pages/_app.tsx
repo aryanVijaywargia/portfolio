@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import "styles/tailwind.css";
+import "@xyflow/react/dist/style.css";
 
 const Loaders: FC<PropsWithChildren> = ({ children }) => {
   return (
