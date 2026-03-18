@@ -11,7 +11,7 @@ export const ContextProviders: FC<PropsWithChildren<any>> = ({ children }) => {
     <PreloadedImagesProvider>
       <GloballyMountedProvider>
         <NotificationsProvider>
-          <ThemeProvider attribute="class">
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
             <LazyMotion features={domAnimation}>
               <TooltipProvider>{children}</TooltipProvider>
             </LazyMotion>
