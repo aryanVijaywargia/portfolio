@@ -2,9 +2,14 @@ import { AchievementProvider } from "components/achievements";
 import { trpc } from "components/_app/trpc";
 import { ContextProviders } from "components/_stores/_context-providers";
 import { LoadInitialData } from "components/_stores/_load-initial-data";
+import { PortfolioModeProvider, usePortfolioMode } from "components/_stores/portfolio-mode-context";
 
 import { Footer } from "components/layout/footer";
 import { Header } from "components/layout/header";
+import { BatmanHeader } from "components/layout/batman-header";
+import { BatmanFooter } from "components/layout/batman-footer";
+import { BatTransition } from "components/batman/bat-transition";
+import { BatScrollFollower } from "components/batman/bat-scroll-follower";
 import { SEO } from "content/seo";
 import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
@@ -21,8 +26,42 @@ const Loaders: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-const App = ({ pageProps, Component }: AppProps) => {
+const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component }) => {
   const router = useRouter();
+  const { mode } = usePortfolioMode();
+  const isBatman = mode === "batman";
+
+  return (
+    <>
+      <DefaultSeo
+        {...SEO}
+        canonical={`${SEO.url}${router.asPath}`}
+        twitter={SEO.twitter}
+        title={isBatman ? "Aryan Vijaywargia | The Dark Knight" : SEO.title}
+        description={SEO.description}
+        openGraph={SEO.openGraph}
+      />
+      {isBatman ? <BatmanHeader /> : <Header />}
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={router.pathname}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="min-h-screen print:!mx-auto print:!w-[1024px]"
+        >
+          <Component {...pageProps} />
+        </motion.main>
+      </AnimatePresence>
+      {isBatman ? <BatmanFooter /> : <Footer />}
+      <BatTransition />
+      <BatScrollFollower />
+    </>
+  );
+};
+
+const App = ({ pageProps, Component }: AppProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,31 +76,12 @@ const App = ({ pageProps, Component }: AppProps) => {
 
   return (
     <Loaders>
-      <AchievementProvider>
-        <DefaultSeo
-          {...SEO}
-          canonical={`${SEO.url}${router.asPath}`}
-          twitter={SEO.twitter}
-          title={SEO.title}
-          description={SEO.description}
-          openGraph={SEO.openGraph}
-        />
-        <Header />
-        <AnimatePresence mode="wait">
-          <motion.main
-            key={router.pathname}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="min-h-screen print:!mx-auto print:!w-[1024px]"
-          >
-            <Component {...pageProps} />
-          </motion.main>
-        </AnimatePresence>
-        <Footer />
-        {/*<Stars />*/}
-      </AchievementProvider>
+      <PortfolioModeProvider>
+        <AchievementProvider>
+          <AppShell pageProps={pageProps} Component={Component} />
+          {/*<Stars />*/}
+        </AchievementProvider>
+      </PortfolioModeProvider>
     </Loaders>
   );
 };
