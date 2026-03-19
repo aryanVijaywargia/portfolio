@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback, useRef, useContext } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Ability, Character, StatusEffect } from "./types";
 import { playerCharacters } from "./user-pokemon";
 import { attackSoundManager, pokemonSoundManager } from "./sounds";
 import { battleMusicManager } from "./battle-music";
 import { PokemonStats } from "./pokemon-stats";
 import { useCharacterOverlay } from "../rick-overlay-context";
-import { AchievementContext } from "../../achievements";
+import { useAchievements } from "../../achievements";
 import { ACHIEVEMENTS } from "../../achievements/achievementsList";
 import { getAbilityDamage, applyStatusEffectsToDamage, checkDodge, decrementStatusEffects, addStatusEffect } from "./utils";
 
@@ -63,7 +63,7 @@ const getPlayerDebuffEffect = (abilityName: string): StatusEffect | null => {
 
 export const PokemonBattle: React.FC<Props> = ({ onBack, onComplete }) => {
   const { showCharacter } = useCharacterOverlay();
-  const { addAchievement } = useContext(AchievementContext);
+  const { addAchievement } = useAchievements();
 
   const [playerTeam, setPlayerTeam] = useState<Character[]>(
     playerCharacters.map((c) => ({ ...c, statusEffects: [] }))
