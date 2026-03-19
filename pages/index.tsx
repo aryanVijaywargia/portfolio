@@ -28,7 +28,7 @@ export const Index: FC = () => {
       <Experience />
       <PortfolioPreview />
       <AchievementsSection />
-      <Quiz />
+      {/* <Quiz /> */}
       <Contact />
     </>
   );
