@@ -45,6 +45,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         window.scrollTo(0, scrollY);
       };
     }
+    return undefined;
   }, [isExpanded, isTerminalMaximized]);
 
   const handleSwitchToEditor = () => {
