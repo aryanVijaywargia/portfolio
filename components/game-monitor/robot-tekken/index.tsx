@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-import { AchievementContext } from "../../achievements";
-import { ACHIEVEMENTS } from "../../achievements/achievementsList";
+import React, { useState, useEffect } from "react";
 import { useCharacterOverlay } from "../rick-overlay-context";
 
 type Move = { name: string; damage: number; description: string };
@@ -42,7 +40,6 @@ const fighters: Fighter[] = [
 type Props = { onBack: () => void; onComplete?: () => void };
 
 export const RobotTekken: React.FC<Props> = ({ onBack, onComplete }) => {
-  const { addAchievement } = useContext(AchievementContext);
   const { showCharacter } = useCharacterOverlay();
 
   const [playerFighter, setPlayerFighter] = useState<Fighter | null>(null);
@@ -76,7 +73,6 @@ export const RobotTekken: React.FC<Props> = ({ onBack, onComplete }) => {
     if (newOpponentHp === 0) {
       setGameOver("win");
       if (onComplete) onComplete();
-      addAchievement(ACHIEVEMENTS.ROBOT_TEKKEN_COMPLETE);
       showCharacter("You won! Incredible!", "excited");
       return;
     }
