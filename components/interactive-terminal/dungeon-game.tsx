@@ -174,7 +174,7 @@ export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd, onEscape }) => {
             ? "+"
             : item.type === "sword"
             ? "/"
-            : item.type === "key"
+            : (item.type as string) === "key"
             ? "k"
             : "$",
         name: item.name,
