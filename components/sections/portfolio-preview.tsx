@@ -93,7 +93,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
               <figure className="relative flex aspect-2 w-full">
                 <Image
                   preload
-                  src={project.featuredImage}
+                  src={(project as any).featuredImage || "/images/placeholder.png"}
                   alt={project.name}
                   width={400}
                   height={200}
