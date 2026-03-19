@@ -2,31 +2,10 @@ import { useAchievements } from "components/achievements";
 import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import clsx from "clsx";
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import {
-  EXPERIENCE_JOURNEY,
-  ExperienceCompany,
-  ExperienceAchievement,
-  ExperienceAccentKey,
-} from "content/experience";
+import { ChevronDownIcon, ChevronUpIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { EXPERIENCE_JOURNEY, ExperienceCompany, ExperienceAchievement, ExperienceAccentKey } from "content/experience";
 import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
-import {
-  ReactFlow,
-  ReactFlowProvider,
-  Background,
-  BackgroundVariant,
-  useNodesState,
-  useEdgesState,
-  useReactFlow,
-  Handle,
-  Position,
-  type Node,
-  type Edge,
-} from "@xyflow/react";
+import { ReactFlow, ReactFlowProvider, Background, BackgroundVariant, useNodesState, useEdgesState, useReactFlow, Handle, Position, type Node, type Edge } from "@xyflow/react";
 
 // ─── Accent color helpers ────────────────────────────────────────────
 
@@ -34,14 +13,39 @@ type AccentStyle = { bg: string; text: string; border: string; dot: string };
 
 const DEFAULT_ACCENTS: Record<ExperienceAccentKey, AccentStyle> = {
   primary: { bg: "bg-sky-500/10", text: "text-sky-400", border: "border-sky-500", dot: "#0ea5e9" },
-  secondary: { bg: "bg-indigo-500/10", text: "text-indigo-400", border: "border-indigo-500", dot: "#818cf8" },
-  tertiary: { bg: "bg-violet-500/10", text: "text-violet-400", border: "border-violet-500", dot: "#a78bfa" },
+  secondary: {
+    bg: "bg-indigo-500/10",
+    text: "text-indigo-400",
+    border: "border-indigo-500",
+    dot: "#818cf8",
+  },
+  tertiary: {
+    bg: "bg-violet-500/10",
+    text: "text-violet-400",
+    border: "border-violet-500",
+    dot: "#a78bfa",
+  },
 };
 
 const BATMAN_ACCENTS: Record<ExperienceAccentKey, AccentStyle> = {
-  primary: { bg: "bg-teal-500/10", text: "text-teal-400", border: "border-teal-500", dot: "#00a692" },
-  secondary: { bg: "bg-emerald-600/10", text: "text-emerald-500", border: "border-emerald-600", dot: "#047857" },
-  tertiary: { bg: "bg-cyan-400/10", text: "text-cyan-300", border: "border-cyan-400", dot: "#a3dbcf" },
+  primary: {
+    bg: "bg-teal-500/10",
+    text: "text-teal-400",
+    border: "border-teal-500",
+    dot: "#00a692",
+  },
+  secondary: {
+    bg: "bg-emerald-600/10",
+    text: "text-emerald-500",
+    border: "border-emerald-600",
+    dot: "#047857",
+  },
+  tertiary: {
+    bg: "bg-cyan-400/10",
+    text: "text-cyan-300",
+    border: "border-cyan-400",
+    dot: "#a3dbcf",
+  },
 };
 
 function useAccentColors(): Record<ExperienceAccentKey, AccentStyle> {
@@ -102,12 +106,20 @@ function RootNode({ data }: { data: { label: string; prompt: string; expanded: b
     >
       <div className="text-lg font-bold text-white">{data.label}</div>
       <div className="mt-1 text-xs text-gray-400">{data.prompt}</div>
-      <Handle type="source" position={Position.Bottom} className="!bg-sky-500 !w-3 !h-3 !border-2 !border-gray-900" />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        className="!bg-sky-500 !w-3 !h-3 !border-2 !border-gray-900"
+      />
     </motion.div>
   );
 }
 
-function CompanyNode({ data }: { data: { company: ExperienceCompany; selected: boolean; index: number } }) {
+function CompanyNode({
+  data,
+}: {
+  data: { company: ExperienceCompany; selected: boolean; index: number };
+}) {
   const accent = ACCENT_COLORS[data.company.accentKey];
   return (
     <motion.div
@@ -117,36 +129,58 @@ function CompanyNode({ data }: { data: { company: ExperienceCompany; selected: b
       className={clsx(
         "cursor-pointer rounded-xl border-2 px-5 py-3 min-w-[180px]",
         "bg-gray-900/80 backdrop-blur-sm",
-        data.selected
-          ? `${accent.border} shadow-lg`
-          : "border-gray-700 hover:border-gray-500"
+        data.selected ? `${accent.border} shadow-lg` : "border-gray-700 hover:border-gray-500"
       )}
       whileHover={{ scale: 1.05, y: -2 }}
       whileTap={{ scale: 0.95 }}
     >
-      <Handle type="target" position={Position.Top} className="!bg-gray-600 !w-2.5 !h-2.5 !border-2 !border-gray-900" />
+      <Handle
+        type="target"
+        position={Position.Top}
+        className="!bg-gray-600 !w-2.5 !h-2.5 !border-2 !border-gray-900"
+      />
       <div className="flex items-center gap-2">
         <motion.div
           className="h-3 w-3 rounded-full"
           style={{ backgroundColor: accent.dot }}
-          animate={data.selected ? { scale: [1, 1.4, 1], boxShadow: `0 0 12px ${accent.dot}` } : { scale: 1 }}
+          animate={
+            data.selected
+              ? { scale: [1, 1.4, 1], boxShadow: `0 0 12px ${accent.dot}` }
+              : { scale: 1 }
+          }
           transition={{ duration: 0.5, repeat: data.selected ? Infinity : 0, repeatDelay: 2 }}
         />
         <span className="font-semibold text-white text-sm">{data.company.company}</span>
       </div>
       <div className="mt-1 text-xs text-gray-400">{data.company.role}</div>
       <div className="mt-1.5 flex items-center gap-2">
-        <span className={clsx("rounded-full px-2 py-0.5 text-[10px] font-medium", accent.bg, accent.text)}>
+        <span
+          className={clsx(
+            "rounded-full px-2 py-0.5 text-[10px] font-medium",
+            accent.bg,
+            accent.text
+          )}
+        >
           {KIND_LABELS[data.company.kind]}
         </span>
-        <span className="text-[10px] text-gray-500">{data.company.achievements.length} achievements</span>
+        <span className="text-[10px] text-gray-500">
+          {data.company.achievements.length} achievements
+        </span>
       </div>
-      <Handle type="source" position={Position.Bottom} className="!bg-gray-600 !w-2.5 !h-2.5 !border-2 !border-gray-900" />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        className="!bg-gray-600 !w-2.5 !h-2.5 !border-2 !border-gray-900"
+      />
     </motion.div>
   );
 }
 
-function AchievementNode({ data }: { data: { achievement: ExperienceAchievement; accentKey: ExperienceAccentKey; index: number } }) {
+function AchievementNode({
+  data,
+}: {
+  data: { achievement: ExperienceAchievement; accentKey: ExperienceAccentKey; index: number };
+}) {
   const accent = ACCENT_COLORS[data.accentKey];
   return (
     <motion.div
@@ -160,11 +194,23 @@ function AchievementNode({ data }: { data: { achievement: ExperienceAchievement;
       whileHover={{ scale: 1.07, y: -3 }}
       whileTap={{ scale: 0.93 }}
     >
-      <Handle type="target" position={Position.Top} className="!bg-gray-600 !w-2 !h-2 !border-2 !border-gray-900" />
-      <span className={clsx("rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase", accent.bg, accent.text)}>
+      <Handle
+        type="target"
+        position={Position.Top}
+        className="!bg-gray-600 !w-2 !h-2 !border-2 !border-gray-900"
+      />
+      <span
+        className={clsx(
+          "rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase",
+          accent.bg,
+          accent.text
+        )}
+      >
         {data.achievement.category}
       </span>
-      <div className="mt-1 text-xs font-medium text-gray-200 leading-snug">{data.achievement.title}</div>
+      <div className="mt-1 text-xs font-medium text-gray-200 leading-snug">
+        {data.achievement.title}
+      </div>
       <div className="mt-1 text-[10px] text-gray-500 truncate">{data.achievement.impact}</div>
     </motion.div>
   );
@@ -180,7 +226,7 @@ const nodeTypes = {
 
 function buildGraphData(
   graphExpanded: boolean,
-  selectedCompanyId: string | null,
+  selectedCompanyId: string | null
 ): { nodes: Node[]; edges: Edge[] } {
   const companies = EXPERIENCE_JOURNEY.companies;
   const nodes: Node[] = [];
@@ -294,14 +340,17 @@ function AchievementDetail({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 10 }}
-      className={clsx(
-        "rounded-xl border bg-gray-900/90 backdrop-blur-md p-5",
-        accent.border
-      )}
+      className={clsx("rounded-xl border bg-gray-900/90 backdrop-blur-md p-5", accent.border)}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className={clsx("rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase", accent.bg, accent.text)}>
+          <span
+            className={clsx(
+              "rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase",
+              accent.bg,
+              accent.text
+            )}
+          >
             {achievement.category}
           </span>
           <span className="rounded-full bg-gray-800 px-2 py-0.5 text-[10px] text-gray-400">
@@ -324,7 +373,10 @@ function AchievementDetail({
       </div>
       <div className="mt-3 flex flex-wrap gap-1.5">
         {achievement.technologies.map((tech) => (
-          <span key={tech} className="rounded-full bg-gray-800 px-2.5 py-1 text-[11px] text-gray-300">
+          <span
+            key={tech}
+            className="rounded-full bg-gray-800 px-2.5 py-1 text-[11px] text-gray-300"
+          >
             {tech}
           </span>
         ))}
@@ -449,30 +501,40 @@ function MobileAccordion({
         const accent = ACCENT_COLORS[company.accentKey];
 
         return (
-          <div key={company.id} className="rounded-xl border border-gray-700/50 bg-gray-900/30 overflow-hidden">
+          <div
+            key={company.id}
+            className="rounded-xl border border-gray-700/50 bg-gray-900/30 overflow-hidden"
+          >
             <button
               onClick={() => onCompanyToggle(company.id)}
               className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-gray-800/30"
               aria-expanded={isOpen}
             >
               <div className="flex items-center gap-3">
-                <div className="h-3 w-3 rounded-full flex-shrink-0" style={{ backgroundColor: accent.dot }} />
+                <div
+                  className="h-3 w-3 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: accent.dot }}
+                />
                 <div>
                   <div className="font-semibold text-white">{company.company}</div>
                   <div className="text-sm text-gray-400">{company.role}</div>
                   <div className="mt-0.5 flex items-center gap-2">
                     <span className="font-mono text-xs text-gray-500">{company.period}</span>
-                    <span className={clsx("rounded-full px-2 py-0.5 text-[10px] font-medium", accent.bg, accent.text)}>
+                    <span
+                      className={clsx(
+                        "rounded-full px-2 py-0.5 text-[10px] font-medium",
+                        accent.bg,
+                        accent.text
+                      )}
+                    >
                       {KIND_LABELS[company.kind]}
                     </span>
                   </div>
                 </div>
               </div>
-              {isOpen ? (
-                <ChevronUpIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
-              ) : (
-                <ChevronDownIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
-              )}
+              {isOpen
+                ? <ChevronUpIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                : <ChevronDownIcon className="h-5 w-5 text-gray-400 flex-shrink-0" />}
             </button>
 
             <AnimatePresence>
@@ -489,25 +551,34 @@ function MobileAccordion({
                       const isExpanded = expandedAchievementId === ach.id;
 
                       return (
-                        <div key={ach.id} className="rounded-lg border border-gray-700/30 bg-gray-800/20 overflow-hidden">
+                        <div
+                          key={ach.id}
+                          className="rounded-lg border border-gray-700/30 bg-gray-800/20 overflow-hidden"
+                        >
                           <button
                             onClick={() => onAchievementToggle(ach.id)}
                             className="flex w-full items-center justify-between p-3 text-left transition-colors hover:bg-gray-800/40"
                             aria-expanded={isExpanded}
                           >
                             <div className="flex items-center gap-2 min-w-0">
-                              <span className={clsx("rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase flex-shrink-0", accent.bg, accent.text)}>
+                              <span
+                                className={clsx(
+                                  "rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase flex-shrink-0",
+                                  accent.bg,
+                                  accent.text
+                                )}
+                              >
                                 {ach.category}
                               </span>
                               <span className="text-sm text-white truncate">{ach.title}</span>
                             </div>
                             <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-                              <span className="text-[10px] text-gray-500">{ach.technologies.length} tech</span>
-                              {isExpanded ? (
-                                <ChevronUpIcon className="h-3.5 w-3.5 text-gray-400" />
-                              ) : (
-                                <ChevronDownIcon className="h-3.5 w-3.5 text-gray-400" />
-                              )}
+                              <span className="text-[10px] text-gray-500">
+                                {ach.technologies.length} tech
+                              </span>
+                              {isExpanded
+                                ? <ChevronUpIcon className="h-3.5 w-3.5 text-gray-400" />
+                                : <ChevronDownIcon className="h-3.5 w-3.5 text-gray-400" />}
                             </div>
                           </button>
 
@@ -521,14 +592,28 @@ function MobileAccordion({
                                 className="overflow-hidden"
                               >
                                 <div className="px-3 pb-3 space-y-2">
-                                  <p className="text-sm text-gray-400 leading-relaxed">{ach.summary}</p>
-                                  <div className={clsx("rounded-lg border-l-2 bg-gray-800/50 px-3 py-2", accent.border)}>
-                                    <span className="text-xs font-medium text-gray-300">Impact: </span>
-                                    <span className={clsx("text-xs font-semibold", accent.text)}>{ach.impact}</span>
+                                  <p className="text-sm text-gray-400 leading-relaxed">
+                                    {ach.summary}
+                                  </p>
+                                  <div
+                                    className={clsx(
+                                      "rounded-lg border-l-2 bg-gray-800/50 px-3 py-2",
+                                      accent.border
+                                    )}
+                                  >
+                                    <span className="text-xs font-medium text-gray-300">
+                                      Impact:{" "}
+                                    </span>
+                                    <span className={clsx("text-xs font-semibold", accent.text)}>
+                                      {ach.impact}
+                                    </span>
                                   </div>
                                   <div className="flex flex-wrap gap-1.5">
                                     {ach.technologies.map((tech) => (
-                                      <span key={tech} className="rounded-full bg-gray-800 px-2 py-0.5 text-[10px] text-gray-300">
+                                      <span
+                                        key={tech}
+                                        className="rounded-full bg-gray-800 px-2 py-0.5 text-[10px] text-gray-300"
+                                      >
                                         {tech}
                                       </span>
                                     ))}
@@ -585,9 +670,7 @@ function LeftRail({
                   onClick={() => onCompanyClick(company.id)}
                   className={clsx(
                     "relative flex w-full items-start gap-4 rounded-lg px-3 py-3 text-left transition-all duration-200",
-                    isSelected
-                      ? "bg-gray-800/50"
-                      : "hover:bg-gray-800/20"
+                    isSelected ? "bg-gray-800/50" : "hover:bg-gray-800/20"
                   )}
                   aria-expanded={isSelected}
                 >
@@ -605,12 +688,23 @@ function LeftRail({
 
                   <div className="min-w-0">
                     <div className="font-mono text-xs text-gray-500">{company.period}</div>
-                    <div className={clsx("font-bold transition-colors", isSelected ? "text-white" : "text-gray-300")}>
+                    <div
+                      className={clsx(
+                        "font-bold transition-colors",
+                        isSelected ? "text-white" : "text-gray-300"
+                      )}
+                    >
                       {company.company}
                     </div>
                     <div className="text-sm text-gray-400">{company.role}</div>
                     <div className="mt-1 flex items-center gap-2">
-                      <span className={clsx("rounded-full px-2 py-0.5 text-[10px] font-medium", accent.bg, accent.text)}>
+                      <span
+                        className={clsx(
+                          "rounded-full px-2 py-0.5 text-[10px] font-medium",
+                          accent.bg,
+                          accent.text
+                        )}
+                      >
                         {KIND_LABELS[company.kind]}
                       </span>
                       <span className="text-[10px] text-gray-500">
@@ -652,16 +746,13 @@ export const Experience = () => {
     setExpandedAchievementId(null);
   }, []);
 
-  const handleAchievementClick = useCallback(
-    (id: string) => {
-      const next = expandedAchievementId === id ? null : id;
-      setExpandedAchievementId(next);
-      if (next) {
-        trackAchievementEvent({ type: "experience:expanded", id: next });
-      }
-    },
-    [expandedAchievementId, trackAchievementEvent]
-  );
+  const handleAchievementClick = useCallback((id: string) => {
+    const next = expandedAchievementId === id ? null : id;
+    setExpandedAchievementId(next);
+    if (next) {
+      trackAchievementEvent({ type: "experience:expanded", id: next });
+    }
+  }, [expandedAchievementId, trackAchievementEvent]);
 
   const handleCloseAchievement = useCallback(() => {
     setExpandedAchievementId(null);
@@ -672,16 +763,13 @@ export const Experience = () => {
     setExpandedAchievementId(null);
   }, []);
 
-  const handleMobileAchievementToggle = useCallback(
-    (id: string) => {
-      const next = expandedAchievementId === id ? null : id;
-      setExpandedAchievementId(next);
-      if (next) {
-        trackAchievementEvent({ type: "experience:expanded", id: next });
-      }
-    },
-    [expandedAchievementId, trackAchievementEvent]
-  );
+  const handleMobileAchievementToggle = useCallback((id: string) => {
+    const next = expandedAchievementId === id ? null : id;
+    setExpandedAchievementId(next);
+    if (next) {
+      trackAchievementEvent({ type: "experience:expanded", id: next });
+    }
+  }, [expandedAchievementId, trackAchievementEvent]);
 
   return (
     <section
@@ -711,18 +799,18 @@ export const Experience = () => {
           className="flex-1 min-w-0"
         >
           <ReactFlowProvider>
-          <ExperienceGraph
-            graphExpanded={graphExpanded}
-            selectedCompanyId={selectedCompanyId}
-            expandedAchievementId={expandedAchievementId}
-            onRootClick={handleRootClick}
-            onCompanyClick={(id) => {
-              if (!graphExpanded) setGraphExpanded(true);
-              handleCompanyClick(id);
-            }}
-            onAchievementClick={handleAchievementClick}
-            onCloseAchievement={handleCloseAchievement}
-          />
+            <ExperienceGraph
+              graphExpanded={graphExpanded}
+              selectedCompanyId={selectedCompanyId}
+              expandedAchievementId={expandedAchievementId}
+              onRootClick={handleRootClick}
+              onCompanyClick={(id) => {
+                if (!graphExpanded) setGraphExpanded(true);
+                handleCompanyClick(id);
+              }}
+              onAchievementClick={handleAchievementClick}
+              onCloseAchievement={handleCloseAchievement}
+            />
           </ReactFlowProvider>
         </motion.div>
       </div>

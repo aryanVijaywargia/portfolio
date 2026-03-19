@@ -147,9 +147,7 @@ export const About: FC<AboutProps> = (props) => {
                   onClick={() => setDescriptionSize(key)}
                   className={clsx(
                     "font-mono text-base font-semibold tracking-widest transition-all duration-300 outline-none",
-                    isActive
-                      ? "text-cyan-500"
-                      : "text-gray-500 d:text-gray-700"
+                    isActive ? "text-cyan-500" : "text-gray-500 d:text-gray-700"
                   )}
                 >
                   {label}
@@ -163,7 +161,10 @@ export const About: FC<AboutProps> = (props) => {
               {ABOUT.descriptions[descriptionSize]}
             </main>
             {/* Right toggle labels */}
-            <div className="ml-auto hidden flex-shrink-0 select-none flex-col justify-between pl-8 sm:flex" style={{ minHeight: 120 }}>
+            <div
+              className="ml-auto hidden flex-shrink-0 select-none flex-col justify-between pl-8 sm:flex"
+              style={{ minHeight: 120 }}
+            >
               {(["brief", "standard", "detailed"] as const).map((size) => {
                 const isActive = descriptionSize === size;
                 return (

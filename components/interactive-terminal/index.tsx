@@ -300,37 +300,37 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
               {/* Terminal/Game Content */}
               <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
-                {mode === "game-menu" ? (
-                  <GameMenu onSelectGame={handleSelectGame} onExit={handleExitGame} />
-                ) : mode === "snake" ? (
-                  <SnakeGame
-                    onGameEnd={handleExitToGameMenu}
-                    onScoreChange={(score) => trackAchievementEvent({ type: "snake:score", score })}
-                  />
-                ) : mode === "dungeon" ? (
-                  <DungeonGame
-                    onGameEnd={handleExitToGameMenu}
-                    onEscape={() => trackAchievementEvent({ type: "dungeon:escaped" })}
-                  />
-                ) : (
-                  <Terminal
-                    onSwitchToEditor={handleSwitchToEditor}
-                    onSwitchToChatbot={handleSwitchToChatbot}
-                    onSwitchToGameMenu={handleSwitchToGame}
-                    triggerChatbot={triggerChatbot}
-                    onTriggerHandled={clearTrigger}
-                    onValidCommand={(command) =>
-                      trackAchievementEvent({ type: "terminal:valid-command", command })
-                    }
-                    onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
-                    onSecretDiscovered={() =>
-                      trackAchievementEvent({ type: "terminal:secret-discovered" })
-                    }
-                    onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
-                    onBatmanTheme={activateBatman}
-                    onExitBatman={deactivateBatman}
-                  />
-                )}
+                {mode === "game-menu"
+                  ? <GameMenu onSelectGame={handleSelectGame} onExit={handleExitGame} />
+                  : mode === "snake"
+                  ? <SnakeGame
+                      onGameEnd={handleExitToGameMenu}
+                      onScoreChange={(score) =>
+                        trackAchievementEvent({ type: "snake:score", score })
+                      }
+                    />
+                  : mode === "dungeon"
+                  ? <DungeonGame
+                      onGameEnd={handleExitToGameMenu}
+                      onEscape={() => trackAchievementEvent({ type: "dungeon:escaped" })}
+                    />
+                  : <Terminal
+                      onSwitchToEditor={handleSwitchToEditor}
+                      onSwitchToChatbot={handleSwitchToChatbot}
+                      onSwitchToGameMenu={handleSwitchToGame}
+                      triggerChatbot={triggerChatbot}
+                      onTriggerHandled={clearTrigger}
+                      onValidCommand={(command) =>
+                        trackAchievementEvent({ type: "terminal:valid-command", command })
+                      }
+                      onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
+                      onSecretDiscovered={() =>
+                        trackAchievementEvent({ type: "terminal:secret-discovered" })
+                      }
+                      onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
+                      onBatmanTheme={activateBatman}
+                      onExitBatman={deactivateBatman}
+                    />}
               </main>
 
               <style jsx>{`
@@ -430,29 +430,29 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
           {/* Terminal/Editor/Game Content */}
           <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
-            {mode === "terminal" ? (
-              <Terminal
-                onSwitchToEditor={handleSwitchToEditor}
-                onSwitchToChatbot={handleSwitchToChatbot}
-                onSwitchToGameMenu={handleSwitchToGame}
-                triggerChatbot={triggerChatbot}
-                onTriggerHandled={clearTrigger}
-                onValidCommand={(command) =>
-                  trackAchievementEvent({ type: "terminal:valid-command", command })
-                }
-                onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
-                onSecretDiscovered={() =>
-                  trackAchievementEvent({ type: "terminal:secret-discovered" })
-                }
-                onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
-                onBatmanTheme={activateBatman}
-                onExitBatman={deactivateBatman}
-              />
-            ) : mode === "editor" ? (
-              <div className="h-full overflow-auto p-3">
-                <Code className="text-[13px]" code={code} language={language} />
-              </div>
-            ) : null}
+            {mode === "terminal"
+              ? <Terminal
+                  onSwitchToEditor={handleSwitchToEditor}
+                  onSwitchToChatbot={handleSwitchToChatbot}
+                  onSwitchToGameMenu={handleSwitchToGame}
+                  triggerChatbot={triggerChatbot}
+                  onTriggerHandled={clearTrigger}
+                  onValidCommand={(command) =>
+                    trackAchievementEvent({ type: "terminal:valid-command", command })
+                  }
+                  onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
+                  onSecretDiscovered={() =>
+                    trackAchievementEvent({ type: "terminal:secret-discovered" })
+                  }
+                  onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
+                  onBatmanTheme={activateBatman}
+                  onExitBatman={deactivateBatman}
+                />
+              : mode === "editor"
+              ? <div className="h-full overflow-auto p-3">
+                  <Code className="text-[13px]" code={code} language={language} />
+                </div>
+              : null}
           </main>
 
           <style jsx>{`

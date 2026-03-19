@@ -6,7 +6,10 @@ import { z } from "zod";
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required").min(2, "Name must be at least 2 characters"),
   email: z.string().min(1, "Email is required").email("Invalid email address"),
-  message: z.string().min(1, "Message is required").min(10, "Message must be at least 10 characters"),
+  message: z
+    .string()
+    .min(1, "Message is required")
+    .min(10, "Message must be at least 10 characters"),
 });
 
 type FormStatus = "idle" | "sending" | "success" | "error";
@@ -282,7 +285,11 @@ const SendMessagePanel: FC = () => {
                     if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                   placeholder="Your Name"
-                  className={`placeholder-gray-400/45 min-w-0 flex-1 border-0 border-b bg-transparent px-0 pb-0.5 pt-0 font-mono text-[0.9rem] text-emerald-400 caret-emerald-400 outline-none focus:ring-0 d:placeholder-slate-600/70 ${errors.name ? "border-red-400" : "border-gray-300/70 focus:border-primary-400 d:border-[#31425c]"}`}
+                  className={`placeholder-gray-400/45 min-w-0 flex-1 border-0 border-b bg-transparent px-0 pb-0.5 pt-0 font-mono text-[0.9rem] text-emerald-400 caret-emerald-400 outline-none focus:ring-0 d:placeholder-slate-600/70 ${
+                    errors.name
+                      ? "border-red-400"
+                      : "border-gray-300/70 focus:border-primary-400 d:border-[#31425c]"
+                  }`}
                 />
                 <span className="shrink-0 whitespace-nowrap">
                   <span className="text-emerald-400">&quot;</span>
@@ -314,7 +321,11 @@ const SendMessagePanel: FC = () => {
                     if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
                   }}
                   placeholder="your@email.com"
-                  className={`placeholder-gray-400/45 min-w-0 flex-1 border-0 border-b bg-transparent px-0 pb-0.5 pt-0 font-mono text-[0.9rem] text-emerald-400 caret-emerald-400 outline-none focus:ring-0 d:placeholder-slate-600/70 ${errors.email ? "border-red-400" : "border-gray-300/70 focus:border-primary-400 d:border-[#31425c]"}`}
+                  className={`placeholder-gray-400/45 min-w-0 flex-1 border-0 border-b bg-transparent px-0 pb-0.5 pt-0 font-mono text-[0.9rem] text-emerald-400 caret-emerald-400 outline-none focus:ring-0 d:placeholder-slate-600/70 ${
+                    errors.email
+                      ? "border-red-400"
+                      : "border-gray-300/70 focus:border-primary-400 d:border-[#31425c]"
+                  }`}
                 />
                 <span className="shrink-0 whitespace-nowrap">
                   <span className="text-emerald-400">&quot;</span>
@@ -462,12 +473,7 @@ const AvatarOnline: FC = () => (
 
 export const Contact: FC = () => {
   return (
-    <section
-      id="contact"
-      className="relative overflow-hidden py-16 md:py-24"
-    >
-
-
+    <section id="contact" className="relative overflow-hidden py-16 md:py-24">
       <div className="relative mx-auto w-full max-w-[74rem] px-4 md:px-8">
         {/* Section header */}
         <header className="mb-8">
@@ -490,8 +496,6 @@ export const Contact: FC = () => {
             <SendMessagePanel />
           </motion.div>
         </motion.div>
-
-
       </div>
     </section>
   );

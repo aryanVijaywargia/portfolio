@@ -17,10 +17,13 @@ export const BatTransition: FC = () => {
     // Phase 2: Bat signal appears
     const t2 = setTimeout(() => setPhase("text"), 1400);
     // Phase 3: Text appears, then fade out
-    const t3 = setTimeout(() => {
-      setPhase("done");
-      dismissTransition();
-    }, 3200);
+    const t3 = setTimeout(
+      () => {
+        setPhase("done");
+        dismissTransition();
+      },
+      3200
+    );
 
     return () => {
       clearTimeout(t1);

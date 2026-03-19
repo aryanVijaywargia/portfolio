@@ -52,9 +52,12 @@ export const Terminal: FC<TerminalProps> = ({
     if (!showIntro) {
       addLines(COMMANDS.banner, 0);
       // Focus input after mount
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
+      setTimeout(
+        () => {
+          inputRef.current?.focus();
+        },
+        100
+      );
     }
   }, [showIntro]);
 
@@ -75,40 +78,61 @@ export const Terminal: FC<TerminalProps> = ({
 
       // Run the chatbot loading animation
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate(`${TERMINAL_CONFIG.prompt} chatbot`, "command-line");
-        }, 0)
+        setTimeout(
+          () => {
+            addLineImmediate(`${TERMINAL_CONFIG.prompt} chatbot`, "command-line");
+          },
+          0
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("", undefined);
-        }, 50)
+        setTimeout(
+          () => {
+            addLineImmediate("", undefined);
+          },
+          50
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("Initializing Neural Bark Network...", "info");
-        }, 130)
+        setTimeout(
+          () => {
+            addLineImmediate("Initializing Neural Bark Network...", "info");
+          },
+          130
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("[#####-----] 50%", "info");
-        }, 450)
+        setTimeout(
+          () => {
+            addLineImmediate("[#####-----] 50%", "info");
+          },
+          450
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("[##########] 100%", "info");
-        }, 850)
+        setTimeout(
+          () => {
+            addLineImmediate("[##########] 100%", "info");
+          },
+          850
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          addLineImmediate("Woof! Connection established.", "info");
-        }, 1250)
+        setTimeout(
+          () => {
+            addLineImmediate("Woof! Connection established.", "info");
+          },
+          1250
+        )
       );
       chatbotTimeoutIds.current.push(
-        setTimeout(() => {
-          onTriggerHandled?.();
-          onSwitchToChatbot();
-        }, 1550)
+        setTimeout(
+          () => {
+            onTriggerHandled?.();
+            onSwitchToChatbot();
+          },
+          1550
+        )
       );
     }
 
@@ -131,13 +155,16 @@ export const Terminal: FC<TerminalProps> = ({
   };
 
   const addLine = (text: string, className?: string, delay = 0): NodeJS.Timeout => {
-    const timeoutId = setTimeout(() => {
-      setLineIdCounter((prev) => {
-        const newId = prev + 1;
-        setOutputLines((lines) => [...lines, { id: newId, text, className }]);
-        return newId;
-      });
-    }, delay);
+    const timeoutId = setTimeout(
+      () => {
+        setLineIdCounter((prev) => {
+          const newId = prev + 1;
+          setOutputLines((lines) => [...lines, { id: newId, text, className }]);
+          return newId;
+        });
+      },
+      delay
+    );
     return timeoutId;
   };
 
@@ -214,11 +241,14 @@ export const Terminal: FC<TerminalProps> = ({
           "info",
           700
         );
-        setTimeout(() => {
-          onBatmanTheme?.();
-          // Scroll to top after theme switch
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }, 1500);
+        setTimeout(
+          () => {
+            onBatmanTheme?.();
+            // Scroll to top after theme switch
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          },
+          1500
+        );
         onRootAccess?.();
       } else {
         addLine("Wrong password", "error", 80);
@@ -246,24 +276,33 @@ export const Terminal: FC<TerminalProps> = ({
 
         case "email":
           addLine("Opening email client...", "info", 80);
-          setTimeout(() => {
-            window.open(SOCIAL_LINKS.email, "_blank");
-          }, 500);
+          setTimeout(
+            () => {
+              window.open(SOCIAL_LINKS.email, "_blank");
+            },
+            500
+          );
           return;
 
         case "resume":
           addLine("Opening resume...", "info", 80);
-          setTimeout(() => {
-            window.open("/resume", "_blank");
-          }, 500);
+          setTimeout(
+            () => {
+              window.open("/resume", "_blank");
+            },
+            500
+          );
           return;
 
         case "code":
           addLine("Opening code editor...", "info", 80);
           onSourceDiver?.();
-          setTimeout(() => {
-            onSwitchToEditor();
-          }, 300);
+          setTimeout(
+            () => {
+              onSwitchToEditor();
+            },
+            300
+          );
           return;
 
         case "chatbot":
@@ -279,9 +318,12 @@ export const Terminal: FC<TerminalProps> = ({
           chatbotTimeoutIds.current.push(addLine("[##########] 100%", "info", 800));
           chatbotTimeoutIds.current.push(addLine("Woof! Connection established.", "info", 1200));
           chatbotTimeoutIds.current.push(
-            setTimeout(() => {
-              onSwitchToChatbot();
-            }, 1500)
+            setTimeout(
+              () => {
+                onSwitchToChatbot();
+              },
+              1500
+            )
           );
           return;
 
@@ -289,9 +331,12 @@ export const Terminal: FC<TerminalProps> = ({
           addLine("", undefined, 0);
           addLine("Loading Games Menu...", "info", 80);
           addLine("[##########] 100%", "info", 400);
-          setTimeout(() => {
-            onSwitchToGameMenu();
-          }, 600);
+          setTimeout(
+            () => {
+              onSwitchToGameMenu();
+            },
+            600
+          );
           return;
 
         case "sudo":
@@ -303,10 +348,13 @@ export const Terminal: FC<TerminalProps> = ({
           addLine("", undefined, 0);
           addLine("Deactivating Dark Knight Protocol...", "info", 80);
           addLine("Returning to normal mode.", "info", 400);
-          setTimeout(() => {
-            onExitBatman?.();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }, 600);
+          setTimeout(
+            () => {
+              onExitBatman?.();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            },
+            600
+          );
           return;
       }
     }
