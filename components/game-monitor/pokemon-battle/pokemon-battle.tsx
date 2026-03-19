@@ -5,8 +5,6 @@ import { attackSoundManager, pokemonSoundManager } from "./sounds";
 import { battleMusicManager } from "./battle-music";
 import { PokemonStats } from "./pokemon-stats";
 import { useCharacterOverlay } from "../rick-overlay-context";
-import { useAchievements } from "../../achievements";
-import { ACHIEVEMENTS } from "../../achievements/achievementsList";
 import { getAbilityDamage, applyStatusEffectsToDamage, checkDodge, decrementStatusEffects, addStatusEffect } from "./utils";
 
 const enemy1: Character = {
@@ -63,7 +61,6 @@ const getPlayerDebuffEffect = (abilityName: string): StatusEffect | null => {
 
 export const PokemonBattle: React.FC<Props> = ({ onBack, onComplete }) => {
   const { showCharacter } = useCharacterOverlay();
-  const { addAchievement } = useAchievements();
 
   const [playerTeam, setPlayerTeam] = useState<Character[]>(
     playerCharacters.map((c) => ({ ...c, statusEffects: [] }))
@@ -210,7 +207,6 @@ export const PokemonBattle: React.FC<Props> = ({ onBack, onComplete }) => {
   const handleEnemyDefeated = () => {
     setGameWon(true);
     addToLog("You won! All enemies defeated!");
-    addAchievement(ACHIEVEMENTS.POKEMON_BATTLE_COMPLETE);
     showCharacter("YES! You did it! I'm free!", "excited", 6000);
     setTimeout(() => onComplete?.(), 3000);
   };
