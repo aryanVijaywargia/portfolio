@@ -202,11 +202,14 @@ const SendMessagePanel: FC = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<FormStatus>("idle");
+  const [statusMessage, setStatusMessage] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setErrors({});
+    setStatus("idle");
+    setStatusMessage("");
 
     const result = contactSchema.safeParse({ name, email, message });
     if (!result.success) {
@@ -227,14 +230,19 @@ const SendMessagePanel: FC = () => {
         body: JSON.stringify({ name, email, message }),
       });
 
-      if (!res.ok) throw new Error("Failed to send");
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || "Failed to send email");
+      }
 
       setStatus("success");
+      setStatusMessage("Message sent successfully!");
       setName("");
       setEmail("");
       setMessage("");
-    } catch {
+    } catch (error) {
       setStatus("error");
+      setStatusMessage(error instanceof Error ? error.message : "Failed to send message.");
     }
   };
 
@@ -391,11 +399,13 @@ const SendMessagePanel: FC = () => {
 
             {/* Status messages */}
             {status === "success" && (
-              <div className="mt-2 text-emerald-400">{">"} Message sent successfully!</div>
+              <div className="mt-2 text-emerald-400">
+                {">"} {statusMessage}
+              </div>
             )}
             {status === "error" && (
               <div className="mt-2 text-red-400">
-                {">"} Error: Failed to send message. Please try again.
+                {">"} Error: {statusMessage}
               </div>
             )}
           </div>
