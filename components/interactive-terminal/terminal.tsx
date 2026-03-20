@@ -20,6 +20,7 @@ type TerminalProps = {
   onRootAccess?: () => void;
   onBatmanTheme?: () => void;
   onExitBatman?: () => void;
+  replayIntroKey?: number;
 };
 
 export const Terminal: FC<TerminalProps> = ({
@@ -34,6 +35,7 @@ export const Terminal: FC<TerminalProps> = ({
   onRootAccess,
   onBatmanTheme,
   onExitBatman,
+  replayIntroKey,
 }) => {
   const [showIntro, setShowIntro] = useState(true);
   const [outputLines, setOutputLines] = useState<OutputLine[]>([]);
@@ -46,6 +48,18 @@ export const Terminal: FC<TerminalProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const chatbotTimeoutIds = useRef<NodeJS.Timeout[]>([]);
+
+  // Replay intro when red button is clicked
+  useEffect(() => {
+    if (replayIntroKey && replayIntroKey > 0) {
+      setShowIntro(true);
+      setOutputLines([]);
+      setCurrentInput("");
+      setCommandHistory([]);
+      setHistoryIndex(-1);
+      setLineIdCounter(0);
+    }
+  }, [replayIntroKey]);
 
   // Initialize with banner after intro completes
   useEffect(() => {

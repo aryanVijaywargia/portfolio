@@ -1,6 +1,6 @@
 import { useAchievements } from "components/achievements";
 import { FC, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { Terminal } from "./terminal";
 import { TerminalChatbot } from "./terminal-chatbot";
 import { SnakeGame } from "./snake-game";
@@ -22,6 +22,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   >("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
+  const [replayIntroKey, setReplayIntroKey] = useState(0);
   const { triggerChatbot, clearTrigger, closeChat } = useChatbot();
   const { trackAchievementEvent } = useAchievements();
   const { activateBatman, deactivateBatman } = usePortfolioMode();
@@ -100,275 +101,134 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     setIsTerminalMaximized(false);
   };
 
+  const isModal = isExpanded || isTerminalMaximized;
+
+  // Determine terminal title
+  const terminalTitle = isExpanded
+    ? "🐕 Byte v1.0 (Connected)"
+    : mode === "snake"
+    ? "🐍 Snake — Terminal"
+    : mode === "dungeon"
+    ? "⚔️ Dungeon Quest — Terminal"
+    : mode === "game-menu"
+    ? "🎮 Games — Terminal"
+    : mode === "editor"
+    ? "/index.tsx"
+    : "aryan@macbook — zsh";
+
+  // Replay Rick intro (red button in terminal mode)
+  const handleReplayIntro = () => {
+    setReplayIntroKey((k) => k + 1);
+  };
+
+  // Determine close handler
+  const handleClose = isExpanded
+    ? handleExitChatbot
+    : isTerminalMaximized
+    ? handleMinimizeTerminal
+    : mode === "editor"
+    ? handleSwitchToTerminal
+    : mode === "terminal"
+    ? handleReplayIntro
+    : undefined;
+
+  // Determine title click handler (for launching chatbot from title)
+  const handleTitleClick = !isExpanded && mode === "terminal" ? handleSwitchToChatbot : undefined;
+
+  const layoutTransition = { type: "spring" as const, damping: 25, stiffness: 300 };
+
+  // Terminal content based on current mode
+  const terminalContent = isExpanded
+    ? <TerminalChatbot
+        onExit={handleExitChatbot}
+        onMessageSent={() => trackAchievementEvent({ type: "chatbot:message-sent" })}
+      />
+    : mode === "game-menu"
+    ? <GameMenu onSelectGame={handleSelectGame} onExit={handleExitGame} />
+    : mode === "snake"
+    ? <SnakeGame
+        onGameEnd={handleExitToGameMenu}
+        onScoreChange={(score) => trackAchievementEvent({ type: "snake:score", score })}
+      />
+    : mode === "dungeon"
+    ? <DungeonGame
+        onGameEnd={handleExitToGameMenu}
+        onEscape={() => trackAchievementEvent({ type: "dungeon:escaped" })}
+      />
+    : mode === "editor"
+    ? <div className="h-full overflow-auto p-3">
+        <Code className="text-[13px]" code={code} language={language} />
+      </div>
+    : <Terminal
+        onSwitchToEditor={handleSwitchToEditor}
+        onSwitchToChatbot={handleSwitchToChatbot}
+        onSwitchToGameMenu={handleSwitchToGame}
+        triggerChatbot={triggerChatbot}
+        onTriggerHandled={clearTrigger}
+        onValidCommand={(command) =>
+          trackAchievementEvent({ type: "terminal:valid-command", command })
+        }
+        onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
+        onSecretDiscovered={() => trackAchievementEvent({ type: "terminal:secret-discovered" })}
+        onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
+        onBatmanTheme={activateBatman}
+        onExitBatman={deactivateBatman}
+        replayIntroKey={replayIntroKey}
+      />;
+
   return (
-    <>
-      {/* Expanded Chatbot Modal */}
+    <LayoutGroup>
+      {/* Backdrop overlay for modal states */}
       <AnimatePresence>
-        {isExpanded && (
+        {isModal && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-            onClick={handleExitChatbot}
-          >
-            <motion.figure
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="terminal-window relative flex h-[80vh] w-[90vw] max-w-2xl flex-col overflow-hidden rounded-lg shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* macOS Window Title Bar */}
-              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#2a2a2a] dark:bg-[#3c3c3c]">
-                {/* Traffic Light Buttons */}
-                <div className="flex items-center gap-2">
-                  {/* Red - Close */}
-                  <button
-                    onClick={handleExitChatbot}
-                    className="traffic-light group flex h-3 w-3 cursor-pointer items-center justify-center rounded-full bg-[#ff5f57]"
-                    aria-label="Close"
-                  >
-                    <svg
-                      className="h-2 w-2 text-[#4a0002] opacity-0 group-hover:opacity-100"
-                      viewBox="0 0 12 12"
-                      fill="currentColor"
-                    >
-                      <path d="M6 4.586L9.293 1.293a1 1 0 111.414 1.414L7.414 6l3.293 3.293a1 1 0 01-1.414 1.414L6 7.414l-3.293 3.293a1 1 0 01-1.414-1.414L4.586 6 1.293 2.707a1 1 0 011.414-1.414L6 4.586z" />
-                    </svg>
-                  </button>
-                  {/* Yellow - Minimize */}
-                  <button
-                    className="traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e]"
-                    aria-label="Minimize"
-                  >
-                    <svg
-                      className="h-2 w-2 text-[#985700] opacity-0 group-hover:opacity-100"
-                      viewBox="0 0 12 12"
-                      fill="currentColor"
-                    >
-                      <rect x="1" y="5.5" width="10" height="1" />
-                    </svg>
-                  </button>
-                  {/* Green - Maximize/Zoom */}
-                  <button
-                    className="traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#28c840]"
-                    aria-label="Fullscreen"
-                  >
-                    <svg
-                      className="h-2 w-2 text-[#006500] opacity-0 group-hover:opacity-100"
-                      viewBox="0 0 12 12"
-                      fill="currentColor"
-                    >
-                      <path d="M5 1H1v4h1V2.707l3.146 3.147.708-.708L2.707 2H5V1zm6 5h-1v2.293L6.854 5.146l-.708.708L9.293 9H7v1h4V6z" />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Window Title */}
-                <div className="flex-1 text-center">
-                  <span className="select-none text-xs font-medium text-[#6b6b6b] dark:text-[#9d9d9d]">
-                    🐕 Byte v1.0 (Connected)
-                  </span>
-                </div>
-
-                {/* Right side spacer */}
-                <div className="w-14" />
-              </header>
-
-              {/* Chatbot Content */}
-              <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
-                <TerminalChatbot
-                  onExit={handleExitChatbot}
-                  onMessageSent={() => trackAchievementEvent({ type: "chatbot:message-sent" })}
-                />
-              </main>
-
-              <style jsx>{`
-                .terminal-window {
-                  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1),
-                    0 20px 40px rgba(0, 0, 0, 0.3);
-                }
-
-                .traffic-light {
-                  transition: filter 0.15s ease;
-                }
-
-                .terminal-window:not(:hover) .traffic-light {
-                  filter: saturate(0.8);
-                }
-              `}</style>
-            </motion.figure>
-          </motion.div>
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            onClick={handleClose}
+          />
         )}
       </AnimatePresence>
 
-      {/* Maximized Terminal Modal */}
-      <AnimatePresence>
-        {isTerminalMaximized && !isExpanded && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-            onClick={handleMinimizeTerminal}
-          >
-            <motion.figure
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="terminal-window relative flex h-[80vh] w-[90vw] max-w-3xl flex-col overflow-hidden rounded-lg shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* macOS Window Title Bar */}
-              <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#2a2a2a] dark:bg-[#3c3c3c]">
-                {/* Traffic Light Buttons */}
-                <div className="flex items-center gap-2">
-                  {/* Red - Close */}
-                  <button
-                    onClick={handleMinimizeTerminal}
-                    className="traffic-light group flex h-3 w-3 cursor-pointer items-center justify-center rounded-full bg-[#ff5f57]"
-                    aria-label="Close"
-                  >
-                    <svg
-                      className="h-2 w-2 text-[#4a0002] opacity-0 group-hover:opacity-100"
-                      viewBox="0 0 12 12"
-                      fill="currentColor"
-                    >
-                      <path d="M6 4.586L9.293 1.293a1 1 0 111.414 1.414L7.414 6l3.293 3.293a1 1 0 01-1.414 1.414L6 7.414l-3.293 3.293a1 1 0 01-1.414-1.414L4.586 6 1.293 2.707a1 1 0 011.414-1.414L6 4.586z" />
-                    </svg>
-                  </button>
-                  {/* Yellow - Minimize */}
-                  <button
-                    onClick={handleMinimizeTerminal}
-                    className="traffic-light group flex h-3 w-3 cursor-pointer items-center justify-center rounded-full bg-[#febc2e]"
-                    aria-label="Minimize"
-                  >
-                    <svg
-                      className="h-2 w-2 text-[#985700] opacity-0 group-hover:opacity-100"
-                      viewBox="0 0 12 12"
-                      fill="currentColor"
-                    >
-                      <rect x="1" y="5.5" width="10" height="1" />
-                    </svg>
-                  </button>
-                  {/* Green - Exit Fullscreen */}
-                  <button
-                    onClick={handleMinimizeTerminal}
-                    className="traffic-light group flex h-3 w-3 cursor-pointer items-center justify-center rounded-full bg-[#28c840]"
-                    aria-label="Exit fullscreen"
-                  >
-                    <svg
-                      className="h-2 w-2 text-[#006500] opacity-0 group-hover:opacity-100"
-                      viewBox="0 0 12 12"
-                      fill="currentColor"
-                    >
-                      <path d="M5 1H1v4h1V2.707l3.146 3.147.708-.708L2.707 2H5V1zm6 5h-1v2.293L6.854 5.146l-.708.708L9.293 9H7v1h4V6z" />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Window Title */}
-                <div
-                  className="flex-1 cursor-pointer text-center"
-                  onClick={
-                    mode === "snake" || mode === "dungeon" || mode === "game-menu"
-                      ? undefined
-                      : handleSwitchToChatbot
-                  }
-                  title={
-                    mode === "snake" || mode === "dungeon" || mode === "game-menu"
-                      ? undefined
-                      : "Launch Byte"
-                  }
-                >
-                  <span className="select-none text-xs font-medium text-[#6b6b6b] dark:text-[#9d9d9d]">
-                    {mode === "snake"
-                      ? "🐍 Snake — Terminal"
-                      : mode === "dungeon"
-                      ? "⚔️ Dungeon Quest — Terminal"
-                      : mode === "game-menu"
-                      ? "🎮 Games — Terminal"
-                      : "aryan@macbook — zsh"}
-                  </span>
-                </div>
-
-                {/* Right side spacer */}
-                <div className="w-14" />
-              </header>
-
-              {/* Terminal/Game Content */}
-              <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
-                {mode === "game-menu"
-                  ? <GameMenu onSelectGame={handleSelectGame} onExit={handleExitGame} />
-                  : mode === "snake"
-                  ? <SnakeGame
-                      onGameEnd={handleExitToGameMenu}
-                      onScoreChange={(score) =>
-                        trackAchievementEvent({ type: "snake:score", score })
-                      }
-                    />
-                  : mode === "dungeon"
-                  ? <DungeonGame
-                      onGameEnd={handleExitToGameMenu}
-                      onEscape={() => trackAchievementEvent({ type: "dungeon:escaped" })}
-                    />
-                  : <Terminal
-                      onSwitchToEditor={handleSwitchToEditor}
-                      onSwitchToChatbot={handleSwitchToChatbot}
-                      onSwitchToGameMenu={handleSwitchToGame}
-                      triggerChatbot={triggerChatbot}
-                      onTriggerHandled={clearTrigger}
-                      onValidCommand={(command) =>
-                        trackAchievementEvent({ type: "terminal:valid-command", command })
-                      }
-                      onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
-                      onSecretDiscovered={() =>
-                        trackAchievementEvent({ type: "terminal:secret-discovered" })
-                      }
-                      onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
-                      onBatmanTheme={activateBatman}
-                      onExitBatman={deactivateBatman}
-                    />}
-              </main>
-
-              <style jsx>{`
-                .terminal-window {
-                  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1),
-                    0 20px 40px rgba(0, 0, 0, 0.3);
-                }
-
-                .traffic-light {
-                  transition: filter 0.15s ease;
-                }
-
-                .terminal-window:not(:hover) .traffic-light {
-                  filter: saturate(0.8);
-                }
-              `}</style>
-            </motion.figure>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Regular Terminal/Editor (non-expanded) */}
-      {!isExpanded && !isTerminalMaximized && (
-        <figure className="terminal-window relative flex h-full min-h-[380px] w-full flex-col overflow-hidden rounded-lg shadow-2xl">
+      {/* Terminal window — shared layoutId animates size/position transitions */}
+      <div
+        className={
+          isModal ? "pointer-events-none fixed inset-0 z-40 flex items-center justify-center" : ""
+        }
+      >
+        <motion.figure
+          layout
+          layoutId="terminal-window"
+          transition={layoutTransition}
+          className={`terminal-window relative flex flex-col overflow-hidden rounded-lg shadow-2xl ${
+            isModal ? "pointer-events-auto" : ""
+          } ${
+            isExpanded
+              ? "h-[80vh] w-[90vw] max-w-2xl"
+              : isTerminalMaximized
+              ? "h-[80vh] w-[90vw] max-w-3xl"
+              : "h-full min-h-[380px] w-full"
+          }`}
+          onClick={isModal ? (e) => e.stopPropagation() : undefined}
+        >
           {/* macOS Window Title Bar */}
-          <header className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#2a2a2a] dark:bg-[#3c3c3c]">
+          <motion.header
+            layout="position"
+            className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#2a2a2a] dark:bg-[#3c3c3c]"
+          >
             {/* Traffic Light Buttons */}
             <div className="flex items-center gap-2">
               {/* Red - Close */}
               <button
-                onClick={mode === "editor" ? handleSwitchToTerminal : undefined}
+                onClick={handleClose}
                 className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f57] ${
-                  mode === "editor" ? "cursor-pointer" : ""
+                  handleClose ? "cursor-pointer" : ""
                 }`}
-                aria-label={mode === "editor" ? "Close" : undefined}
+                aria-label="Close"
               >
-                {mode === "editor" && (
+                {handleClose && (
                   <svg
                     className="h-2 w-2 text-[#4a0002] opacity-0 group-hover:opacity-100"
                     viewBox="0 0 12 12"
@@ -380,7 +240,10 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               </button>
               {/* Yellow - Minimize */}
               <button
-                className="traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e]"
+                onClick={isModal ? handleClose : undefined}
+                className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e] ${
+                  isModal ? "cursor-pointer" : ""
+                }`}
                 aria-label="Minimize"
               >
                 <svg
@@ -393,9 +256,15 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               </button>
               {/* Green - Maximize/Zoom */}
               <button
-                onClick={mode === "editor" ? handleSwitchToTerminal : handleMaximizeTerminal}
+                onClick={
+                  isModal
+                    ? handleClose
+                    : mode === "editor"
+                    ? handleSwitchToTerminal
+                    : handleMaximizeTerminal
+                }
                 className="traffic-light group flex h-3 w-3 cursor-pointer items-center justify-center rounded-full bg-[#28c840]"
-                aria-label={mode === "editor" ? "Exit fullscreen" : "Fullscreen"}
+                aria-label={isModal ? "Exit fullscreen" : "Fullscreen"}
               >
                 <svg
                   className="h-2 w-2 text-[#006500] opacity-0 group-hover:opacity-100"
@@ -409,51 +278,29 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
             {/* Window Title */}
             <div
-              className="flex-1 cursor-pointer text-center"
-              onClick={mode === "terminal" ? handleSwitchToChatbot : undefined}
-              title={mode === "terminal" ? "Launch Byte" : undefined}
+              className={`flex-1 text-center ${handleTitleClick ? "cursor-pointer" : ""}`}
+              onClick={handleTitleClick}
+              title={handleTitleClick ? "Launch Byte" : undefined}
             >
               <span className="select-none text-xs font-medium text-[#6b6b6b] dark:text-[#9d9d9d]">
-                {mode === "terminal" ? "aryan@macbook — zsh" : "/index.tsx"}
+                {terminalTitle}
               </span>
             </div>
 
             {/* Right side - Copy button for editor mode */}
             <div className="flex w-14 justify-end">
-              {mode === "editor" && (
+              {!isModal && mode === "editor" && (
                 <CopyButton
                   content={Array.isArray(code) ? code.join("\n") : code}
                   className="text-gray-400 hover:text-white"
                 />
               )}
             </div>
-          </header>
+          </motion.header>
 
-          {/* Terminal/Editor/Game Content */}
+          {/* Content */}
           <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
-            {mode === "terminal"
-              ? <Terminal
-                  onSwitchToEditor={handleSwitchToEditor}
-                  onSwitchToChatbot={handleSwitchToChatbot}
-                  onSwitchToGameMenu={handleSwitchToGame}
-                  triggerChatbot={triggerChatbot}
-                  onTriggerHandled={clearTrigger}
-                  onValidCommand={(command) =>
-                    trackAchievementEvent({ type: "terminal:valid-command", command })
-                  }
-                  onSourceDiver={() => trackAchievementEvent({ type: "terminal:source-diver" })}
-                  onSecretDiscovered={() =>
-                    trackAchievementEvent({ type: "terminal:secret-discovered" })
-                  }
-                  onRootAccess={() => trackAchievementEvent({ type: "terminal:root-access" })}
-                  onBatmanTheme={activateBatman}
-                  onExitBatman={deactivateBatman}
-                />
-              : mode === "editor"
-              ? <div className="h-full overflow-auto p-3">
-                  <Code className="text-[13px]" code={code} language={language} />
-                </div>
-              : null}
+            {terminalContent}
           </main>
 
           <style jsx>{`
@@ -470,9 +317,9 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
               filter: saturate(0.8);
             }
           `}</style>
-        </figure>
-      )}
-    </>
+        </motion.figure>
+      </div>
+    </LayoutGroup>
   );
 };
 
