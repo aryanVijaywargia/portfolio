@@ -17,22 +17,28 @@ export const BatContact: FC = () => {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage("");
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formState),
       });
-      if (response.ok) {
-        setSubmitted(true);
-        setFormState({ name: "", email: "", message: "" });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        throw new Error(data?.error || "Failed to send email");
       }
-    } catch {
-      // Handle error silently
+
+      setSubmitted(true);
+      setFormState({ name: "", email: "", message: "" });
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Failed to send message.");
     } finally {
       setIsSubmitting(false);
     }
@@ -173,6 +179,12 @@ export const BatContact: FC = () => {
                     >
                       {isSubmitting ? "Sending..." : "Send Message"}
                     </button>
+
+                    {errorMessage && (
+                      <p className="text-sm" style={{ color: "#f87171" }}>
+                        {errorMessage}
+                      </p>
+                    )}
                   </form>}
             </motion.div>
 
