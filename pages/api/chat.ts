@@ -17,44 +17,6 @@ type ChatResponse = {
   error?: string;
 };
 
-// --- Rate Limiter (in-memory, per IP, 5 req/min) ---
-// Google's free tier allows ~10 RPM but enforces cooldowns after bursts.
-// Keep at 5 to stay well within limits and avoid extended lockouts.
-const RATE_LIMIT_WINDOW_MS = 60_000;
-const RATE_LIMIT_MAX = 5;
-const requestLog = new Map<string, number[]>();
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const timestamps = requestLog.get(ip) ?? [];
-  const recent = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-
-  if (recent.length >= RATE_LIMIT_MAX) {
-    requestLog.set(ip, recent);
-    return true;
-  }
-
-  recent.push(now);
-  requestLog.set(ip, recent);
-  return false;
-}
-
-// Clean up stale entries every 5 minutes to prevent memory leaks
-setInterval(
-  () => {
-    const now = Date.now();
-    for (const [ip, timestamps] of requestLog.entries()) {
-      const recent = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-      if (recent.length === 0) {
-        requestLog.delete(ip);
-      } else {
-        requestLog.set(ip, recent);
-      }
-    }
-  },
-  5 * 60_000
-);
-
 // --- Input Validation ---
 const MAX_MESSAGES = 20;
 const MAX_MESSAGE_LENGTH = 500;
@@ -89,22 +51,6 @@ function validateMessages(messages: unknown): { valid: boolean; error?: string }
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ChatResponse>) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "", error: "Method not allowed" });
-  }
-
-  // Rate limiting
-  const ip =
-    (Array.isArray(req.headers["x-forwarded-for"])
-      ? req.headers["x-forwarded-for"][0]
-      : req.headers["x-forwarded-for"]?.split(",")[0]?.trim()) ||
-    req.socket.remoteAddress ||
-    "unknown";
-
-  if (isRateLimited(ip)) {
-    return res.status(429).json({
-      message: "",
-      error:
-        "*yawns and curls up* Byte wants to take a short nap! I'll wake up in about a minute. Try again shortly!",
-    });
   }
 
   // API key check
@@ -155,7 +101,8 @@ Remember: You are Byte the dog. Stay in character. Be helpful but with personali
     if (errorMessage.includes("429") || errorMessage.includes("RESOURCE_EXHAUSTED")) {
       return res.status(429).json({
         message: "",
-        error: "*yawns and curls up* Byte needs a quick nap! I'll be back in a minute, promise!",
+        error:
+          "*yawns and curls up* Byte wants to take a short nap! I'll wake up in about a minute. Try again shortly!",
       });
     }
 
