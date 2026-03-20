@@ -17,9 +17,9 @@ type ChatResponse = {
   error?: string;
 };
 
-// --- Rate Limiter (in-memory, per IP, 10 req/min) ---
+// --- Rate Limiter (in-memory, per IP, 8 req/min) ---
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const RATE_LIMIT_MAX = 10;
+const RATE_LIMIT_MAX = 8;
 const requestLog = new Map<string, number[]>();
 
 function isRateLimited(ip: string): boolean {
