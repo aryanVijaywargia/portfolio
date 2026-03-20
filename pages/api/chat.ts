@@ -101,7 +101,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     return res.status(429).json({
       message: "",
       error:
-        "*whimpers* Too many belly rubs! Give me a moment to catch my breath. Try again in a minute.",
+        "*yawns and curls up* Byte wants to take a short nap! I'll wake up in about a minute. Try again shortly!",
     });
   }
 
@@ -153,7 +153,7 @@ Remember: You are Byte the dog. Stay in character. Be helpful but with personali
     if (errorMessage.includes("429") || errorMessage.includes("RESOURCE_EXHAUSTED")) {
       return res.status(429).json({
         message: "",
-        error: "*pants heavily* I've been running around too much today. Try again later!",
+        error: "*yawns and curls up* Byte needs a quick nap! I'll be back in a minute, promise!",
       });
     }
 
