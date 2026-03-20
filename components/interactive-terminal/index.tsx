@@ -121,9 +121,17 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     setReplayIntroKey((k) => k + 1);
   };
 
+  // Minimize maximized terminal and replay Rick intro
+  const handleMinimizeAndReplayIntro = () => {
+    handleMinimizeTerminal();
+    handleReplayIntro();
+  };
+
   // Determine close handler
   const handleClose = isExpanded
     ? handleExitChatbot
+    : isTerminalMaximized && mode === "terminal"
+    ? handleMinimizeAndReplayIntro
     : isTerminalMaximized
     ? handleMinimizeTerminal
     : mode === "editor"
