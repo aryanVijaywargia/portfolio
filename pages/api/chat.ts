@@ -17,9 +17,11 @@ type ChatResponse = {
   error?: string;
 };
 
-// --- Rate Limiter (in-memory, per IP, 8 req/min) ---
+// --- Rate Limiter (in-memory, per IP, 5 req/min) ---
+// Google's free tier allows ~10 RPM but enforces cooldowns after bursts.
+// Keep at 5 to stay well within limits and avoid extended lockouts.
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const RATE_LIMIT_MAX = 8;
+const RATE_LIMIT_MAX = 5;
 const requestLog = new Map<string, number[]>();
 
 function isRateLimited(ip: string): boolean {
