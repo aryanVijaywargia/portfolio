@@ -1,5 +1,5 @@
 // pages/api/chat.ts
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { BYTE_KNOWLEDGE, BYTE_PERSONALITY } from "content/byte-knowledge";
 
@@ -17,81 +17,161 @@ type ChatResponse = {
   error?: string;
 };
 
+// --- Rate Limiter (in-memory, per IP, 10 req/min) ---
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 10;
+const requestLog = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = requestLog.get(ip) ?? [];
+  const recent = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+
+  if (recent.length >= RATE_LIMIT_MAX) {
+    requestLog.set(ip, recent);
+    return true;
+  }
+
+  recent.push(now);
+  requestLog.set(ip, recent);
+  return false;
+}
+
+// Clean up stale entries every 5 minutes to prevent memory leaks
+setInterval(
+  () => {
+    const now = Date.now();
+    for (const [ip, timestamps] of requestLog.entries()) {
+      const recent = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
+      if (recent.length === 0) {
+        requestLog.delete(ip);
+      } else {
+        requestLog.set(ip, recent);
+      }
+    }
+  },
+  5 * 60_000
+);
+
+// --- Input Validation ---
+const MAX_MESSAGES = 20;
+const MAX_MESSAGE_LENGTH = 500;
+
+function validateMessages(messages: unknown): { valid: boolean; error?: string } {
+  if (!Array.isArray(messages)) {
+    return { valid: false, error: "Messages must be an array." };
+  }
+  if (messages.length === 0) {
+    return { valid: false, error: "Messages cannot be empty." };
+  }
+  if (messages.length > MAX_MESSAGES) {
+    return { valid: false, error: `Too many messages. Max ${MAX_MESSAGES} per request.` };
+  }
+  for (const msg of messages) {
+    if (!msg || typeof msg !== "object") {
+      return { valid: false, error: "Invalid message format." };
+    }
+    if (msg.role !== "user" && msg.role !== "assistant") {
+      return { valid: false, error: "Invalid message role." };
+    }
+    if (typeof msg.content !== "string" || msg.content.trim().length === 0) {
+      return { valid: false, error: "Message content must be a non-empty string." };
+    }
+    if (msg.content.length > MAX_MESSAGE_LENGTH) {
+      return { valid: false, error: `Message too long. Max ${MAX_MESSAGE_LENGTH} characters.` };
+    }
+  }
+  return { valid: true };
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ChatResponse>) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "", error: "Method not allowed" });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  // Rate limiting
+  const ip =
+    (Array.isArray(req.headers["x-forwarded-for"])
+      ? req.headers["x-forwarded-for"][0]
+      : req.headers["x-forwarded-for"]?.split(",")[0]?.trim()) ||
+    req.socket.remoteAddress ||
+    "unknown";
+
+  if (isRateLimited(ip)) {
+    return res.status(429).json({
+      message: "",
+      error:
+        "*whimpers* Too many belly rubs! Give me a moment to catch my breath. Try again in a minute.",
+    });
+  }
+
+  // API key check
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ message: "", error: "API key not configured" });
+    return res.status(503).json({
+      message: "",
+      error: "*yawns* Byte is napping right now. The chatbot is currently unavailable.",
+    });
+  }
+
+  // Input validation
+  const { messages } = (req.body || {}) as ChatRequest;
+  const validation = validateMessages(messages);
+  if (!validation.valid) {
+    return res.status(400).json({ message: "", error: validation.error });
   }
 
   try {
-    const { messages = [] } = (req.body || {}) as ChatRequest;
-    const lastMessage =
-      messages.length > 0 ? messages[messages.length - 1]?.content?.toLowerCase() || "" : "";
-
-    // Mock mode for UI testing when using placeholder key
-    if (apiKey === "your_api_key_here") {
-      const mockResponses = [
-        "*wags tail* Hey there! I'm Byte, Aryan's sassy assistant. I'm in demo mode right now, but once Aryan adds his API key, I'll be much smarter!",
-        "*tilts head* Interesting question! In demo mode, I can only give you canned responses. But I promise I'm way wittier with a real API key.",
-        "*scratches ear* You know, being a demo dog is ruff. Ask Aryan to set up the real API and I'll show you what I can really do!",
-        "*yawns dramatically* I'd love to help more, but I'm running on placeholder power. The real Byte is much more impressive.",
-        "*perks up* Ooh, a human! I'm Byte - part corgi, part chatbot, all sass. Currently in demo mode though!",
-      ];
-
-      // Simple keyword matching for demo
-      let response = mockResponses[Math.floor(Math.random() * mockResponses.length)];
-      if (
-        lastMessage.includes("hello") ||
-        lastMessage.includes("hi") ||
-        lastMessage.includes("hey")
-      ) {
-        response =
-          "*wags tail excitedly* Woof! Hey there! I'm Byte, Aryan's witty canine assistant. I'm in demo mode right now, but feel free to test the UI!";
-      } else if (lastMessage.includes("aryan") || lastMessage.includes("who")) {
-        response =
-          "*puffs chest proudly* Aryan? That's my human! He's a full-stack developer who dabbles in ML/AI. In demo mode I can't tell you much more, but the real me knows everything!";
-      } else if (lastMessage.includes("project")) {
-        response =
-          "*sniffs around* Projects? Aryan has some cool ones! But in demo mode, my memory is a bit... fuzzy. Add the real API key for the full scoop!";
-      }
-
-      // Simulate slight delay for realism
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      return res.status(200).json({ message: response });
-    }
-
-    const client = new Anthropic({ apiKey });
-
-    const systemPrompt = `${BYTE_PERSONALITY}
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      systemInstruction: `${BYTE_PERSONALITY}
 
 Here is information about Aryan that you know:
 ${BYTE_KNOWLEDGE}
 
-Remember: You are Byte the dog. Stay in character. Be helpful but with personality.`;
-
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 500,
-      system: systemPrompt,
-      messages: messages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      })),
+Remember: You are Byte the dog. Stay in character. Be helpful but with personality.`,
     });
 
-    const textContent = response.content.find((c): c is Anthropic.TextBlock => c.type === "text");
-    const message = textContent ? textContent.text : "woof?";
+    // Build chat history (all messages except the last one)
+    const history = messages.slice(0, -1).map((m) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    }));
 
-    return res.status(200).json({ message });
-  } catch (error) {
+    const chat = model.startChat({ history });
+    const lastMessage = messages[messages.length - 1].content;
+    const result = await chat.sendMessage(lastMessage);
+    const text = result.response.text();
+
+    return res.status(200).json({ message: text || "*tilts head* ...woof?" });
+  } catch (error: unknown) {
     console.error("Chat API error:", error);
+
+    const errorMessage = error instanceof Error ? error.message : "";
+
+    if (errorMessage.includes("429") || errorMessage.includes("RESOURCE_EXHAUSTED")) {
+      return res.status(429).json({
+        message: "",
+        error: "*pants heavily* I've been running around too much today. Try again later!",
+      });
+    }
+
+    if (
+      errorMessage.includes("API_KEY") ||
+      errorMessage.includes("401") ||
+      errorMessage.includes("403")
+    ) {
+      return res.status(503).json({
+        message: "",
+        error:
+          "*whimpers* Something's wrong with my collar tag. The chatbot is temporarily unavailable.",
+      });
+    }
+
     return res.status(500).json({
       message: "",
-      error: "Something went wrong. Even dogs have bad days.",
+      error: "*whimpers* Something went wrong. Even dogs have bad days.",
     });
   }
 }
