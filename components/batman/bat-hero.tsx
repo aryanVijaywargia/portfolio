@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
 import { Link } from "components/link";
+import { Image } from "components/image";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -107,9 +108,11 @@ export const BatHero: FC = () => {
               }}
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden">
-                <img
+                <Image
                   src="/images/about/aryan-profile.jpg"
                   alt="Aryan Vijaywargia"
+                  width={1600}
+                  height={1200}
                   className="bat-no-filter h-full w-full object-cover"
                   style={{
                     filter:

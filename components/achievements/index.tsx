@@ -70,6 +70,11 @@ type AchievementContextValue = {
   progress: AchievementProgress;
 };
 
+type AchievementActionsContextValue = Pick<
+  AchievementContextValue,
+  "unlockAchievement" | "trackAchievementEvent" | "resetAchievements"
+>;
+
 const STORAGE_KEY = "portfolio-achievements:v2";
 
 const DEFAULT_PROGRESS: AchievementProgress = {
@@ -103,6 +108,12 @@ const AchievementContext = createContext<AchievementContextValue>({
   isUnlocked: () => false,
   resetAchievements: () => {},
   progress: DEFAULT_PROGRESS,
+});
+
+const AchievementActionsContext = createContext<AchievementActionsContextValue>({
+  unlockAchievement: () => {},
+  trackAchievementEvent: () => {},
+  resetAchievements: () => {},
 });
 
 const mergeUnique = <T,>(items: T[], nextItem: T) =>
@@ -373,7 +384,7 @@ export const AchievementProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }
   }, []);
 
-  const achievements = ACHIEVEMENT_ORDER.map((id) => ACHIEVEMENTS[id]);
+  const achievements = useMemo(() => ACHIEVEMENT_ORDER.map((id) => ACHIEVEMENTS[id]), []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -441,35 +452,55 @@ export const AchievementProvider: React.FC<{ children: React.ReactNode }> = ({ c
     };
 
     detectDevtools();
-    const intervalId = window.setInterval(detectDevtools, 1000);
     window.addEventListener("resize", detectDevtools);
 
     return () => {
-      window.clearInterval(intervalId);
       window.removeEventListener("resize", detectDevtools);
       delete window.__ARYAN_DEVTOOLS__;
     };
   }, [repoUrl, trackAchievementEvent]);
 
+  const actionsValue = useMemo(
+    () => ({
+      unlockAchievement,
+      trackAchievementEvent,
+      resetAchievements,
+    }),
+    [unlockAchievement, trackAchievementEvent, resetAchievements]
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      achievements,
+      unlockedIds: progress.unlockedIds,
+      unlockAchievement,
+      trackAchievementEvent,
+      isUnlocked,
+      resetAchievements,
+      progress,
+    }),
+    [
+      achievements,
+      progress,
+      unlockAchievement,
+      trackAchievementEvent,
+      isUnlocked,
+      resetAchievements,
+    ]
+  );
+
   return (
-    <AchievementContext.Provider
-      value={{
-        achievements,
-        unlockedIds: progress.unlockedIds,
-        unlockAchievement,
-        trackAchievementEvent,
-        isUnlocked,
-        resetAchievements,
-        progress,
-      }}
-    >
-      {children}
-      <AchievementToasts latestAchievementId={latestAchievementId} />
-    </AchievementContext.Provider>
+    <AchievementActionsContext.Provider value={actionsValue}>
+      <AchievementContext.Provider value={contextValue}>
+        {children}
+        <AchievementToasts latestAchievementId={latestAchievementId} />
+      </AchievementContext.Provider>
+    </AchievementActionsContext.Provider>
   );
 };
 
 export const useAchievements = () => useContext(AchievementContext);
+export const useAchievementActions = () => useContext(AchievementActionsContext);
 
 const AchievementToasts: React.FC<{ latestAchievementId: AchievementId | null }> = ({
   latestAchievementId,
@@ -682,7 +713,7 @@ const ShimmerOverlay: React.FC = () => (
     <div className="shimmer-sweep absolute inset-0" />
     <style jsx>{`
       .shimmer-sweep::after {
-        content: '';
+        content: "";
         position: absolute;
         inset: 0;
         background: linear-gradient(
@@ -696,8 +727,12 @@ const ShimmerOverlay: React.FC = () => (
         animation: shimmer 4s ease-in-out infinite;
       }
       @keyframes shimmer {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
       }
     `}</style>
   </div>
@@ -733,7 +768,10 @@ export const AchievementsSection: React.FC = () => {
   const shelf2Ids = unlockedAchievementIds.slice(5, 10);
 
   return (
-    <section id="achievements" className="mx-auto max-w-6xl px-4 py-16 md:px-8 md:py-32">
+    <section
+      id="achievements"
+      className="mx-auto min-h-[100svh] max-w-6xl px-4 pt-24 pb-16 md:px-8 md:pt-28 md:pb-32"
+    >
       {/* Header */}
       <header className="mb-16 md:mb-24">
         <div className="heading-pre">Discovery Log</div>

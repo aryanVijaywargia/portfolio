@@ -1,4 +1,4 @@
-import { useAchievements } from "components/achievements";
+import { useAchievementActions } from "components/achievements";
 import { useDebouncedEffect } from "components/_hooks/use-debounce-effect";
 import clsx from "clsx";
 import { TIMELINEOBJECT } from "content/timeline";
@@ -15,7 +15,7 @@ export const Timeline: FC<TimelineProps> = ({}) => {
   const [autoAnimate, setAutoAnimate] = useState(true);
   const [autoScroll, setAutoScroll] = useState(true);
   const inView = useInView(scrollContainerRef);
-  const { trackAchievementEvent } = useAchievements();
+  const { trackAchievementEvent } = useAchievementActions();
 
   const handleManualSelect = (year: string, index: number) => {
     setAutoScroll(false);
@@ -84,7 +84,7 @@ export const Timeline: FC<TimelineProps> = ({}) => {
   );
 
   return (
-    <section className="mx-auto  max-w-6xl px-4 pb-16 md:px-8">
+    <section className="mx-auto max-w-6xl px-4 pb-16 md:px-8 md:pb-24">
       <div className="-mx-4 flex h-96 overflow-x-auto px-6 py-4 xl:mx-0" ref={scrollContainerRef}>
         {Object.entries(TIMELINEOBJECT).map(([year, events], yearIndex, years) => (
           <div key={year} className="relative">

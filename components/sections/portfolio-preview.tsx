@@ -1,4 +1,4 @@
-import { useAchievements } from "components/achievements";
+import { useAchievementActions } from "components/achievements";
 import { LinkIcon } from "@heroicons/react/24/solid";
 import { FaGithub } from "@react-icons/all-files/fa/FaGithub";
 import { Image } from "components/image";
@@ -7,13 +7,13 @@ import clsx from "clsx";
 import { ScrollGallery } from "components/scroll-gallery";
 import { PORTFOLIO } from "content/portfolio-preview";
 import { PROJECTS } from "content/projects";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 
 type PortfolioPreviewProps = {};
 
 export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
   const [filter, setFilter] = useState("All Projects");
-  const { trackAchievementEvent } = useAchievements();
+  const { trackAchievementEvent } = useAchievementActions();
 
   const handleFilterChange = useCallback((value: string) => {
     setFilter(value);
@@ -26,8 +26,23 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
     trackAchievementEvent({ type: "portfolio:link-opened" });
   }, [trackAchievementEvent]);
 
+  const rotationIndexByName = useMemo(() => {
+    const visible = PROJECTS.filter(
+      ({ type }) => filter === "All Projects" || type.includes(filter)
+    );
+    return new Map(visible.map((project, index) => [project.name, index]));
+  }, [filter]);
+
+  const filterTags = useMemo(
+    () => ["All Projects", ...new Set(PROJECTS.map((p) => p.type).flat())],
+    []
+  );
+
   return (
-    <section id="portfolio" className="portfolio-preview mb-24 min-h-full spacing-4">
+    <section
+      id="portfolio"
+      className="portfolio-preview min-h-[100svh] pt-24 pb-16 spacing-4 md:pt-28 md:pb-24"
+    >
       <header className="mx-auto grid w-full max-w-6xl px-4 md:px-8">
         <div className="heading-pre">{PORTFOLIO.pre}</div>
         <h1 className="heading-2xl -ml-1">{PORTFOLIO.heading}</h1>
@@ -37,7 +52,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
             onChange={(e) => handleFilterChange((e.target as HTMLInputElement).value)}
           >
             <legend className="sr-only">Filter by Tag</legend>
-            {["All Projects", ...new Set(PROJECTS.map((p) => p.type).flat())].map((type, index) => {
+            {filterTags.map((type, index) => {
               return (
                 <label key={type} className="flex">
                   <input
@@ -58,9 +73,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
       </header>
       <ScrollGallery itemWidth={340} gapWidth={32} filter={filter}>
         {PROJECTS.map((project, index) => {
-          const rotationIndex = PROJECTS.filter(
-            ({ type }) => filter === "All Projects" || type.includes(filter)
-          ).findIndex(({ name }) => project.name === name);
+          const rotationIndex = rotationIndexByName.get(project.name) ?? -1;
 
           return (
             <section
@@ -92,8 +105,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
             >
               <figure className="relative flex aspect-2 w-full">
                 <Image
-                  preload
-                  src={(project as any).featuredImage || "/images/placeholder.png"}
+                  src={(project as any).featuredImage || "/images/sharing-image.jpg"}
                   alt={project.name}
                   width={400}
                   height={200}

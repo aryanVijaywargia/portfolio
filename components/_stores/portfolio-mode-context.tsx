@@ -1,4 +1,4 @@
-import { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 type PortfolioMode = "default" | "batman";
 
@@ -65,13 +65,12 @@ export const PortfolioModeProvider: FC<PropsWithChildren> = ({ children }) => {
     setShowTransition(false);
   }, []);
 
-  return (
-    <PortfolioModeContext.Provider
-      value={{ mode, activateBatman, deactivateBatman, showTransition, dismissTransition }}
-    >
-      {children}
-    </PortfolioModeContext.Provider>
+  const value = useMemo(
+    () => ({ mode, activateBatman, deactivateBatman, showTransition, dismissTransition }),
+    [mode, activateBatman, deactivateBatman, showTransition, dismissTransition]
   );
+
+  return <PortfolioModeContext.Provider value={value}>{children}</PortfolioModeContext.Provider>;
 };
 
 export const usePortfolioMode = () => useContext(PortfolioModeContext);

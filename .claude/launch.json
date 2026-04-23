@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "/Users/aryanvijaywargia/.nvm/versions/node/v22.16.0/bin/node",
+      "runtimeArgs": ["/Users/aryanvijaywargia/.nvm/versions/node/v22.16.0/bin/pnpm", "dev"],
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}

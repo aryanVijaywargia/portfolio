@@ -1,22 +1,33 @@
-import { AchievementProvider } from "components/achievements";
 import { ContextProviders } from "components/_stores/_context-providers";
 import { LoadInitialData } from "components/_stores/_load-initial-data";
 import { PortfolioModeProvider, usePortfolioMode } from "components/_stores/portfolio-mode-context";
 
 import { Footer } from "components/layout/footer";
 import { Header } from "components/layout/header";
-import { BatmanHeader } from "components/layout/batman-header";
-import { BatmanFooter } from "components/layout/batman-footer";
-import { BatTransition } from "components/batman/bat-transition";
-import { BatScrollFollower } from "components/batman/bat-scroll-follower";
 import { SEO } from "content/seo";
+import dynamic from "next/dynamic";
 import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
-import { motion, AnimatePresence } from "framer-motion";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { FC, PropsWithChildren } from "react";
 import "styles/tailwind.css";
-import "@xyflow/react/dist/style.css";
+
+const BatmanHeader = dynamic(
+  () => import("components/layout/batman-header").then((mod) => mod.BatmanHeader),
+  { ssr: false }
+);
+const BatmanFooter = dynamic(
+  () => import("components/layout/batman-footer").then((mod) => mod.BatmanFooter),
+  { ssr: false }
+);
+const BatTransition = dynamic(
+  () => import("components/batman/bat-transition").then((mod) => mod.BatTransition),
+  { ssr: false }
+);
+const BatScrollFollower = dynamic(
+  () => import("components/batman/bat-scroll-follower").then((mod) => mod.BatScrollFollower),
+  { ssr: false }
+);
 
 const Loaders: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -28,7 +39,7 @@ const Loaders: FC<PropsWithChildren> = ({ children }) => {
 
 const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component }) => {
   const router = useRouter();
-  const { mode } = usePortfolioMode();
+  const { mode, showTransition } = usePortfolioMode();
   const isBatman = mode === "batman";
 
   return (
@@ -42,45 +53,22 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
         openGraph={SEO.openGraph}
       />
       {isBatman ? <BatmanHeader /> : <Header />}
-      <AnimatePresence mode="wait">
-        <motion.main
-          key={router.pathname}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="min-h-screen print:!mx-auto print:!w-[1024px]"
-        >
-          <Component {...pageProps} />
-        </motion.main>
-      </AnimatePresence>
+      <main className="min-h-screen print:!mx-auto print:!w-[1024px]">
+        <Component {...pageProps} />
+      </main>
       {isBatman ? <BatmanFooter /> : <Footer />}
-      <BatTransition />
-      <BatScrollFollower />
+      {showTransition ? <BatTransition /> : null}
+      {isBatman ? <BatScrollFollower /> : null}
     </>
   );
 };
 
 const App = ({ pageProps, Component }: AppProps) => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (window) {
-      setLoading(false);
-    }
-  }, []);
-
-  if (loading) {
-    return <></>;
-  }
-
   return (
     <Loaders>
       <PortfolioModeProvider>
-        <AchievementProvider>
-          <AppShell pageProps={pageProps} Component={Component} />
-          {/*<Stars />*/}
-        </AchievementProvider>
+        <AppShell pageProps={pageProps} Component={Component} />
+        {/*<Stars />*/}
       </PortfolioModeProvider>
     </Loaders>
   );

@@ -1,4 +1,4 @@
-import { useAchievements } from "components/achievements";
+import { useAchievementActions } from "components/achievements";
 import { QUIZ_QUESTIONS, QUIZ_RESULT_TIERS } from "content/quiz";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
@@ -28,7 +28,7 @@ const ScoreCounter: FC<{ target: number }> = ({ target }) => {
 // ── Quiz ──────────────────────────────────────────────────────────
 
 export const Quiz: FC = () => {
-  const { trackAchievementEvent } = useAchievements();
+  const { trackAchievementEvent } = useAchievementActions();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);

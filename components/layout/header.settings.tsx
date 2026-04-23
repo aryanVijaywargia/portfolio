@@ -13,7 +13,7 @@ type ProfileNavProps = {
 
 export const ProfileNav: FC<ProfileNavProps> = ({ showNav }) => {
   const { theme, setTheme } = useTheme();
-  const { requestChatbot } = useChatbot();
+  const requestChatbot = useChatbot((state) => state.requestChatbot);
 
   const handleOpenChatbot = () => {
     // Scroll to terminal section

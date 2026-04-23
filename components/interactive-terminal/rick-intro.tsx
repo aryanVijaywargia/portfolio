@@ -111,12 +111,15 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
     return () => clearInterval(interval);
   }, [currentLineIndex]);
 
-  // Auto-scroll dialogue into view
+  // Auto-scroll the latest dialogue line into view without hijacking manual scroll
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    const wrapper = containerRef.current;
+    if (!wrapper) return;
+    const lastLine = wrapper.querySelector(".dialogue-line.current, .dialogue-line.continue-hint");
+    if (lastLine && "scrollIntoView" in lastLine) {
+      (lastLine as HTMLElement).scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
-  }, [displayedText, completedLines]);
+  }, [displayedText, completedLines, allDone]);
 
   return (
     <div ref={containerRef} className="rick-intro-wrapper" onClick={handleComplete}>
@@ -147,13 +150,10 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
         .rick-intro-wrapper {
           width: 100%;
           height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
           background: #ffffff;
           cursor: pointer;
-          overflow: auto;
+          overflow-y: auto;
+          overflow-x: hidden;
           padding: 1.5rem;
           font-family: "Menlo", "Monaco", "Courier New", monospace;
           position: relative;
@@ -169,6 +169,9 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
           align-items: center;
           gap: 0.75rem;
           max-width: 100%;
+          margin: auto;
+          min-height: 100%;
+          justify-content: center;
         }
 
         .rick-ascii {

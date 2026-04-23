@@ -17,7 +17,11 @@ type TerminalChatbotProps = {
 
 export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSent }) => {
   const [input, setInput] = useState("");
-  const { messages, isLoading, addMessage, setLoading, clearMessages } = useChatbot();
+  const messages = useChatbot((state) => state.messages);
+  const isLoading = useChatbot((state) => state.isLoading);
+  const addMessage = useChatbot((state) => state.addMessage);
+  const setLoading = useChatbot((state) => state.setLoading);
+  const clearMessages = useChatbot((state) => state.clearMessages);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 

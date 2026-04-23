@@ -10,62 +10,67 @@ export const DesktopNav: FC = () => {
   const scrollingRef = useRef(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const sectionIds = ["about", "experience", "portfolio", "contact"];
+    const currentPath = router.asPath.split(/[#?]/)[0];
+
+    if (currentPath !== "/") {
+      setActiveSection(currentPath);
+      return;
+    }
+
+    let lastSection = "";
+    let frameId: number | null = null;
+
+    const computeActive = () => {
+      frameId = null;
       if (scrollingRef.current) return;
 
-      const sections = ["about", "experience", "portfolio", "contact"];
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
-
-      // Check if we're at the top (home)
       if (window.scrollY < 100) {
-        setActiveSection("");
+        if (lastSection !== "") {
+          lastSection = "";
+          setActiveSection("");
+        }
         return;
       }
 
-      // Check current route for non-hash pages
-      const currentPath = router.asPath.split(/[#?]/)[0];
-      if (currentPath !== "/") {
-        setActiveSection(currentPath);
-        return;
-      }
+      const anchor = window.innerHeight * 0.3;
+      let bestId = "";
+      let bestDist = Infinity;
 
-      // Find the closest section to current scroll position
-      let closestSection = "";
-      let closestDistance = Infinity;
-
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const elementTop = rect.top + window.scrollY;
-          const elementBottom = elementTop + rect.height;
-          const elementCenter = elementTop + rect.height / 2;
-
-          // If we're inside the section, use it
-          if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
-            closestSection = `/#${sectionId}`;
-            break;
-          }
-
-          // Otherwise find the closest section
-          const distance = Math.min(
-            Math.abs(scrollPosition - elementTop),
-            Math.abs(scrollPosition - elementCenter)
-          );
-
-          if (distance < closestDistance) {
-            closestDistance = distance;
-            closestSection = `/#${sectionId}`;
-          }
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top > anchor) continue;
+        if (rect.bottom < 0) continue;
+        const dist = anchor - rect.top;
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestId = id;
         }
       }
 
-      setActiveSection(closestSection);
+      const next = bestId ? `/#${bestId}` : "";
+      if (next !== lastSection) {
+        lastSection = next;
+        setActiveSection(next);
+      }
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const schedule = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(computeActive);
+    };
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    computeActive();
+
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (frameId !== null) cancelAnimationFrame(frameId);
+    };
   }, [router.asPath]);
 
   const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
