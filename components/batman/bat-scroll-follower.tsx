@@ -1,23 +1,21 @@
 import { FC, useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
 
 export const BatScrollFollower: FC = () => {
   const { mode } = usePortfolioMode();
+  const prefersReducedMotion = useReducedMotion();
   const [docHeight, setDocHeight] = useState(1);
   const [viewportH, setViewportH] = useState(800);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 768 : true
+  );
 
   const { scrollY } = useScroll();
-
   const scrollProgress = useTransform(scrollY, [0, docHeight], [0, 1]);
-
   const batY = useTransform(scrollProgress, [0, 1], [80, viewportH - 100]);
   const smoothY = useSpring(batY, { damping: 25, stiffness: 60, mass: 1.2 });
-
   const batX = useTransform(scrollY, (v) => Math.sin(v * 0.005) * 30);
-  const smoothX = useSpring(batX, { damping: 30, stiffness: 80 });
-
-  const batRotate = useTransform(scrollY, (v) => Math.sin(v * 0.005) * 10);
 
   useEffect(() => {
     if (mode !== "batman") return;
@@ -25,6 +23,7 @@ export const BatScrollFollower: FC = () => {
     const measure = () => {
       setDocHeight(Math.max(1, document.documentElement.scrollHeight - window.innerHeight));
       setViewportH(window.innerHeight);
+      setIsMobile(window.innerWidth < 768);
     };
 
     measure();
@@ -37,7 +36,7 @@ export const BatScrollFollower: FC = () => {
     };
   }, [mode]);
 
-  if (mode !== "batman") return null;
+  if (mode !== "batman" || isMobile || prefersReducedMotion) return null;
 
   return (
     <motion.div
@@ -46,8 +45,7 @@ export const BatScrollFollower: FC = () => {
         right: "8%",
         top: 0,
         y: smoothY,
-        x: smoothX,
-        rotate: batRotate,
+        x: batX,
       }}
     >
       {/* Glow */}
@@ -132,8 +130,6 @@ export const BatScrollFollower: FC = () => {
             position: "absolute",
             top: 0,
             left: 0,
-            filter:
-              "drop-shadow(0 0 8px rgba(0,166,146,0.5)) drop-shadow(0 0 20px rgba(0,166,146,0.15))",
           }}
         >
           {/* Body */}

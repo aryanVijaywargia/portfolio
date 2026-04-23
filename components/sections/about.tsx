@@ -1,4 +1,4 @@
-import { useAchievements } from "components/achievements";
+import { useAchievementActions } from "components/achievements";
 import { useTooltipStore } from "components/_stores/tooltip-store";
 import { Image } from "components/image";
 import { ABOUT } from "content/about";
@@ -15,7 +15,7 @@ export const About: FC<AboutProps> = (props) => {
   const [images, setImages] = useState(ABOUT.images);
   const [tooltip, setTooltip] = useTooltipStore();
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const { trackAchievementEvent } = useAchievements();
+  const { trackAchievementEvent } = useAchievementActions();
   const [descriptionSize, setDescriptionSize] = useState<DescriptionSize>("standard");
 
   const handleImageClick = useCallback(() => {
@@ -23,7 +23,7 @@ export const About: FC<AboutProps> = (props) => {
     if (focusImageIndex === images.length - 1) {
       trackAchievementEvent({ type: "about:cycle-complete" });
       setFocusImageIndex((current) => current + 1);
-      setImages((current) => current.sort(() => 0.5 - Math.random()));
+      setImages((current) => [...current].sort(() => 0.5 - Math.random()));
       setTimeout(
         () => {
           setFocusImageIndex(0);
@@ -59,7 +59,7 @@ export const About: FC<AboutProps> = (props) => {
   }, [focusImageIndex, images.length, setTooltip, trackAchievementEvent]);
 
   return (
-    <section id="about" className="-mt-12 overflow-hidden pt-12">
+    <section id="about" className="relative overflow-hidden pt-24 md:pt-28 lg:pt-36">
       {/* Section Header */}
       <header className="mx-auto mb-8 grid w-full max-w-6xl px-4 md:px-8">
         <div className="heading-pre">Get to Know Me</div>
@@ -86,8 +86,9 @@ export const About: FC<AboutProps> = (props) => {
                 width={2000}
                 height={1500}
                 sizes="(min-width: 580px) 540px, 400px"
-                preload
+                preload={index === 0}
                 priority={index === 0}
+                loading={index === 0 ? "eager" : "lazy"}
                 className="absolute left-0 top-0 rounded-xl border-2 border-gray-50/80 object-cover !opacity-0 shadow-lg shadow-gray-700/5 transition-all duration-300 group-focus-visible:border-sky-500 d:border-gray-600/80"
                 data-about-image-index={index}
                 onLoadingComplete={() =>
@@ -103,7 +104,7 @@ export const About: FC<AboutProps> = (props) => {
                         }deg)`
                       : `rotate(${(index % 4) * (index % 2 === 0 ? 0.5 : -1.2) * 3}deg)`,
                   zIndex: -index,
-                  filter: focusImageIndex !== index ? "grayscale(80)" : "",
+                  ...(focusImageIndex !== index ? { filter: "grayscale(80)" } : {}),
                   opacity: focusImageIndex > index ? "0" : "1",
                 }}
               />
@@ -146,7 +147,7 @@ export const About: FC<AboutProps> = (props) => {
                   type="button"
                   onClick={() => setDescriptionSize(key)}
                   className={clsx(
-                    "font-mono text-base font-semibold tracking-widest transition-all duration-300 outline-none",
+                    "font-mono text-base font-semibold tracking-widest outline-none transition-all duration-300",
                     isActive ? "text-cyan-500" : "text-gray-500 d:text-gray-700"
                   )}
                 >

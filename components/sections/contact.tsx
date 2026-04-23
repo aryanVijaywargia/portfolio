@@ -483,7 +483,10 @@ const AvatarOnline: FC = () => (
 
 export const Contact: FC = () => {
   return (
-    <section id="contact" className="relative overflow-hidden py-16 md:py-24">
+    <section
+      id="contact"
+      className="relative min-h-[100svh] overflow-hidden pt-24 pb-16 md:pt-28 md:pb-24"
+    >
       <div className="relative mx-auto w-full max-w-[74rem] px-4 md:px-8">
         {/* Section header */}
         <header className="mb-8">

@@ -17,6 +17,11 @@ type ChatResponse = {
   error?: string;
 };
 
+type GeminiModel = ReturnType<GoogleGenerativeAI["getGenerativeModel"]>;
+
+let cachedApiKey: string | null = null;
+let cachedModel: GeminiModel | null = null;
+
 // --- Input Validation ---
 const MAX_MESSAGES = 20;
 const MAX_MESSAGE_LENGTH = 500;
@@ -70,16 +75,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      systemInstruction: `${BYTE_PERSONALITY}
+    if (!cachedModel || cachedApiKey !== apiKey) {
+      const genAI = new GoogleGenerativeAI(apiKey);
+      cachedModel = genAI.getGenerativeModel({
+        model: "gemini-2.5-flash",
+        systemInstruction: `${BYTE_PERSONALITY}
 
 Here is information about Aryan that you know:
 ${BYTE_KNOWLEDGE}
 
 Remember: You are Byte the dog. Stay in character. Be helpful but with personality.`,
-    });
+      });
+      cachedApiKey = apiKey;
+    }
+    const model = cachedModel;
+    if (!model) throw new Error("Gemini model initialization failed");
 
     // Build chat history (all messages except the last one)
     const history = messages.slice(0, -1).map((m) => ({

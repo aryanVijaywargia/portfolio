@@ -3,61 +3,83 @@ import { DesktopNav } from "components/layout/header.desktop-nav";
 import { MobileNav } from "components/layout/header.mobile-nav";
 import { ProfileNav } from "components/layout/header.settings";
 import { HEADER } from "content/layout";
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useRef } from "react";
 
 export const Header: FC = ({}) => {
   const [showNav, setShowNav] = useState(false);
-  const [scrollOpacity, setScrollOpacity] = useState(0);
-  const [navTop, setNavTop] = useState<number | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
+  const frameRef = useRef<number | null>(null);
+  const metricsRef = useRef({ heroHeight: 0, navbarHeight: 80 });
+  const lastVisibleRef = useRef(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    const measure = () => {
       const heroSection = document.querySelector(".hero");
-      const heroHeight = heroSection?.clientHeight || window.innerHeight;
-      // Get navbar height from rem (h-20 = 5rem) - converts to pixels based on root font size
       const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-      const navbarHeight = 5 * rootFontSize; // 5rem
+      metricsRef.current = {
+        heroHeight: heroSection?.clientHeight || window.innerHeight,
+        navbarHeight: 5 * rootFontSize,
+      };
+    };
+
+    const updateHeader = () => {
+      frameRef.current = null;
+      const header = headerRef.current;
+      if (!header) return;
+      const { heroHeight, navbarHeight } = metricsRef.current;
       const scrollY = window.scrollY;
 
-      // Navbar starts at bottom of hero section (its top edge at heroHeight - navbarHeight)
-      // As user scrolls, navbar "rises up" - top value decreases
-      // Once top reaches 0, navbar is fixed at the top
       const initialTop = heroHeight - navbarHeight;
       const calculatedTop = Math.max(0, initialTop - scrollY);
-      setNavTop(calculatedTop);
-
-      // Opacity: fade in during the last 30% of hero height before navbar reaches top
-      // This creates the "becoming visible" effect as user scrolls
       const fadeDistance = heroHeight * 0.3;
-      if (calculatedTop >= fadeDistance) {
-        setScrollOpacity(0);
-      } else {
-        setScrollOpacity(1 - calculatedTop / fadeDistance);
+      const nextOpacity = calculatedTop >= fadeDistance ? 0 : 1 - calculatedTop / fadeDistance;
+
+      header.style.setProperty("--header-top", `${calculatedTop}px`);
+      header.style.setProperty("--header-opacity", `${nextOpacity}`);
+
+      const nextVisible = nextOpacity > 0;
+      if (nextVisible !== lastVisibleRef.current) {
+        lastVisibleRef.current = nextVisible;
+        setIsVisible(nextVisible);
       }
     };
 
-    // Initial check
-    handleScroll();
+    const scheduleUpdate = () => {
+      if (frameRef.current !== null) return;
+      frameRef.current = window.requestAnimationFrame(updateHeader);
+    };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
+    const handleResize = () => {
+      measure();
+      scheduleUpdate();
+    };
+
+    measure();
+    updateHeader();
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   return (
     <>
       <header
+        ref={headerRef}
         className={`fixed inset-x-0 z-50 h-20 w-full border-b border-gray-800/10 bg-white/50 backdrop-blur d:border-gray-100/10 d:bg-gray-900/40 print:hidden ${
-          scrollOpacity > 0 ? "pointer-events-auto" : "pointer-events-none"
+          isVisible ? "pointer-events-auto" : "pointer-events-none invisible"
         }`}
         style={{
-          top: navTop !== null ? `${navTop}px` : undefined,
-          opacity: scrollOpacity,
-          visibility: scrollOpacity === 0 ? "hidden" : "visible",
+          top: "var(--header-top, 0px)",
+          opacity: "var(--header-opacity, 0)",
         }}
       >
         <div className="mx-auto flex h-full max-w-6xl grid-cols-[210px_1fr_210px] items-center gap-1 px-4 md:grid md:gap-4 md:px-8">

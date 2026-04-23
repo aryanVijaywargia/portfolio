@@ -1,5 +1,5 @@
-import { useAchievements } from "components/achievements";
-import { HeartIcon, MoonIcon, StarIcon, SunIcon } from "@heroicons/react/24/solid";
+import { useAchievementActions } from "components/achievements";
+import { MoonIcon, StarIcon, SunIcon } from "@heroicons/react/24/solid";
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
 import { Link } from "components/link";
 import { Badge } from "components/badge";
@@ -7,32 +7,19 @@ import { InteractiveTerminal } from "components/interactive-terminal";
 import ToggleSwitch from "components/toggle-switch";
 import { HERO } from "content/hero";
 import { useTheme } from "next-themes";
-import { FC } from "react";
-import { motion } from "framer-motion";
+import { FC, useEffect, useState } from "react";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { DogIcon } from "components/icons/dog-icon";
 
-// Animation variants
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
 export const Hero: FC = () => {
   const { theme, setTheme } = useTheme();
-  const { requestChatbot } = useChatbot();
-  const { trackAchievementEvent } = useAchievements();
+  const [themeMounted, setThemeMounted] = useState(false);
+  const requestChatbot = useChatbot((state) => state.requestChatbot);
+  const { trackAchievementEvent } = useAchievementActions();
+
+  useEffect(() => {
+    setThemeMounted(true);
+  }, []);
 
   const handleOpenChatbot = () => {
     // Scroll to terminal section
@@ -59,7 +46,7 @@ export const Hero: FC = () => {
   };
 
   return (
-    <section className="hero relative overflow-hidden pb-40">
+    <section className="hero relative min-h-[100svh] overflow-x-clip pb-16 md:pb-32 lg:flex lg:min-h-[calc(100svh+5rem)] lg:items-center lg:pb-0">
       {/* Top Action Bar */}
       <div className="absolute right-4 top-4 z-50 flex items-center gap-3 md:right-8 md:top-6">
         <Link
@@ -89,27 +76,18 @@ export const Hero: FC = () => {
           <SiGithub className="h-5 w-5" />
         </Link>
         <ToggleSwitch
-          enabled={theme === "dark"}
+          enabled={themeMounted && theme === "dark"}
           setEnabled={handleThemeToggle}
           enabledIcon={<MoonIcon className="h-3 w-3 text-slate-400" />}
           disabledIcon={<SunIcon className="h-4 w-4 text-orange-400" />}
         />
       </div>
 
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={staggerContainer}
-        className="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16 md:px-8 md:py-32 lg:grid"
-      >
+      <div className="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16 md:px-8 md:py-32 lg:grid lg:py-0">
         <section className="col-span-2">
           <header>
-            <motion.div variants={fadeInUp} transition={{ duration: 0.5 }} className="heading-pre">
-              {HERO.pre}
-            </motion.div>
-            <motion.h1 variants={fadeInUp} transition={{ duration: 0.5 }} className="heading-hero ">
-              {HERO.heading}
-            </motion.h1>
+            <div className="heading-pre">{HERO.pre}</div>
+            <h1 className="heading-hero ">{HERO.heading}</h1>
             {/* <h2 className="heading-hero ">
                 <Typewriter
                   loop={false}
@@ -122,35 +100,23 @@ export const Hero: FC = () => {
                   ]}
                 />
               </h2>*/}
-            <motion.ul
-              variants={fadeInUp}
-              transition={{ duration: 0.5 }}
-              className="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium"
-            >
+            <ul className="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium">
               {HERO.tech.map(({ name, Icon }) => (
                 <li className="flex items-center gap-2 text-gray-500 d:text-gray-400" key={name}>
                   <Icon className="h-7 w-7 text-gray-400 d:text-gray-300/80" />
                   {name}
                 </li>
               ))}
-            </motion.ul>
+            </ul>
           </header>
           <main>
-            <motion.p
-              variants={fadeInUp}
-              transition={{ duration: 0.5 }}
-              className="mb-3 max-w-lg font-normal text-gray-500 d:text-gray-400 md:text-lg md:tracking-tight"
-            >
+            <p className="mb-3 max-w-lg font-normal text-gray-500 d:text-gray-400 md:text-lg md:tracking-tight">
               {HERO.body(handleWowClick)}
-            </motion.p>
+            </p>
 
             <p className="mb-3 max-w-xl font-normal text-gray-500 md:text-lg md:tracking-tight"></p>
           </main>
-          <motion.footer
-            variants={fadeInUp}
-            transition={{ duration: 0.5 }}
-            className="mt-6 flex flex-wrap gap-4 md:gap-8"
-          >
+          <footer className="mt-6 flex flex-wrap gap-4 md:gap-8">
             {HERO.cta1
               ? <Link
                   href={HERO.cta1.href}
@@ -168,16 +134,12 @@ export const Hero: FC = () => {
                   {HERO.cta2.name}
                 </Link>
               : null}
-          </motion.footer>
+          </footer>
         </section>
-        <motion.section
-          variants={fadeInUp}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="relative md:h-[30rem]"
-        >
-          <div className="relative flex h-full min-w-[32rem] flex-col gap-4 pr-4 sm:min-w-[42rem] lg:absolute lg:-left-4 lg:top-24 lg:mr-4 lg:min-w-[34rem] lg:pr-8">
+        <section className="relative md:h-[30rem]">
+          <div className="relative flex h-full min-w-[32rem] flex-col gap-4 pr-4 sm:min-w-[42rem] lg:absolute lg:-left-4 lg:top-28 lg:mr-4 lg:min-w-[34rem] lg:pr-8">
             <div id="terminal-section" className="relative flex h-full flex-col">
-              <InteractiveTerminal code={HERO.code} language="tsx" />
+              <InteractiveTerminal language="tsx" />
               <div className="absolute -bottom-5 -right-5 -z-10 h-[calc(100%+1.25rem)] w-[calc(100%+1.25rem)] rounded-lg border border-gray-400/20 bg-gray-100/70 [mask-image:linear-gradient(-30deg,#fff_16.35%,rgb(255_255_255_/_0%)_61.66%)] d:border-gray-700/20 d:bg-gray-900/40"></div>
             </div>
             <div className="relative z-20 mt-0.5 flex flex-wrap justify-end gap-1.5">
@@ -188,11 +150,11 @@ export const Hero: FC = () => {
               <Badge style="plain">Space Enthusiast</Badge>
             </div>
           </div>
-        </motion.section>
+        </section>
         <div className="background pointer-events-none absolute inset-0 -z-30 select-none">
           <div className="relative left-1/2 top-1/2 h-2/3 w-1/2 -translate-y-[30%] rounded-full bg-gradient-radial from-emerald-600/30 to-sky-600/5 blur-2xl"></div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

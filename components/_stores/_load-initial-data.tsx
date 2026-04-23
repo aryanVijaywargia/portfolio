@@ -1,10 +1,9 @@
 import { useIsGloballyMounted } from "components/_stores/is-globally-mounted-store";
-import { useNotifications } from "components/_stores/notifications-store";
 import { useTooltipStore } from "components/_stores/tooltip-store";
 
 import { Toast } from "components/toast";
 import dynamic from "next/dynamic";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { FC, PropsWithChildren, useEffect } from "react";
 import ReactTooltipType from "react-tooltip";
 //
 
@@ -14,31 +13,8 @@ const ReactTooltip = dynamic(() => import("react-tooltip").then((mod) => mod), {
 
 export const LoadInitialData: FC<PropsWithChildren<any>> = ({ children }) => {
   const [tooltip] = useTooltipStore();
-  const [showTooltip, setShowTooltip] = useState(true);
   const [isGloballyMounted, setIsGloballyMounted] = useIsGloballyMounted();
-  const [notifications, setNotifications] = useNotifications();
   // useInitShopifyData();
-
-  useEffect(() => {
-    const hideTooltip = () => {
-      setTimeout(
-        () => {
-          setShowTooltip(false);
-          setTimeout(
-            () => {
-              setShowTooltip(true);
-            },
-            10
-          );
-        },
-        200
-      );
-    };
-    window.addEventListener("scroll", hideTooltip);
-    return () => {
-      window.removeEventListener("scroll", hideTooltip);
-    };
-  }, []);
 
   useEffect(() => {
     setIsGloballyMounted(true);

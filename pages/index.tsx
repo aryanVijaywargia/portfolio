@@ -1,17 +1,26 @@
-import { AchievementsSection } from "components/achievements";
-import { About } from "components/sections/about";
-import { Contact } from "components/sections/contact";
-import { Experience } from "components/sections/experience";
+import { AchievementProvider } from "components/achievements";
 import { Hero } from "components/sections/hero";
-import { PortfolioPreview } from "components/sections/portfolio-preview";
-import { Quiz } from "components/sections/quiz";
-import { Timeline } from "components/sections/timeline";
-import { BatmanHome } from "components/batman/batman-home";
 import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
-import party from "party-js";
+import dynamic from "next/dynamic";
 import { FC } from "react";
 
-party.settings.respectReducedMotion = false;
+const About = dynamic(() => import("components/sections/about").then((mod) => mod.About));
+const Timeline = dynamic(() => import("components/sections/timeline").then((mod) => mod.Timeline));
+const Experience = dynamic(() =>
+  import("components/sections/experience").then((mod) => mod.Experience)
+);
+const PortfolioPreview = dynamic(() =>
+  import("components/sections/portfolio-preview").then((mod) => mod.PortfolioPreview)
+);
+const Contact = dynamic(() => import("components/sections/contact").then((mod) => mod.Contact));
+const AchievementsSection = dynamic(
+  () => import("components/achievements").then((mod) => mod.AchievementsSection),
+  { ssr: false }
+);
+const BatmanHome = dynamic(
+  () => import("components/batman/batman-home").then((mod) => mod.BatmanHome),
+  { ssr: false }
+);
 
 export const Index: FC = () => {
   const { mode } = usePortfolioMode();
@@ -21,16 +30,16 @@ export const Index: FC = () => {
   }
 
   return (
-    <>
+    <AchievementProvider>
       <Hero />
       <About />
       <Timeline />
       <Experience />
       <PortfolioPreview />
+      <Contact />
       <AchievementsSection />
       {/* <Quiz /> */}
-      <Contact />
-    </>
+    </AchievementProvider>
   );
 };
 

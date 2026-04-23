@@ -1,0 +1,6 @@
+internal/store:make lint-go && make test-go
+internal/jobs:make lint-go && make test-go
+internal/api:make lint-go && make test-go
+sdks/python:cd /Users/aryanvijaywargia/Projects/Continua/sdks/python && uv run pytest
+internal/testutil:make lint-go && make test-go
+internal/ingest:make lint-go && make test-go

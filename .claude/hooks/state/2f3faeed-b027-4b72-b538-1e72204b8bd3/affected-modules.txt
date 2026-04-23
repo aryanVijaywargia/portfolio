@@ -1,0 +1,10 @@
+db/platform
+internal/jobs
+cmd
+internal/ingest
+internal/api
+internal/store
+internal/testutil
+web
+sdks/python
+.claude
