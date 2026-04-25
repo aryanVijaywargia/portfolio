@@ -4,15 +4,12 @@ import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 import { Terminal } from "./terminal";
+import { TerminalChatbot } from "./terminal-chatbot";
 import { CopyButton } from "components/copy-button";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
 import type { CodeGroupProps } from "components/typography/code";
 
-const TerminalChatbot = dynamic(
-  () => import("./terminal-chatbot").then((mod) => mod.TerminalChatbot),
-  { ssr: false }
-);
 const SnakeGame = dynamic(() => import("./snake-game").then((mod) => mod.SnakeGame), {
   ssr: false,
 });
