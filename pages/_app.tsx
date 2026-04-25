@@ -4,6 +4,7 @@ import { PortfolioModeProvider, usePortfolioMode } from "components/_stores/port
 
 import { Footer } from "components/layout/footer";
 import { Header } from "components/layout/header";
+import { BatTransition } from "components/batman/bat-transition";
 import { SEO } from "content/seo";
 import dynamic from "next/dynamic";
 import { DefaultSeo } from "next-seo";
@@ -18,10 +19,6 @@ const BatmanHeader = dynamic(
 );
 const BatmanFooter = dynamic(
   () => import("components/layout/batman-footer").then((mod) => mod.BatmanFooter),
-  { ssr: false }
-);
-const BatTransition = dynamic(
-  () => import("components/batman/bat-transition").then((mod) => mod.BatTransition),
   { ssr: false }
 );
 const BatScrollFollower = dynamic(
