@@ -1,4 +1,4 @@
-import { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 type PortfolioMode = "default" | "batman";
 
@@ -19,10 +19,18 @@ const PortfolioModeContext = createContext<PortfolioModeContextValue>({
 });
 
 const STORAGE_KEY = "portfolio-mode";
+const MODE_SWAP_DELAY_MS = 120;
 
 export const PortfolioModeProvider: FC<PropsWithChildren> = ({ children }) => {
   const [mode, setMode] = useState<PortfolioMode>("default");
   const [showTransition, setShowTransition] = useState(false);
+  const modeSwapTimeoutRef = useRef<number | null>(null);
+
+  const clearModeSwapTimeout = useCallback(() => {
+    if (modeSwapTimeoutRef.current === null) return;
+    window.clearTimeout(modeSwapTimeoutRef.current);
+    modeSwapTimeoutRef.current = null;
+  }, []);
 
   // Restore from sessionStorage on mount
   useEffect(() => {
@@ -37,9 +45,15 @@ export const PortfolioModeProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }, []);
 
-  const activateBatman = useCallback(() => {
+  useEffect(() => {
+    return () => {
+      clearModeSwapTimeout();
+    };
+  }, [clearModeSwapTimeout]);
+
+  const enterBatmanMode = useCallback(() => {
     setMode("batman");
-    setShowTransition(true);
+    window.scrollTo(0, 0);
     document.documentElement.setAttribute("data-portfolio-mode", "batman");
     try {
       sessionStorage.setItem(STORAGE_KEY, "batman");
@@ -48,7 +62,20 @@ export const PortfolioModeProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }, []);
 
+  const activateBatman = useCallback(() => {
+    clearModeSwapTimeout();
+    setShowTransition(true);
+    modeSwapTimeoutRef.current = window.setTimeout(
+      () => {
+        modeSwapTimeoutRef.current = null;
+        enterBatmanMode();
+      },
+      MODE_SWAP_DELAY_MS
+    );
+  }, [clearModeSwapTimeout, enterBatmanMode]);
+
   const deactivateBatman = useCallback(() => {
+    clearModeSwapTimeout();
     setShowTransition(false);
     document.documentElement.removeAttribute("data-portfolio-mode");
     try {
@@ -56,10 +83,10 @@ export const PortfolioModeProvider: FC<PropsWithChildren> = ({ children }) => {
     } catch {
       // sessionStorage unavailable
     }
-    // Small delay to let CSS transition, then switch mode and scroll
-    window.scrollTo({ top: 0, behavior: "instant" });
+    // Reset position before returning to the default portfolio.
+    window.scrollTo(0, 0);
     setMode("default");
-  }, []);
+  }, [clearModeSwapTimeout]);
 
   const dismissTransition = useCallback(() => {
     setShowTransition(false);
