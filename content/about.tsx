@@ -23,7 +23,7 @@ export const ABOUT = {
     {
       statistic: getExperienceYearsSince(new Date("2023-06-01T00:00:00")),
       tooltip: "Full-time engineering experience since June 2023",
-      caption: "Full-time",
+      caption: "Experience",
     },
     {
       statistic: "1K+",
