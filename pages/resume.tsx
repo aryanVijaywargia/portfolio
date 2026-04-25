@@ -22,7 +22,6 @@ const RESUME_PDF_FILENAME = "Aryan-Vijaywargia-Resume.pdf";
 export const Resume: FC = (props) => {
   const { sections, filter, showSection, selectFilter } = useResumeSectionInView();
   const [inView, setInView] = useState("intro");
-  const [hasResumePdf, setHasResumePdf] = useState(false);
 
   useEffect(() => {
     for (const key in sections) {
@@ -46,26 +45,6 @@ export const Resume: FC = (props) => {
       setInView("");
     }
   }, [sections]);
-
-  useEffect(() => {
-    let active = true;
-
-    fetch(RESUME_PDF_PATH, { method: "HEAD" })
-      .then((response) => {
-        if (active) {
-          setHasResumePdf(response.ok);
-        }
-      })
-      .catch(() => {
-        if (active) {
-          setHasResumePdf(false);
-        }
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
 
   return (
     <table className="margin-0 padding-0 relative block min-h-screen appearance-none border-none text-gray-900 print:!table [&_td]:p-0">
@@ -112,18 +91,16 @@ export const Resume: FC = (props) => {
         <tr className="block print:!table-row">
           <td className="block print:!table-cell">
             <article className="relative mx-auto mb-16 grid max-w-6xl gap-12 px-4 py-16 print:!flex print:!py-0 print:!pl-24 md:px-8 lg:grid-cols-[1fr_200px] print:[&_*]:![-webkit-print-color-adjust:exact] print:[&_*]:![color-adjust:exact] print:[&_*]:![print-color-adjust:exact]">
-              {hasResumePdf
-                ? <div className="flex justify-center print:!hidden lg:col-span-2 lg:justify-end">
-                    <a
-                      href={RESUME_PDF_PATH}
-                      download={RESUME_PDF_FILENAME}
-                      className="button-border inline-flex w-full items-center justify-center gap-2 whitespace-nowrap bg-white/90 px-4 py-2 text-sm font-medium tracking-tight text-gray-600 transition-all hfa:border-gray-900/70 hfa:bg-white hfa:text-gray-900 d:border-gray-700/80 d:bg-gray-900/40 d:text-gray-300 d:hfa:border-gray-200/30 d:hfa:bg-gray-900/80 d:hfa:text-gray-50 sm:w-auto"
-                    >
-                      <ArrowDownTrayIcon className="h-4 w-4" />
-                      Download PDF
-                    </a>
-                  </div>
-                : null}
+              <div className="fixed inset-x-0 top-0 z-40 mx-auto flex h-20 max-w-6xl items-center justify-end px-4 print:!hidden md:px-8">
+                <a
+                  href={RESUME_PDF_PATH}
+                  download={RESUME_PDF_FILENAME}
+                  className="button-rainbow inline-flex items-center justify-center gap-2 whitespace-nowrap bg-gray-800 px-6 py-2.5 text-sm font-medium tracking-tight text-gray-50 hfa:border-gray-300/90 hfa:bg-gray-900 hfa:text-white d:hfa:border-gray-700/30 md:px-8"
+                >
+                  <ArrowDownTrayIcon className="h-4 w-4" />
+                  Download Resume
+                </a>
+              </div>
               <main className="snap-y snap-normal spacing-10">
                 <ResumeSection title="Intro" className="break-inside-avoid print:!max-w-3xl">
                   <p className="text-[15px] leading-relaxed text-gray-500 d:text-gray-300 d:text-gray-300 print:!-ml-24 print:!max-w-3xl print:!text-base">
