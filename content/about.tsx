@@ -26,13 +26,9 @@ export const ABOUT = {
       caption: "Full-time",
     },
     {
-      statistic: "4+",
-      tooltip: "Started ML journey in 2020",
-      caption: "Years ML/AI",
-    },
-    {
       statistic: "1K+",
-      tooltip: "1,875 authored default-branch commits across owned non-fork repos, including private repos",
+      tooltip:
+        "1,875 authored default-branch commits across owned non-fork repos, including private repos",
       caption: "Git Commits",
     },
     {

@@ -110,15 +110,13 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
 
 export const STARTUP_BANNER: CommandOutput[] = [
   { text: "" },
-  { text: "     ___                         ______          __" },
-  { text: "    /   |  ________  ______     / ____/___  ____/ /__  _____" },
-  { text: "   / /| | / ___/ _ \\/ ___/    / /   / __ \\/ __  / _ \\/ ___/" },
-  { text: "  / ___ |/ /  /  __/ /       / /___/ /_/ / /_/ /  __(__  )" },
-  { text: " /_/  |_/_/   \\___/_/        \\____/\\____/\\__,_/\\___/____/" },
-  { text: "" },
-  {
-    text: '<span class="skill-category">AI systems</span> · ML pipelines · full-stack experiments',
-  },
+  { text: "          .                  .                         " },
+  { text: "         /\\                 /\\              .          " },
+  { text: "    /\\  /  \\      /\\   /\\  /  \\       /\\  /\\          " },
+  { text: "   /  \\/    \\    /  \\ /  \\/    \\     /  \\/  \\         " },
+  { text: "  /          \\__/    V          \\___/        \\        " },
+  { text: " ~~~~  ~~~~  ~~~~  ~~~~  ~~~~  ~~~~  ~~~~  ~~~~      " },
+  { text: "        aryancodes.com  |  terminal trailhead          " },
   {
     text: '<span class="inherit">Type <span class="command">help</span> for available commands.</span>',
   },
