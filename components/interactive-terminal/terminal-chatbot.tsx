@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const QUICK_ACTIONS = [
   { label: "about", message: "Who is Aryan?" },
-  { label: "skills", message: "What are Aryan's technical skills?" },
   { label: "projects", message: "Tell me about Aryan's projects" },
   { label: "contact", message: "How can I contact Aryan?" },
 ];
@@ -22,15 +21,19 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
   const addMessage = useChatbot((state) => state.addMessage);
   const setLoading = useChatbot((state) => state.setLoading);
   const clearMessages = useChatbot((state) => state.clearMessages);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const messagesElement = messagesRef.current;
+    if (messagesElement) {
+      messagesElement.scrollTop = messagesElement.scrollHeight;
+    }
   }, [messages]);
 
   useEffect(() => {
-    inputRef.current?.focus();
+    inputRef.current?.focus({ preventScroll: true });
   }, []);
 
   const sendMessage = async (content: string) => {
@@ -92,9 +95,12 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
   };
 
   return (
-    <div className="terminal-chatbot flex h-full flex-col overflow-hidden bg-[#1e1e1e]">
+    <div className="terminal-chatbot flex h-full min-h-0 flex-col overflow-hidden bg-[#1e1e1e]">
       {/* Messages Area */}
-      <div className="flex-1 overflow-auto p-3">
+      <div
+        ref={messagesRef}
+        className="terminal-chatbot-messages min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-3"
+      >
         {messages.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -197,7 +203,10 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
             onKeyDown={handleKeyDown}
             placeholder="Ask Byte something..."
             disabled={isLoading}
-            className="flex-1 bg-transparent text-[13px] text-[#D4D4D4] placeholder-[#6A6A6A] caret-[#D4D4D4] outline-none"
+            className="flex-1 bg-transparent text-[16px] text-[#D4D4D4] placeholder-[#6A6A6A] caret-[#D4D4D4] outline-none sm:text-[13px]"
+            spellCheck={false}
+            autoComplete="off"
+            autoCapitalize="off"
             autoFocus
           />
           <button
@@ -236,8 +245,20 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
       <style jsx>{`
         .terminal-chatbot {
           font-family: "Menlo", "Monaco", "Courier New", monospace;
-          font-size: 13px;
+          font-size: 16px;
           line-height: 1.6;
+        }
+
+        @media (min-width: 640px) {
+          .terminal-chatbot {
+            font-size: 13px;
+          }
+        }
+
+        .terminal-chatbot-messages {
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+          touch-action: pan-y;
         }
 
         .terminal-message {
