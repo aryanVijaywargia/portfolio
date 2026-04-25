@@ -68,7 +68,7 @@ export const Terminal: FC<TerminalProps> = ({
       // Focus input after mount
       setTimeout(
         () => {
-          inputRef.current?.focus();
+          inputRef.current?.focus({ preventScroll: true });
         },
         100
       );

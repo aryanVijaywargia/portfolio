@@ -111,14 +111,11 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
     return () => clearInterval(interval);
   }, [currentLineIndex]);
 
-  // Auto-scroll the latest dialogue line into view without hijacking manual scroll
+  // Keep the intro output pinned inside the terminal without moving the page.
   useEffect(() => {
     const wrapper = containerRef.current;
     if (!wrapper) return;
-    const lastLine = wrapper.querySelector(".dialogue-line.current, .dialogue-line.continue-hint");
-    if (lastLine && "scrollIntoView" in lastLine) {
-      (lastLine as HTMLElement).scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }
+    wrapper.scrollTop = wrapper.scrollHeight;
   }, [displayedText, completedLines, allDone]);
 
   return (
