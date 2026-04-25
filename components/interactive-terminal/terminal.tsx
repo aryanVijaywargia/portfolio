@@ -1,5 +1,5 @@
 import { FC, useState, useRef, useEffect, KeyboardEvent, useCallback } from "react";
-import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, DESKTOP_GAME_HELP, getCommandOutput, isSpecialCommand, CommandOutput } from "./terminal-commands";
+import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, DESKTOP_GAME_HELP, STARTUP_BANNER, getCommandOutput, isSpecialCommand, CommandOutput } from "./terminal-commands";
 import { RickIntro } from "./rick-intro";
 
 type OutputLine = {
@@ -43,10 +43,12 @@ export const Terminal: FC<TerminalProps> = ({
   const [isPasswordMode, setIsPasswordMode] = useState(false);
   const [lineIdCounter, setLineIdCounter] = useState(0);
   const [canPlayKeyboardGames, setCanPlayKeyboardGames] = useState(false);
+  const [showStartupBanner, setShowStartupBanner] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const chatbotTimeoutIds = useRef<NodeJS.Timeout[]>([]);
+  const startupRenderedRef = useRef(false);
 
   // Replay intro when red button is clicked
   useEffect(() => {
@@ -57,18 +59,26 @@ export const Terminal: FC<TerminalProps> = ({
       setCommandHistory([]);
       setHistoryIndex(-1);
       setLineIdCounter(0);
+      startupRenderedRef.current = false;
     }
   }, [replayIntroKey]);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(
+    const gameMediaQuery = window.matchMedia(
       "(min-width: 1024px) and (hover: hover) and (pointer: fine)"
     );
-    const updateCanPlayKeyboardGames = () => setCanPlayKeyboardGames(mediaQuery.matches);
+    const startupBannerMediaQuery = window.matchMedia("(min-width: 768px)");
+    const updateCanPlayKeyboardGames = () => setCanPlayKeyboardGames(gameMediaQuery.matches);
+    const updateShowStartupBanner = () => setShowStartupBanner(startupBannerMediaQuery.matches);
 
     updateCanPlayKeyboardGames();
-    mediaQuery.addEventListener?.("change", updateCanPlayKeyboardGames);
-    return () => mediaQuery.removeEventListener?.("change", updateCanPlayKeyboardGames);
+    updateShowStartupBanner();
+    gameMediaQuery.addEventListener?.("change", updateCanPlayKeyboardGames);
+    startupBannerMediaQuery.addEventListener?.("change", updateShowStartupBanner);
+    return () => {
+      gameMediaQuery.removeEventListener?.("change", updateCanPlayKeyboardGames);
+      startupBannerMediaQuery.removeEventListener?.("change", updateShowStartupBanner);
+    };
   }, []);
 
   const getHelpLines = useCallback(
@@ -80,10 +90,11 @@ export const Terminal: FC<TerminalProps> = ({
     [canPlayKeyboardGames]
   );
 
-  // Initialize with the compact welcome after intro completes
+  // Initialize once after intro completes.
   useEffect(() => {
-    if (!showIntro) {
-      addLines(COMMANDS.initial, 0);
+    if (!showIntro && !startupRenderedRef.current) {
+      startupRenderedRef.current = true;
+      addLines(showStartupBanner ? STARTUP_BANNER : COMMANDS.initial, 0);
       // Focus input after mount
       setTimeout(
         () => {
@@ -92,7 +103,7 @@ export const Terminal: FC<TerminalProps> = ({
         100
       );
     }
-  }, [showIntro]);
+  }, [showIntro, showStartupBanner]);
 
   // Cleanup chatbot timeouts on unmount
   useEffect(() => {

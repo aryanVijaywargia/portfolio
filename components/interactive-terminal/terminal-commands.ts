@@ -108,6 +108,23 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
   ],
 };
 
+export const STARTUP_BANNER: CommandOutput[] = [
+  { text: "" },
+  { text: "     ___                         ______          __" },
+  { text: "    /   |  ________  ______     / ____/___  ____/ /__  _____" },
+  { text: "   / /| | / ___/ _ \\/ ___/    / /   / __ \\/ __  / _ \\/ ___/" },
+  { text: "  / ___ |/ /  /  __/ /       / /___/ /_/ / /_/ /  __(__  )" },
+  { text: " /_/  |_/_/   \\___/_/        \\____/\\____/\\__,_/\\___/____/" },
+  { text: "" },
+  {
+    text: '<span class="skill-category">AI systems</span> · ML pipelines · full-stack experiments',
+  },
+  {
+    text: '<span class="inherit">Type <span class="command">help</span> for available commands.</span>',
+  },
+  { text: "" },
+];
+
 export const DESKTOP_GAME_HELP: CommandOutput = {
   text: '<span class="command">game</span>           Open the games menu',
 };

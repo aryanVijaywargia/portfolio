@@ -4,6 +4,7 @@ import { PortfolioModeProvider, usePortfolioMode } from "components/_stores/port
 
 import { Footer } from "components/layout/footer";
 import { Header } from "components/layout/header";
+import { MobileExperienceNotice } from "components/layout/mobile-experience-notice";
 import { BatTransition } from "components/batman/bat-transition";
 import { SEO } from "content/seo";
 import dynamic from "next/dynamic";
@@ -54,6 +55,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
         <Component {...pageProps} />
       </main>
       {isBatman ? <BatmanFooter /> : <Footer />}
+      <MobileExperienceNotice />
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
     </>
