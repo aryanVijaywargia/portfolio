@@ -47,7 +47,7 @@ export const MobileNav: FC<HeaderMobileNavProps> = ({ showNav, setShowNav }) => 
       <MobileNavButton size="24px" border="2px" onClick={toggleNav} active={showNav} />
       <div
         className={clsx(
-          " fixed left-0 top-0 h-screen w-full",
+          "fixed left-0 top-0 h-screen w-full [--line-color:theme(colors.gray.300/0.9)] d:[--line-color:theme(colors.gray.600/0.8)]",
           showNav
             ? "nav-active opacity-100"
             : "pointer-events-none select-none opacity-0 delay-[900ms]"
@@ -58,11 +58,11 @@ export const MobileNav: FC<HeaderMobileNavProps> = ({ showNav, setShowNav }) => 
             return (
               <div
                 className={clsx(
-                  "pointer-events-none relative h-full -translate-y-full select-none bg-slate-900 transition-all duration-300 ease-linear",
+                  "pointer-events-none relative h-full -translate-y-full select-none bg-white transition-all duration-300 ease-linear d:bg-slate-900",
                   index === 0 &&
-                    "relative before:absolute b:right-0 b:top-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-20",
+                    "relative before:absolute b:right-0 b:top-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-70 d:b:opacity-20",
                   index === 17 &&
-                    "relative before:absolute b:left-0 b:top-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-20"
+                    "relative before:absolute b:left-0 b:top-0 b:h-full b:w-px b:bg-[linear-gradient(180deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] b:bg-[length:1px_8px] b:opacity-70 d:b:opacity-20"
                 )}
                 style={{
                   transitionDelay: showNav ? `${index * 0.01}s` : `${index * 0.025}s`,
@@ -74,13 +74,13 @@ export const MobileNav: FC<HeaderMobileNavProps> = ({ showNav, setShowNav }) => 
           })}
         </div>
         <section className="mt-28 p-8 spacing-24">
-          <nav className="relative text-white spacing-6">
+          <nav className="relative text-gray-900 d:text-white spacing-6">
             {HEADER.nav.map((navItem, index) => {
               return (
                 <Link
                   key={navItem.href}
                   href={navItem.href}
-                  className="group flex items-baseline justify-between py-2 text-gray-300 opacity-0 opacity-0 transition-opacity delay-200 hfa:text-sky-400 [.nav-active_&]:opacity-100"
+                  className="group flex items-baseline justify-between py-2 text-gray-800 opacity-0 transition-opacity delay-200 hfa:text-sky-500 d:text-gray-300 d:hfa:text-sky-400 [.nav-active_&]:opacity-100"
                   onClick={() => setShowNav(false)}
                 >
                   <span
@@ -93,9 +93,9 @@ export const MobileNav: FC<HeaderMobileNavProps> = ({ showNav, setShowNav }) => 
                   >
                     {navItem.title}
                   </span>
-                  <div className="mx-2 h-px flex-1 bg-[linear-gradient(90deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] bg-[length:8px_1px] opacity-0 transition-opacity [.nav-active_&]:opacity-40 [.nav-active_&]:delay-500"></div>
+                  <div className="mx-2 h-px flex-1 bg-[linear-gradient(90deg,var(--line-color),var(--line-color)_50%,transparent_0,transparent)] bg-[length:8px_1px] opacity-0 transition-opacity [.nav-active_&]:opacity-70 d:[.nav-active_&]:opacity-40 [.nav-active_&]:delay-500"></div>
                   <small
-                    className="translate-x-[200%] text-gray-400 [.nav-active_&]:translate-x-0"
+                    className="translate-x-[200%] text-gray-500 d:text-gray-400 [.nav-active_&]:translate-x-0"
                     style={{
                       transition: showNav
                         ? `transform 0.15s ${0.4 + 0.05 * index}s`

@@ -85,7 +85,10 @@ export const Timeline: FC<TimelineProps> = ({}) => {
 
   return (
     <section className="mx-auto max-w-6xl px-4 pb-16 md:px-8 md:pb-24">
-      <div className="-mx-4 flex h-96 overflow-x-auto px-6 py-4 xl:mx-0" ref={scrollContainerRef}>
+      <div
+        className="scrollbar-none -mx-4 flex h-96 overflow-x-auto px-6 py-4 xl:mx-0"
+        ref={scrollContainerRef}
+      >
         {Object.entries(TIMELINEOBJECT).map(([year, events], yearIndex, years) => (
           <div key={year} className="relative">
             <header className="absolute left-0 -translate-x-1/2 select-none text-xs font-semibold text-gray-400">
