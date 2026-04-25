@@ -6,13 +6,24 @@ import Aryan3 from "../public/images/about/aryan-3.jpg";
 import Aryan4 from "../public/images/about/aryan-4.jpg";
 import Aryan5 from "../public/images/about/aryan-5.jpg";
 
+const getExperienceYearsSince = (startDate: Date) => {
+  const now = new Date();
+  let totalMonths =
+    (now.getFullYear() - startDate.getFullYear()) * 12 + now.getMonth() - startDate.getMonth();
+
+  if (now.getDate() < startDate.getDate()) {
+    totalMonths -= 1;
+  }
+
+  return `${Math.max(0, Math.floor(totalMonths / 12))}+`;
+};
+
 export const ABOUT = {
   stats: [
     {
-      statistic: `${new Date(Date.now() - new Date("2000-01-01T00:00:00").getTime()).getFullYear() - 1970
-        }`,
-      tooltip: `Born in 2000`,
-      caption: "Years Old",
+      statistic: getExperienceYearsSince(new Date("2023-06-01T00:00:00")),
+      tooltip: "Full-time engineering experience since June 2023",
+      caption: "Full-time",
     },
     {
       statistic: "4+",
@@ -20,9 +31,9 @@ export const ABOUT = {
       caption: "Years ML/AI",
     },
     {
-      statistic: "10+",
-      tooltip: "TensorFlow, PyTorch, OpenCV, Scikit-Learn, and more",
-      caption: "ML Frameworks",
+      statistic: "1K+",
+      tooltip: "1,875 authored default-branch commits across owned non-fork repos, including private repos",
+      caption: "Git Commits",
     },
     {
       statistic: "15+",
