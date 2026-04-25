@@ -1,5 +1,5 @@
 import { FC, useState, useRef, useEffect, KeyboardEvent, useCallback } from "react";
-import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, getCommandOutput, isSpecialCommand, CommandOutput } from "./terminal-commands";
+import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, DESKTOP_GAME_HELP, STARTUP_BANNER, getCommandOutput, isSpecialCommand, CommandOutput } from "./terminal-commands";
 import { RickIntro } from "./rick-intro";
 
 type OutputLine = {
@@ -19,7 +19,6 @@ type TerminalProps = {
   onSecretDiscovered?: () => void;
   onRootAccess?: () => void;
   onBatmanTheme?: () => void;
-  onExitBatman?: () => void;
   replayIntroKey?: number;
 };
 
@@ -34,7 +33,6 @@ export const Terminal: FC<TerminalProps> = ({
   onSecretDiscovered,
   onRootAccess,
   onBatmanTheme,
-  onExitBatman,
   replayIntroKey,
 }) => {
   const [showIntro, setShowIntro] = useState(true);
@@ -44,10 +42,13 @@ export const Terminal: FC<TerminalProps> = ({
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isPasswordMode, setIsPasswordMode] = useState(false);
   const [lineIdCounter, setLineIdCounter] = useState(0);
+  const [canPlayKeyboardGames, setCanPlayKeyboardGames] = useState(false);
+  const [showStartupBanner, setShowStartupBanner] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const chatbotTimeoutIds = useRef<NodeJS.Timeout[]>([]);
+  const startupRenderedRef = useRef(false);
 
   // Replay intro when red button is clicked
   useEffect(() => {
@@ -58,13 +59,42 @@ export const Terminal: FC<TerminalProps> = ({
       setCommandHistory([]);
       setHistoryIndex(-1);
       setLineIdCounter(0);
+      startupRenderedRef.current = false;
     }
   }, [replayIntroKey]);
 
-  // Initialize with banner after intro completes
   useEffect(() => {
-    if (!showIntro) {
-      addLines(COMMANDS.banner, 0);
+    const gameMediaQuery = window.matchMedia(
+      "(min-width: 1024px) and (hover: hover) and (pointer: fine)"
+    );
+    const startupBannerMediaQuery = window.matchMedia("(min-width: 768px)");
+    const updateCanPlayKeyboardGames = () => setCanPlayKeyboardGames(gameMediaQuery.matches);
+    const updateShowStartupBanner = () => setShowStartupBanner(startupBannerMediaQuery.matches);
+
+    updateCanPlayKeyboardGames();
+    updateShowStartupBanner();
+    gameMediaQuery.addEventListener?.("change", updateCanPlayKeyboardGames);
+    startupBannerMediaQuery.addEventListener?.("change", updateShowStartupBanner);
+    return () => {
+      gameMediaQuery.removeEventListener?.("change", updateCanPlayKeyboardGames);
+      startupBannerMediaQuery.removeEventListener?.("change", updateShowStartupBanner);
+    };
+  }, []);
+
+  const getHelpLines = useCallback(
+    () => [
+      ...COMMANDS.help.slice(0, -2),
+      ...(canPlayKeyboardGames ? [DESKTOP_GAME_HELP] : []),
+      ...COMMANDS.help.slice(-2),
+    ],
+    [canPlayKeyboardGames]
+  );
+
+  // Initialize once after intro completes.
+  useEffect(() => {
+    if (!showIntro && !startupRenderedRef.current) {
+      startupRenderedRef.current = true;
+      addLines(showStartupBanner ? STARTUP_BANNER : COMMANDS.initial, 0);
       // Focus input after mount
       setTimeout(
         () => {
@@ -73,7 +103,7 @@ export const Terminal: FC<TerminalProps> = ({
         100
       );
     }
-  }, [showIntro]);
+  }, [showIntro, showStartupBanner]);
 
   // Cleanup chatbot timeouts on unmount
   useEffect(() => {
@@ -165,7 +195,7 @@ export const Terminal: FC<TerminalProps> = ({
 
   // Focus input on click
   const handleTerminalClick = () => {
-    inputRef.current?.focus();
+    inputRef.current?.focus({ preventScroll: true });
   };
 
   const addLine = (text: string, className?: string, delay = 0): NodeJS.Timeout => {
@@ -216,7 +246,7 @@ export const Terminal: FC<TerminalProps> = ({
     // Handle password mode
     if (isPasswordMode) {
       if (cmd === TERMINAL_CONFIG.password) {
-        addLines(COMMANDS.social, 80);
+        addLine("Access granted.", "info", 80);
         onRootAccess?.();
       } else if (cmd === TERMINAL_CONFIG.batmanPassword) {
         // Batman theme activation sequence
@@ -298,16 +328,6 @@ export const Terminal: FC<TerminalProps> = ({
           );
           return;
 
-        case "resume":
-          addLine("Opening resume...", "info", 80);
-          setTimeout(
-            () => {
-              window.open("/resume", "_blank");
-            },
-            500
-          );
-          return;
-
         case "code":
           addLine("Opening code editor...", "info", 80);
           onSourceDiver?.();
@@ -342,6 +362,11 @@ export const Terminal: FC<TerminalProps> = ({
           return;
 
         case "game":
+          if (!canPlayKeyboardGames) {
+            addLine(`Command not found: ${cmd}. Type 'help' for available commands.`, "error", 80);
+            return;
+          }
+
           addLine("", undefined, 0);
           addLine("Loading Games Menu...", "info", 80);
           addLine("[##########] 100%", "info", 400);
@@ -357,24 +382,11 @@ export const Terminal: FC<TerminalProps> = ({
           addLine("Enter password:", "info", 80);
           setIsPasswordMode(true);
           return;
-
-        case "exitbat":
-          addLine("", undefined, 0);
-          addLine("Deactivating Dark Knight Protocol...", "info", 80);
-          addLine("Returning to normal mode.", "info", 400);
-          setTimeout(
-            () => {
-              onExitBatman?.();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            },
-            600
-          );
-          return;
       }
     }
 
     // Handle regular commands
-    const output = getCommandOutput(normalizedCmd);
+    const output = normalizedCmd === "help" ? getHelpLines() : getCommandOutput(normalizedCmd);
     if (output) {
       onValidCommand?.(normalizedCmd);
       if (normalizedCmd === "secret") {
@@ -422,11 +434,11 @@ export const Terminal: FC<TerminalProps> = ({
 
   return (
     <div
-      className="terminal-wrapper h-full overflow-auto rounded-b-md bg-white dark:bg-[#1e1e1e]"
+      className="terminal-wrapper h-full min-h-0 overflow-y-auto overflow-x-hidden rounded-b-md bg-white dark:bg-[#1e1e1e]"
       onClick={handleTerminalClick}
       ref={terminalRef}
     >
-      <div className="terminal-content p-3 font-mono text-[13px] leading-relaxed">
+      <div className="terminal-content p-3 font-mono text-[16px] leading-relaxed sm:text-[13px]">
         {/* Output Lines */}
         {outputLines.map((line) => (
           <div
@@ -437,7 +449,7 @@ export const Terminal: FC<TerminalProps> = ({
         ))}
 
         {/* Input Line - inline with output */}
-        <div className="terminal-input-line flex items-center font-mono text-[13px]">
+        <div className="terminal-input-line flex items-center font-mono">
           <span className="prompt select-none whitespace-nowrap text-[#0d7377] dark:text-[#4EC9B0]">
             {TERMINAL_CONFIG.prompt}
           </span>
@@ -460,6 +472,9 @@ export const Terminal: FC<TerminalProps> = ({
         .terminal-wrapper {
           cursor: text;
           font-family: "Menlo", "Monaco", "Courier New", monospace;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+          touch-action: pan-y;
         }
 
         .terminal-line {

@@ -137,7 +137,7 @@ export const Hero: FC = () => {
           </footer>
         </section>
         <section className="relative md:h-[30rem]">
-          <div className="relative flex h-full min-w-[32rem] flex-col gap-4 pr-4 sm:min-w-[42rem] lg:absolute lg:-left-4 lg:top-28 lg:mr-4 lg:min-w-[34rem] lg:pr-8">
+          <div className="relative flex h-full w-full min-w-0 flex-col gap-4 sm:min-w-[42rem] sm:pr-4 lg:absolute lg:-left-4 lg:top-28 lg:mr-4 lg:min-w-[34rem] lg:pr-8">
             <div id="terminal-section" className="relative flex h-full flex-col">
               <InteractiveTerminal language="tsx" />
               <div className="absolute -bottom-5 -right-5 -z-10 h-[calc(100%+1.25rem)] w-[calc(100%+1.25rem)] rounded-lg border border-gray-400/20 bg-gray-100/70 [mask-image:linear-gradient(-30deg,#fff_16.35%,rgb(255_255_255_/_0%)_61.66%)] d:border-gray-700/20 d:bg-gray-900/40"></div>

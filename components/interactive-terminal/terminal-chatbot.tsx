@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const QUICK_ACTIONS = [
   { label: "about", message: "Who is Aryan?" },
-  { label: "skills", message: "What are Aryan's technical skills?" },
   { label: "projects", message: "Tell me about Aryan's projects" },
   { label: "contact", message: "How can I contact Aryan?" },
 ];
@@ -22,15 +21,18 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
   const addMessage = useChatbot((state) => state.addMessage);
   const setLoading = useChatbot((state) => state.setLoading);
   const clearMessages = useChatbot((state) => state.clearMessages);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const messagesElement = messagesRef.current;
+    if (messagesElement) {
+      messagesElement.scrollTop = messagesElement.scrollHeight;
+    }
   }, [messages]);
 
   useEffect(() => {
-    inputRef.current?.focus();
+    inputRef.current?.focus({ preventScroll: true });
   }, []);
 
   const sendMessage = async (content: string) => {
@@ -92,9 +94,12 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
   };
 
   return (
-    <div className="terminal-chatbot flex h-full flex-col overflow-hidden bg-[#1e1e1e]">
+    <div className="terminal-chatbot flex h-full min-h-0 flex-col overflow-hidden bg-white text-[#383a42] dark:bg-[#1e1e1e] dark:text-[#D4D4D4]">
       {/* Messages Area */}
-      <div className="flex-1 overflow-auto p-3">
+      <div
+        ref={messagesRef}
+        className="terminal-chatbot-messages min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-3"
+      >
         {messages.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -103,18 +108,20 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
             className="flex h-full flex-col items-center justify-center"
           >
             {/* ASCII Dog */}
-            <pre className="mb-4 text-[11px] leading-tight text-[#4EC9B0]">
+            <pre className="mb-4 text-[11px] leading-tight text-[#0d7377] dark:text-[#4EC9B0]">
               {`    / \\__
    (    @\\___
    /         O
   /   (_____/
  /_____/   U`}
             </pre>
-            <div className="mb-2 text-sm text-[#D4D4D4]">
-              Woof! I'm <span className="text-[#4EC9B0]">Byte</span>, Aryan's AI companion.
+            <div className="mb-2 text-sm text-[#383a42] dark:text-[#D4D4D4]">
+              Woof! I'm <span className="text-[#0d7377] dark:text-[#4EC9B0]">Byte</span>, Aryan's AI
+              companion.
             </div>
-            <div className="text-xs text-[#6A6A6A]">
-              Ask me anything or type <span className="text-[#4EC9B0]">'exit'</span> to return.
+            <div className="text-xs text-[#64748b] dark:text-[#6A6A6A]">
+              Ask me anything or type{" "}
+              <span className="text-[#0d7377] dark:text-[#4EC9B0]">'exit'</span> to return.
             </div>
           </motion.div>
         )}
@@ -132,13 +139,11 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
               >
                 {/* Prompt line */}
                 <div className="flex items-start gap-1">
-                  <span className="select-none text-[#4EC9B0]">
+                  <span className="select-none text-[#0d7377] dark:text-[#4EC9B0]">
                     {msg.role === "user" ? "you" : "byte"}
                   </span>
-                  <span className="select-none text-[#6A6A6A]">›</span>
-                  <span className={msg.role === "user" ? "text-[#D4D4D4]" : "text-[#D4D4D4]"}>
-                    {msg.content}
-                  </span>
+                  <span className="select-none text-[#94a3b8] dark:text-[#6A6A6A]">›</span>
+                  <span className="text-[#383a42] dark:text-[#D4D4D4]">{msg.content}</span>
                 </div>
               </motion.div>
             ))}
@@ -152,9 +157,9 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
               transition={{ duration: 0.15 }}
               className="flex items-start gap-1"
             >
-              <span className="select-none text-[#4EC9B0]">byte</span>
-              <span className="select-none text-[#6A6A6A]">›</span>
-              <span className="text-[#3794FF]">
+              <span className="select-none text-[#0d7377] dark:text-[#4EC9B0]">byte</span>
+              <span className="select-none text-[#94a3b8] dark:text-[#6A6A6A]">›</span>
+              <span className="text-[#4078f2] dark:text-[#3794FF]">
                 <motion.span
                   animate={{ opacity: [1, 0.3, 1] }}
                   transition={{ duration: 1, repeat: Infinity }}
@@ -165,19 +170,18 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
             </motion.div>
           )}
         </div>
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Quick Commands */}
-      <div className="border-t border-[#2a2a2a] px-3 py-2">
-        <div className="mb-2 text-[11px] text-[#6A6A6A]">Quick commands:</div>
+      <div className="border-t border-gray-200 px-3 py-2 dark:border-[#2a2a2a]">
+        <div className="mb-2 text-[11px] text-[#64748b] dark:text-[#6A6A6A]">Quick commands:</div>
         <div className="flex flex-wrap gap-1.5">
           {QUICK_ACTIONS.map((action) => (
             <button
               key={action.label}
               onClick={() => sendMessage(action.message)}
               disabled={isLoading}
-              className="rounded border border-[#3c3c3c] bg-[#2a2a2a] px-2 py-1 text-[11px] text-[#D4D4D4] transition-all duration-150 hover:border-[#4EC9B0] hover:text-[#4EC9B0] disabled:opacity-40"
+              className="rounded border border-gray-300 bg-gray-50 px-2 py-1 text-[11px] text-[#475569] transition-all duration-150 hover:border-[#0d7377] hover:text-[#0d7377] disabled:opacity-40 dark:border-[#3c3c3c] dark:bg-[#2a2a2a] dark:text-[#D4D4D4] dark:hover:border-[#4EC9B0] dark:hover:text-[#4EC9B0]"
             >
               {action.label}
             </button>
@@ -186,9 +190,11 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-[#2a2a2a] p-3">
+      <div className="border-t border-gray-200 p-3 dark:border-[#2a2a2a]">
         <div className="flex items-center gap-1">
-          <span className="select-none whitespace-nowrap text-[#4EC9B0]">you ›</span>
+          <span className="select-none whitespace-nowrap text-[#0d7377] dark:text-[#4EC9B0]">
+            you ›
+          </span>
           <input
             ref={inputRef}
             type="text"
@@ -197,13 +203,16 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
             onKeyDown={handleKeyDown}
             placeholder="Ask Byte something..."
             disabled={isLoading}
-            className="flex-1 bg-transparent text-[13px] text-[#D4D4D4] placeholder-[#6A6A6A] caret-[#D4D4D4] outline-none"
+            className="flex-1 bg-transparent text-[16px] text-[#383a42] placeholder-[#94a3b8] caret-[#383a42] outline-none disabled:opacity-60 dark:text-[#D4D4D4] dark:placeholder-[#6A6A6A] dark:caret-[#D4D4D4] sm:text-[13px]"
+            spellCheck={false}
+            autoComplete="off"
+            autoCapitalize="off"
             autoFocus
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={isLoading || !input.trim()}
-            className="text-[#6A6A6A] transition-colors duration-150 hover:text-[#4EC9B0] disabled:opacity-40"
+            className="text-[#64748b] transition-colors duration-150 hover:text-[#0d7377] disabled:opacity-40 dark:text-[#6A6A6A] dark:hover:text-[#4EC9B0]"
           >
             <svg
               className="h-4 w-4"
@@ -220,15 +229,17 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
             </svg>
           </button>
         </div>
-        <div className="mt-2 flex items-center justify-between text-[10px] text-[#6A6A6A]">
+        <div className="mt-2 flex items-center justify-between text-[10px] text-[#64748b] dark:text-[#6A6A6A]">
           <div className="flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-[#28c840]" />
             <span>Connected</span>
           </div>
           <span>
             Press{" "}
-            <kbd className="rounded border border-[#3c3c3c] bg-[#2a2a2a] px-1 py-0.5">Esc</kbd> to
-            exit
+            <kbd className="rounded border border-gray-300 bg-gray-50 px-1 py-0.5 dark:border-[#3c3c3c] dark:bg-[#2a2a2a]">
+              Esc
+            </kbd>{" "}
+            to exit
           </span>
         </div>
       </div>
@@ -236,8 +247,20 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
       <style jsx>{`
         .terminal-chatbot {
           font-family: "Menlo", "Monaco", "Courier New", monospace;
-          font-size: 13px;
+          font-size: 16px;
           line-height: 1.6;
+        }
+
+        @media (min-width: 640px) {
+          .terminal-chatbot {
+            font-size: 13px;
+          }
+        }
+
+        .terminal-chatbot-messages {
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+          touch-action: pan-y;
         }
 
         .terminal-message {
@@ -250,13 +273,23 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
           width: 8px;
         }
         .terminal-chatbot ::-webkit-scrollbar-track {
-          background: #1e1e1e;
+          background: #ffffff;
         }
         .terminal-chatbot ::-webkit-scrollbar-thumb {
-          background: #3c3c3c;
+          background: #cbd5e1;
           border-radius: 4px;
         }
         .terminal-chatbot ::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+
+        :global(.dark) .terminal-chatbot ::-webkit-scrollbar-track {
+          background: #1e1e1e;
+        }
+        :global(.dark) .terminal-chatbot ::-webkit-scrollbar-thumb {
+          background: #3c3c3c;
+        }
+        :global(.dark) .terminal-chatbot ::-webkit-scrollbar-thumb:hover {
           background: #4c4c4c;
         }
       `}</style>

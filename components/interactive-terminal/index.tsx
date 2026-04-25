@@ -4,15 +4,12 @@ import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 import { Terminal } from "./terminal";
+import { TerminalChatbot } from "./terminal-chatbot";
 import { CopyButton } from "components/copy-button";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
 import type { CodeGroupProps } from "components/typography/code";
 
-const TerminalChatbot = dynamic(
-  () => import("./terminal-chatbot").then((mod) => mod.TerminalChatbot),
-  { ssr: false }
-);
 const SnakeGame = dynamic(() => import("./snake-game").then((mod) => mod.SnakeGame), {
   ssr: false,
 });
@@ -43,7 +40,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const clearTrigger = useChatbot((state) => state.clearTrigger);
   const closeChat = useChatbot((state) => state.closeChat);
   const { trackAchievementEvent } = useAchievementActions();
-  const { activateBatman, deactivateBatman } = usePortfolioMode();
+  const { activateBatman } = usePortfolioMode();
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -198,10 +195,10 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
   const layoutTransition = { type: "spring" as const, damping: 25, stiffness: 300 };
   const windowSizeClass = isExpanded
-    ? "h-[80vh] w-[90vw] max-w-2xl"
+    ? "h-[min(80svh,42rem)] w-[calc(100vw-2rem)] max-w-2xl sm:w-[90vw]"
     : isTerminalMaximized
-    ? "h-[80vh] w-[90vw] max-w-3xl"
-    : "h-[22rem] sm:h-[24rem] lg:h-[27rem] w-full";
+    ? "h-[min(80svh,42rem)] w-[calc(100vw-2rem)] max-w-3xl sm:w-[90vw]"
+    : "h-[22rem] w-full sm:h-[24rem] lg:h-[27rem]";
 
   // Terminal content based on current mode
   const terminalContent = isExpanded
@@ -231,7 +228,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         onSecretDiscovered={handleSecretDiscovered}
         onRootAccess={handleRootAccess}
         onBatmanTheme={activateBatman}
-        onExitBatman={deactivateBatman}
         replayIntroKey={replayIntroKey}
       />;
 
@@ -240,7 +236,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       layout
       layoutId="terminal-window"
       transition={layoutTransition}
-      className={`terminal-window relative flex flex-col overflow-hidden rounded-lg shadow-2xl ${
+      className={`terminal-window relative flex min-h-0 flex-col overflow-hidden rounded-lg shadow-2xl ${
         isModal ? "pointer-events-auto" : ""
       } ${windowSizeClass}`}
       onClick={isModal ? (e) => e.stopPropagation() : undefined}
@@ -331,7 +327,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       </motion.header>
 
       {/* Content */}
-      <main className="terminal-content flex-1 overflow-auto bg-white dark:bg-[#1e1e1e]">
+      <main className="terminal-content min-h-0 flex-1 overflow-hidden bg-white dark:bg-[#1e1e1e]">
         {terminalContent}
       </main>
 
@@ -339,6 +335,10 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         .terminal-window {
           box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1),
             0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .terminal-content {
+          overscroll-behavior: contain;
         }
 
         .traffic-light {

@@ -25,18 +25,12 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: "" },
     { text: '<span class="command">whois</span>          Who is Aryan?' },
     { text: '<span class="command">whoami</span>         Who are you?' },
-    { text: '<span class="command">social</span>         Display social networks' },
     { text: '<span class="command">contact</span>        Show business card' },
-    { text: '<span class="command">skills</span>         View technical skills' },
-    { text: '<span class="command">resume</span>         Open resume' },
     { text: '<span class="command">code</span>           View the code editor' },
     { text: '<span class="command">history</span>        View command history' },
     { text: '<span class="command">secret</span>         Find the hidden command' },
     { text: '<span class="command">chatbot</span>        Launch Byte, the AI companion' },
-    { text: '<span class="command">game</span>           Open the games menu' },
     { text: '<span class="command">clear</span>          Clear terminal' },
-    { text: '<span class="command">banner</span>         Display the header' },
-    { text: '<span class="command">exitbat</span>        Exit Batman mode (if active)' },
     { text: '<span class="command">help</span>           Show this help message' },
     { text: "" },
   ],
@@ -63,39 +57,6 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
   whoami: [
     { text: "" },
     { text: 'The paradox of "Who am I?" is: we never know, but we constantly find out.' },
-    { text: "" },
-  ],
-
-  social: [
-    { text: "" },
-    {
-      text: `github         <a href="${SOCIAL_LINKS.github}" target="_blank" class="terminal-link">github.com/AryanVijaywargia</a>`,
-    },
-    {
-      text: `linkedin       <a href="${SOCIAL_LINKS.linkedin}" target="_blank" class="terminal-link">linkedin.com/in/aryan-vijaywargia</a>`,
-    },
-    {
-      text: `dagshub        <a href="${SOCIAL_LINKS.dagshub}" target="_blank" class="terminal-link">dagshub.com/aryanVijaywargia</a>`,
-    },
-    { text: "" },
-  ],
-
-  skills: [
-    { text: "" },
-    { text: '<span class="skill-category">Languages:</span>' },
-    { text: "  Python, C/C++, JavaScript, TypeScript, HTML/CSS, SQL" },
-    { text: "" },
-    { text: '<span class="skill-category">ML/DL Frameworks:</span>' },
-    { text: "  TensorFlow, PyTorch, Scikit-Learn, OpenCV, Keras" },
-    { text: "" },
-    { text: '<span class="skill-category">Libraries:</span>' },
-    { text: "  Flask, Dash, Plotly, Shapely, Pandas, NumPy" },
-    { text: "" },
-    { text: '<span class="skill-category">Developer Tools:</span>' },
-    { text: "  Git, GitHub, DagsHub, MLFlow, Heroku, Weights & Biases" },
-    { text: "" },
-    { text: '<span class="skill-category">Frontend:</span>' },
-    { text: "  Angular, React, TailwindCSS" },
     { text: "" },
   ],
 
@@ -140,20 +101,6 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: "" },
   ],
 
-  banner: [
-    { text: "" },
-    { text: "    _                           ____          _           " },
-    { text: "   / \\   _ __ _   _  __ _ _ __ / ___|___   __| | ___  ___ " },
-    { text: "  / _ \\ | '__| | | |/ _` | '_ \\ |   / _ \\ / _` |/ _ \\/ __|" },
-    { text: " / ___ \\| |  | |_| | (_| | | | | |__| (_) | (_| |  __/\\__ \\" },
-    { text: "/_/   \\_\\_|   \\__, |\\__,_|_| |_|\\____\\___/ \\__,_|\\___||___/" },
-    { text: "              |___/                                        " },
-    { text: "" },
-    { text: "Welcome to my interactive terminal portfolio!" },
-    { text: 'Type <span class="command">help</span> for a list of available commands.' },
-    { text: "" },
-  ],
-
   initial: [
     {
       text: '<span class="inherit">Welcome! Type <span class="command">help</span> for available commands.</span>',
@@ -161,16 +108,26 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
   ],
 };
 
-export const SPECIAL_COMMANDS = [
-  "clear",
-  "history",
-  "resume",
-  "code",
-  "sudo",
-  "chatbot",
-  "game",
-  "exitbat",
+export const STARTUP_BANNER: CommandOutput[] = [
+  { text: "" },
+  { text: "          .                  .                         " },
+  { text: "         /\\                 /\\              .          " },
+  { text: "    /\\  /  \\      /\\   /\\  /  \\       /\\  /\\          " },
+  { text: "   /  \\/    \\    /  \\ /  \\/    \\     /  \\/  \\         " },
+  { text: "  /          \\__/    V          \\___/        \\        " },
+  { text: " ~~~~  ~~~~  ~~~~  ~~~~  ~~~~  ~~~~  ~~~~  ~~~~      " },
+  { text: "        aryancodes.com  |  terminal trailhead          " },
+  {
+    text: '<span class="inherit">Type <span class="command">help</span> for available commands.</span>',
+  },
+  { text: "" },
 ];
+
+export const DESKTOP_GAME_HELP: CommandOutput = {
+  text: '<span class="command">game</span>           Open the games menu',
+};
+
+export const SPECIAL_COMMANDS = ["clear", "history", "code", "sudo", "chatbot", "game"];
 
 export function isSpecialCommand(cmd: string): boolean {
   return SPECIAL_COMMANDS.includes(cmd.toLowerCase().trim());
