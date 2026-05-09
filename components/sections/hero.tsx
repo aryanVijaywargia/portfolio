@@ -52,7 +52,7 @@ export const Hero: FC = () => {
         <Link
           target="_blank"
           href="https://github.com/AryanVijaywargia"
-          className="group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-yellow-500/30 hfa:bg-yellow-500 hfa:text-white d:bg-gray-700 d:text-gray-50 d:hfa:bg-yellow-500"
+          className="group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-yellow-500/30 hfa:bg-yellow-500 hfa:text-white d:border-slate-400/15 d:bg-slate-900/60 d:text-slate-200 d:backdrop-blur d:hfa:border-yellow-500/40 d:hfa:bg-yellow-500/90"
           data-tip="Star on GitHub"
         >
           <span className="sr-only">Star on GitHub</span>
@@ -60,7 +60,7 @@ export const Hero: FC = () => {
         </Link>
         <button
           onClick={handleOpenChatbot}
-          className="group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-sky-500/30 hfa:bg-sky-500 hfa:text-white d:bg-gray-700 d:text-gray-50 d:hfa:bg-sky-500"
+          className="group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-sky-500/30 hfa:bg-sky-500 hfa:text-white d:border-slate-400/15 d:bg-slate-900/60 d:text-slate-200 d:backdrop-blur d:hfa:border-sky-500/40 d:hfa:bg-sky-500/90"
           data-tip="Chat with Byte"
           aria-label="Chat with Byte"
         >
@@ -69,7 +69,7 @@ export const Hero: FC = () => {
         <Link
           target="_blank"
           href="https://github.com/AryanVijaywargia"
-          className="group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-gray-900/30 hfa:bg-gray-900 hfa:text-white d:bg-gray-700 d:text-gray-50 d:hfa:bg-gray-600"
+          className="group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-gray-900/30 hfa:bg-gray-900 hfa:text-white d:border-slate-400/15 d:bg-slate-900/60 d:text-slate-200 d:backdrop-blur d:hfa:border-slate-300/30 d:hfa:bg-slate-800"
           data-tip="GitHub Profile"
         >
           <span className="sr-only">GitHub Profile</span>
@@ -100,10 +100,13 @@ export const Hero: FC = () => {
                   ]}
                 />
               </h2>*/}
-            <ul className="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium">
+            <ul className="scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium d:gap-2">
               {HERO.tech.map(({ name, Icon }) => (
-                <li className="flex items-center gap-2 text-gray-500 d:text-gray-400" key={name}>
-                  <Icon className="h-7 w-7 text-gray-400 d:text-gray-300/80" />
+                <li
+                  className="flex items-center gap-2 text-gray-500 d:gap-2 d:rounded-full d:border d:border-slate-400/15 d:bg-slate-900/50 d:px-3.5 d:py-2 d:text-[13px] d:text-slate-300 d:backdrop-blur d:transition-colors d:hover:border-cyan-400/40 d:hover:text-slate-50"
+                  key={name}
+                >
+                  <Icon className="h-7 w-7 text-gray-400 d:h-5 d:w-5 d:text-slate-200" />
                   {name}
                 </li>
               ))}
@@ -120,7 +123,7 @@ export const Hero: FC = () => {
             {HERO.cta1
               ? <Link
                   href={HERO.cta1.href}
-                  className="button-rainbow inline-flex whitespace-nowrap bg-gray-800 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-50 hfa:border-gray-300/90 hfa:bg-gray-900 hfa:text-white d:hfa:border-gray-700/30 md:px-12"
+                  className="button-rainbow inline-flex whitespace-nowrap bg-gray-800 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-50 hfa:border-gray-300/90 hfa:bg-gray-900 hfa:text-white d:border-transparent d:bg-gradient-to-br d:from-cyan-500 d:to-blue-600 d:text-white d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)] d:hfa:border-transparent d:hfa:from-cyan-400 d:hfa:to-blue-500 d:hfa:text-white d:hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.7),0_0_48px_-6px_rgba(59,130,246,0.55)] md:px-12"
                 >
                   {HERO.cta1.name}
                 </Link>
@@ -129,7 +132,7 @@ export const Hero: FC = () => {
             {HERO.cta2
               ? <Link
                   href={HERO.cta2.href}
-                  className="button-border inline-flex whitespace-nowrap bg-white/90 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-500 transition-all hfa:border-gray-900/70 hfa:bg-white/90 hfa:text-gray-900 d:border-gray-700/80 d:bg-transparent d:text-gray-300 d:hfa:border-gray-200/30 d:hfa:bg-gray-900/80 d:hfa:text-gray-50 md:px-12"
+                  className="button-border inline-flex whitespace-nowrap bg-white/90 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-500 transition-all hfa:border-gray-900/70 hfa:bg-white/90 hfa:text-gray-900 d:border-slate-400/20 d:bg-slate-900/60 d:text-slate-200 d:backdrop-blur d:hfa:border-slate-300/40 d:hfa:bg-slate-900/80 d:hfa:text-slate-50 md:px-12"
                 >
                   {HERO.cta2.name}
                 </Link>
@@ -142,17 +145,54 @@ export const Hero: FC = () => {
               <InteractiveTerminal language="tsx" />
               <div className="absolute -bottom-5 -right-5 -z-10 h-[calc(100%+1.25rem)] w-[calc(100%+1.25rem)] rounded-lg border border-gray-400/20 bg-gray-100/70 [mask-image:linear-gradient(-30deg,#fff_16.35%,rgb(255_255_255_/_0%)_61.66%)] d:border-gray-700/20 d:bg-gray-900/40"></div>
             </div>
-            <div className="relative z-20 mt-0.5 flex flex-wrap justify-end gap-1.5">
+            <div className="relative z-20 mt-0.5 flex flex-wrap items-center justify-end gap-1.5 d:hidden">
+              <span className="mr-1 font-mono text-[11px] uppercase tracking-[0.1em] text-gray-400">
+                also:
+              </span>
               <Badge style="info">Hiker</Badge>
               <Badge style="success">Chef</Badge>
               <Badge style="warning">Runner</Badge>
               <Badge style="accent">Mixologist</Badge>
               <Badge style="plain">Space Enthusiast</Badge>
             </div>
+            {/* Dark-mode identity rail: outlined chips with leading colored dot */}
+            <div className="relative z-20 mt-0.5 hidden flex-wrap items-center justify-end gap-2.5 d:flex">
+              <span className="mr-1 font-mono text-[11px] uppercase tracking-[0.1em] text-slate-500">
+                also:
+              </span>
+              {[
+                { label: "Hiker", color: "#67e8f9", border: "rgba(103,232,249,0.3)", bg: "rgba(6,182,212,0.06)" },
+                { label: "Chef", color: "#86efac", border: "rgba(134,239,172,0.3)", bg: "rgba(34,197,94,0.06)" },
+                { label: "Runner", color: "#fcd34d", border: "rgba(252,211,77,0.3)", bg: "rgba(245,158,11,0.06)" },
+                { label: "Mixologist", color: "#f0abfc", border: "rgba(240,171,252,0.3)", bg: "rgba(217,70,239,0.06)" },
+                { label: "Space Enthusiast", color: "#c4b5fd", border: "rgba(196,181,253,0.3)", bg: "rgba(124,58,237,0.06)" },
+              ].map(({ label, color, border, bg }) => (
+                <span
+                  key={label}
+                  className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-[3px] text-[12px] font-medium"
+                  style={{ color, borderColor: border, backgroundColor: bg }}
+                >
+                  <span
+                    className="h-[5px] w-[5px] rounded-full"
+                    style={{ backgroundColor: color }}
+                  />
+                  {label}
+                </span>
+              ))}
+            </div>
           </div>
         </section>
         <div className="background pointer-events-none absolute inset-0 -z-30 select-none">
-          <div className="relative left-1/2 top-1/2 h-2/3 w-1/2 -translate-y-[30%] rounded-full bg-gradient-radial from-emerald-600/30 to-sky-600/5 blur-2xl"></div>
+          <div className="relative left-1/2 top-1/2 h-2/3 w-1/2 -translate-y-[30%] rounded-full bg-gradient-radial from-emerald-600/30 to-sky-600/5 blur-2xl d:hidden"></div>
+          {/* Dark-mode layered backdrop: faded grid + cyan/violet/pink orbs */}
+          <div className="absolute inset-0 hidden d:block">
+            <div
+              className="absolute inset-0 [background-image:linear-gradient(to_right,rgba(148,163,184,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.06)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_30%,#000_30%,transparent_80%)]"
+            ></div>
+            <div className="absolute -left-24 top-20 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,#0891b2_0%,transparent_70%)] opacity-50 blur-[80px]"></div>
+            <div className="absolute -right-16 -top-10 h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,#7c3aed_0%,transparent_70%)] opacity-30 blur-[80px]"></div>
+            <div className="absolute -bottom-24 left-[38%] h-[360px] w-[360px] rounded-full bg-[radial-gradient(circle,#db2777_0%,transparent_70%)] opacity-25 blur-[80px]"></div>
+          </div>
         </div>
       </div>
     </section>

@@ -11,7 +11,7 @@ import dynamic from "next/dynamic";
 import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useEffect } from "react";
 import "styles/tailwind.css";
 
 const BatmanHeader = dynamic(
@@ -39,6 +39,23 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
   const router = useRouter();
   const { mode, showTransition } = usePortfolioMode();
   const isBatman = mode === "batman";
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    // Initial scroll restoration runs in an inline <script> in _document.tsx
+    // before first paint to avoid the landing-page flash. This effect only
+    // wires up the save-on-unload side so the inline script has data to read.
+    const saveScroll = () => {
+      sessionStorage.setItem(
+        `scrollPos:${window.location.pathname}`,
+        String(window.scrollY)
+      );
+    };
+    window.addEventListener("pagehide", saveScroll);
+    return () => {
+      window.removeEventListener("pagehide", saveScroll);
+    };
+  }, []);
 
   return (
     <>

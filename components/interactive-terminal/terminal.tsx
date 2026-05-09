@@ -434,7 +434,7 @@ export const Terminal: FC<TerminalProps> = ({
 
   return (
     <div
-      className="terminal-wrapper h-full min-h-0 overflow-y-auto overflow-x-hidden rounded-b-md bg-white dark:bg-[#1e1e1e]"
+      className="terminal-wrapper scrollbar-none h-full min-h-0 overflow-y-auto overflow-x-hidden rounded-b-md bg-white dark:bg-transparent"
       onClick={handleTerminalClick}
       ref={terminalRef}
     >
@@ -569,6 +569,51 @@ export const Terminal: FC<TerminalProps> = ({
 
         :global(.dark) .terminal-line :global(.inherit) {
           color: #d4d4d4;
+        }
+
+        /* JSON-intro syntax highlighting (matches design system) */
+        .terminal-line :global(.t-prompt) {
+          color: #0d7377;
+        }
+        :global(.dark) .terminal-line :global(.t-prompt) {
+          color: #06b6d4;
+        }
+        .terminal-line :global(.t-cmd) {
+          color: #1f2328;
+        }
+        :global(.dark) .terminal-line :global(.t-cmd) {
+          color: #f8fafc;
+        }
+        .terminal-line :global(.t-out) {
+          color: #4b5563;
+        }
+        :global(.dark) .terminal-line :global(.t-out) {
+          color: #94a3b8;
+        }
+        .terminal-line :global(.json-key) {
+          color: #0d7377;
+        }
+        :global(.dark) .terminal-line :global(.json-key) {
+          color: #67e8f9;
+        }
+        .terminal-line :global(.json-val) {
+          color: #b45309;
+        }
+        :global(.dark) .terminal-line :global(.json-val) {
+          color: #fbbf24;
+        }
+        .terminal-line :global(.json-str) {
+          color: #047857;
+        }
+        :global(.dark) .terminal-line :global(.json-str) {
+          color: #a7f3d0;
+        }
+        .terminal-line :global(.cmt) {
+          color: #6b7280;
+          font-style: italic;
+        }
+        :global(.dark) .terminal-line :global(.cmt) {
+          color: #64748b;
         }
 
         .prompt {

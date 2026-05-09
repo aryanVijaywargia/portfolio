@@ -54,6 +54,11 @@ export const DesktopNav: FC = () => {
       if (next !== lastSection) {
         lastSection = next;
         setActiveSection(next);
+        // Keep the URL in sync with what's actually in view, without polluting history.
+        const targetUrl = next || "/";
+        if (window.location.pathname + window.location.hash !== targetUrl) {
+          window.history.replaceState(null, "", targetUrl);
+        }
       }
     };
 
@@ -133,8 +138,8 @@ export const DesktopNav: FC = () => {
                 "group/nav relative flex h-10 min-w-[2.5rem] items-center justify-center rounded-full outline-none",
                 "transition-[background-color,box-shadow,padding] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
                 isActive
-                  ? "bg-sky-500 pl-3 pr-1 shadow-lg shadow-sky-500/30"
-                  : "bg-gray-200/80 px-0 hover:pl-3 hover:pr-1 d:bg-gray-700"
+                  ? "bg-sky-500 pl-3 pr-1 shadow-lg shadow-sky-500/30 d:bg-gradient-to-br d:from-cyan-500 d:to-blue-600 d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)]"
+                  : "bg-gray-200/80 px-0 hover:pl-3 hover:pr-1 d:bg-slate-900/60 d:ring-1 d:ring-inset d:ring-slate-400/15 d:backdrop-blur d:hfa:bg-slate-800/80 d:hfa:ring-slate-300/30"
               )}
             >
               <span

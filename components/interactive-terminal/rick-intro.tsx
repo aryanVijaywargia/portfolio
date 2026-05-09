@@ -154,10 +154,17 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
           padding: 1.5rem;
           font-family: "Menlo", "Monaco", "Courier New", monospace;
           position: relative;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .rick-intro-wrapper::-webkit-scrollbar {
+          width: 0;
+          height: 0;
+          background: transparent;
         }
 
         :global(.dark) .rick-intro-wrapper {
-          background: #1e1e1e;
+          background: transparent;
         }
 
         .rick-intro-content {

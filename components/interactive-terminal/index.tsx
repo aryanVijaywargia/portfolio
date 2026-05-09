@@ -210,7 +210,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     : mode === "dungeon"
     ? <DungeonGame onGameEnd={handleExitToGameMenu} onEscape={handleDungeonEscape} />
     : mode === "editor"
-    ? <div className="h-full overflow-auto p-3">
+    ? <div className="scrollbar-none h-full overflow-auto p-3">
         <Code
           className="text-[13px]"
           code={editorCode ?? "Loading source..."}
@@ -244,7 +244,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       {/* macOS Window Title Bar */}
       <motion.header
         layout="position"
-        className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#2a2a2a] dark:bg-[#3c3c3c]"
+        className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#1e293b]/60 dark:bg-[#0f172a]/90"
       >
         {/* Traffic Light Buttons */}
         <div className="flex items-center gap-2">
@@ -304,6 +304,15 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           </button>
         </div>
 
+        {/* Tabs (dark-mode default terminal only) — decorative, mirrors design */}
+        {!isModal && mode === "terminal" && (
+          <div className="ml-3 hidden items-center gap-1 dark:flex">
+            <span className="rounded px-2 py-0.5 font-mono text-[11px] text-[#67e8f9] [background:rgba(6,182,212,0.12)]">
+              ~/aryan
+            </span>
+          </div>
+        )}
+
         {/* Window Title */}
         <div
           className={`flex-1 text-center ${handleTitleClick ? "cursor-pointer" : ""}`}
@@ -327,14 +336,42 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       </motion.header>
 
       {/* Content */}
-      <main className="terminal-content min-h-0 flex-1 overflow-hidden bg-white dark:bg-[#1e1e1e]">
-        {terminalContent}
+      <main className="terminal-content relative min-h-0 flex-1 overflow-hidden bg-white dark:bg-[#060810] dark:bg-gradient-to-b dark:from-[#0a0e1a] dark:to-[#060810]">
+        {/* cyan radial tint at top (dark mode only) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 hidden dark:block"
+          style={{
+            background:
+              "radial-gradient(ellipse at top, rgba(6,182,212,0.08), transparent 60%)",
+          }}
+        />
+        <div className="relative h-full">{terminalContent}</div>
       </main>
+
+      {/* Status strip — only on the default terminal view (not games/chatbot/editor/modal) */}
+      {!isModal && mode === "terminal" && (
+        <footer className="terminal-statusbar relative hidden h-7 shrink-0 items-center justify-between border-t border-slate-400/10 bg-[#0f172a]/60 px-4 font-mono text-[11px] text-[#64748b] dark:flex">
+          <div className="flex items-center gap-3.5">
+            <span className="text-[#67e8f9]">● live</span>
+            <span>main</span>
+            <span className="hidden sm:inline">node 20.11</span>
+          </div>
+          <span className="hidden sm:inline">↵ try `help`</span>
+        </footer>
+      )}
 
       <style jsx>{`
         .terminal-window {
           box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1),
             0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        :global(.dark) .terminal-window {
+          box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.28),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+            0 30px 60px -20px rgba(0, 0, 0, 0.7),
+            0 0 90px -20px rgba(6, 182, 212, 0.35);
         }
 
         .terminal-content {

@@ -310,7 +310,7 @@ export const SnakeGame: FC<SnakeGameProps> = ({ onGameEnd, onScoreChange }) => {
   // Start screen
   if (!gameStarted && !gameOver) {
     return (
-      <div className="flex h-full flex-col bg-[#1e1e1e] p-4 font-mono text-sm text-[#D4D4D4]">
+      <div className="flex h-full flex-col bg-[#1e1e1e] dark:bg-transparent p-4 font-mono text-sm text-[#D4D4D4]">
         <div className="text-cyan-400">$ ./snake --play</div>
         <div className="mt-2 text-gray-400">
           <pre className="text-green-400">{`
@@ -361,7 +361,7 @@ export const SnakeGame: FC<SnakeGameProps> = ({ onGameEnd, onScoreChange }) => {
   const grid = renderGrid();
 
   return (
-    <div className="flex h-full flex-col bg-[#1e1e1e] p-2 font-mono text-[#D4D4D4]">
+    <div className="flex h-full flex-col bg-[#1e1e1e] dark:bg-transparent p-2 font-mono text-[#D4D4D4]">
       {/* Terminal header */}
       <div className="mb-1 flex items-center justify-between text-xs">
         <span className="text-cyan-400">$ snake --playing</span>
