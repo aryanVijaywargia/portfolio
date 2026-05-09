@@ -2,7 +2,6 @@ import { useAchievementActions } from "components/achievements";
 import { MoonIcon, StarIcon, SunIcon } from "@heroicons/react/24/solid";
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
 import { Link } from "components/link";
-import { Badge } from "components/badge";
 import { InteractiveTerminal } from "components/interactive-terminal";
 import ToggleSwitch from "components/toggle-switch";
 import { HERO } from "content/hero";
@@ -52,7 +51,7 @@ export const Hero: FC = () => {
         <Link
           target="_blank"
           href="https://github.com/AryanVijaywargia"
-          className="d:border-slate-400/15 group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-yellow-500/30 hfa:bg-yellow-500 hfa:text-white d:bg-slate-900/60 d:text-slate-200 d:backdrop-blur d:hfa:border-yellow-500/40 d:hfa:bg-yellow-500/90"
+          className="group flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/60 bg-white/70 bg-clip-padding text-sm font-medium text-gray-600 backdrop-blur transition-all hfa:border-yellow-500/40 hfa:bg-yellow-500 hfa:text-white d:border-slate-400/15 d:bg-slate-900/60 d:text-slate-200 d:hfa:bg-yellow-500/90"
           data-tip="Star on GitHub"
         >
           <span className="sr-only">Star on GitHub</span>
@@ -60,7 +59,7 @@ export const Hero: FC = () => {
         </Link>
         <button
           onClick={handleOpenChatbot}
-          className="d:border-slate-400/15 group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-sky-500/30 hfa:bg-sky-500 hfa:text-white d:bg-slate-900/60 d:text-slate-200 d:backdrop-blur d:hfa:border-sky-500/40 d:hfa:bg-sky-500/90"
+          className="group flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/60 bg-white/70 bg-clip-padding text-sm font-medium text-gray-600 backdrop-blur transition-all hfa:border-sky-500/40 hfa:bg-sky-500 hfa:text-white d:border-slate-400/15 d:bg-slate-900/60 d:text-slate-200 d:hfa:bg-sky-500/90"
           data-tip="Chat with Byte"
           aria-label="Chat with Byte"
         >
@@ -69,7 +68,7 @@ export const Hero: FC = () => {
         <Link
           target="_blank"
           href="https://github.com/AryanVijaywargia"
-          className="d:border-slate-400/15 group flex h-10 w-10 items-center justify-center rounded-full border-2 border-gray-400/50 bg-gray-100 bg-clip-padding text-sm font-medium text-gray-600 transition-all hfa:border-gray-900/30 hfa:bg-gray-900 hfa:text-white d:bg-slate-900/60 d:text-slate-200 d:backdrop-blur d:hfa:border-slate-300/30 d:hfa:bg-slate-800"
+          className="group flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/60 bg-white/70 bg-clip-padding text-sm font-medium text-gray-600 backdrop-blur transition-all hfa:border-gray-900/40 hfa:bg-gray-900 hfa:text-white d:border-slate-400/15 d:bg-slate-900/60 d:text-slate-200 d:hfa:border-slate-300/30 d:hfa:bg-slate-800"
           data-tip="GitHub Profile"
         >
           <span className="sr-only">GitHub Profile</span>
@@ -100,13 +99,13 @@ export const Hero: FC = () => {
                   ]}
                 />
               </h2>*/}
-            <ul className="scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium d:gap-2">
+            <ul className="scrollbar-none -mx-4 mb-2 flex items-center gap-2 overflow-x-auto px-4 pb-2 text-[13px] font-medium">
               {HERO.tech.map(({ name, Icon }) => (
                 <li
-                  className="d:border-slate-400/15 flex items-center gap-2 text-gray-500 d:gap-2 d:rounded-full d:border d:bg-slate-900/50 d:px-3.5 d:py-2 d:text-[13px] d:text-slate-300 d:backdrop-blur d:transition-colors d:hover:border-cyan-400/40 d:hover:text-slate-50"
+                  className="flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/70 px-3.5 py-2 text-slate-600 backdrop-blur transition-colors hover:border-cyan-500/50 hover:text-slate-900 d:border-slate-400/15 d:bg-slate-900/50 d:text-slate-300 d:hover:border-cyan-400/40 d:hover:text-slate-50"
                   key={name}
                 >
-                  <Icon className="h-7 w-7 text-gray-400 d:h-5 d:w-5 d:text-slate-200" />
+                  <Icon className="h-5 w-5 text-slate-500 d:text-slate-200" />
                   {name}
                 </li>
               ))}
@@ -123,7 +122,7 @@ export const Hero: FC = () => {
             {HERO.cta1
               ? <Link
                   href={HERO.cta1.href}
-                  className="button-rainbow inline-flex whitespace-nowrap bg-gray-800 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-50 hfa:border-gray-300/90 hfa:bg-gray-900 hfa:text-white d:border-transparent d:bg-gradient-to-br d:from-cyan-500 d:to-blue-600 d:text-white d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)] d:hfa:border-transparent d:hfa:from-cyan-400 d:hfa:to-blue-500 d:hfa:text-white d:hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.7),0_0_48px_-6px_rgba(59,130,246,0.55)] md:px-12"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-gradient-to-br from-cyan-500 to-blue-600 px-10 py-2.5 text-sm font-medium tracking-tight text-white shadow-[0_8px_24px_-8px_rgba(6,182,212,0.5),0_0_40px_-8px_rgba(59,130,246,0.3)] transition-all hfa:from-cyan-400 hfa:to-blue-500 hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.65),0_0_48px_-6px_rgba(59,130,246,0.5)] d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)] d:hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.7),0_0_48px_-6px_rgba(59,130,246,0.55)] md:px-12"
                 >
                   {HERO.cta1.name}
                 </Link>
@@ -132,7 +131,7 @@ export const Hero: FC = () => {
             {HERO.cta2
               ? <Link
                   href={HERO.cta2.href}
-                  className="button-border inline-flex whitespace-nowrap bg-white/90 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-500 transition-all hfa:border-gray-900/70 hfa:bg-white/90 hfa:text-gray-900 d:border-slate-400/20 d:bg-slate-900/60 d:text-slate-200 d:backdrop-blur d:hfa:border-slate-300/40 d:hfa:bg-slate-900/80 d:hfa:text-slate-50 md:px-12"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-slate-300/70 bg-white/70 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-600 backdrop-blur transition-all hfa:border-gray-900/40 hfa:text-gray-900 d:border-slate-400/20 d:bg-slate-900/60 d:text-slate-200 d:hfa:border-slate-300/40 d:hfa:bg-slate-900/80 d:hfa:text-slate-50 md:px-12"
                 >
                   {HERO.cta2.name}
                 </Link>
@@ -145,62 +144,66 @@ export const Hero: FC = () => {
               <InteractiveTerminal language="tsx" />
               <div className="absolute -bottom-5 -right-5 -z-10 h-[calc(100%+1.25rem)] w-[calc(100%+1.25rem)] rounded-lg border border-gray-400/20 bg-gray-100/70 [mask-image:linear-gradient(-30deg,#fff_16.35%,rgb(255_255_255_/_0%)_61.66%)] d:border-gray-700/20 d:bg-gray-900/40"></div>
             </div>
-            <div className="relative z-20 mt-0.5 flex flex-wrap items-center justify-end gap-1.5 d:hidden">
-              <span className="mr-1 font-mono text-[11px] uppercase tracking-[0.1em] text-gray-400">
-                also:
-              </span>
-              <Badge style="info">Hiker</Badge>
-              <Badge style="success">Chef</Badge>
-              <Badge style="warning">Runner</Badge>
-              <Badge style="accent">Mixologist</Badge>
-              <Badge style="plain">Space Enthusiast</Badge>
-            </div>
-            {/* Dark-mode identity rail: outlined chips with leading colored dot */}
-            <div className="relative z-20 mt-0.5 hidden flex-nowrap items-center justify-end gap-1.5 whitespace-nowrap d:flex xl:gap-2">
-              <span className="mr-0.5 shrink-0 font-mono text-[11px] uppercase tracking-[0.1em] text-slate-500">
+            {/* Identity rail: outlined chips with leading colored dot — both themes */}
+            <div className="relative z-20 mt-0.5 flex flex-nowrap items-center justify-end gap-1.5 whitespace-nowrap xl:gap-2">
+              <span className="mr-0.5 shrink-0 font-mono text-[11px] uppercase tracking-[0.1em] text-slate-500 d:text-slate-500">
                 also:
               </span>
               {[
                 {
                   label: "Hiker",
-                  color: "#67e8f9",
-                  border: "rgba(103,232,249,0.3)",
-                  bg: "rgba(6,182,212,0.06)",
+                  dot: "#06b6d4",
+                  text: "#0e7490",
+                  textDark: "#67e8f9",
+                  border: "rgba(6,182,212,0.35)",
+                  bg: "rgba(6,182,212,0.08)",
                 },
                 {
                   label: "Chef",
-                  color: "#86efac",
-                  border: "rgba(134,239,172,0.3)",
-                  bg: "rgba(34,197,94,0.06)",
+                  dot: "#22c55e",
+                  text: "#15803d",
+                  textDark: "#86efac",
+                  border: "rgba(34,197,94,0.35)",
+                  bg: "rgba(34,197,94,0.08)",
                 },
                 {
                   label: "Runner",
-                  color: "#fcd34d",
-                  border: "rgba(252,211,77,0.3)",
-                  bg: "rgba(245,158,11,0.06)",
+                  dot: "#f59e0b",
+                  text: "#b45309",
+                  textDark: "#fcd34d",
+                  border: "rgba(245,158,11,0.35)",
+                  bg: "rgba(245,158,11,0.08)",
                 },
                 {
                   label: "Mixologist",
-                  color: "#f0abfc",
-                  border: "rgba(240,171,252,0.3)",
-                  bg: "rgba(217,70,239,0.06)",
+                  dot: "#d946ef",
+                  text: "#a21caf",
+                  textDark: "#f0abfc",
+                  border: "rgba(217,70,239,0.35)",
+                  bg: "rgba(217,70,239,0.08)",
                 },
                 {
                   label: "Space Enthusiast",
-                  color: "#c4b5fd",
-                  border: "rgba(196,181,253,0.3)",
-                  bg: "rgba(124,58,237,0.06)",
+                  dot: "#7c3aed",
+                  text: "#6d28d9",
+                  textDark: "#c4b5fd",
+                  border: "rgba(124,58,237,0.35)",
+                  bg: "rgba(124,58,237,0.08)",
                 },
-              ].map(({ label, color, border, bg }) => (
+              ].map(({ label, dot, text, textDark, border, bg }) => (
                 <span
                   key={label}
-                  className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-[3px] text-[11px] font-medium xl:gap-1.5 xl:px-2.5 xl:text-[12px]"
-                  style={{ color, borderColor: border, backgroundColor: bg }}
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-[3px] text-[11px] font-medium [color:var(--chip-text)] xl:gap-1.5 xl:px-2.5 xl:text-[12px] d:[color:var(--chip-text-dark)]"
+                  style={
+                    {
+                      "--chip-text": text,
+                      "--chip-text-dark": textDark,
+                      borderColor: border,
+                      backgroundColor: bg,
+                    } as React.CSSProperties
+                  }
                 >
-                  <span
-                    className="h-[5px] w-[5px] rounded-full"
-                    style={{ backgroundColor: color }}
-                  />
+                  <span className="h-[5px] w-[5px] rounded-full" style={{ backgroundColor: dot }} />
                   {label}
                 </span>
               ))}
@@ -208,13 +211,12 @@ export const Hero: FC = () => {
           </div>
         </section>
         <div className="background pointer-events-none absolute inset-0 -z-30 select-none">
-          <div className="relative left-1/2 top-1/2 h-2/3 w-1/2 -translate-y-[30%] rounded-full bg-gradient-radial from-emerald-600/30 to-sky-600/5 blur-2xl d:hidden"></div>
-          {/* Dark-mode layered backdrop: faded grid + cyan/violet/pink orbs */}
-          <div className="absolute inset-0 hidden d:block">
-            <div className="absolute inset-0 [background-image:linear-gradient(to_right,rgba(148,163,184,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.06)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_30%,#000_30%,transparent_80%)]"></div>
-            <div className="absolute -left-24 top-20 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,#0891b2_0%,transparent_70%)] opacity-50 blur-[80px]"></div>
-            <div className="absolute -right-16 -top-10 h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,#7c3aed_0%,transparent_70%)] opacity-30 blur-[80px]"></div>
-            <div className="absolute -bottom-24 left-[38%] h-[360px] w-[360px] rounded-full bg-[radial-gradient(circle,#db2777_0%,transparent_70%)] opacity-25 blur-[80px]"></div>
+          {/* Layered backdrop: faded grid + cyan/violet/pink orbs (both themes) */}
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 [background-image:linear-gradient(to_right,rgba(100,116,139,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,116,139,0.06)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_30%,#000_30%,transparent_80%)] d:[background-image:linear-gradient(to_right,rgba(148,163,184,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.06)_1px,transparent_1px)]"></div>
+            <div className="absolute -left-24 top-20 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,#0891b2_0%,transparent_70%)] opacity-20 blur-[80px] d:opacity-50"></div>
+            <div className="absolute -right-16 -top-10 h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,#7c3aed_0%,transparent_70%)] opacity-15 blur-[80px] d:opacity-30"></div>
+            <div className="absolute -bottom-24 left-[38%] h-[360px] w-[360px] rounded-full bg-[radial-gradient(circle,#db2777_0%,transparent_70%)] opacity-10 blur-[80px] d:opacity-25"></div>
           </div>
         </div>
       </div>

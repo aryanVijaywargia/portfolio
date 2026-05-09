@@ -96,7 +96,7 @@ const ContactInfoPanel: FC = () => {
   const { contactInfo, socialLinks } = CONTACT;
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-gray-200/80 bg-gray-50/95 shadow-[0_18px_52px_-34px_rgba(15,23,42,0.42)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]">
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-gray-200/80 bg-gray-50/95 shadow-[0_0_0_1px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.6),0_18px_52px_-30px_rgba(15,23,42,0.4),0_0_80px_-30px_rgba(6,182,212,0.18)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]">
       <div className="flex h-[3rem] items-center justify-between border-b border-gray-200/80 bg-gray-100/90 px-4 d:border-[#243146] d:bg-[#171f2b]">
         <WindowDots />
         <div className="flex items-center gap-2 font-mono text-[0.82rem] text-gray-500 d:text-slate-400">
@@ -247,7 +247,7 @@ const SendMessagePanel: FC = () => {
   };
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-gray-200/80 bg-gray-50/95 shadow-[0_18px_52px_-34px_rgba(15,23,42,0.42)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]">
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-gray-200/80 bg-gray-50/95 shadow-[0_0_0_1px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.6),0_18px_52px_-30px_rgba(15,23,42,0.4),0_0_80px_-30px_rgba(6,182,212,0.18)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]">
       <div className="relative flex h-[3rem] items-center border-b border-gray-200/80 bg-gray-100/90 px-4 d:border-[#243146] d:bg-[#171f2b]">
         <WindowDots />
         <div className="absolute bottom-[-1px] left-[4.5rem] flex h-[3rem] items-center gap-2.5 border-x border-t border-gray-200/80 bg-white/80 px-3.5 font-mono text-[0.82rem] text-gray-500 d:border-[#243146] d:bg-[#101824] d:text-slate-400">

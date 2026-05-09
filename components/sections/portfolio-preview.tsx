@@ -74,6 +74,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
       <ScrollGallery itemWidth={340} gapWidth={32} filter={filter}>
         {PROJECTS.map((project, index) => {
           const rotationIndex = rotationIndexByName.get(project.name) ?? -1;
+          const featuredImage = (project as any).featuredImage as string | undefined;
 
           return (
             <section
@@ -104,14 +105,22 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
               )}
             >
               <figure className="relative flex aspect-2 w-full">
-                <Image
-                  src={(project as any).featuredImage || "/images/sharing-image.jpg"}
-                  alt={project.name}
-                  width={400}
-                  height={200}
-                  maxWidth={320}
-                  className="rounded-t-lg object-cover object-center [mask-image:linear-gradient(180deg,#fff_16.35%,rgb(255_255_255_/_0%)_91.66%)]"
-                />
+                {featuredImage
+                  ? <Image
+                      src={featuredImage}
+                      alt={project.name}
+                      width={400}
+                      height={200}
+                      maxWidth={320}
+                      className="rounded-t-lg object-cover object-center [mask-image:linear-gradient(180deg,#fff_16.35%,rgb(255_255_255_/_0%)_91.66%)]"
+                    />
+                  : <div className="relative h-full w-full overflow-hidden rounded-t-lg bg-slate-950/90 [mask-image:linear-gradient(180deg,#fff_16.35%,rgb(255_255_255_/_0%)_91.66%)]">
+                      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(14,165,233,0.28),rgba(168,85,247,0.26),rgba(16,185,129,0.18))]" />
+                      <div className="absolute inset-0 [background-image:linear-gradient(to_right,rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] [background-size:28px_28px]" />
+                      <div className="absolute left-8 top-9 h-16 w-16 rounded-full border border-cyan-200/30 bg-cyan-300/10 blur-sm" />
+                      <div className="absolute right-10 top-8 h-24 w-24 rounded-full border border-fuchsia-200/25 bg-fuchsia-300/10 blur-sm" />
+                      <div className="absolute bottom-9 left-1/2 h-12 w-36 -translate-x-1/2 rounded-full bg-white/10 blur-xl" />
+                    </div>}
               </figure>
               <header>
                 <h2 className="text-2xl font-bold tracking-tighter text-gray-800 d:text-white">
