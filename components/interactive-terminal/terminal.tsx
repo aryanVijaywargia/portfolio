@@ -473,7 +473,7 @@ export const Terminal: FC<TerminalProps> = ({
           cursor: text;
           font-family: "Menlo", "Monaco", "Courier New", monospace;
           -webkit-overflow-scrolling: touch;
-          overscroll-behavior: contain;
+          overscroll-behavior-y: auto;
           touch-action: pan-y;
         }
 
