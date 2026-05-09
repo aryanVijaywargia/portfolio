@@ -203,10 +203,7 @@ export const Hero: FC = () => {
                     } as React.CSSProperties
                   }
                 >
-                  <span
-                    className="h-[5px] w-[5px] rounded-full"
-                    style={{ backgroundColor: dot }}
-                  />
+                  <span className="h-[5px] w-[5px] rounded-full" style={{ backgroundColor: dot }} />
                   {label}
                 </span>
               ))}
