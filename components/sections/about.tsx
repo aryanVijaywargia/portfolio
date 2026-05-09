@@ -3,16 +3,41 @@ import { useTooltipStore } from "components/_stores/tooltip-store";
 import { Image } from "components/image";
 import { ABOUT } from "content/about";
 import clsx from "clsx";
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 type DescriptionSize = "brief" | "standard" | "detailed";
 
 type AboutProps = {};
 
+const ABOUT_VISITED_KEY = "about:images-visited";
+
+const shuffle = <T,>(arr: readonly T[]): T[] => {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
 export const About: FC<AboutProps> = (props) => {
   const imageRef = useRef<HTMLImageElement[]>([]);
   const [focusImageIndex, setFocusImageIndex] = useState(0);
-  const images = ABOUT.images;
+  const [images, setImages] = useState(ABOUT.images);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const visited = localStorage.getItem(ABOUT_VISITED_KEY);
+      if (visited) {
+        setImages(shuffle(ABOUT.images));
+      } else {
+        localStorage.setItem(ABOUT_VISITED_KEY, "1");
+      }
+    } catch {
+      // localStorage may be unavailable; fall back to sequence
+    }
+  }, []);
   const [tooltip, setTooltip] = useTooltipStore();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { trackAchievementEvent } = useAchievementActions();

@@ -2,6 +2,7 @@ import { ContextProviders } from "components/_stores/_context-providers";
 import { LoadInitialData } from "components/_stores/_load-initial-data";
 import { PortfolioModeProvider, usePortfolioMode } from "components/_stores/portfolio-mode-context";
 
+import { AmbientMessages } from "components/ambient-messages";
 import { Footer } from "components/layout/footer";
 import { Header } from "components/layout/header";
 import { MobileExperienceNotice } from "components/layout/mobile-experience-notice";
@@ -66,13 +67,14 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
         openGraph={SEO.openGraph}
       />
       {isBatman ? <BatmanHeader /> : <Header />}
-      <main className="min-h-screen print:!mx-auto print:!w-[1024px]">
+      <main className="relative z-10 min-h-screen print:!mx-auto print:!w-[1024px]">
         <Component {...pageProps} />
       </main>
       {isBatman ? <BatmanFooter /> : <Footer />}
       <MobileExperienceNotice />
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
+      {!isBatman ? <AmbientMessages /> : null}
     </>
   );
 };

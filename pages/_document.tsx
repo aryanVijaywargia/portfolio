@@ -20,6 +20,12 @@ class Root extends Document {
           />
           <Favicon />
           <Font />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap"
+            rel="stylesheet"
+          />
 
           {process.env.NODE_ENV === "production"
             ? <Script

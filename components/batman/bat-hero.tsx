@@ -2,7 +2,7 @@ import { FC } from "react";
 import { motion } from "framer-motion";
 import { Link } from "components/link";
 import { Image } from "components/image";
-import AryanPortrait from "public/images/about/bb09f0d6-75a1-438b-92ae-cd3e5d4bba6f 2.jpg";
+import AryanPortrait from "public/images/about/aryan-1.jpg";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },

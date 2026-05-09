@@ -1,6 +1,6 @@
 import { CONTACT } from "content/contact";
-import { motion } from "framer-motion";
-import { FC, FormEvent, ReactNode, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { FC, FormEvent, ReactNode, useRef, useState } from "react";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -94,9 +94,127 @@ const rightPanelVariants = {
 
 const ContactInfoPanel: FC = () => {
   const { contactInfo, socialLinks } = CONTACT;
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.2 });
+
+  const lineContents: { content: ReactNode; chars: number }[] = [
+    {
+      chars: 1,
+      content: <span className="text-gray-700 d:text-slate-300">{"{"}</span>,
+    },
+    {
+      chars: 28,
+      content: (
+        <span className="ml-4">
+          <JsonKey>status</JsonKey>
+          <span className="text-gray-700 d:text-slate-300">: </span>
+          <JsonString>open_to_work</JsonString>
+          <span className="text-gray-700 d:text-slate-300">,</span>
+        </span>
+      ),
+    },
+    {
+      chars: 12 + contactInfo.email.length,
+      content: (
+        <span className="ml-4">
+          <JsonKey>email</JsonKey>
+          <span className="text-gray-700 d:text-slate-300">: </span>
+          <JsonString href={`mailto:${contactInfo.email}`}>{contactInfo.email}</JsonString>
+          <span className="text-gray-700 d:text-slate-300">,</span>
+        </span>
+      ),
+    },
+    {
+      chars: 14,
+      content: (
+        <span className="ml-4">
+          <JsonKey>socials</JsonKey>
+          <span className="text-gray-700 d:text-slate-300">{": {"}</span>
+        </span>
+      ),
+    },
+    {
+      chars: 13 + contactInfo.socials.github.length,
+      content: (
+        <span className="ml-8">
+          <JsonKey>github</JsonKey>
+          <span className="text-gray-700 d:text-slate-300">: </span>
+          <JsonString href={socialLinks.github}>{contactInfo.socials.github}</JsonString>
+          <span className="text-gray-700 d:text-slate-300">,</span>
+        </span>
+      ),
+    },
+    {
+      chars: 15 + contactInfo.socials.linkedin.length,
+      content: (
+        <span className="ml-8">
+          <JsonKey>linkedin</JsonKey>
+          <span className="text-gray-700 d:text-slate-300">: </span>
+          <JsonString href={socialLinks.linkedin}>{contactInfo.socials.linkedin}</JsonString>
+          <span className="text-gray-700 d:text-slate-300">,</span>
+        </span>
+      ),
+    },
+    {
+      chars: 13 + contactInfo.socials.twitter.length,
+      content: (
+        <span className="ml-8">
+          <JsonKey>twitter</JsonKey>
+          <span className="text-gray-700 d:text-slate-300">: </span>
+          <JsonString href={socialLinks.twitter}>{contactInfo.socials.twitter}</JsonString>
+        </span>
+      ),
+    },
+    {
+      chars: 3,
+      content: (
+        <span className="ml-4">
+          <span className="text-gray-700 d:text-slate-300">{"},"}</span>
+        </span>
+      ),
+    },
+    {
+      chars: 14 + contactInfo.location.length,
+      content: (
+        <span className="ml-4">
+          <JsonKey>location</JsonKey>
+          <span className="text-gray-700 d:text-slate-300">: </span>
+          <JsonString>{contactInfo.location}</JsonString>
+        </span>
+      ),
+    },
+    {
+      chars: 1,
+      content: <span className="text-gray-700 d:text-slate-300">{"}"}</span>,
+    },
+    {
+      chars: 0,
+      content: <span>&nbsp;</span>,
+    },
+    {
+      chars: 28,
+      content: <CodeComment>{"// " + "Waiting for connection..."}</CodeComment>,
+    },
+  ];
+
+  // Compute per-line duration and cumulative delay so the typing speed
+  // tracks the visible character count rather than treating each line equally.
+  const CPS = 55;
+  const GAP = 0.04;
+  const durations = lineContents.map(({ chars }) => Math.max(0.12, chars / CPS));
+  const delays: number[] = [];
+  let cum = 0;
+  for (let i = 0; i < durations.length; i++) {
+    delays.push(cum);
+    cum += durations[i] + GAP;
+  }
+  const totalTypingTime = cum;
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-gray-200/80 bg-gray-50/95 shadow-[0_0_0_1px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.6),0_18px_52px_-30px_rgba(15,23,42,0.4),0_0_80px_-30px_rgba(6,182,212,0.18)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]">
+    <div
+      ref={ref}
+      className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-gray-200/80 bg-gray-50/95 shadow-[0_0_0_1px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.6),0_18px_52px_-30px_rgba(15,23,42,0.4),0_0_80px_-30px_rgba(6,182,212,0.18)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]"
+    >
       <div className="flex h-[3rem] items-center justify-between border-b border-gray-200/80 bg-gray-100/90 px-4 d:border-[#243146] d:bg-[#171f2b]">
         <WindowDots />
         <div className="flex items-center gap-2 font-mono text-[0.82rem] text-gray-500 d:text-slate-400">
@@ -106,90 +224,32 @@ const ContactInfoPanel: FC = () => {
       </div>
 
       <div className="flex-1 px-4 pb-3 pt-4 font-mono text-[0.84rem] md:px-5 lg:px-5">
-        <JsonLine num={1}>
-          <span className="text-gray-700 d:text-slate-300">{"{"}</span>
-        </JsonLine>
+        {lineContents.map((line, i) => (
+          <motion.div
+            key={i}
+            initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
+            animate={
+              inView
+                ? { clipPath: "inset(0 0% 0 0)", opacity: 1 }
+                : { clipPath: "inset(0 100% 0 0)", opacity: 0 }
+            }
+            transition={{
+              clipPath: { duration: durations[i], delay: delays[i], ease: "linear" },
+              opacity: { duration: 0.01, delay: delays[i] },
+            }}
+          >
+            <JsonLine num={i + 1}>{line.content}</JsonLine>
+          </motion.div>
+        ))}
 
-        <JsonLine num={2}>
-          <span className="ml-4">
-            <JsonKey>status</JsonKey>
-            <span className="text-gray-700 d:text-slate-300">: </span>
-            <JsonString>open_to_work</JsonString>
-            <span className="text-gray-700 d:text-slate-300">,</span>
-          </span>
-        </JsonLine>
-
-        <JsonLine num={3}>
-          <span className="ml-4">
-            <JsonKey>email</JsonKey>
-            <span className="text-gray-700 d:text-slate-300">: </span>
-            <JsonString href={`mailto:${contactInfo.email}`}>{contactInfo.email}</JsonString>
-            <span className="text-gray-700 d:text-slate-300">,</span>
-          </span>
-        </JsonLine>
-
-        <JsonLine num={4}>
-          <span className="ml-4">
-            <JsonKey>socials</JsonKey>
-            <span className="text-gray-700 d:text-slate-300">{": {"}</span>
-          </span>
-        </JsonLine>
-
-        <JsonLine num={5}>
-          <span className="ml-8">
-            <JsonKey>github</JsonKey>
-            <span className="text-gray-700 d:text-slate-300">: </span>
-            <JsonString href={socialLinks.github}>{contactInfo.socials.github}</JsonString>
-            <span className="text-gray-700 d:text-slate-300">,</span>
-          </span>
-        </JsonLine>
-
-        <JsonLine num={6}>
-          <span className="ml-8">
-            <JsonKey>linkedin</JsonKey>
-            <span className="text-gray-700 d:text-slate-300">: </span>
-            <JsonString href={socialLinks.linkedin}>{contactInfo.socials.linkedin}</JsonString>
-            <span className="text-gray-700 d:text-slate-300">,</span>
-          </span>
-        </JsonLine>
-
-        <JsonLine num={7}>
-          <span className="ml-8">
-            <JsonKey>twitter</JsonKey>
-            <span className="text-gray-700 d:text-slate-300">: </span>
-            <JsonString href={socialLinks.twitter}>{contactInfo.socials.twitter}</JsonString>
-          </span>
-        </JsonLine>
-
-        <JsonLine num={8}>
-          <span className="ml-4">
-            <span className="text-gray-700 d:text-slate-300">{"},"}</span>
-          </span>
-        </JsonLine>
-
-        <JsonLine num={9}>
-          <span className="ml-4">
-            <JsonKey>location</JsonKey>
-            <span className="text-gray-700 d:text-slate-300">: </span>
-            <JsonString>{contactInfo.location}</JsonString>
-          </span>
-        </JsonLine>
-
-        <JsonLine num={10}>
-          <span className="text-gray-700 d:text-slate-300">{"}"}</span>
-        </JsonLine>
-
-        <JsonLine num={11}>
-          <span>&nbsp;</span>
-        </JsonLine>
-
-        <JsonLine num={12}>
-          <CodeComment>{"// " + "Waiting for connection..."}</CodeComment>
-        </JsonLine>
-
-        <div className="ml-[2.45rem] mt-1.5">
+        <motion.div
+          className="ml-[2.45rem] mt-1.5"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.2, delay: totalTypingTime }}
+        >
           <span className="inline-block h-[2px] w-2.5 animate-blink bg-gray-800 d:bg-slate-200" />
-        </div>
+        </motion.div>
       </div>
     </div>
   );
