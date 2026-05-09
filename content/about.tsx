@@ -1,9 +1,9 @@
-import AryanHeic2 from "../public/images/about/IMG_3593.jpg";
-import AryanPixelTrip from "../public/images/about/PXL_20241228_095508620.RAW-01.COVER_Original 2.jpg";
 import Aryan1 from "../public/images/about/aryan-1.jpg";
 import Aryan2 from "../public/images/about/aryan-2.jpg";
+import Aryan3 from "../public/images/about/aryan-3.jpg";
+import Aryan4 from "../public/images/about/aryan-4.jpg";
 import Aryan5 from "../public/images/about/aryan-5.jpg";
-import AryanPortrait from "../public/images/about/bb09f0d6-75a1-438b-92ae-cd3e5d4bba6f 2.jpg";
+import Aryan6 from "../public/images/about/aryan-6.jpg";
 
 const getExperienceYearsSince = (startDate: Date) => {
   const now = new Date();
@@ -83,19 +83,19 @@ export const ABOUT = {
   },
   images: [
     {
-      src: AryanHeic2,
+      src: Aryan1,
       alt: "Aryan candid photo",
     },
     {
-      src: AryanPixelTrip,
+      src: Aryan2,
       alt: "Aryan travel photo",
     },
     {
-      src: Aryan1,
+      src: Aryan3,
       alt: "Aryan at a tech event",
     },
     {
-      src: Aryan2,
+      src: Aryan4,
       alt: "Aryan working on ML projects",
     },
     {
@@ -103,7 +103,7 @@ export const ABOUT = {
       alt: "Aryan exploring new places",
     },
     {
-      src: AryanPortrait,
+      src: Aryan6,
       alt: "Aryan Vijaywargia portrait",
     },
   ],
