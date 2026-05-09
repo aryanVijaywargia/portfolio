@@ -39,6 +39,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
   const router = useRouter();
   const { mode, showTransition } = usePortfolioMode();
   const isBatman = mode === "batman";
+  const canonicalPath = router.asPath.split(/[?#]/)[0] || "/";
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -46,10 +47,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
     // before first paint to avoid the landing-page flash. This effect only
     // wires up the save-on-unload side so the inline script has data to read.
     const saveScroll = () => {
-      sessionStorage.setItem(
-        `scrollPos:${window.location.pathname}`,
-        String(window.scrollY)
-      );
+      sessionStorage.setItem(`scrollPos:${window.location.pathname}`, String(window.scrollY));
     };
     window.addEventListener("pagehide", saveScroll);
     return () => {
@@ -61,7 +59,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
     <>
       <DefaultSeo
         {...SEO}
-        canonical={`${SEO.url}${router.asPath}`}
+        canonical={`${SEO.url}${canonicalPath}`}
         twitter={SEO.twitter}
         title={isBatman ? "Aryan Vijaywargia | The Dark Knight" : SEO.title}
         description={SEO.description}

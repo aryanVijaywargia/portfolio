@@ -342,8 +342,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 hidden dark:block"
           style={{
-            background:
-              "radial-gradient(ellipse at top, rgba(6,182,212,0.08), transparent 60%)",
+            background: "radial-gradient(ellipse at top, rgba(6,182,212,0.08), transparent 60%)",
           }}
         />
         <div className="relative h-full">{terminalContent}</div>
@@ -367,10 +366,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
             0 20px 40px rgba(0, 0, 0, 0.3);
         }
         :global(.dark) .terminal-window {
-          box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.28),
-            inset 0 1px 0 rgba(255, 255, 255, 0.08),
-            inset 0 0 0 1px rgba(255, 255, 255, 0.04),
-            0 30px 60px -20px rgba(0, 0, 0, 0.7),
+          box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 30px 60px -20px rgba(0, 0, 0, 0.7),
             0 0 90px -20px rgba(6, 182, 212, 0.35);
         }
 
