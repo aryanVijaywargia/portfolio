@@ -101,7 +101,7 @@ export const GameMenu: FC<GameMenuProps> = ({ onSelectGame, onExit }) => {
   }, [isLoading, handleSelect, onExit]);
 
   return (
-    <div className="flex h-full flex-col bg-[#1e1e1e] p-4 font-mono text-sm text-[#D4D4D4]">
+    <div className="flex h-full flex-col bg-[#1e1e1e] dark:bg-transparent p-4 font-mono text-sm text-[#D4D4D4]">
       {/* Header */}
       <div className="text-cyan-400">$ ls ./games/</div>
 

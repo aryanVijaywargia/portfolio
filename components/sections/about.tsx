@@ -12,7 +12,7 @@ type AboutProps = {};
 export const About: FC<AboutProps> = (props) => {
   const imageRef = useRef<HTMLImageElement[]>([]);
   const [focusImageIndex, setFocusImageIndex] = useState(0);
-  const [images, setImages] = useState(ABOUT.images);
+  const images = ABOUT.images;
   const [tooltip, setTooltip] = useTooltipStore();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const { trackAchievementEvent } = useAchievementActions();
@@ -23,7 +23,6 @@ export const About: FC<AboutProps> = (props) => {
     if (focusImageIndex === images.length - 1) {
       trackAchievementEvent({ type: "about:cycle-complete" });
       setFocusImageIndex((current) => current + 1);
-      setImages((current) => [...current].sort(() => 0.5 - Math.random()));
       setTimeout(
         () => {
           setFocusImageIndex(0);
@@ -76,7 +75,7 @@ export const About: FC<AboutProps> = (props) => {
           data-tip={images[focusImageIndex]?.alt}
         >
           <span className="sr-only">Cycle through Images</span>
-          {images.map(({ src, alt }, index) => {
+          {images.map(({ src, alt, objectPosition }, index) => {
             return (
               <Image
                 maxWidth={540}
@@ -106,6 +105,7 @@ export const About: FC<AboutProps> = (props) => {
                   zIndex: -index,
                   ...(focusImageIndex !== index ? { filter: "grayscale(80)" } : {}),
                   opacity: focusImageIndex > index ? "0" : "1",
+                  objectPosition,
                 }}
               />
             );

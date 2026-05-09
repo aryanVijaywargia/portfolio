@@ -110,13 +110,16 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
 
 export const STARTUP_BANNER: CommandOutput[] = [
   { text: "" },
-  { text: "          .                  .                         " },
-  { text: "         /\\                 /\\              .          " },
-  { text: "    /\\  /  \\      /\\   /\\  /  \\       /\\  /\\          " },
-  { text: "   /  \\/    \\    /  \\ /  \\/    \\     /  \\/  \\         " },
-  { text: "  /          \\__/    V          \\___/        \\        " },
-  { text: " ~~~~  ~~~~  ~~~~  ~~~~  ~~~~  ~~~~  ~~~~  ~~~~      " },
-  { text: "        aryancodes.com  |  terminal trailhead          " },
+  { text: '<span class="banner">     _    ____  __   __ _    _   _ </span>' },
+  { text: '<span class="banner">    / \\  |  _ \\ \\ \\ / // \\  | \\ | |</span>' },
+  { text: '<span class="banner">   / _ \\ | |_) | \\ V // _ \\ |  \\| |</span>' },
+  { text: '<span class="banner">  / ___ \\|  _ <   | |/ ___ \\| |\\  |</span>' },
+  { text: '<span class="banner"> /_/   \\_\\_| \\_\\  |_/_/   \\_\\_| \\_|</span>' },
+  { text: "" },
+  {
+    text: '<span class="cmt">  fullstack engineer · aryancodes.com</span>',
+  },
+  { text: "" },
   {
     text: '<span class="inherit">Type <span class="command">help</span> for available commands.</span>',
   },

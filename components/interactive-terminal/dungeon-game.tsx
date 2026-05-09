@@ -436,7 +436,7 @@ export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd, onEscape }) => {
   // Start screen
   if (gameState === "start") {
     return (
-      <div className="flex h-full flex-col bg-[#1e1e1e] p-4 font-mono text-sm text-[#D4D4D4]">
+      <div className="flex h-full flex-col bg-[#1e1e1e] dark:bg-transparent p-4 font-mono text-sm text-[#D4D4D4]">
         <div className="text-cyan-400">$ ./dungeon --adventure</div>
         <pre className="mt-2 text-yellow-400">
           {`
@@ -505,7 +505,7 @@ export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd, onEscape }) => {
   // Victory screen
   if (gameState === "victory") {
     return (
-      <div className="flex h-full flex-col items-center justify-center bg-[#1e1e1e] p-4 font-mono text-[#D4D4D4]">
+      <div className="flex h-full flex-col items-center justify-center bg-[#1e1e1e] dark:bg-transparent p-4 font-mono text-[#D4D4D4]">
         <pre className="text-yellow-400">
           {`
  _    _______________  ______  __
@@ -530,7 +530,7 @@ export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd, onEscape }) => {
   // Game over screen
   if (gameState === "gameover") {
     return (
-      <div className="flex h-full flex-col items-center justify-center bg-[#1e1e1e] p-4 font-mono text-[#D4D4D4]">
+      <div className="flex h-full flex-col items-center justify-center bg-[#1e1e1e] dark:bg-transparent p-4 font-mono text-[#D4D4D4]">
         <pre className="text-red-400">
           {`
    _________    __  _________   ____ _    ____________
@@ -558,7 +558,7 @@ export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd, onEscape }) => {
     const playerHpPercent = Math.floor((playerHp / playerMaxHp) * 10);
 
     return (
-      <div className="flex h-full flex-col bg-[#1e1e1e] p-4 font-mono text-sm text-[#D4D4D4]">
+      <div className="flex h-full flex-col bg-[#1e1e1e] dark:bg-transparent p-4 font-mono text-sm text-[#D4D4D4]">
         <div className="text-red-400">⚔️ COMBAT! ⚔️</div>
         <div className="mt-4 border border-red-400 p-3">
           <div className="flex justify-between">
@@ -605,7 +605,7 @@ export const DungeonGame: FC<DungeonGameProps> = ({ onGameEnd, onEscape }) => {
   const grid = renderMap();
 
   return (
-    <div className="flex h-full flex-col bg-[#1e1e1e] p-2 font-mono text-[#D4D4D4]">
+    <div className="flex h-full flex-col bg-[#1e1e1e] dark:bg-transparent p-2 font-mono text-[#D4D4D4]">
       {/* Header */}
       <div className="mb-1 flex items-center justify-between text-xs">
         <span className="text-cyan-400">$ dungeon --level={level + 1}</span>

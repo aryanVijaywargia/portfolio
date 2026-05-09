@@ -94,11 +94,11 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
   };
 
   return (
-    <div className="terminal-chatbot flex h-full min-h-0 flex-col overflow-hidden bg-white text-[#383a42] dark:bg-[#1e1e1e] dark:text-[#D4D4D4]">
+    <div className="terminal-chatbot flex h-full min-h-0 flex-col overflow-hidden bg-white text-[#383a42] dark:bg-transparent dark:text-[#D4D4D4]">
       {/* Messages Area */}
       <div
         ref={messagesRef}
-        className="terminal-chatbot-messages min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-3"
+        className="terminal-chatbot-messages scrollbar-none min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-3"
       >
         {messages.length === 0 && (
           <motion.div
