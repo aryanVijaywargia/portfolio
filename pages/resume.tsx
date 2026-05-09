@@ -95,7 +95,7 @@ export const Resume: FC = (props) => {
                 <a
                   href={RESUME_PDF_PATH}
                   download={RESUME_PDF_FILENAME}
-                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent bg-gray-800 px-6 py-2.5 text-sm font-medium tracking-tight text-gray-50 transition-all hfa:bg-gray-900 hfa:text-white d:bg-gradient-to-br d:from-cyan-500 d:to-blue-600 d:text-white d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)] d:hfa:from-cyan-400 d:hfa:to-blue-500 d:hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.7),0_0_48px_-6px_rgba(59,130,246,0.55)] md:px-8"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent bg-gradient-to-br from-cyan-500 to-blue-600 px-6 py-2.5 text-sm font-medium tracking-tight text-white shadow-[0_8px_24px_-8px_rgba(6,182,212,0.5),0_0_40px_-8px_rgba(59,130,246,0.3)] transition-all hfa:from-cyan-400 hfa:to-blue-500 hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.65),0_0_48px_-6px_rgba(59,130,246,0.5)] d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)] d:hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.7),0_0_48px_-6px_rgba(59,130,246,0.55)] md:px-8"
                 >
                   <ArrowDownTrayIcon className="h-4 w-4" />
                   Download Resume

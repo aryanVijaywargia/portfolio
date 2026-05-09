@@ -304,10 +304,10 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           </button>
         </div>
 
-        {/* Tabs (dark-mode default terminal only) — decorative, mirrors design */}
+        {/* Tabs — decorative, both themes */}
         {!isModal && mode === "terminal" && (
-          <div className="ml-3 hidden items-center gap-1 dark:flex">
-            <span className="rounded px-2 py-0.5 font-mono text-[11px] text-[#67e8f9] [background:rgba(6,182,212,0.12)]">
+          <div className="ml-3 flex items-center gap-1">
+            <span className="rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 [background:rgba(6,182,212,0.12)] dark:text-[#67e8f9]">
               ~/aryan
             </span>
           </div>
@@ -350,9 +350,9 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
       {/* Status strip — only on the default terminal view (not games/chatbot/editor/modal) */}
       {!isModal && mode === "terminal" && (
-        <footer className="terminal-statusbar relative hidden h-7 shrink-0 items-center justify-between border-t border-slate-400/10 bg-[#0f172a]/60 px-4 font-mono text-[11px] text-[#64748b] dark:flex">
+        <footer className="terminal-statusbar relative flex h-7 shrink-0 items-center justify-between border-t border-slate-200 bg-slate-100/80 px-4 font-mono text-[11px] text-slate-500 dark:border-slate-400/10 dark:bg-[#0f172a]/60 dark:text-[#64748b]">
           <div className="flex items-center gap-3.5">
-            <span className="text-[#67e8f9]">● live</span>
+            <span className="text-cyan-600 dark:text-[#67e8f9]">● live</span>
             <span>main</span>
             <span className="hidden sm:inline">node 20.11</span>
           </div>
@@ -362,8 +362,9 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
       <style jsx>{`
         .terminal-window {
-          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.1),
-            0 20px 40px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6),
+            0 20px 50px -18px rgba(15, 23, 42, 0.25),
+            0 0 80px -25px rgba(6, 182, 212, 0.18);
         }
         :global(.dark) .terminal-window {
           box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08),

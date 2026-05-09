@@ -138,8 +138,8 @@ export const DesktopNav: FC = () => {
                 "group/nav relative flex h-10 min-w-[2.5rem] items-center justify-center rounded-full outline-none",
                 "transition-[background-color,box-shadow,padding] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
                 isActive
-                  ? "bg-sky-500 pl-3 pr-1 shadow-lg shadow-sky-500/30 d:bg-gradient-to-br d:from-cyan-500 d:to-blue-600 d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)]"
-                  : "bg-gray-200/80 px-0 hover:pl-3 hover:pr-1 d:bg-slate-900/60 d:ring-1 d:ring-inset d:ring-slate-400/15 d:backdrop-blur d:hfa:bg-slate-800/80 d:hfa:ring-slate-300/30"
+                  ? "bg-gradient-to-br from-cyan-500 to-blue-600 pl-3 pr-1 shadow-[0_8px_24px_-8px_rgba(6,182,212,0.5),0_0_40px_-8px_rgba(59,130,246,0.3)] d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)]"
+                  : "bg-white/70 px-0 ring-1 ring-inset ring-slate-300/60 backdrop-blur hover:pl-3 hover:pr-1 hfa:bg-white/90 hfa:ring-slate-400/50 d:bg-slate-900/60 d:ring-slate-400/15 d:hfa:bg-slate-800/80 d:hfa:ring-slate-300/30"
               )}
             >
               <span
