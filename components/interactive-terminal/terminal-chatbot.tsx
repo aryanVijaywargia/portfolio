@@ -259,7 +259,7 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
 
         .terminal-chatbot-messages {
           -webkit-overflow-scrolling: touch;
-          overscroll-behavior: contain;
+          overscroll-behavior-y: auto;
           touch-action: pan-y;
         }
 

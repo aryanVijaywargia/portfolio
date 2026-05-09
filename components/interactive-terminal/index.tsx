@@ -373,7 +373,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         }
 
         .terminal-content {
-          overscroll-behavior: contain;
+          overscroll-behavior-y: auto;
         }
 
         .traffic-light {

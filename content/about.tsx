@@ -39,7 +39,7 @@ export const ABOUT = {
   descriptions: {
     brief: (
       <p>
-        I'm a Cape Town based Web Developer and Entrepreneur. My focus area for the past few years
+        I'm a Madhya Pradesh, India-based Web Developer and Entrepreneur. My focus area for the past few years
         has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>,
         and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
         bring delight.
@@ -48,7 +48,7 @@ export const ABOUT = {
     standard: (
       <>
         <p>
-          I'm a Cape Town based Web Developer and Entrepreneur. My focus area for the past few years
+          I'm a Madhya Pradesh, India-based Web Developer and Entrepreneur. My focus area for the past few years
           has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>,
           and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
           bring delight.
@@ -65,7 +65,7 @@ export const ABOUT = {
     detailed: (
       <>
         <p>
-          I'm a Cape Town based Web Developer and Entrepreneur. My focus area for the past few years
+          I'm a Madhya Pradesh, India-based Web Developer and Entrepreneur. My focus area for the past few years
           has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>,
           and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
           bring delight.

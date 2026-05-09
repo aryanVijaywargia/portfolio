@@ -5,7 +5,7 @@ export const CV = {
   name: "Elizabeth Dangwa",
   title: "UX & UI Designer",
   primary_stack: [TECH.figma, TECH.illustrator, TECH.shopify],
-  address: "Cape Town, Vredehoek 8001, South Africa",
+  address: "Madhya Pradesh, India",
   email: "elizabeth@tellmann.co.za",
   website: "https://lizt.dev",
   mobile: {
@@ -40,8 +40,8 @@ export const CV = {
     {
       dateFrom: "2010-08-01",
       dateTo: "2011-08-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       institution: "Silwood School of Cookery",
       certificate: "Sous Chef Training - Certificate in Professional Cookery",
       level: "School",
@@ -50,8 +50,8 @@ export const CV = {
     {
       dateFrom: "2012-08-01",
       dateTo: "2014-08-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       institution: "Varsity College",
       certificate: "IIE Diploma in Travel and Tourism Management (NQF 6)",
       level: "School",
@@ -60,9 +60,9 @@ export const CV = {
     {
       dateFrom: "2015-08-01",
       dateTo: "2015-08-01",
-      city: "Cape Town",
-      country: "South Africa",
-      institution: "University of Cape Town",
+      city: "Madhya Pradesh",
+      country: "India",
+      institution: "University of Madhya Pradesh",
       certificate:
         "Postgraduate Diploma in Business Management (NQF8) Specializing in Tourism and Events",
       level: "School",
@@ -73,8 +73,8 @@ export const CV = {
     {
       dateFrom: "2015-12-01",
       dateTo: "2023-07-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       company: "Kids Living",
       title: "Freelancing UX/UI Designer & Social Media Expert",
       type: ["management", "relevant"],
@@ -128,8 +128,8 @@ export const CV = {
     {
       dateFrom: "2022-05-01",
       dateTo: "2023-07-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       company: "Lunalemon.dev",
       title: "Lead UX/UI Designer",
       type: ["relevant"],
@@ -169,7 +169,7 @@ export const CV = {
       dateFrom: "2018-04-01",
       dateTo: "2020-05-01",
       city: "Knysna",
-      country: "South Africa",
+      country: "India",
       company: "The Burger Exchange Restaurant",
       title: "Co-Owner & Marketing Director",
       type: ["relevant"],
@@ -202,8 +202,8 @@ export const CV = {
     {
       dateFrom: "2017-05-01",
       dateTo: "2018-04-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       company: "Liquix.io – Ecommerce Solutions",
       title: "UX/UI Designer & Client Service Manager",
       type: ["relevant"],
@@ -233,8 +233,8 @@ export const CV = {
     {
       dateFrom: "2016-07-01",
       dateTo: "2017-05-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       company: "LizActive Yoga Wear",
       title: "Product Designer",
       type: ["relevant"],
@@ -260,8 +260,8 @@ export const CV = {
     /*    {
       dateFrom: "2015-12-01",
       dateTo: "2016-08-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       company: "Worldsport Events",
       title: "Sponsorship Rights Co-ordinator ",
       type: ["management", "relevant"],
@@ -276,7 +276,7 @@ export const CV = {
           type: ["relevant"],
         },
         {
-          content: "Client service at Cape Town Cycle Tour & Pick N Pay Women's walk",
+          content: "Client service at Madhya Pradesh Cycle Tour & Pick N Pay Women's walk",
           type: ["relevant"],
         },
         {
@@ -288,8 +288,8 @@ export const CV = {
     {
       dateFrom: "2016-08-01",
       dateTo: "2017-07-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       company: "SmartUp Online (Pty) Ltd. - Restaurant Training & Development",
       title: "Product Manager",
       type: ["management", "relevant"],
@@ -320,8 +320,8 @@ export const CV = {
     {
       dateFrom: "2016-12-01",
       dateTo: "2017-09-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       company: "LizActive yoga wear",
       title: "Product Manager",
       type: ["management", "relevant"],
@@ -352,8 +352,8 @@ export const CV = {
     {
       dateFrom: "2017-04-01",
       dateTo: "2018-05-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       company: "Liquix.io - Ecommerce Solutions",
       title: "Project Manager",
       type: ["management", "relevant"],
@@ -385,7 +385,7 @@ export const CV = {
       dateFrom: "2018-04-01",
       dateTo: "2020-04-01",
       city: "Knysna",
-      country: "South Africa",
+      country: "India",
       company: "Liquix.io - Ecommerce Solutions",
       title: "Co-owner & Managing Director",
       type: ["management", "relevant"],
@@ -425,8 +425,8 @@ export const CV = {
     {
       dateFrom: "2020-05-01",
       dateTo: "2022-10-01",
-      city: "Cape Town",
-      country: "South Africa",
+      city: "Madhya Pradesh",
+      country: "India",
       company: "Lunalemon.dev - Online Success Partners",
       title: "UI / UX Designer",
       type: ["management", "relevant"],
@@ -493,7 +493,7 @@ export const CV = {
         {
           content: (
             <>
-              {/*I created & designed a website for a leading South African baby and kids store,
+              {/*I created & designed a website for a leading Indian baby and kids store,
               offering an extensive range of imported and locally manufactured high-end products. In
               addition to managing the E-commerce store & website, I also handle digital marketing,
               web maintenance, UX design, data structures, and testing of the site with a team.*/}
@@ -771,5 +771,5 @@ export const CV = {
       reference: `I have been fortunate enough to be working both along & with Felix Tellmann for the past 8 months. Felix has been an absolute light and strength in the team he runs. His approach to every challenge with a calm, firm & respectful attitude is something to be admired and to be learned by everyone. In spite of the challenges, this type of leadership makes a happy and productive work environment because it brings everyone together. I wish Felix all the best for his future endeavors. He is sure to make any challenge he takes on an absolute success.`,
     },
   ],
-  personal: `After spending my childhood in Germany and early work career, I moved to Cape Town 14 years ago. Cooking and hosting dinners for family and friends are some of my favorite activities, and I enjoy connecting with people through good food, technology, and intelligent discussion. You will often find me on and around Table Mountain, hiking or running with my dog Alpha. I am very excited about the new age Space Race and the innovation it brings, and I would like to witness a rocket launch in my lifetime. It is also important to me to keep up with web technology and UX design developments by listening to podcasts, attending local events, attending conferences, and using Twitter.`,
+  personal: `After spending my childhood in Germany and early work career, I moved to Madhya Pradesh 14 years ago. Cooking and hosting dinners for family and friends are some of my favorite activities, and I enjoy connecting with people through good food, technology, and intelligent discussion. You will often find me on and around Table Mountain, hiking or running with my dog Alpha. I am very excited about the new age Space Race and the innovation it brings, and I would like to witness a rocket launch in my lifetime. It is also important to me to keep up with web technology and UX design developments by listening to podcasts, attending local events, attending conferences, and using Twitter.`,
 };

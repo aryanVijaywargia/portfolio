@@ -567,7 +567,7 @@ export const Resume: FC = (props) => {
                     </Link>
                   </nav>
                   <h5 className="ml-1 text-[13px] text-gray-500 d:text-gray-400">
-                    Cape Town, South Africa
+                    Madhya Pradesh, India
                   </h5>
                 </section>
               </aside>

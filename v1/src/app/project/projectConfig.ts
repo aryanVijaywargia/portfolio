@@ -99,7 +99,7 @@ export const PROJECTS: Project[] = [
     TECH.reactjs,],
     url: "https://kidsliving.co.za",
     repository: "",
-    description: `Large scale Ecommerce website for a South African based client with 3 brick & mortar locations and over 3000 products.`,
+    description: `Large scale Ecommerce website for an Indian based client with 3 brick & mortar locations and over 3000 products.`,
     content: `
           
             <p>
