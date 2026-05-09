@@ -156,8 +156,8 @@ export const Hero: FC = () => {
               <Badge style="plain">Space Enthusiast</Badge>
             </div>
             {/* Dark-mode identity rail: outlined chips with leading colored dot */}
-            <div className="relative z-20 mt-0.5 hidden flex-wrap items-center justify-end gap-2.5 d:flex">
-              <span className="mr-1 font-mono text-[11px] uppercase tracking-[0.1em] text-slate-500">
+            <div className="relative z-20 mt-0.5 hidden flex-nowrap items-center justify-end gap-1.5 whitespace-nowrap d:flex xl:gap-2">
+              <span className="mr-0.5 shrink-0 font-mono text-[11px] uppercase tracking-[0.1em] text-slate-500">
                 also:
               </span>
               {[
@@ -194,7 +194,7 @@ export const Hero: FC = () => {
               ].map(({ label, color, border, bg }) => (
                 <span
                   key={label}
-                  className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-[3px] text-[12px] font-medium"
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full border px-2 py-[3px] text-[11px] font-medium xl:gap-1.5 xl:px-2.5 xl:text-[12px]"
                   style={{ color, borderColor: border, backgroundColor: bg }}
                 >
                   <span
