@@ -2,6 +2,7 @@ import { FC } from "react";
 import { motion } from "framer-motion";
 import { Link } from "components/link";
 import { Image } from "components/image";
+import AryanPortrait from "public/images/about/bb09f0d6-75a1-438b-92ae-cd3e5d4bba6f 2.jpg";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -109,7 +110,7 @@ export const BatHero: FC = () => {
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden">
                 <Image
-                  src="/images/about/aryan-profile.jpg"
+                  src={AryanPortrait}
                   alt="Aryan Vijaywargia"
                   width={1600}
                   height={1200}
