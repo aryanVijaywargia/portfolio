@@ -1,11 +1,67 @@
 import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
-const REGULAR_MESSAGES = [
-  "Aren't you going to press some links?",
-  "Try the terminal - type `help`",
-  "Hover the photo to cycle",
-  "Hit the resume button",
+type AmbientSection = {
+  selector: string;
+  messages: readonly string[];
+  surprise: string;
+};
+
+const SECTION_MESSAGES: readonly AmbientSection[] = [
+  {
+    selector: "#about",
+    messages: [
+      "Hover the photo stack",
+      "Click through the portraits",
+      "The about photos shuffle after your first visit",
+    ],
+    surprise: "open the hidden profile mode?",
+  },
+  {
+    selector: "#timeline",
+    messages: [
+      "Follow the timeline down the page",
+      "Each stop shaped the next one",
+      "The dates tell the path",
+    ],
+    surprise: "view this path as a case file?",
+  },
+  {
+    selector: "#experience",
+    messages: [
+      "Try the graph nodes",
+      "The experience map is interactive",
+      "Some work connects across roles",
+    ],
+    surprise: "switch to the case-file view?",
+  },
+  {
+    selector: "#portfolio",
+    messages: [
+      "Filter projects by type",
+      "Open a repo from here",
+      "The project cards have live links",
+    ],
+    surprise: "open the archive version?",
+  },
+  {
+    selector: "#contact",
+    messages: [
+      "The contact panel types itself here",
+      "Send a note from this section",
+      "Email and socials are in the terminal",
+    ],
+    surprise: "send the signal instead?",
+  },
+  {
+    selector: "#achievements",
+    messages: [
+      "A few badges are still hidden",
+      "Some achievements need exploration",
+      "This section remembers what you found",
+    ],
+    surprise: "check the secret dossier?",
+  },
 ];
 
 type AmbientMessage = {
@@ -16,7 +72,7 @@ type AmbientMessage = {
   rotation: number;
 };
 
-const FIRST_DELAY_MS = 9000;
+const FIRST_DELAY_MS = 4500;
 const MIN_DELAY_MS = 18000;
 const MAX_DELAY_MS = 45000;
 const CHAR_INTERVAL_MS = 55;
@@ -26,7 +82,7 @@ const SURPRISE_INTERVAL_MS = 90000;
 const SURPRISE_HOLD_MS = 9000;
 
 // "Components" = visually contained UI blocks: cards, panels, terminals,
-// nav/footer. We don't treat raw text (h1, p) as a blocker — those are content,
+// nav/footer. We don't treat raw text (h1, p) as a blocker - those are content,
 // and the message can fall in the gaps between glyphs without reading as overlap.
 const BLOCKER_SELECTORS = [
   "header",
@@ -49,6 +105,24 @@ const LINE_HEIGHT_PX = FONT_PX * 1.05;
 
 const randomBetween = (min: number, max: number) => min + Math.random() * (max - min);
 
+const overlapsAnyBlocker = (
+  candidate: { left: number; top: number; right: number; bottom: number },
+  blockers: DOMRect[]
+) => {
+  for (const b of blockers) {
+    if (
+      b.right < candidate.left ||
+      b.left > candidate.right ||
+      b.bottom < candidate.top ||
+      b.top > candidate.bottom
+    ) {
+      continue;
+    }
+    return true;
+  }
+  return false;
+};
+
 const estimateMessageBox = (text: string) => ({
   width: Math.min(text.length * APPROX_CHAR_PX + 16, 0.7 * window.innerWidth),
   height: LINE_HEIGHT_PX + 6,
@@ -59,44 +133,93 @@ const collectBlockerRects = () =>
     .map((el) => el.getBoundingClientRect())
     .filter((r) => r.width > 8 && r.height > 8);
 
-const findCleanPosition = (text: string) => {
+const getActiveSection = () => {
   if (typeof window === "undefined") return null;
+  let best: { section: AmbientSection; distance: number } | null = null;
+  const anchorY = window.innerHeight * 0.48;
+  const aboutEl = document.querySelector<HTMLElement>("#about");
+  const firstSectionTop = aboutEl ? aboutEl.offsetTop : Number.POSITIVE_INFINITY;
+
+  if (window.scrollY + anchorY < firstSectionTop + 64) {
+    return null;
+  }
+
+  for (const section of SECTION_MESSAGES) {
+    const el = document.querySelector<HTMLElement>(section.selector);
+    if (!el) continue;
+    const rect = el.getBoundingClientRect();
+    const visibleTop = Math.max(rect.top, 0);
+    const visibleBottom = Math.min(rect.bottom, window.innerHeight);
+    const visibleHeight = visibleBottom - visibleTop;
+    const minimumVisible = Math.min(160, rect.height * 0.2);
+
+    if (visibleHeight < minimumVisible) continue;
+
+    const midpoint = visibleTop + visibleHeight / 2;
+    const distance = Math.abs(midpoint - anchorY);
+    if (!best || distance < best.distance) {
+      best = { section, distance };
+    }
+  }
+
+  return best?.section ?? null;
+};
+
+const findCleanPosition = (text: string, section: AmbientSection) => {
+  if (typeof window === "undefined") return null;
+  const sectionEl = document.querySelector<HTMLElement>(section.selector);
+  if (!sectionEl) return null;
+
   const blockers = collectBlockerRects();
   const { width: w, height: h } = estimateMessageBox(text);
   const ih = window.innerHeight;
   const iw = window.innerWidth;
+  const sectionRect = sectionEl.getBoundingClientRect();
+  const topMin = Math.max(0.08 * ih, sectionRect.top + 12);
+  const topMax = Math.min(ih - h - 12, sectionRect.bottom - h - 12);
+
+  if (topMax <= topMin) return null;
+
+  const createCandidate = (left: number, top: number) => ({
+    left: left - PADDING_PX,
+    top: top - PADDING_PX,
+    right: left + w + PADDING_PX,
+    bottom: top + h + PADDING_PX,
+  });
+  const toDocumentPosition = (left: number, top: number) => ({
+    topPx: Math.round(window.scrollY + top),
+    leftPx: Math.round(left),
+    rotation: randomBetween(-3, 3),
+  });
 
   for (let attempt = 0; attempt < MAX_POSITION_ATTEMPTS; attempt++) {
     const left = randomBetween(8, Math.max(8, iw - w - 8));
-    const top = randomBetween(0.08 * ih, Math.max(0.08 * ih, ih - h - 12));
-    const candidate = {
-      left: left - PADDING_PX,
-      top: top - PADDING_PX,
-      right: left + w + PADDING_PX,
-      bottom: top + h + PADDING_PX,
-    };
-    let overlaps = false;
-    for (const b of blockers) {
-      if (
-        b.right < candidate.left ||
-        b.left > candidate.right ||
-        b.bottom < candidate.top ||
-        b.top > candidate.bottom
-      ) {
-        continue;
-      }
-      overlaps = true;
-      break;
-    }
-    if (!overlaps) {
-      return {
-        topPx: Math.round(window.scrollY + top),
-        leftPx: Math.round(left),
-        rotation: randomBetween(-3, 3),
-      };
+    const top = randomBetween(topMin, topMax);
+    const candidate = createCandidate(left, top);
+    if (!overlapsAnyBlocker(candidate, blockers)) {
+      return toDocumentPosition(left, top);
     }
   }
-  return null;
+
+  const safeLeftMax = Math.max(8, iw - w - 8);
+  const fallbackLefts = [24, iw - w - 24, iw * 0.5 - w / 2]
+    .map((left) => Math.min(Math.max(8, left), safeLeftMax))
+    .filter((left, index, arr) => arr.findIndex((item) => Math.abs(item - left) < 1) === index);
+  const fallbackTops = [topMin + 10, topMax - 10, topMin + (topMax - topMin) * 0.5]
+    .map((top) => Math.min(Math.max(topMin, top), topMax))
+    .filter((top, index, arr) => arr.findIndex((item) => Math.abs(item - top) < 1) === index);
+
+  for (const top of fallbackTops) {
+    for (const left of fallbackLefts) {
+      if (!overlapsAnyBlocker(createCandidate(left, top), blockers)) {
+        return toDocumentPosition(left, top);
+      }
+    }
+  }
+
+  const fallbackLeft = fallbackLefts[0] ?? 8;
+  const fallbackTop = fallbackTops[0] ?? topMin;
+  return toDocumentPosition(fallbackLeft, fallbackTop);
 };
 
 export const AmbientMessages: FC = () => {
@@ -109,9 +232,11 @@ export const AmbientMessages: FC = () => {
     topPx: number;
     leftPx: number;
     rotation: number;
+    text: string;
     fading: boolean;
   } | null>(null);
   const [enabled, setEnabled] = useState(false);
+  const [activeSection, setActiveSection] = useState<AmbientSection | null>(null);
   const idRef = useRef(0);
   const surpriseIdRef = useRef(0);
 
@@ -125,8 +250,32 @@ export const AmbientMessages: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!enabled) {
-      // Clear any in-flight message if the viewport just shrank below the threshold.
+    if (!enabled || typeof window === "undefined") {
+      setActiveSection(null);
+      return;
+    }
+
+    let frame = 0;
+    const update = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        setActiveSection(getActiveSection());
+      });
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [enabled]);
+
+  useEffect(() => {
+    if (!enabled || !activeSection) {
       setMessage(null);
       setRevealed(0);
       setFading(false);
@@ -135,6 +284,11 @@ export const AmbientMessages: FC = () => {
     }
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    setMessage(null);
+    setRevealed(0);
+    setFading(false);
+    setSurprise(null);
 
     let scheduleTimer: ReturnType<typeof setTimeout> | null = null;
     let typeTimer: ReturnType<typeof setInterval> | null = null;
@@ -156,8 +310,9 @@ export const AmbientMessages: FC = () => {
 
     const showMessage = () => {
       if (cancelled) return;
-      const text = REGULAR_MESSAGES[Math.floor(Math.random() * REGULAR_MESSAGES.length)];
-      const pos = findCleanPosition(text);
+      const text =
+        activeSection.messages[Math.floor(Math.random() * activeSection.messages.length)];
+      const pos = findCleanPosition(text, activeSection);
       if (!pos) {
         // No empty slot in the current viewport - wait and try again sooner.
         scheduleTimer = setTimeout(showMessage, 6000);
@@ -207,13 +362,14 @@ export const AmbientMessages: FC = () => {
 
     const showSurprise = () => {
       if (cancelled) return;
-      const pos = findCleanPosition("click here for a surprise!") || {
-        topPx: Math.round(window.scrollY + 0.5 * window.innerHeight),
-        leftPx: Math.round(0.5 * window.innerWidth - 110),
-        rotation: 0,
-      };
+      const text = activeSection.surprise;
+      const pos = findCleanPosition(text, activeSection);
+      if (!pos) {
+        surpriseTimer = setTimeout(showSurprise, 6000);
+        return;
+      }
       const id = ++surpriseIdRef.current;
-      setSurprise({ ...pos, fading: false, id });
+      setSurprise({ ...pos, text, fading: false, id });
 
       surpriseHideTimer = setTimeout(
         () => {
@@ -240,7 +396,7 @@ export const AmbientMessages: FC = () => {
       if (surpriseFadeTimer) clearTimeout(surpriseFadeTimer);
       clearActive();
     };
-  }, [enabled]);
+  }, [activeSection, enabled]);
 
   const handleSurpriseClick = useCallback(() => {
     setSurprise(null);
@@ -275,7 +431,7 @@ export const AmbientMessages: FC = () => {
         <button
           type="button"
           onClick={handleSurpriseClick}
-          aria-label="Click here for a surprise"
+          aria-label={surprise.text}
           className="ambient-surprise absolute cursor-pointer select-none border-0 bg-transparent p-0"
           style={{
             top: `${surprise.topPx}px`,
@@ -285,20 +441,22 @@ export const AmbientMessages: FC = () => {
             transition: `opacity ${FADE_OUT_MS}ms ease-out`,
           }}
         >
-          <span className="ambient-surprise__lead">click here for a </span>
-          <span className="ambient-surprise__shimmer">surprise</span>
-          <span className="ambient-surprise__tail">!</span>
+          <span className="ambient-surprise__shimmer">{surprise.text}</span>
         </button>
       )}
 
       <style jsx>{`
-        .ambient-message {
+        .ambient-message,
+        .ambient-surprise {
           font-family: "Caveat", "Patrick Hand", "Comic Sans MS", cursive;
-          font-size: clamp(1rem, 1.35vw, 1.35rem);
+          font-size: 1.0625rem;
           line-height: 1.05;
+          letter-spacing: 0.01em;
+        }
+
+        .ambient-message {
           color: rgba(71, 85, 105, 0.5);
           max-width: min(34ch, 60vw);
-          letter-spacing: 0.01em;
           z-index: 0;
           will-change: opacity, transform;
         }
@@ -322,12 +480,9 @@ export const AmbientMessages: FC = () => {
         }
 
         .ambient-surprise {
-          font-family: "Caveat", "Patrick Hand", "Comic Sans MS", cursive;
-          font-size: clamp(1.4rem, 2vw, 1.9rem);
-          line-height: 1.05;
           z-index: 60;
           color: rgba(51, 65, 85, 0.85);
-          letter-spacing: 0.01em;
+          max-width: min(34ch, 60vw);
           transition: transform 200ms ease-out;
           animation: ambient-surprise-in 600ms ease-out both;
         }
@@ -336,7 +491,7 @@ export const AmbientMessages: FC = () => {
         }
         .ambient-surprise:hover,
         .ambient-surprise:focus-visible {
-          transform: rotate(0deg) scale(1.04);
+          transform: rotate(0deg);
           outline: none;
         }
         @keyframes ambient-surprise-in {

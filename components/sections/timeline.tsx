@@ -84,7 +84,7 @@ export const Timeline: FC<TimelineProps> = ({}) => {
   );
 
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-16 md:px-8 md:pb-24">
+    <section id="timeline" className="mx-auto max-w-6xl px-4 pb-16 md:px-8 md:pb-24">
       <div
         className="scrollbar-none -mx-4 flex h-96 overflow-x-auto px-6 py-4 xl:mx-0"
         ref={scrollContainerRef}

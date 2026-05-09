@@ -74,7 +74,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
       <MobileExperienceNotice />
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
-      {!isBatman ? <AmbientMessages /> : null}
+      {!isBatman && router.pathname === "/" ? <AmbientMessages /> : null}
     </>
   );
 };
