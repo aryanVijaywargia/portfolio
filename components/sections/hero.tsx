@@ -100,13 +100,18 @@ export const Hero: FC = () => {
                 />
               </h2>*/}
             <ul className="scrollbar-none -mx-4 mb-2 flex items-center gap-2 overflow-x-auto px-4 pb-2 text-[13px] font-medium">
-              {HERO.tech.map(({ name, Icon }) => (
+              {HERO.tech.map(({ name, Icon, bg, color }) => (
                 <li
-                  className="flex items-center gap-2 rounded-full border border-slate-300/70 bg-white/70 px-3.5 py-2 text-slate-600 backdrop-blur transition-colors hover:border-cyan-500/50 hover:text-slate-900 d:border-slate-400/15 d:bg-slate-900/50 d:text-slate-300 d:hover:border-cyan-400/40 d:hover:text-slate-50"
+                  className="flex items-center gap-2 rounded-full border border-slate-300/80 bg-white/85 px-3 py-1.5 text-slate-700 shadow-sm shadow-slate-900/5 backdrop-blur transition-colors hover:border-cyan-500/50 hover:text-slate-950 d:border-slate-400/15 d:bg-slate-900/65 d:text-slate-300 d:shadow-none d:hover:border-cyan-400/40 d:hover:text-slate-50"
                   key={name}
                 >
-                  <Icon className="h-5 w-5 text-slate-500 d:text-slate-200" />
-                  {name}
+                  <span
+                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_4px_12px_-6px_rgba(15,23,42,0.55)]"
+                    style={{ backgroundColor: bg }}
+                  >
+                    <Icon className="h-3.5 w-3.5" style={{ color }} />
+                  </span>
+                  <span className="font-semibold">{name}</span>
                 </li>
               ))}
             </ul>
