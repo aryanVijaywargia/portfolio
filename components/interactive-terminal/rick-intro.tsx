@@ -179,7 +179,7 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
         }
 
         .rick-ascii {
-          color: #000000;
+          color: #0f7a55;
           font-size: 0.45rem;
           line-height: 1.1;
           margin: 0;
@@ -211,7 +211,7 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
         }
 
         .dialogue-line {
-          color: #000000;
+          color: #166534;
           font-size: 13px;
           line-height: 1.8;
           margin-bottom: 0.25rem;
@@ -222,7 +222,7 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
         }
 
         .dialogue-line.completed {
-          opacity: 0.5;
+          opacity: 0.78;
         }
 
         .dialogue-line.current {
@@ -247,7 +247,7 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
 
         .cursor {
           animation: blink 0.7s step-end infinite;
-          color: #000000;
+          color: #15803d;
         }
 
         :global(.dark) .cursor {
@@ -264,7 +264,7 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
           position: absolute;
           bottom: 0.75rem;
           right: 1rem;
-          color: #999;
+          color: #64786f;
           font-size: 10px;
           font-family: "Menlo", "Monaco", "Courier New", monospace;
         }

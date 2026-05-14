@@ -26,7 +26,7 @@ const WindowDots: FC = () => (
 
 const JsonLine: FC<{ num: number; children: ReactNode }> = ({ num, children }) => (
   <div className="flex min-h-[1.5rem] items-start leading-[1.5rem]">
-    <span className="mr-4 inline-block w-6 select-none border-r border-gray-200/50 pr-3 text-right text-[0.9rem] text-gray-400/90 d:border-slate-700/50 d:text-slate-500/90">
+    <span className="mr-4 inline-block w-6 select-none border-r border-slate-300/80 pr-3 text-right text-[0.9rem] text-slate-500 d:border-slate-700/50 d:text-slate-500/90">
       {num}
     </span>
     <span>{children}</span>
@@ -34,11 +34,11 @@ const JsonLine: FC<{ num: number; children: ReactNode }> = ({ num, children }) =
 );
 
 const JsonKey: FC<{ children: string }> = ({ children }) => (
-  <span className="text-primary-400">&quot;{children}&quot;</span>
+  <span className="text-sky-600 d:text-primary-400">&quot;{children}&quot;</span>
 );
 
 const JsonString: FC<{ children: string; href?: string }> = ({ children, href }) => {
-  const content = <span className="text-emerald-400">&quot;{children}&quot;</span>;
+  const content = <span className="text-emerald-600 d:text-emerald-400">&quot;{children}&quot;</span>;
   if (href) {
     return (
       <a
@@ -55,11 +55,11 @@ const JsonString: FC<{ children: string; href?: string }> = ({ children, href })
 };
 
 const CodeKeyword: FC<{ children: string }> = ({ children }) => (
-  <span className="text-purple-400">{children}</span>
+  <span className="text-violet-600 d:text-purple-400">{children}</span>
 );
 
 const CodeComment: FC<{ children: string }> = ({ children }) => (
-  <span className="italic text-gray-400/90 d:text-slate-500/90">{children}</span>
+  <span className="italic text-slate-500 d:text-slate-500/90">{children}</span>
 );
 
 /* ─── Animation variants ─── */
@@ -213,12 +213,12 @@ const ContactInfoPanel: FC = () => {
   return (
     <div
       ref={ref}
-      className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-gray-200/80 bg-gray-50/95 shadow-[0_0_0_1px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.6),0_18px_52px_-30px_rgba(15,23,42,0.4),0_0_80px_-30px_rgba(6,182,212,0.18)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]"
+      className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-slate-300/80 bg-[#f8fbff] shadow-[0_0_0_1px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.8),0_20px_56px_-28px_rgba(15,23,42,0.42),0_0_70px_-28px_rgba(6,182,212,0.22)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]"
     >
-      <div className="flex h-[3rem] items-center justify-between border-b border-gray-200/80 bg-gray-100/90 px-4 d:border-[#243146] d:bg-[#171f2b]">
+      <div className="flex h-[3rem] items-center justify-between border-b border-slate-300/80 bg-slate-100 px-4 d:border-[#243146] d:bg-[#171f2b]">
         <WindowDots />
-        <div className="flex items-center gap-2 font-mono text-[0.82rem] text-gray-500 d:text-slate-400">
-          <span className="text-yellow-500 d:text-yellow-400">{`</>`}</span>
+        <div className="flex items-center gap-2 font-mono text-[0.82rem] font-semibold text-slate-600 d:text-slate-400">
+          <span className="text-amber-500 d:text-yellow-400">{`</>`}</span>
           <span>contact_info.json</span>
         </div>
       </div>
@@ -248,7 +248,7 @@ const ContactInfoPanel: FC = () => {
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.2, delay: totalTypingTime }}
         >
-          <span className="inline-block h-[2px] w-2.5 animate-blink bg-gray-800 d:bg-slate-200" />
+          <span className="inline-block h-[2px] w-2.5 animate-blink bg-slate-900 d:bg-slate-200" />
         </motion.div>
       </div>
     </div>
@@ -307,14 +307,14 @@ const SendMessagePanel: FC = () => {
   };
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-gray-200/80 bg-gray-50/95 shadow-[0_0_0_1px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.6),0_18px_52px_-30px_rgba(15,23,42,0.4),0_0_80px_-30px_rgba(6,182,212,0.18)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]">
-      <div className="relative flex h-[3rem] items-center border-b border-gray-200/80 bg-gray-100/90 px-4 d:border-[#243146] d:bg-[#171f2b]">
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-slate-300/80 bg-[#f8fbff] shadow-[0_0_0_1px_rgba(15,23,42,0.08),inset_0_1px_0_rgba(255,255,255,0.8),0_20px_56px_-28px_rgba(15,23,42,0.42),0_0_70px_-28px_rgba(6,182,212,0.22)] d:border-[#243146] d:bg-[#101824] d:shadow-[0_0_0_1px_rgba(148,163,184,0.18),inset_0_1px_0_rgba(255,255,255,0.06),0_24px_60px_-20px_rgba(2,8,23,0.85),0_0_80px_-25px_rgba(6,182,212,0.22)]">
+      <div className="relative flex h-[3rem] items-center border-b border-slate-300/80 bg-slate-100 px-4 d:border-[#243146] d:bg-[#171f2b]">
         <WindowDots />
-        <div className="absolute bottom-[-1px] left-[4.5rem] flex h-[3rem] items-center gap-2.5 border-x border-t border-gray-200/80 bg-white/80 px-3.5 font-mono text-[0.82rem] text-gray-500 d:border-[#243146] d:bg-[#101824] d:text-slate-400">
-          <span className="absolute inset-x-0 top-0 h-[2px] bg-primary-400" />
-          <span className="text-[0.82rem] font-bold text-blue-500 d:text-blue-400">TS</span>
+        <div className="absolute bottom-[-1px] left-[4.5rem] flex h-[3rem] items-center gap-2.5 border-x border-t border-slate-300/80 bg-[#f8fbff] px-3.5 font-mono text-[0.82rem] font-semibold text-slate-600 d:border-[#243146] d:bg-[#101824] d:text-slate-400">
+          <span className="absolute inset-x-0 top-0 h-[2px] bg-sky-500 d:bg-primary-400" />
+          <span className="text-[0.82rem] font-bold text-blue-600 d:text-blue-400">TS</span>
           <span>sendMessage.ts</span>
-          <span className="ml-1 text-gray-400 d:text-slate-600">&times;</span>
+          <span className="ml-1 text-slate-500 d:text-slate-600">&times;</span>
         </div>
       </div>
 
@@ -327,21 +327,21 @@ const SendMessagePanel: FC = () => {
 
             <div className="mb-3 text-[0.9rem]">
               <CodeKeyword>const</CodeKeyword>
-              <span className="text-primary-300"> send</span>
-              <span className="text-gray-700 d:text-slate-300"> = </span>
+              <span className="text-sky-600 d:text-primary-300"> send</span>
+              <span className="text-slate-700 d:text-slate-300"> = </span>
               <CodeKeyword>async</CodeKeyword>
-              <span className="text-gray-700 d:text-slate-300"> () </span>
-              <span className="text-primary-400">{"\u21D2"}</span>
-              <span className="text-gray-700 d:text-slate-300"> {"{"}</span>
+              <span className="text-slate-700 d:text-slate-300"> () </span>
+              <span className="text-sky-600 d:text-primary-400">{"\u21D2"}</span>
+              <span className="text-slate-700 d:text-slate-300"> {"{"}</span>
             </div>
 
             <div className="mb-2.5 ml-4">
               <div className="flex items-end">
                 <span className="shrink-0 whitespace-nowrap">
                   <CodeKeyword>const</CodeKeyword>
-                  <span className="text-primary-300"> name</span>
-                  <span className="text-gray-700 d:text-slate-300"> = </span>
-                  <span className="text-emerald-400">&quot;</span>
+                  <span className="text-sky-600 d:text-primary-300"> name</span>
+                  <span className="text-slate-700 d:text-slate-300"> = </span>
+                  <span className="text-emerald-600 d:text-emerald-400">&quot;</span>
                 </span>
                 <input
                   type="text"
@@ -353,15 +353,15 @@ const SendMessagePanel: FC = () => {
                     if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
                   }}
                   placeholder="Your Name"
-                  className={`placeholder-gray-400/45 min-w-0 flex-1 border-0 border-b bg-transparent px-0 pb-0.5 pt-0 font-mono text-[0.9rem] text-emerald-400 caret-emerald-400 outline-none focus:ring-0 d:placeholder-slate-600/70 ${
+                  className={`min-w-0 flex-1 border-0 border-b bg-transparent px-0 pb-0.5 pt-0 font-mono text-[0.9rem] text-emerald-600 caret-emerald-500 outline-none placeholder:text-slate-500/70 focus:ring-0 d:text-emerald-400 d:caret-emerald-400 d:placeholder-slate-600/70 ${
                     errors.name
                       ? "border-red-400"
-                      : "border-gray-300/70 focus:border-primary-400 d:border-[#31425c]"
+                      : "border-slate-300 focus:border-sky-500 d:border-[#31425c] d:focus:border-primary-400"
                   }`}
                 />
                 <span className="shrink-0 whitespace-nowrap">
-                  <span className="text-emerald-400">&quot;</span>
-                  <span className="text-gray-700 d:text-slate-300">;</span>
+                  <span className="text-emerald-600 d:text-emerald-400">&quot;</span>
+                  <span className="text-slate-700 d:text-slate-300">;</span>
                 </span>
               </div>
               {errors.name && (
@@ -375,9 +375,9 @@ const SendMessagePanel: FC = () => {
               <div className="flex items-end">
                 <span className="shrink-0 whitespace-nowrap">
                   <CodeKeyword>const</CodeKeyword>
-                  <span className="text-primary-300"> email</span>
-                  <span className="text-gray-700 d:text-slate-300"> = </span>
-                  <span className="text-emerald-400">&quot;</span>
+                  <span className="text-sky-600 d:text-primary-300"> email</span>
+                  <span className="text-slate-700 d:text-slate-300"> = </span>
+                  <span className="text-emerald-600 d:text-emerald-400">&quot;</span>
                 </span>
                 <input
                   type="email"
@@ -389,15 +389,15 @@ const SendMessagePanel: FC = () => {
                     if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
                   }}
                   placeholder="your@email.com"
-                  className={`placeholder-gray-400/45 min-w-0 flex-1 border-0 border-b bg-transparent px-0 pb-0.5 pt-0 font-mono text-[0.9rem] text-emerald-400 caret-emerald-400 outline-none focus:ring-0 d:placeholder-slate-600/70 ${
+                  className={`min-w-0 flex-1 border-0 border-b bg-transparent px-0 pb-0.5 pt-0 font-mono text-[0.9rem] text-emerald-600 caret-emerald-500 outline-none placeholder:text-slate-500/70 focus:ring-0 d:text-emerald-400 d:caret-emerald-400 d:placeholder-slate-600/70 ${
                     errors.email
                       ? "border-red-400"
-                      : "border-gray-300/70 focus:border-primary-400 d:border-[#31425c]"
+                      : "border-slate-300 focus:border-sky-500 d:border-[#31425c] d:focus:border-primary-400"
                   }`}
                 />
                 <span className="shrink-0 whitespace-nowrap">
-                  <span className="text-emerald-400">&quot;</span>
-                  <span className="text-gray-700 d:text-slate-300">;</span>
+                  <span className="text-emerald-600 d:text-emerald-400">&quot;</span>
+                  <span className="text-slate-700 d:text-slate-300">;</span>
                 </span>
               </div>
               {errors.email && (
@@ -409,26 +409,26 @@ const SendMessagePanel: FC = () => {
 
             <div className="mb-0.5 ml-4 text-[0.9rem]">
               <CodeKeyword>await</CodeKeyword>
-              <span className="text-primary-300"> api</span>
-              <span className="text-gray-700 d:text-slate-300">.</span>
-              <span className="text-yellow-300">submit</span>
-              <span className="text-gray-700 d:text-slate-300">({"{"}</span>
+              <span className="text-sky-600 d:text-primary-300"> api</span>
+              <span className="text-slate-700 d:text-slate-300">.</span>
+              <span className="text-amber-500 d:text-yellow-300">submit</span>
+              <span className="text-slate-700 d:text-slate-300">({"{"}</span>
             </div>
 
             <div className="mb-0.5 ml-8 text-[0.9rem]">
-              <span className="text-primary-300">name</span>
-              <span className="text-gray-700 d:text-slate-300">, </span>
-              <span className="text-primary-300">email</span>
-              <span className="text-gray-700 d:text-slate-300">,</span>
+              <span className="text-sky-600 d:text-primary-300">name</span>
+              <span className="text-slate-700 d:text-slate-300">, </span>
+              <span className="text-sky-600 d:text-primary-300">email</span>
+              <span className="text-slate-700 d:text-slate-300">,</span>
             </div>
 
             <div className="mb-0.5 ml-8 text-[0.9rem]">
-              <span className="text-primary-300">message</span>
-              <span className="text-gray-700 d:text-slate-300"> : </span>
-              <span className="text-emerald-400">`</span>
+              <span className="text-sky-600 d:text-primary-300">message</span>
+              <span className="text-slate-700 d:text-slate-300"> : </span>
+              <span className="text-emerald-600 d:text-emerald-400">`</span>
             </div>
 
-            <div className="border-primary-400/35 mb-1.5 ml-[3.1rem] mr-1 border-l pl-2.5 d:border-primary-400/25">
+            <div className="mb-1.5 ml-[3.1rem] mr-1 border-l border-sky-500/45 pl-2.5 d:border-primary-400/25">
               <textarea
                 value={message}
                 onChange={(e) => {
@@ -438,7 +438,7 @@ const SendMessagePanel: FC = () => {
                 placeholder="Type your message here..."
                 rows={3}
                 aria-label="Your message"
-                className="placeholder-gray-400/45 h-16 w-full resize-none border-0 bg-transparent p-0 font-mono text-[0.9rem] leading-[1.72rem] text-emerald-400 caret-emerald-400 outline-none focus:ring-0 d:placeholder-slate-600/70"
+                className="h-16 w-full resize-none border-0 bg-transparent p-0 font-mono text-[0.9rem] leading-[1.72rem] text-emerald-600 caret-emerald-500 outline-none placeholder:text-slate-500/70 focus:ring-0 d:text-emerald-400 d:caret-emerald-400 d:placeholder-slate-600/70"
               />
               {errors.message && (
                 <div className="mt-0.5 text-xs text-red-400">
@@ -448,13 +448,13 @@ const SendMessagePanel: FC = () => {
             </div>
 
             <div className="mb-0.5 ml-4 text-[0.9rem]">
-              <span className="text-emerald-400">`</span>
-              <span className="text-gray-700 d:text-slate-300">{"})"}</span>
-              <span className="text-gray-700 d:text-slate-300">;</span>
+              <span className="text-emerald-600 d:text-emerald-400">`</span>
+              <span className="text-slate-700 d:text-slate-300">{"})"}</span>
+              <span className="text-slate-700 d:text-slate-300">;</span>
             </div>
 
             <div className="text-[0.9rem]">
-              <span className="text-gray-700 d:text-slate-300">{"}"}</span>
+              <span className="text-slate-700 d:text-slate-300">{"}"}</span>
             </div>
 
             {/* Status messages */}

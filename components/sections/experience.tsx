@@ -5,19 +5,19 @@ import clsx from "clsx";
 import { useCallback, useMemo, useRef, useState } from "react";
 
 const EXPERIENCE_THEME_CLASSES = [
-  "[--experience-shell:rgba(255,255,255,0.92)]",
-  "[--experience-card:rgba(248,250,252,0.78)]",
-  "[--experience-panel:rgba(255,255,255,0.84)]",
+  "[--experience-shell:#ffffff]",
+  "[--experience-card:#f8fbff]",
+  "[--experience-panel:#ffffff]",
   "[--experience-panel-strong:#ffffff]",
-  "[--experience-panel-muted:rgba(241,245,249,0.74)]",
+  "[--experience-panel-muted:#eef6fc]",
   "[--experience-text:#0f172a]",
-  "[--experience-text-muted:#475569]",
-  "[--experience-text-subtle:#64748b]",
-  "[--experience-border:rgba(148,163,184,0.28)]",
-  "[--experience-border-faint:rgba(148,163,184,0.16)]",
-  "[--experience-grid:rgba(148,163,184,0.16)]",
-  "[--experience-shadow:0_24px_60px_-42px_rgba(15,23,42,0.36)]",
-  "[--experience-glow:rgba(14,165,233,0.08)]",
+  "[--experience-text-muted:#334155]",
+  "[--experience-text-subtle:#52657e]",
+  "[--experience-border:rgba(100,116,139,0.28)]",
+  "[--experience-border-faint:rgba(100,116,139,0.18)]",
+  "[--experience-grid:rgba(100,116,139,0.18)]",
+  "[--experience-shadow:0_24px_70px_-38px_rgba(15,23,42,0.32)]",
+  "[--experience-glow:rgba(14,165,233,0.14)]",
   "d:[--experience-shell:#07090f]",
   "d:[--experience-card:rgba(15,23,42,0.45)]",
   "d:[--experience-panel:rgba(7,9,15,0.5)]",
@@ -44,31 +44,31 @@ type KindStyle = {
 const KIND_STYLES: Record<ExperienceKind, KindStyle> = {
   employment: {
     label: "Work",
-    color: "#06b6d4",
-    soft: "rgba(6,182,212,0.1)",
-    border: "rgba(6,182,212,0.42)",
-    glow: "rgba(6,182,212,0.36)",
+    color: "#0891b2",
+    soft: "rgba(8,145,178,0.13)",
+    border: "rgba(8,145,178,0.38)",
+    glow: "rgba(8,145,178,0.28)",
   },
   freelance: {
     label: "Freelance",
-    color: "#c084fc",
-    soft: "rgba(192,132,252,0.1)",
-    border: "rgba(192,132,252,0.42)",
-    glow: "rgba(192,132,252,0.34)",
+    color: "#8b5cf6",
+    soft: "rgba(139,92,246,0.12)",
+    border: "rgba(139,92,246,0.36)",
+    glow: "rgba(139,92,246,0.26)",
   },
   education: {
     label: "Edu",
-    color: "#fbbf24",
-    soft: "rgba(251,191,36,0.12)",
-    border: "rgba(251,191,36,0.42)",
-    glow: "rgba(251,191,36,0.3)",
+    color: "#f59e0b",
+    soft: "rgba(245,158,11,0.13)",
+    border: "rgba(245,158,11,0.38)",
+    glow: "rgba(245,158,11,0.28)",
   },
   project: {
     label: "OSS",
-    color: "#34d399",
-    soft: "rgba(52,211,153,0.1)",
-    border: "rgba(52,211,153,0.42)",
-    glow: "rgba(52,211,153,0.34)",
+    color: "#10b981",
+    soft: "rgba(16,185,129,0.12)",
+    border: "rgba(16,185,129,0.36)",
+    glow: "rgba(16,185,129,0.26)",
   },
 };
 
@@ -227,11 +227,9 @@ function TimelineBlock({
                 <span
                   className={clsx(
                     "absolute flex h-8 w-[108px] items-center justify-end pr-3 text-right text-[13px] leading-none tracking-[-0.01em]",
-                    isSelected
-                      ? "font-semibold text-cyan-500 d:text-cyan-300"
-                      : "text-[var(--experience-text-muted)]"
+                    isSelected ? "font-semibold" : "text-[var(--experience-text-muted)]"
                   )}
-                  style={{ top }}
+                  style={{ top, color: isSelected ? style.color : undefined }}
                 >
                   {company.timeline.rowLabel}
                 </span>
@@ -279,10 +277,16 @@ function TimelineBlock({
               onClick={() => onSelect(company.id)}
               className={clsx(
                 "grid grid-cols-[16px,minmax(0,1fr),auto] items-center gap-2.5 rounded-lg border px-3.5 py-3 text-left transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--experience-shell)] sm:gap-3",
-                isSelected
-                  ? "border-cyan-500/20 bg-cyan-500/[0.06]"
-                  : "border-transparent hover:bg-[var(--experience-panel-muted)]"
+                isSelected ? "" : "border-transparent hover:bg-[var(--experience-panel-muted)]"
               )}
+              style={
+                isSelected
+                  ? {
+                      borderColor: style.border,
+                      backgroundColor: style.soft,
+                    }
+                  : undefined
+              }
             >
               <span
                 aria-hidden
@@ -298,8 +302,9 @@ function TimelineBlock({
               <span
                 className={clsx(
                   "whitespace-nowrap font-mono text-[11px]",
-                  isSelected ? "text-cyan-500" : "text-[var(--experience-text-subtle)]"
+                  isSelected ? "" : "text-[var(--experience-text-subtle)]"
                 )}
+                style={{ color: isSelected ? style.color : undefined }}
               >
                 {company.periodShort}
               </span>
