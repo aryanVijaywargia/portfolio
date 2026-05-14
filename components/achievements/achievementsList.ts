@@ -32,7 +32,7 @@ const ACHIEVEMENTS_MAP = {
   },
   GIT_ARCHAEOLOGIST: {
     title: "Git Archaeologist",
-    description: "Expanded four work-history commits.",
+    description: "Inspected four work-history chapters.",
     hint: "The experience log opens up if you keep digging.",
     category: "explorer",
     hidden: true,
