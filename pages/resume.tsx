@@ -91,16 +91,6 @@ export const Resume: FC = (props) => {
         <tr className="block print:!table-row">
           <td className="block print:!table-cell">
             <article className="relative mx-auto mb-16 grid max-w-6xl gap-12 px-4 py-16 print:!flex print:!py-0 print:!pl-24 md:px-8 lg:grid-cols-[1fr_200px] print:[&_*]:![-webkit-print-color-adjust:exact] print:[&_*]:![color-adjust:exact] print:[&_*]:![print-color-adjust:exact]">
-              <div className="fixed inset-x-0 top-0 z-40 mx-auto flex h-20 max-w-6xl items-center justify-end px-4 print:!hidden md:px-8">
-                <a
-                  href={RESUME_PDF_PATH}
-                  download={RESUME_PDF_FILENAME}
-                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent bg-gradient-to-br from-cyan-500 to-blue-600 px-6 py-2.5 text-sm font-medium tracking-tight text-white shadow-[0_8px_24px_-8px_rgba(6,182,212,0.5),0_0_40px_-8px_rgba(59,130,246,0.3)] transition-all hfa:from-cyan-400 hfa:to-blue-500 hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.65),0_0_48px_-6px_rgba(59,130,246,0.5)] d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)] d:hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.7),0_0_48px_-6px_rgba(59,130,246,0.55)] md:px-8"
-                >
-                  <ArrowDownTrayIcon className="h-4 w-4" />
-                  Download Resume
-                </a>
-              </div>
               <main className="snap-y snap-normal spacing-10">
                 <ResumeSection title="Intro" className="break-inside-avoid print:!max-w-3xl">
                   <p className="text-[15px] leading-relaxed text-gray-500 d:text-gray-300 d:text-gray-300 print:!-ml-24 print:!max-w-3xl print:!text-base">
@@ -370,6 +360,14 @@ export const Resume: FC = (props) => {
                 </ResumeSection>
               </main>
               <aside className="top-[144px] mb-auto hidden max-h-min print:!hidden lg:sticky lg:spacing-8">
+                <a
+                  href={RESUME_PDF_PATH}
+                  download={RESUME_PDF_FILENAME}
+                  className="group inline-flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent bg-gradient-to-br from-cyan-500 to-blue-600 px-4 py-2.5 text-sm font-medium tracking-tight text-white shadow-[0_8px_24px_-8px_rgba(6,182,212,0.5),0_0_40px_-8px_rgba(59,130,246,0.3)] transition-all hfa:from-cyan-400 hfa:to-blue-500 hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.65),0_0_48px_-6px_rgba(59,130,246,0.5)] d:shadow-[0_8px_24px_-8px_rgba(6,182,212,0.6),0_0_40px_-8px_rgba(59,130,246,0.4)] d:hfa:shadow-[0_12px_32px_-8px_rgba(6,182,212,0.7),0_0_48px_-6px_rgba(59,130,246,0.55)] print:!hidden"
+                >
+                  <ArrowDownTrayIcon className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                  Download Resume
+                </a>
                 <section className="spacing-6 print:!hidden">
                   <nav className="relative whitespace-nowrap text-[15px] font-medium text-gray-300 spacing-0">
                     <HoverEffect className="border-none border-transparent bg-gray-100" />
