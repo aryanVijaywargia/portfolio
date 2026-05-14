@@ -15,18 +15,26 @@ export const HERO = {
     {
       name: "Python",
       Icon: ({ className }) => <SiPython className={className} />,
+      color: "#3776ab",
+      bg: "#ffd43b",
     },
     {
       name: "TensorFlow",
       Icon: ({ className }) => <SiTensorflow className={className} />,
+      color: "#ffffff",
+      bg: "#ff6f00",
     },
     {
       name: "TypeScript",
       Icon: ({ className }) => <SiTypescript className={className} />,
+      color: "#ffffff",
+      bg: "#3178c6",
     },
     {
       name: "Angular",
       Icon: ({ className }) => <SiAngular className={className} />,
+      color: "#ffffff",
+      bg: "#dd0031",
     },
   ] as const,
   body: (onWowClick?: () => void) => (

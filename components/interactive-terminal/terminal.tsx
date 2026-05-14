@@ -120,6 +120,15 @@ export const Terminal: FC<TerminalProps> = ({
       chatbotTimeoutIds.current.forEach((id) => clearTimeout(id));
       chatbotTimeoutIds.current = [];
 
+      if (showIntro) {
+        startupRenderedRef.current = true;
+        setOutputLines([]);
+        setCurrentInput("");
+        setLineIdCounter(0);
+        setShowIntro(false);
+        return;
+      }
+
       // Run the chatbot loading animation
       chatbotTimeoutIds.current.push(
         setTimeout(
@@ -184,7 +193,7 @@ export const Terminal: FC<TerminalProps> = ({
       chatbotTimeoutIds.current.forEach((id) => clearTimeout(id));
       chatbotTimeoutIds.current = [];
     };
-  }, [triggerChatbot, onSwitchToChatbot, onTriggerHandled]);
+  }, [triggerChatbot, showIntro, onSwitchToChatbot, onTriggerHandled]);
 
   // Auto-scroll to bottom when output changes
   useEffect(() => {

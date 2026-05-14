@@ -37,6 +37,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const [replayIntroKey, setReplayIntroKey] = useState(0);
   const [editorCode, setEditorCode] = useState<string | string[] | null>(code ?? null);
   const triggerChatbot = useChatbot((state) => state.triggerChatbot);
+  const requestChatbot = useChatbot((state) => state.requestChatbot);
   const clearTrigger = useChatbot((state) => state.clearTrigger);
   const closeChat = useChatbot((state) => state.closeChat);
   const { trackAchievementEvent } = useAchievementActions();
@@ -191,7 +192,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     : undefined;
 
   // Determine title click handler (for launching chatbot from title)
-  const handleTitleClick = !isExpanded && mode === "terminal" ? handleSwitchToChatbot : undefined;
+  const handleTitleClick = !isExpanded && mode === "terminal" ? requestChatbot : undefined;
 
   const layoutTransition = { type: "spring" as const, damping: 25, stiffness: 300 };
   const windowSizeClass = isExpanded
