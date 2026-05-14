@@ -438,27 +438,25 @@ export const Experience = () => {
       id="experience"
       ref={sectionRef}
       className={clsx(
-        "mx-auto min-h-[100svh] px-4 pt-24 pb-16 md:px-8 md:pt-28 md:pb-24",
+        "mx-auto min-h-[100svh] max-w-[74rem] px-4 pt-24 pb-16 md:px-8 md:pt-28 md:pb-24",
         EXPERIENCE_THEME_CLASSES
       )}
-      style={{ maxWidth: "88rem" }}
     >
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
         transition={{ duration: 0.45, ease: "easeOut" }}
-        className="mx-auto"
-        style={{ maxWidth: "82rem" }}
+        className="mx-auto w-full"
       >
         <ExperienceHeader />
 
-        <div className="relative overflow-hidden rounded-2xl border bg-[var(--experience-card)] p-5 shadow-[var(--experience-shadow)] backdrop-blur [border-color:var(--experience-border)] md:p-7">
+        <div className="relative overflow-hidden rounded-2xl border bg-[var(--experience-card)] p-5 shadow-[var(--experience-shadow)] backdrop-blur [border-color:var(--experience-border)] md:p-6">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_10%_0%,var(--experience-glow),transparent_60%)]"
           />
 
-          <div className="experience-layout relative grid min-h-[590px] gap-8 xl:gap-10">
+          <div className="experience-layout relative grid min-h-[520px] gap-8 xl:gap-8">
             <TimelineBlock selectedCompanyId={selectedCompany.id} onSelect={handleSelect} />
             <RoleDetail company={selectedCompany} />
           </div>
@@ -472,13 +470,13 @@ export const Experience = () => {
 
         @media (min-width: 1024px) {
           .experience-layout {
-            grid-template-columns: minmax(0, 1.4fr) minmax(340px, 0.9fr);
+            grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.9fr);
           }
         }
 
         @media (min-width: 1280px) {
           .experience-layout {
-            grid-template-columns: minmax(760px, 1.65fr) minmax(380px, 0.95fr);
+            grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.95fr);
           }
         }
       `}</style>
