@@ -38,7 +38,9 @@ const JsonKey: FC<{ children: string }> = ({ children }) => (
 );
 
 const JsonString: FC<{ children: string; href?: string }> = ({ children, href }) => {
-  const content = <span className="text-emerald-600 d:text-emerald-400">&quot;{children}&quot;</span>;
+  const content = (
+    <span className="text-emerald-600 d:text-emerald-400">&quot;{children}&quot;</span>
+  );
   if (href) {
     return (
       <a
