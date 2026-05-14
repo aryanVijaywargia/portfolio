@@ -1,4 +1,4 @@
-import { ChevronDoubleUpIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
+import { ArrowDownTrayIcon, ChevronDoubleUpIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
 import { SiLinkedin } from "@react-icons/all-files/si/SiLinkedin";
 import { SiTwitter } from "@react-icons/all-files/si/SiTwitter";
@@ -37,7 +37,15 @@ export const ResumeFooter = () => {
         <span className="sr-only">Show Mobile Navigation</span>
         <ChevronDoubleUpIcon className={clsx("h-4 w-4 transition-all", active && "rotate-180")} />
       </button>
-      <section className="relative z-10 mt-8 grid grid-cols-2 pb-4">
+      <a
+        href="/resume/aryan-vijaywargia-resume.pdf"
+        download="Aryan-Vijaywargia-Resume.pdf"
+        className="relative z-10 mt-7 inline-flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent bg-gradient-to-br from-cyan-500 to-blue-600 px-4 py-2 text-sm font-medium tracking-tight text-white shadow-[0_8px_24px_-8px_rgba(6,182,212,0.5),0_0_40px_-8px_rgba(59,130,246,0.3)] transition-all hfa:from-cyan-400 hfa:to-blue-500"
+      >
+        <ArrowDownTrayIcon className="h-4 w-4" />
+        Download Resume
+      </a>
+      <section className="relative z-10 mt-4 grid grid-cols-2 pb-4">
         <section className="spacing-2">
           <div className="text-[13px] font-medium text-gray-700 d:text-gray-300">Filter view:</div>
           <nav className="flex flex-wrap gap-1.5">
