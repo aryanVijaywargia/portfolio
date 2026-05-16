@@ -3,7 +3,6 @@
 .gemini-clipboard/
 .pnpm-store/
 Aryan Portfolio Design System/
-v1/
 docs/plans/
 out.html
 public/feed.xml
@@ -11,7 +10,6 @@ public/sitemap*.xml
 
 components/_hooks/use-is-mount.tsx
 components/_stores/notifications-store.tsx
-components/_stores/preloaded-images-store.tsx
 components/alert.tsx
 components/badge.tsx
 components/button-loading.tsx

@@ -1,0 +1,24 @@
+<div class="relative">
+  <main (scroll)="onScroll($event)"
+    class="sm:scrollbar-none group relative flex snap-x snap-mandatory scroll-pl-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] gap-8 overflow-x-auto py-12 px-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] [--slider-padding:2rem]"
+    #scrollContainer>
+    <ng-content></ng-content>
+  </main>
+  <button
+    class="absolute left-10 bottom-0 hidden items-center gap-2 py-2 px-4 text-sm text-gray-500 transition-all duration-75 disabled:text-gray-300 h:text-gray-900 disabled:h:text-gray-300 d:text-gray-300 d:disabled:text-gray-700 d:hfa:text-gray-50 d:disabled:hfa:text-gray-700 md:flex"
+    [class.disabled]="!scrollNavigation.prev" (click)="handleClickPrevious()" [disabled]="!scrollNavigation.prev">
+    <svg class="mt-0.5 h-5 w-5">
+      
+    </svg>
+    prev
+  </button>
+
+  <button
+    class="absolute right-10 bottom-0 hidden items-center gap-2 py-2 px-4 text-sm text-gray-500 transition-all duration-75 disabled:text-gray-300 h:text-gray-900 h:text-gray-900 disabled:h:text-gray-300 d:text-gray-300 d:disabled:text-gray-700 d:hfa:text-gray-50 d:disabled:hfa:text-gray-700 md:flex"
+    (click)="handleClickNext()" [disabled]="!scrollNavigation.next">
+    next
+    <svg class="mt-0.5 h-5 w-5">
+      
+    </svg>
+  </button>
+</div>

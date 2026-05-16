@@ -1,0 +1,83 @@
+
+
+<section id="hero-section" class="hero relative overflow-hidden md:pb-40" [@bannerTrigger]>
+    <app-darkmode-icon></app-darkmode-icon>
+
+    <div class="relative mx-auto flex max-w-6xl grid-cols-3 flex-col gap-8 gap-y-16 px-4 py-16  md:px-8 lg:grid">
+
+        <section class="col-span-2">
+            <header>
+                <div class="heading-pre" [innerHTML]="heroPre"></div>
+                <h1 class="heading-hero" [innerHTML]="heroHeading"></h1>
+                <ul
+                    class="sm:scrollbar-none -mx-4 mb-2 flex items-center gap-6 overflow-x-auto px-4 pb-2 text-[15px] font-medium">
+                    <li *ngFor="let techItem of tech"
+                        class="flex items-center gap-2 text-gray-500-custom d:text-gray-400">
+                        <div *ngIf="techItem.name=='Typescript'" class="icon">
+                            <i style="font-size: 30px;" class="devicon-typescript-plain"></i>
+                        </div>
+
+                        <div *ngIf="techItem.name=='Angular'" class="icon">
+                            <i style="font-size: 30px;" class="fab fa-brands fa-angular"></i>
+                        </div>
+
+                        <div *ngIf="techItem.name=='Dotnet'" class="icon">
+                            <i style="font-size: 30px;" class="devicon-dotnetcore-plain"></i>
+                        </div>
+
+                        <div *ngIf="techItem.name=='Tensorflow'" class="icon">
+                            <i style="font-size: 30px;" class="devicon-tensorflow-original"></i>
+                        </div>
+
+                        <div *ngIf="techItem.name=='Python'" class="icon">
+                            <i style="font-size: 30px;" class="fab fa-brands fa-python"></i>
+                        </div>
+
+                        {{ techItem.name }}
+
+                    </li>
+                </ul>
+            </header>
+            <main>
+                <p
+                    class="mb-3 max-w-prose font-normal text-gray-500-custom d:text-gray-400 md:text-lg md:tracking-tight">
+                    I love writing code that takes things next level, creating highly performant websites, automated
+                    API
+                    integrations, building my own dev-tools, and creating stunning user-experiences that make you
+                    feel
+                    <em class='relative cursor-pointer before:absolute b:bottom-0 b:-z-10 b:h-3 b:w-full b:-rotate-2 b:animate-hint-hint b:bg-pink-400/70 b:blur-sm d:b:bg-pink-600'
+                        (click)='onWowClick($event)'>
+                        WOW!
+                    </em>
+                </p>
+            </main>
+
+            <footer class="mt-6 flex flex-wrap gap-4 md:gap-8">
+                <ng-container *ngIf="heroCtai">
+                    <a [routerLink]="heroCtai"
+                        class="button-rainbow inline-flex whitespace-nowrap bg-gray-800 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-50 hfa:border-gray-300/90 hfa:bg-gray-900 hfa:text-white d:hfa:border-gray-700/30 md:px-12">
+                        Lets Work
+                    </a>
+                </ng-container>
+
+                <ng-container *ngIf="heroCtai">
+                    <a [routerLink]="heroCtai"
+                        class="button-border inline-flex whitespace-nowrap bg-white/90 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-500 transition-all hfa:border-gray-900/70 hfa:bg-white/90 hfa:text-gray-900 d:border-gray-700/80 d:bg-transparent d:text-gray-300 d:hfa:border-gray-200/30 d:hfa:bg-gray-900/80 d:hfa:text-gray-50 md:px-12">
+                        Resume
+                    </a>
+                </ng-container>
+            </footer>
+
+        </section>
+
+        <app-hero-terminal></app-hero-terminal>
+
+        <div class="background pointer-events-none absolute inset-0 z-0 -z-30 select-none">
+            <div style="filter: blur(40px);"
+                class="relative top-1/2 left-1/2  h-2/3 w-1/2 -translate-y-[30%] rounded-full bg-gradient-radial from-emerald-600/30 to-sky-600/5 blur-2xl">
+            </div>
+        </div>
+
+    </div>
+
+</section>

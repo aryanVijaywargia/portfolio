@@ -1,0 +1,54 @@
+
+
+
+
+
+
+<form class="card__wr1" autocomplete="off" [formGroup]="reactiveForm" (ngSubmit)="onSubmit($event)">
+    <div style=" display:flex; flex-direction: row; padding-top:1rem">
+
+        <div class="inputBox">
+            <input type="text" required="required" formControlName="name" (focus)="changeSmile(true); onFocus('name')"
+                (blur)="changeSmile(false); onBlur('name')">
+            <span
+                [ngClass]="{'error': submitted && lastSubmit.name && reactiveForm.controls['name'].invalid, 'active': submitted && focused.name && reactiveForm.controls['name'].invalid}">Name</span>
+            <i></i>
+        </div>
+
+        <div class="inputBox" style="margin-left: 5px;">
+            <input type="text" required="required" formControlName="email" (focus)="changeSmile(true); onFocus('email')"
+                (blur)=" changeSmile(false); onBlur('email')">
+            <span
+                [ngClass]="{'error': submitted && lastSubmit.email && reactiveForm.controls['email'].invalid, 'active': submitted && focused.email && reactiveForm.controls['email'].invalid}">Email</span>
+            <i></i>
+        </div>
+        
+
+
+        
+
+
+        
+
+        
+    </div>
+    
+    <div style="display:flex; margin-top:2em" class="textBox">
+        <textarea style="height: 100px; flex:8" formControlName="message"
+            (focus)="changeSmile(true); onFocus('message')" (blur)="changeSmile(false); onBlur('message')"
+            required="required"></textarea>
+        <span
+            [ngClass]="{'error': submitted && lastSubmit.message && reactiveForm.controls['message'].invalid, 'active-text': submitted && focused.message && reactiveForm.controls['message'].invalid}">Message</span>
+        <div style="flex:2">
+            <app-card-submit-button [buttonReactiveForm]="reactiveForm" (submitClicked)="onSubmit($event)">
+            </app-card-submit-button>
+        </div>
+
+    </div>
+
+    
+    
+
+    
+
+</form>

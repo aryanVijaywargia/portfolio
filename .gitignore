@@ -61,13 +61,11 @@ package-lock.json
 .agents/
 .claude/
 .gemini-clipboard/
-v1/
 Aryan Portfolio Design System/
 
 # Public-release removed files kept locally
 components/_hooks/use-is-mount.tsx
 components/_stores/notifications-store.tsx
-components/_stores/preloaded-images-store.tsx
 components/alert.tsx
 components/badge.tsx
 components/button-loading.tsx

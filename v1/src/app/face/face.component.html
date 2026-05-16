@@ -1,0 +1,12 @@
+<div class="face">
+    <span class="hair"></span>
+    <span [ngClass]="{'ears': true, 'ears-smiling': shouldSmile}"></span>
+    
+    <div class="face__front">
+        <span [ngClass]="{'eyes': true, 'eyes-smiling': shouldSmile}"></span>
+        <span class="nose"></span>
+        <span [ngClass]="{'blush': true, 'blush-smiling': shouldSmile}"></span>
+        <span [ngClass]="{'mouth': true, 'mouth-smiling': shouldSmile}"></span>
+    </div>
+</div>
+

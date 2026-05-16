@@ -6,11 +6,11 @@ export const BYTE_KNOWLEDGE = `
 - Full-stack developer and Machine Learning Engineer
 - Based in India
 - B.Tech in Computer Science & Engineering from NIT Agartala (2019-2023, CGPA: 8.59)
-- Currently: Senior Full Stack Developer at Flext Solutions (Jan 2023 — Present)
+- Currently: Senior Full Stack Developer at a current company (Jan 2023 — Present)
 - Open to work and new opportunities
 
 ## Work Experience
-- **Flext Solutions (Current)** — Senior Full Stack Dev. Built 5+ production apps serving 10k+ users. Reduced load times by 40%. Mentored junior devs. Set up CI/CD pipelines.
+- **Current Company** — Senior Full Stack Dev. Built 5+ production apps serving 10k+ users. Reduced load times by 40%. Mentored junior devs. Set up CI/CD pipelines.
 - **IHub-Data, IIIT Hyderabad** — ML Intern. Built pothole & triple rider detection using YOLOv5 on dash camera footage. Achieved 20% reduction in false positives.
 - **ISRO-NESAC** — Research Assistant. Built LSTM models for ionospheric parameter forecasting and earthquake precursor anomaly detection (F1: 0.78).
 - **Omdena** — ML Engineer. Worked on EV charging optimization using time series clustering for EnergyHub.
