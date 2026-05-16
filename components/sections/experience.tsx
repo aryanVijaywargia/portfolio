@@ -79,7 +79,7 @@ const KIND_LABELS: Record<ExperienceKind, string> = {
   project: "Open Source",
 };
 
-const DEFAULT_SELECTED_ID = "flext";
+const DEFAULT_SELECTED_ID = "current-role";
 const TIMELINE_LABEL_WIDTH = 116;
 
 function monthIndex(date: string) {

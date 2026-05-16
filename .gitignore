@@ -9,6 +9,7 @@
 
 # production server output
 out
+out.html
 .env
 .env.local
 .env.development
@@ -49,9 +50,39 @@ warehouse
 # Build artifacts
 tsconfig.tsbuildinfo
 .angular/cache/
+public/feed.xml
+public/sitemap*.xml
 
 # Package manager
 package-lock.json
+.pnpm-store/
 
-# Claude Code
+# Local/private tooling and generated exports
+.agents/
+.claude/
 .gemini-clipboard/
+Aryan Portfolio Design System/
+
+# Public-release removed files kept locally
+components/_hooks/use-is-mount.tsx
+components/_stores/notifications-store.tsx
+components/alert.tsx
+components/badge.tsx
+components/button-loading.tsx
+components/code-editor.tsx
+components/divider.tsx
+components/game-monitor/
+components/sections/quiz.tsx
+components/twitter-profile.tsx
+components/typewriter.tsx
+content/books.tsx
+content/docs.tsx
+content/footer.tsx
+content/quiz.tsx
+docs/plans/
+utils/clean-svg-ids.ts
+utils/get-initials.ts
+utils/is-image.tsx
+utils/json-parse.ts
+utils/serialize-form.tsx
+utils/validate-password.ts

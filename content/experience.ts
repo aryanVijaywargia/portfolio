@@ -62,8 +62,8 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
   ],
   companies: [
     {
-      id: "flext",
-      company: "Flext Solutions",
+      id: "current-role",
+      company: "Current Company",
       roleShort: "Senior Full Stack",
       role: "Senior Full Stack Developer · React / Next.js / TypeScript / AWS",
       period: "Jan 2023 — Present",
@@ -75,12 +75,12 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
       timeline: {
         start: "2023-01-01",
         track: 3,
-        rowLabel: "Flext",
+        rowLabel: "Current",
         barLabel: "Senior Full Stack · current",
       },
       achievements: [
         {
-          id: "flext-arch",
+          id: "current-arch",
           category: "Architecture",
           title: "Production app suite",
           summary: "Shipped 5+ production apps on a unified React/Next/TypeScript/AWS stack with shared auth, billing, and observability.",
@@ -88,7 +88,7 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
           technologies: ["React", "Next.js", "TypeScript", "AWS"],
         },
         {
-          id: "flext-perf",
+          id: "current-perf",
           category: "Performance",
           title: "Load-time optimization",
           summary: "Cut p75 page load by 40% via route-level code splitting, edge-cached responses, and Redis on the hot path.",
@@ -96,7 +96,7 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
           technologies: ["Webpack", "React", "CDN", "Redis"],
         },
         {
-          id: "flext-lead",
+          id: "current-lead",
           category: "Leadership",
           title: "Team mentorship",
           summary: "Mentored 3 junior engineers from onboarding to first solo ship. Established the team's code-review rubric.",
@@ -104,7 +104,7 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
           technologies: ["Git", "GitHub Actions", "Code Review"],
         },
         {
-          id: "flext-devops",
+          id: "current-devops",
           category: "DevOps",
           title: "CI/CD pipeline",
           summary: "Built CI/CD from scratch with automated tests, Terraform environments, and blue/green rollouts.",

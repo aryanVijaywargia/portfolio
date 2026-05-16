@@ -21,7 +21,7 @@ const caseEntries: CaseEntry[] = [
   {
     id: "cf-001",
     title: "Senior Full Stack Developer",
-    organization: "Flext Solutions",
+    organization: "Current Company",
     period: "2023 — Present",
     type: "employment",
     description: "Leading development of scalable web applications using modern technologies",

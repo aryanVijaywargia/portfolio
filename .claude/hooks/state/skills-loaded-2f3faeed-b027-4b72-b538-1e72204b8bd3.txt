@@ -1,4 +1,0 @@
-continua-observability
-continua-backend-dev
-continua-integrations
-skill-developer
