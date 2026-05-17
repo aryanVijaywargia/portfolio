@@ -314,6 +314,18 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           </div>
         )}
 
+        {/* Explicit back affordance in editor mode */}
+        {!isModal && mode === "editor" && (
+          <button
+            onClick={handleSwitchToTerminal}
+            className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
+            aria-label="Back to terminal"
+          >
+            <span aria-hidden="true">←</span>
+            <span>back</span>
+          </button>
+        )}
+
         {/* Window Title */}
         <div
           className={`flex-1 text-center ${handleTitleClick ? "cursor-pointer" : ""}`}
