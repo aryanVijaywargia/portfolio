@@ -400,6 +400,10 @@ export const Terminal: FC<TerminalProps> = ({
       onValidCommand?.(normalizedCmd);
       if (normalizedCmd === "secret") {
         onSecretDiscovered?.();
+        addLines(output, 80);
+        addLine("Enter password:", "info", 240);
+        setIsPasswordMode(true);
+        return;
       }
       addLines(output, 80);
     } else {
