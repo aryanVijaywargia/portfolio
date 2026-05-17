@@ -8,7 +8,7 @@
         "./graphql/*"
       ],
       "types/*": [
-        "./@types/*"
+        "./types/*"
       ]
     },
     "downlevelIteration": true,
@@ -31,7 +31,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "typeRoots": ["./node_modules/@types","./@types/types.d.ts"]
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
   "include": [
     "next-env.d.ts",
