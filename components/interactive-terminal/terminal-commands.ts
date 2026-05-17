@@ -94,12 +94,7 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: "" },
   ],
 
-  secret: [
-    { text: "" },
-    { text: '<span class="command">sudo</span>           Only use if you know the password' },
-    { text: "                    Hint: there might be more than one..." },
-    { text: "" },
-  ],
+  secret: [{ text: "" }, { text: "Hint: there might be more than one..." }, { text: "" }],
 
   initial: [
     {

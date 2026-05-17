@@ -418,7 +418,7 @@ export const AchievementProvider: React.FC<{ children: React.ReactNode }> = ({ c
         "%cSource lives here:\n" +
           `${repoUrl}\n\n` +
           "Tip: inspect window.__ARYAN_DEVTOOLS__ or run window.__ARYAN_DEVTOOLS__.openRepo()\n\n" +
-          "🔑 There's a locked achievement in the terminal. Try: secret → sudo → password: aryancodes",
+          "🔑 There's a locked achievement in the terminal. Try: secret → password: aryancodes",
         bodyStyle
       );
     };
