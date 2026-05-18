@@ -1,8 +1,10 @@
 import { useAchievementActions } from "components/achievements";
+import { Link } from "components/link";
 import { EXPERIENCE_JOURNEY, ExperienceCompany, ExperienceKind } from "content/experience";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import clsx from "clsx";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const EXPERIENCE_THEME_CLASSES = [
   "[--experience-shell:#ffffff]",
@@ -41,37 +43,6 @@ type KindStyle = {
   glow: string;
 };
 
-const KIND_STYLES: Record<ExperienceKind, KindStyle> = {
-  employment: {
-    label: "Work",
-    color: "#0891b2",
-    soft: "rgba(8,145,178,0.13)",
-    border: "rgba(8,145,178,0.38)",
-    glow: "rgba(8,145,178,0.28)",
-  },
-  freelance: {
-    label: "Freelance",
-    color: "#8b5cf6",
-    soft: "rgba(139,92,246,0.12)",
-    border: "rgba(139,92,246,0.36)",
-    glow: "rgba(139,92,246,0.26)",
-  },
-  education: {
-    label: "Edu",
-    color: "#f59e0b",
-    soft: "rgba(245,158,11,0.13)",
-    border: "rgba(245,158,11,0.38)",
-    glow: "rgba(245,158,11,0.28)",
-  },
-  project: {
-    label: "OSS",
-    color: "#10b981",
-    soft: "rgba(16,185,129,0.12)",
-    border: "rgba(16,185,129,0.36)",
-    glow: "rgba(16,185,129,0.26)",
-  },
-};
-
 const KIND_LABELS: Record<ExperienceKind, string> = {
   employment: "Employment",
   freelance: "Freelance",
@@ -79,13 +50,92 @@ const KIND_LABELS: Record<ExperienceKind, string> = {
   project: "Open Source",
 };
 
-const DEFAULT_SELECTED_ID = "current-role";
+// Per-company color palette borrowing from the projects section while keeping
+// neighboring legend entries visually distinct.
+const COMPANY_PALETTE: KindStyle[] = [
+  {
+    label: "Violet",
+    color: "#8b5cf6",
+    soft: "rgba(139,92,246,0.13)",
+    border: "rgba(139,92,246,0.38)",
+    glow: "rgba(139,92,246,0.28)",
+  },
+  {
+    label: "Rose",
+    color: "#e11d48",
+    soft: "rgba(225,29,72,0.13)",
+    border: "rgba(225,29,72,0.38)",
+    glow: "rgba(225,29,72,0.28)",
+  },
+  {
+    label: "Emerald",
+    color: "#10b981",
+    soft: "rgba(16,185,129,0.13)",
+    border: "rgba(16,185,129,0.38)",
+    glow: "rgba(16,185,129,0.28)",
+  },
+  {
+    label: "Cyan",
+    color: "#0891b2",
+    soft: "rgba(8,145,178,0.13)",
+    border: "rgba(8,145,178,0.38)",
+    glow: "rgba(8,145,178,0.28)",
+  },
+  {
+    label: "Amber",
+    color: "#f97316",
+    soft: "rgba(249,115,22,0.13)",
+    border: "rgba(249,115,22,0.38)",
+    glow: "rgba(249,115,22,0.28)",
+  },
+  {
+    label: "Fuchsia",
+    color: "#c026d3",
+    soft: "rgba(192,38,211,0.13)",
+    border: "rgba(192,38,211,0.38)",
+    glow: "rgba(192,38,211,0.28)",
+  },
+  {
+    label: "Teal",
+    color: "#0d9488",
+    soft: "rgba(13,148,136,0.13)",
+    border: "rgba(13,148,136,0.38)",
+    glow: "rgba(13,148,136,0.28)",
+  },
+  {
+    label: "Indigo",
+    color: "#4338ca",
+    soft: "rgba(67,56,202,0.13)",
+    border: "rgba(67,56,202,0.38)",
+    glow: "rgba(67,56,202,0.28)",
+  },
+];
+
+const COMPANY_INDEX_BY_ID: Record<string, number> = Object.fromEntries(
+  EXPERIENCE_JOURNEY.companies.map((company, index) => [company.id, index])
+);
+
+function getCompanyStyle(company: ExperienceCompany): KindStyle {
+  const index = COMPANY_INDEX_BY_ID[company.id] ?? 0;
+  return COMPANY_PALETTE[index % COMPANY_PALETTE.length];
+}
+
 const TIMELINE_LABEL_WIDTH = 116;
 
 function monthIndex(date: string) {
   const parsed = new Date(`${date}T00:00:00`);
   return parsed.getUTCFullYear() * 12 + parsed.getUTCMonth();
 }
+
+const SORTED_COMPANIES = [...EXPERIENCE_JOURNEY.companies].sort(
+  (a, b) => monthIndex(b.timeline.start) - monthIndex(a.timeline.start)
+);
+
+const COMPANY_TRACK_BY_ID: Record<string, number> = Object.fromEntries(
+  SORTED_COMPANIES.map((company, index) => [company.id, index])
+);
+
+const DEFAULT_SELECTED_ID = SORTED_COMPANIES[0]?.id ?? "gep-worldwide";
 
 function clampPercent(value: number) {
   return Math.max(0, Math.min(100, value));
@@ -158,8 +208,7 @@ function TimelineBlock({
   const startMonth = monthIndex(EXPERIENCE_JOURNEY.timelineStart);
   const totalMonths = Math.max(1, monthIndex(EXPERIENCE_JOURNEY.timelineEnd) - startMonth);
   const markers = useMemo(() => buildYearMarkers(), []);
-  const trackCount =
-    Math.max(...EXPERIENCE_JOURNEY.companies.map((company) => company.timeline.track)) + 1;
+  const trackCount = SORTED_COMPANIES.length;
   const trackGap = 48;
   const timelineHeight = trackCount * trackGap + 72;
 
@@ -171,16 +220,19 @@ function TimelineBlock({
         </span>
 
         <div className="flex flex-wrap gap-x-3.5 gap-y-1 font-mono text-[11px] text-[var(--experience-text-subtle)]">
-          {(["employment", "freelance", "education", "project"] as ExperienceKind[]).map((kind) => (
-            <span key={kind} className="inline-flex items-center gap-1.5">
-              <span
-                aria-hidden
-                className="h-2 w-2 rounded-sm"
-                style={{ backgroundColor: KIND_STYLES[kind].color }}
-              />
-              {KIND_STYLES[kind].label}
-            </span>
-          ))}
+          {SORTED_COMPANIES.map((company) => {
+            const style = getCompanyStyle(company);
+            return (
+              <span key={company.id} className="inline-flex items-center gap-1.5">
+                <span
+                  aria-hidden
+                  className="h-2 w-2 rounded-sm"
+                  style={{ backgroundColor: style.color }}
+                />
+                {company.timeline.rowLabel}
+              </span>
+            );
+          })}
         </div>
       </div>
 
@@ -216,11 +268,11 @@ function TimelineBlock({
             </span>
           </div>
 
-          {EXPERIENCE_JOURNEY.companies.map((company) => {
+          {SORTED_COMPANIES.map((company) => {
             const isSelected = selectedCompanyId === company.id;
-            const style = KIND_STYLES[company.kind];
+            const style = getCompanyStyle(company);
             const layout = getTimelineLayout(company, startMonth, totalMonths);
-            const top = 6 + company.timeline.track * trackGap;
+            const top = 6 + (COMPANY_TRACK_BY_ID[company.id] ?? 0) * trackGap;
 
             return (
               <div key={company.id}>
@@ -239,7 +291,7 @@ function TimelineBlock({
                   title={`${company.company} · ${company.duration}`}
                   aria-pressed={isSelected}
                   onClick={() => onSelect(company.id)}
-                  className="absolute flex h-8 min-w-8 items-center overflow-hidden rounded-md border px-3 text-left text-[12.5px] font-semibold tracking-[-0.005em] text-[var(--experience-text)] transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--experience-shell)] d:text-white"
+                  className="min-w-8 absolute flex h-8 items-center overflow-hidden rounded-md border px-3 text-left text-[12.5px] font-semibold tracking-[-0.005em] text-[var(--experience-text)] transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--experience-shell)] d:text-white"
                   style={{
                     top,
                     left: `calc(${TIMELINE_LABEL_WIDTH}px + (100% - ${TIMELINE_LABEL_WIDTH}px) * ${
@@ -265,9 +317,9 @@ function TimelineBlock({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        {EXPERIENCE_JOURNEY.companies.map((company) => {
+        {SORTED_COMPANIES.map((company) => {
           const isSelected = selectedCompanyId === company.id;
-          const style = KIND_STYLES[company.kind];
+          const style = getCompanyStyle(company);
 
           return (
             <button
@@ -317,7 +369,15 @@ function TimelineBlock({
 }
 
 function RoleDetail({ company }: { company: ExperienceCompany }) {
-  const style = KIND_STYLES[company.kind];
+  const style = getCompanyStyle(company);
+  const [expandedAchievementId, setExpandedAchievementId] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+  const expandedAchievement =
+    company.achievements.find((achievement) => achievement.id === expandedAchievementId) ?? null;
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <AnimatePresence mode="wait">
@@ -359,6 +419,24 @@ function RoleDetail({ company }: { company: ExperienceCompany }) {
             <p className="mt-2 text-[15px] tracking-[-0.005em] text-[var(--experience-text-muted)]">
               {company.role}
             </p>
+            {company.links?.length
+              ? <div className="mt-3 flex flex-wrap gap-2">
+                  {company.links.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      className="inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[10.5px] font-semibold uppercase tracking-[0.08em] transition hover:bg-[var(--experience-panel-muted)]"
+                      style={{
+                        color: style.color,
+                        borderColor: style.border,
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              : null}
           </div>
 
           {company.live && (
@@ -373,43 +451,144 @@ function RoleDetail({ company }: { company: ExperienceCompany }) {
         </div>
 
         <div className="grid gap-3 xl:grid-cols-2">
-          {company.achievements.map((achievement) => (
-            <article
-              key={achievement.id}
-              className="group flex min-h-[166px] flex-col gap-3 rounded-lg border bg-[var(--experience-panel)] px-4 py-4 transition-all duration-150 hover:bg-[var(--experience-panel-strong)]"
-              style={{ borderColor: "var(--experience-border-faint)" }}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <span
-                  className="font-mono text-[9.5px] font-bold uppercase tracking-[0.1em]"
-                  style={{ color: style.color }}
-                >
-                  {achievement.category}
-                </span>
-                <span className="whitespace-nowrap font-mono text-[10.5px] font-bold tracking-[-0.005em] text-amber-500">
-                  {achievement.impact}
-                </span>
-              </div>
-
-              <h4 className="m-0 text-[14px] font-bold leading-snug tracking-[-0.01em] text-[var(--experience-text)]">
-                {achievement.title}
-              </h4>
-              <p className="m-0 text-[12.5px] leading-relaxed text-[var(--experience-text-muted)] line-clamp-3">
-                {achievement.summary}
-              </p>
-              <div className="mt-auto flex flex-wrap gap-1.5">
-                {achievement.technologies.map((tech) => (
+          {company.achievements.map((achievement) => {
+            return (
+              <motion.article
+                layout
+                key={achievement.id}
+                role="button"
+                tabIndex={0}
+                aria-haspopup="dialog"
+                onClick={() => setExpandedAchievementId(achievement.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setExpandedAchievementId(achievement.id);
+                  }
+                }}
+                className={clsx(
+                  "group flex min-h-[166px] cursor-pointer flex-col gap-3 rounded-lg border bg-[var(--experience-panel)] px-4 py-4 transition-colors duration-150 hover:bg-[var(--experience-panel-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                )}
+                style={{ borderColor: "var(--experience-border-faint)" }}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
                   <span
-                    key={tech}
-                    className="rounded bg-[var(--experience-panel-muted)] px-2 py-1 font-mono text-[10px] text-[var(--experience-text-muted)]"
+                    className="font-mono text-[9.5px] font-bold uppercase tracking-[0.1em]"
+                    style={{ color: style.color }}
                   >
-                    {tech}
+                    {achievement.category}
                   </span>
-                ))}
-              </div>
-            </article>
-          ))}
+                  <span className="max-w-full text-right font-mono text-[10.5px] font-bold tracking-[-0.005em] text-amber-500">
+                    {achievement.impact}
+                  </span>
+                </div>
+
+                <h4 className="m-0 text-[14px] font-bold leading-snug tracking-[-0.01em] text-[var(--experience-text)]">
+                  {achievement.title}
+                </h4>
+                <p className="m-0 text-[12.5px] leading-relaxed text-[var(--experience-text-muted)] line-clamp-3">
+                  {achievement.summary}
+                </p>
+                <div className="mt-auto flex flex-wrap items-center gap-1.5">
+                  {achievement.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded bg-[var(--experience-panel-muted)] px-2 py-1 font-mono text-[10px] text-[var(--experience-text-muted)]"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                  <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--experience-text-subtle)]">
+                    Click to expand
+                  </span>
+                </div>
+              </motion.article>
+            );
+          })}
         </div>
+
+        {isMounted &&
+          createPortal(
+            <AnimatePresence>
+              {expandedAchievement && (
+                <motion.div
+                  className="bg-slate-950/90 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setExpandedAchievementId(null)}
+                >
+                  <motion.article
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby={`${expandedAchievement.id}-title`}
+                    initial={{ opacity: 0, scale: 0.96, y: 14 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.98, y: 10 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                    onClick={(event) => event.stopPropagation()}
+                    className="relative flex max-h-[min(78vh,720px)] w-full max-w-3xl flex-col gap-5 overflow-y-auto rounded-2xl border p-5 shadow-2xl md:p-7"
+                    style={{
+                      borderColor: style.border,
+                      backgroundColor: "var(--experience-shell)",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      aria-label="Close expanded card"
+                      onClick={() => setExpandedAchievementId(null)}
+                      className="absolute right-4 top-4 rounded-full border border-[var(--experience-border-faint)] px-2.5 py-1 text-sm text-[var(--experience-text-muted)] transition hover:text-[var(--experience-text)]"
+                    >
+                      ×
+                    </button>
+
+                    <div className="pr-10">
+                      <div className="mb-3 flex flex-wrap items-center gap-2">
+                        <span
+                          className="font-mono text-[10px] font-bold uppercase tracking-[0.1em]"
+                          style={{ color: style.color }}
+                        >
+                          {expandedAchievement.category}
+                        </span>
+                        <span className="font-mono text-[11px] font-bold text-amber-500">
+                          {expandedAchievement.impact}
+                        </span>
+                      </div>
+                      <h4
+                        id={`${expandedAchievement.id}-title`}
+                        className="m-0 text-[24px] font-extrabold leading-tight tracking-[-0.02em] text-[var(--experience-text)]"
+                      >
+                        {expandedAchievement.title}
+                      </h4>
+                      <p className="mt-3 max-w-2xl text-[14px] leading-relaxed text-[var(--experience-text-muted)]">
+                        {expandedAchievement.summary}
+                      </p>
+                    </div>
+
+                    {expandedAchievement.pointers?.length
+                      ? <ul className="m-0 grid gap-3 pl-5 text-[14px] leading-relaxed text-[var(--experience-text-muted)] marker:text-[var(--experience-text-subtle)]">
+                          {expandedAchievement.pointers.map((pointer) => (
+                            <li key={pointer}>{pointer}</li>
+                          ))}
+                        </ul>
+                      : null}
+
+                    <div className="flex flex-wrap gap-1.5 border-t border-[var(--experience-border-faint)] pt-4">
+                      {expandedAchievement.technologies.map((tech) => (
+                        <span
+                          key={tech}
+                          className="rounded bg-[var(--experience-panel-muted)] px-2 py-1 font-mono text-[10px] text-[var(--experience-text-muted)]"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.article>
+                </motion.div>
+              )}
+            </AnimatePresence>,
+            document.body
+          )}
       </motion.div>
     </AnimatePresence>
   );

@@ -54,10 +54,13 @@ export const DesktopNav: FC = () => {
       if (next !== lastSection) {
         lastSection = next;
         setActiveSection(next);
-        // Keep the URL in sync with what's actually in view, without polluting history.
+        // Keep the URL in sync with what's actually in view, without polluting history
+        // or asking the browser to jump to the matching anchor. Updating the hash
+        // through Next/router while the user is manually scrolling can trigger the
+        // browser's native anchor scroll and yank the viewport to the section start.
         const targetUrl = next || "/";
         if (window.location.pathname + window.location.hash !== targetUrl) {
-          window.history.replaceState(null, "", targetUrl);
+          window.history.replaceState(window.history.state, "", targetUrl);
         }
       }
     };
@@ -76,7 +79,7 @@ export const DesktopNav: FC = () => {
       window.removeEventListener("resize", schedule);
       if (frameId !== null) cancelAnimationFrame(frameId);
     };
-  }, [router.asPath]);
+  }, [router, router.asPath]);
 
   const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("/#")) {
@@ -110,14 +113,14 @@ export const DesktopNav: FC = () => {
             requestAnimationFrame(step);
           } else {
             scrollingRef.current = false;
-            window.history.pushState(null, "", href);
+            void router.push(href, undefined, { shallow: true, scroll: false });
           }
         };
 
         requestAnimationFrame(step);
       }
     }
-  }, []);
+  }, [router]);
 
   return (
     <nav className="sm:scrollbar-none header-nav group relative isolate mt-auto hidden h-full items-center justify-center gap-3 overflow-visible px-2 md:flex">

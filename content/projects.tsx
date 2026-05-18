@@ -1,36 +1,98 @@
+import { SiGo } from "@react-icons/all-files/si/SiGo";
+import { SiPostgresql } from "@react-icons/all-files/si/SiPostgresql";
 import { SiPython } from "@react-icons/all-files/si/SiPython";
+import { SiReact } from "@react-icons/all-files/si/SiReact";
+import { SiTypescript } from "@react-icons/all-files/si/SiTypescript";
 import { SiTensorflow } from "@react-icons/all-files/si/SiTensorflow";
+import { SiPytorch } from "@react-icons/all-files/si/SiPytorch";
+import { SiFlask } from "@react-icons/all-files/si/SiFlask";
 
-// Custom tech items for ML projects since they don't exist in tech-stack
-const ML_TECH = {
+const TECH = {
+  go: {
+    name: "Go",
+    Icon: ({ className }: { className?: string }) => <SiGo className={className} />,
+  },
+  postgresql: {
+    name: "PostgreSQL",
+    Icon: ({ className }: { className?: string }) => <SiPostgresql className={className} />,
+  },
   python: {
     name: "Python",
     Icon: ({ className }: { className?: string }) => <SiPython className={className} />,
+  },
+  react: {
+    name: "React",
+    Icon: ({ className }: { className?: string }) => <SiReact className={className} />,
+  },
+  typescript: {
+    name: "TypeScript",
+    Icon: ({ className }: { className?: string }) => <SiTypescript className={className} />,
   },
   tensorflow: {
     name: "TensorFlow",
     Icon: ({ className }: { className?: string }) => <SiTensorflow className={className} />,
   },
+  pytorch: {
+    name: "PyTorch",
+    Icon: ({ className }: { className?: string }) => <SiPytorch className={className} />,
+  },
+  flask: {
+    name: "Flask",
+    Icon: ({ className }: { className?: string }) => <SiFlask className={className} />,
+  },
 };
 
 export const PROJECTS = [
   {
-    name: "Forex Trading Recommendation System",
-    type: ["Machine Learning", "NLP"],
-    tech: [ML_TECH.python, ML_TECH.tensorflow],
-    url: "",
-    repository: "https://github.com/AryanVijaywargia/forex-trading-ml",
-    description: `Built a CNN-LSTM model combining Twitter sentiment analysis with FOREX time series data to generate trading recommendations.`,
+    name: "Continua",
+    type: ["Durable Execution", "AI Infrastructure"],
+    tech: [TECH.go, TECH.postgresql, TECH.react, TECH.typescript, TECH.python],
+    featuredImage: "/images/projects/continua-brand-card.svg",
+    url: "https://www.continua.in/",
+    repository: "https://github.com/aryanVijaywargia/Continua",
+    description: `A Go/Postgres durable execution engine purpose-built for AI agents — event-sourced replay, byte-exact divergence detection, and lease-based crash recovery with p99 < 50 ms RTT.`,
     content: (
       <>
         <p>
-          This project combines natural language processing with time series analysis to predict
-          currency pair movements. The model analyzes Twitter sentiment and correlates it with
-          historical FOREX data.
+          Continua is a durable execution engine purpose-built for AI agents. The core is a Go service
+          backed by PostgreSQL: event-sourced replay with byte-exact divergence detection,{" "}
+          <code>FOR UPDATE SKIP LOCKED</code> lease workers (consensus-free crash recovery),
+          exponential-backoff retries, continue-as-new, and scope+key CAS dedup. p99 round-trip
+          stays under 50 ms, and crash recovery completes within one poll interval.
         </p>
         <p>
-          Key challenges included handling noisy social media data, feature engineering for
-          time series, and optimizing the hybrid CNN-LSTM architecture.
+          On top of the engine sits a React trace debugger built for time-travel replay over
+          event-sourced history — a virtualized 1K+ span waterfall, <code>useDeferredValue</code> JSON
+          search across 5K-node trees, an idempotency-aware retry-safety classifier, a state-diff
+          viewer, and per-span LLM token/cost attribution with a cumulative-cost step chart.
+        </p>
+        <p>
+          The Python SDK wraps it all with decorator-based agent tracing: <code>ContextVar</code>{" "}
+          propagation, semantic decision/effect/tool events, and a remote activity worker with
+          lease claim, 50% TTL heartbeats, and SIGTERM drain. The River-backed ingest pipeline
+          sustains p95 &lt; 150 ms on 1 MB batches.
+        </p>
+      </>
+    ),
+    year: "2025",
+  },
+  {
+    name: "Forex Trading Recommendation System",
+    type: ["Machine Learning", "NLP"],
+    tech: [TECH.python, TECH.tensorflow],
+    url: "",
+    repository: "https://dagshub.com/aryanVijaywargia/Forex-Trend-Prediction-System",
+    description: `A CNN-LSTM model amalgamating Twitter sentiment analysis from finance-domain tweets with FOREX time-series data to surface trading recommendations — F1 validation 0.62.`,
+    content: (
+      <>
+        <p>
+          Built a recommendation system that fuses Twitter sentiment on finance-domain tweets
+          with FOREX time-series signals. The CNN-LSTM architecture captures both local phrase
+          features and global temporal semantics, hitting an F1 validation score of 0.62.
+        </p>
+        <p>
+          Key challenges: noisy social media data via <code>twint</code>, feature engineering for
+          mixed text + time-series inputs, and tuning the hybrid CNN-LSTM head.
         </p>
       </>
     ),
@@ -39,110 +101,42 @@ export const PROJECTS = [
   {
     name: "OpenCV Sudoku Solver",
     type: ["Computer Vision", "Deep Learning"],
-    tech: [ML_TECH.python, ML_TECH.tensorflow],
+    tech: [TECH.python, TECH.tensorflow],
     url: "",
-    repository: "https://github.com/AryanVijaywargia/sudoku-solver",
-    description: `Image processing pipeline using VGG-16 for digit recognition achieving 99.3% accuracy on handwritten digits.`,
+    repository: "https://github.com/aryanVijaywargia/Vision-Sudoku",
+    description: `End-to-end Sudoku solver combining OpenCV image processing with a fine-tuned VGG-16 digit recognizer at 99.3% accuracy and a backtracking solver.`,
     content: (
       <>
         <p>
-          Built an end-to-end Sudoku solver that captures an image, extracts the grid using
-          computer vision techniques, recognizes digits using a fine-tuned VGG-16 model, and
-          solves the puzzle algorithmically.
+          Captures a Sudoku grid from an image, extracts and warps the grid using OpenCV,
+          recognizes each digit with a fine-tuned VGG-16 model (99.3% accuracy), and solves the
+          puzzle with a backtracking algorithm.
         </p>
       </>
     ),
-    year: "2022",
+    year: "2020",
   },
   {
-    name: "Deep Handwriting Synthesis",
-    type: ["Deep Learning", "Generative AI"],
-    tech: [ML_TECH.python],
-    url: "",
-    repository: "https://github.com/AryanVijaywargia/handwriting-synthesis",
-    description: `Attention-based encoder-decoder RNN for generating realistic handwritten text from input strings.`,
-    content: (
-      <>
-        <p>
-          Implemented a sequence-to-sequence model with attention mechanism for handwriting
-          generation. The model learns writing styles and can generate handwritten versions
-          of any input text.
-        </p>
-      </>
-    ),
-    year: "2022",
-  },
-  {
-    name: "Pothole & Triple Rider Detection",
+    name: "Roadex — Triple-Rider & Pothole Detection",
     type: ["Computer Vision", "Object Detection"],
-    tech: [ML_TECH.python],
+    tech: [TECH.python, TECH.tensorflow, TECH.pytorch, TECH.flask],
     url: "",
-    repository: "https://github.com/AryanVijaywargia/yolov5-detection",
-    description: `Real-time detection system using YOLOv5 trained on dash camera footage for traffic safety monitoring.`,
+    repository: "",
+    description: `A Flask web app running 3 YOLO-based CV pipelines on dash-cam video at ~12 FPS — including a cascaded TensorFlow YOLOv4 + PyTorch YOLOv5 triple-rider violation pipeline at 0.83 mAP@0.5.`,
     content: (
       <>
         <p>
-          Developed at IHub-Data IIIT Hyderabad. Built custom YOLOv5 models trained on annotated
-          dash camera datasets to detect potholes and triple riders in real-time.
+          Built at IHub-Data, IIIT Hyderabad. The web app runs 3 YOLO-based CV pipelines (pothole,
+          triple-rider, tree obstruction) on dash-cam video at ~12 FPS, streams annotated MJPEG
+          frames, and persists run metadata in SQLite.
         </p>
         <p>
-          Achieved 20% reduction in false positives through data augmentation and model optimization.
+          The triple-rider violation pipeline cascades TensorFlow YOLOv4 (rider/motorcycle) with
+          PyTorch YOLOv5 (helmet) — using IoU-based rider→motorcycle matching and Deep SORT tracking
+          with frame interpolation. Hits 0.83 mAP@0.5 with 91% helmet accuracy.
         </p>
       </>
     ),
     year: "2022",
-  },
-  {
-    name: "Earthquake Precursor Detection",
-    type: ["Time Series", "Research"],
-    tech: [ML_TECH.python, ML_TECH.tensorflow],
-    url: "",
-    repository: "https://github.com/AryanVijaywargia/earthquake-prediction",
-    description: `LSTM-based system for ionospheric parameter forecasting and earthquake precursor anomaly detection with F1 score of 0.78.`,
-    content: (
-      <>
-        <p>
-          Research project at ISRO-NESAC analyzing satellite data to identify patterns that
-          precede seismic activity. Built LSTM models for time series forecasting of
-          ionospheric parameters.
-        </p>
-      </>
-    ),
-    year: "2021",
-  },
-  {
-    name: "EV Charging Optimization",
-    type: ["Machine Learning", "Clustering"],
-    tech: [ML_TECH.python],
-    url: "",
-    repository: "https://github.com/AryanVijaywargia/ev-charging-optimization",
-    description: `Time series clustering for electricity consumption profiles to optimize EV charging schedules for EnergyHub.`,
-    content: (
-      <>
-        <p>
-          Collaborated with Omdena's global team to build clustering models that identify
-          patterns in electricity consumption, enabling smarter EV charging recommendations.
-        </p>
-      </>
-    ),
-    year: "2021",
-  },
-  {
-    name: "Hailstorm Severity Prediction",
-    type: ["Time Series", "Weather Forecasting"],
-    tech: [ML_TECH.python, ML_TECH.tensorflow],
-    url: "",
-    repository: "https://github.com/AryanVijaywargia/hailstorm-prediction",
-    description: `LSTM-based model for predicting hailstorm severity using meteorological data from IMD.`,
-    content: (
-      <>
-        <p>
-          Built during research internship at India Meteorological Department. The model
-          analyzes multiple weather parameters to predict the likelihood and severity of
-          hailstorm events.
-        </p>
-      </>
-    ),
-    year: "2021",
   },
 ];

@@ -105,14 +105,16 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
 
 export const STARTUP_BANNER: CommandOutput[] = [
   { text: "" },
-  { text: '<span class="banner">     _    ____  __   __ _    _   _ </span>' },
-  { text: '<span class="banner">    / \\  |  _ \\ \\ \\ / // \\  | \\ | |</span>' },
-  { text: '<span class="banner">   / _ \\ | |_) | \\ V // _ \\ |  \\| |</span>' },
-  { text: '<span class="banner">  / ___ \\|  _ <   | |/ ___ \\| |\\  |</span>' },
-  { text: '<span class="banner"> /_/   \\_\\_| \\_\\  |_/_/   \\_\\_| \\_|</span>' },
+  { text: '<span class="banner">                 .       *       .</span>' },
+  { text: '<span class="banner">        *             .       .</span>' },
+  { text: '<span class="banner">              /\\                 /\\</span>' },
+  { text: '<span class="banner">         /\\  /  \\      /\\       /  \\</span>' },
+  { text: '<span class="banner">        /  \\/    \\ /\\ /  \\  /\\ /    \\</span>' },
+  { text: '<span class="banner">   ____/          V  V    \\/  V      \\____</span>' },
+  { text: '<span class="banner">        ~ ~ ~ ~ ~ moonlit build trail ~ ~ ~</span>' },
   { text: "" },
   {
-    text: '<span class="cmt">  fullstack engineer · aryancodes.com</span>',
+    text: '<span class="cmt">  systems, search, and small expeditions</span>',
   },
   { text: "" },
   {

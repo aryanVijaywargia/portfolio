@@ -1,11 +1,11 @@
 export const SEO = {
-  title: "Aryan Vijaywargia - ML Engineer - Python, TensorFlow, TypeScript, Angular",
-  url: "https://aryancodes.com",
+  title: "Aryan Vijaywargia — Senior Software Engineer · Go, C#, .NET, TypeScript, Python",
+  url: "https://aryanvijaywargia.com",
   description:
-    "I'm a Machine Learning Engineer and Full-stack Developer. I enjoy building intelligent systems, ML models for real-world applications, and creating stunning user experiences.",
-  siteName: "AryanCodes",
-  github: "https://github.com/AryanVijaywargia",
-  avatar: "https://avatars.githubusercontent.com/u/AryanVijaywargia",
+    "Senior Software Engineer at GEP Worldwide. I build agentic runtimes, search platforms, and durable execution engines. Creator of Continua.",
+  siteName: "Aryan Vijaywargia",
+  github: "https://github.com/aryanVijaywargia",
+  avatar: "https://avatars.githubusercontent.com/aryanVijaywargia",
   author: "Aryan Vijaywargia",
   twitter: {
     handle: "@AryanVijaywargia",
@@ -15,15 +15,15 @@ export const SEO = {
   openGraph: {
     type: "website",
     locale: "en_IE",
-    url: "https://aryancodes.com",
-    site_name: "AryanCodes",
+    url: "https://aryanvijaywargia.com",
+    site_name: "Aryan Vijaywargia",
     title: "Aryan Vijaywargia",
     description:
-      "Machine Learning Engineer - Python, TensorFlow, PyTorch, Deep Learning, Computer Vision, NLP",
+      "Senior Software Engineer · Go, C#, .NET, TypeScript, Python · Agentic runtimes, search platforms, durable execution.",
     images: [
       {
-        url: "https://aryancodes.com/images/sharing-image.jpg",
-        alt: "Aryan Vijaywargia - ML Engineer - Python, TensorFlow, TypeScript",
+        url: "https://aryanvijaywargia.com/images/sharing-image.jpg",
+        alt: "Aryan Vijaywargia — Senior Software Engineer",
         width: 1200,
         height: 630,
       },
@@ -32,12 +32,12 @@ export const SEO = {
 };
 
 export const BLOG_SEO = {
-  title: "Aryan Vijaywargia - Blog",
+  title: "Aryan Vijaywargia — Blog",
   description:
-    "Learn Machine Learning, Deep Learning, Computer Vision, NLP, and Full-stack Development - Python, TensorFlow, PyTorch, and more.",
+    "Writing about durable execution, agentic runtimes, search platforms, CDC, and the systems that make AI agents reliable.",
   openGraph: {
-    title: "Aryan Vijaywargia - Blog",
+    title: "Aryan Vijaywargia — Blog",
     description:
-      "Learn Machine Learning, Deep Learning, Computer Vision, NLP, and Full-stack Development - Python, TensorFlow, PyTorch, and more.",
+      "Writing about durable execution, agentic runtimes, search platforms, CDC, and the systems that make AI agents reliable.",
   },
 };
