@@ -47,11 +47,11 @@ const SECTION_MESSAGES: readonly AmbientSection[] = [
   {
     selector: "#contact",
     messages: [
-      "The contact panel types itself here",
-      "Send a note from this section",
-      "Email and socials are in the terminal",
+      "please send work, memes, or both",
+      "recruiters welcome, crypto founders respectfully no",
+      "your dm will be read between standups",
     ],
-    surprise: "send the signal instead?",
+    surprise: "send the bat signal",
   },
   {
     selector: "#achievements",
