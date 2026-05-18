@@ -15,26 +15,18 @@ export const HERO = {
     {
       name: "Go",
       Icon: ({ className }) => <SiGo className={className} />,
-      color: "#ffffff",
-      bg: "#00add8",
     },
     {
       name: "C#",
       Icon: ({ className }) => <SiCsharp className={className} />,
-      color: "#ffffff",
-      bg: "#512bd4",
     },
     {
       name: "TypeScript",
       Icon: ({ className }) => <SiTypescript className={className} />,
-      color: "#ffffff",
-      bg: "#3178c6",
     },
     {
       name: "Python",
       Icon: ({ className }) => <SiPython className={className} />,
-      color: "#3776ab",
-      bg: "#ffd43b",
     },
   ] as const,
   body: (onWowClick?: () => void) => (
