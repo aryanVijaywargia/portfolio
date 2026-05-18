@@ -1,28 +1,28 @@
-import { SiPython } from "@react-icons/all-files/si/SiPython";
-import { SiTensorflow } from "@react-icons/all-files/si/SiTensorflow";
+import { SiGo } from "@react-icons/all-files/si/SiGo";
 import { SiTypescript } from "@react-icons/all-files/si/SiTypescript";
-import { SiAngular } from "@react-icons/all-files/si/SiAngular";
+import { SiCsharp } from "@react-icons/all-files/si/SiCsharp";
+import { SiPython } from "@react-icons/all-files/si/SiPython";
 import { Link } from "components/link";
 
 export const HERO = {
   pre: "Welcome to my site.",
   heading: (
     <>
-      I'm <strong>Aryan Vijaywargia</strong>, a Fullstack Engineer.
+      I'm <strong>Aryan Vijaywargia</strong>, a Software Engineer.
     </>
   ),
   tech: [
     {
-      name: "Python",
-      Icon: ({ className }) => <SiPython className={className} />,
-      color: "#3776ab",
-      bg: "#ffd43b",
+      name: "Go",
+      Icon: ({ className }) => <SiGo className={className} />,
+      color: "#ffffff",
+      bg: "#00add8",
     },
     {
-      name: "TensorFlow",
-      Icon: ({ className }) => <SiTensorflow className={className} />,
+      name: "C#",
+      Icon: ({ className }) => <SiCsharp className={className} />,
       color: "#ffffff",
-      bg: "#ff6f00",
+      bg: "#512bd4",
     },
     {
       name: "TypeScript",
@@ -31,17 +31,17 @@ export const HERO = {
       bg: "#3178c6",
     },
     {
-      name: "Angular",
-      Icon: ({ className }) => <SiAngular className={className} />,
-      color: "#ffffff",
-      bg: "#dd0031",
+      name: "Python",
+      Icon: ({ className }) => <SiPython className={className} />,
+      color: "#3776ab",
+      bg: "#ffd43b",
     },
   ] as const,
   body: (onWowClick?: () => void) => (
     <>
-      I love building intelligent systems that take things to the next level - creating ML models
-      for real-world applications, automated data pipelines, and stunning user-experiences that make
-      you feel{" "}
+      I build the kind of backend infrastructure that AI agents and search platforms run on —
+      durable execution engines, streaming protocol adapters, and CDC pipelines that make the
+      hard parts feel{" "}
       <em
         className="relative cursor-pointer before:absolute b:bottom-0 b:-z-10 b:h-3 b:w-full b:-rotate-2 b:animate-hint-hint b:bg-pink-400/70 b:blur-sm d:b:bg-pink-600"
         onClick={async (e) => {
@@ -55,16 +55,15 @@ export const HERO = {
       >
         WOW!
       </em>
-      .<span className="mt-4 block" />I am always keen to learn and explore new technologies,
-      frameworks and programming languages. Currently, I'm exploring{" "}
-      <Link target="_blank" href="https://pytorch.org/" className="underline hfa:text-sky-500">
-        PyTorch
-      </Link>{" "}
-      and{" "}
-      <Link href="https://mlflow.org" target="_blank" className="underline hfa:text-sky-500">
-        MLFlow
+      .<span className="mt-4 block" />Currently a Senior Software Engineer at{" "}
+      <Link target="_blank" href="https://www.gep.com/" className="underline hfa:text-sky-500">
+        GEP Worldwide
       </Link>
-      .
+      , where I work on the Leo Agentic Runtime and search platform. On the side, I'm building{" "}
+      <Link target="_blank" href="https://www.continua.in/" className="underline hfa:text-sky-500">
+        Continua
+      </Link>
+      , a durable execution engine for AI agents.
     </>
   ),
   cta1: {

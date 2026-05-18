@@ -4,20 +4,21 @@ export const CONTACT = {
   contactInfo: {
     status: "open_to_work",
     email: "aryanvijaywargia@gmail.com",
+    phone: "+91-7424904411",
     socials: {
-      github: "@AryanVijaywargia",
+      github: "@aryanVijaywargia",
       linkedin: "@aryan-vijaywargia",
       twitter: "@AryanVijaywargia",
     },
     location: "India",
   },
   socialLinks: {
-    github: "https://github.com/AryanVijaywargia",
+    github: "https://github.com/aryanVijaywargia",
     linkedin: "https://www.linkedin.com/in/aryan-vijaywargia/",
     twitter: "https://twitter.com/AryanVijaywargia",
   },
   footer: {
     name: "Aryan Vijaywargia",
-    title: "Machine Learning Engineer",
+    title: "Senior Software Engineer",
   },
 };

@@ -7,28 +7,28 @@ const fadeIn = {
 };
 
 const stats = [
-  { value: "15+", label: "Projects" },
-  { value: "10+", label: "Technologies" },
-  { value: "4+", label: "Years Experience" },
+  { value: "171", label: "CDC Pipelines" },
+  { value: "2.8×", label: "MCP Speedup" },
+  { value: "7+", label: "Years Coding" },
 ];
 
 const specialties = [
-  "Machine Learning",
-  "Deep Learning",
-  "Computer Vision",
-  "NLP",
-  "TensorFlow",
-  "PyTorch",
-  "Python",
+  "Go",
+  "C#",
+  ".NET",
   "TypeScript",
+  "Python",
+  "C/C++",
+  "SQL",
   "Angular",
   "React",
-  "Next.js",
-  "Flask",
-  "OpenCV",
-  "Scikit-Learn",
-  "TailwindCSS",
-  "Node.js",
+  "TensorFlow",
+  "PyTorch",
+  "PostgreSQL",
+  "Elasticsearch",
+  "Kafka",
+  "Docker",
+  "Kubernetes",
 ];
 
 export const BatDossier: FC = () => {
@@ -70,25 +70,26 @@ export const BatDossier: FC = () => {
                   fontFamily: "var(--bat-serif)",
                 }}
               >
-                &ldquo;I build intelligent systems that take things to the next level.&rdquo;
+                &ldquo;I build the infrastructure other people&apos;s agents and applications run on.&rdquo;
               </blockquote>
 
               <p className="bat-subtext">
-                I&apos;m Aryan Vijaywargia — a Machine Learning Engineer passionate about building
-                intelligent systems and solving real-world problems with AI. I specialize in Deep
-                Learning, Computer Vision, NLP, and Time Series Forecasting.
+                I&apos;m Aryan Vijaywargia — a Senior Software Engineer at GEP Worldwide, working on
+                the Leo Agentic Runtime and the Leo search platform. My focus is backend
+                infrastructure — durable execution, streaming protocols, search, and CDC.
               </p>
 
               <p className="bat-subtext">
-                I&apos;ve worked on earthquake prediction, pothole detection, EV charging
-                optimization, and more. My tech stack includes Python, TensorFlow, PyTorch, Flask,
-                TypeScript, Angular, and various ML/DL frameworks.
+                On the side I&apos;m building <strong>Continua</strong>, a Go/Postgres durable
+                execution engine purpose-built for AI agents — event-sourced replay, lease-based
+                crash recovery, and a React time-travel trace debugger over event-sourced history.
               </p>
 
               <p className="bat-subtext">
-                I&apos;m a former GDSC Lead at NIT Agartala and love contributing to open-source
-                projects. I am always keen to learn and explore new technologies, frameworks, and
-                programming languages.
+                Before GEP I studied Computer Science &amp; Engineering at NIT Agartala (CGPA 8.59)
+                and interned at IHub-Data IIIT Hyderabad, ISRO-NESAC, IMD, and Omdena × EnergyHub —
+                research roles spanning earthquake-precursor detection, hailstorm forecasting, and
+                EV-charging optimization. Former GDSC Lead at NIT Agartala.
               </p>
 
               {/* Stats Row */}
@@ -148,9 +149,9 @@ export const BatDossier: FC = () => {
               <div className="space-y-3">
                 {[
                   ["Location", "India"],
-                  ["Education", "NIT Agartala"],
-                  ["Focus", "AI / ML Engineering"],
-                  ["Status", "Open to Work"],
+                  ["Education", "NIT Agartala — B.Tech CSE, CGPA 8.59"],
+                  ["Focus", "Durable execution · agentic runtimes · search"],
+                  ["Status", "Building Continua"],
                 ].map(([key, value]) => (
                   <div key={key} className="flex items-baseline gap-4">
                     <span

@@ -31,53 +31,52 @@ export const ABOUT = {
       caption: "Git Commits",
     },
     {
-      statistic: "15+",
-      tooltip: "Research papers, projects, and professional work",
-      caption: "Projects",
+      statistic: "171",
+      tooltip: "Logstash CDC pipelines spanning 28 business domains on the Leo Storage platform",
+      caption: "CDC Pipelines",
     },
   ],
   descriptions: {
     brief: (
       <p>
-        I'm a Madhya Pradesh, India-based Web Developer and Entrepreneur. My focus area for the past few years
-        has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>,
-        and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
-        bring delight.
+        I'm an India-based <strong>Senior Software Engineer</strong> at <strong>GEP Worldwide</strong>,
+        building the Leo Agentic Runtime and the Leo search platform. My focus is backend
+        infrastructure — durable execution, streaming protocols, search, and CDC.
       </p>
     ),
     standard: (
       <>
         <p>
-          I'm a Madhya Pradesh, India-based Web Developer and Entrepreneur. My focus area for the past few years
-          has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>,
-          and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
-          bring delight.
+          I'm an India-based <strong>Senior Software Engineer</strong> at{" "}
+          <strong>GEP Worldwide</strong>, building the Leo Agentic Runtime and the Leo search
+          platform. My focus is backend infrastructure — durable execution, streaming protocols,
+          search, and CDC.
         </p>
         <p>
-          I've spent most of my life deeply interested in technology and food, continuously building
-          things with both. As a teenager, I was a classic computer nerd, spending most of my times
-          messing with the computer, doing 1 of 4 things: Modding games and figuring things out.
-          Tinkering with hardware, building computers. Developing websites with FrontPage 98 and
-          Flash. And of course, playing games.
+          On the side, I'm building <strong>Continua</strong>, a Go/Postgres durable execution
+          engine purpose-built for AI agents — event-sourced replay, lease-based crash recovery,
+          and a React time-travel trace debugger over event-sourced history.
         </p>
       </>
     ),
     detailed: (
       <>
         <p>
-          I'm a Madhya Pradesh, India-based Web Developer and Entrepreneur. My focus area for the past few years
-          has been front-end development with <strong>Next.js</strong>, <strong>Typescript</strong>,
-          and <strong>TailwindCSS</strong> to create beautiful user- and developer experiences that
-          bring delight.
+          I'm an India-based <strong>Senior Software Engineer</strong> at{" "}
+          <strong>GEP Worldwide</strong>, building the Leo Agentic Runtime and the Leo search
+          platform. My focus is backend infrastructure — durable execution, streaming protocols,
+          search, and CDC.
         </p>
         <p>
-          I've spent most of my life deeply interested in technology and food, continuously building
-          things with both. As a teenager, I was a classic computer nerd, spending most of my times
-          messing with the computer, doing 1 of 4 things: Modding games and figuring things out.
-          Tinkering with hardware, building computers. Developing websites with FrontPage 98 and
-          Flash. And of course, playing games.
+          On the side, I'm building <strong>Continua</strong>, a Go/Postgres durable execution
+          engine purpose-built for AI agents — event-sourced replay, lease-based crash recovery,
+          and a React time-travel trace debugger over event-sourced history.
         </p>
-        <p>Most of that is still true today.</p>
+        <p>
+          Before GEP I studied Computer Science & Engineering at <strong>NIT Agartala</strong>{" "}
+          (CGPA 8.59) and interned at <strong>IHub-Data, IIIT Hyderabad</strong> building YOLO-based
+          CV pipelines on dash-cam video. I work primarily in Go, C#, Python, and TypeScript.
+        </p>
       </>
     ),
   },

@@ -8,7 +8,7 @@ const fadeIn = {
 };
 
 const socialLinks = [
-  { name: "Github", href: "https://github.com/AryanVijaywargia" },
+  { name: "Github", href: "https://github.com/aryanVijaywargia" },
   { name: "LinkedIn", href: "https://www.linkedin.com/in/aryan-vijaywargia/" },
   { name: "DagsHub", href: "https://dagshub.com/aryanVijaywargia" },
 ];

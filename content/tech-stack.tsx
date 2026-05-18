@@ -7,7 +7,17 @@ import { MdDesktopMac } from "@react-icons/all-files/md/MdDesktopMac";
 import { SiAdobeillustrator } from "@react-icons/all-files/si/SiAdobeillustrator";
 import { SiAdobephotoshop } from "@react-icons/all-files/si/SiAdobephotoshop";
 import { SiAngular } from "@react-icons/all-files/si/SiAngular";
+import { SiApachekafka } from "@react-icons/all-files/si/SiApachekafka";
+import { SiCplusplus } from "@react-icons/all-files/si/SiCplusplus";
+import { SiCsharp } from "@react-icons/all-files/si/SiCsharp";
 import { SiCss3 } from "@react-icons/all-files/si/SiCss3";
+import { SiDocker } from "@react-icons/all-files/si/SiDocker";
+import { SiDotNet } from "@react-icons/all-files/si/SiDotNet";
+import { SiElasticsearch } from "@react-icons/all-files/si/SiElasticsearch";
+import { SiGo } from "@react-icons/all-files/si/SiGo";
+import { SiKubernetes } from "@react-icons/all-files/si/SiKubernetes";
+import { SiMongodb } from "@react-icons/all-files/si/SiMongodb";
+import { SiPostgresql } from "@react-icons/all-files/si/SiPostgresql";
 import { SiEslint } from "@react-icons/all-files/si/SiEslint";
 import { SiFacebook } from "@react-icons/all-files/si/SiFacebook";
 import { SiFigma } from "@react-icons/all-files/si/SiFigma";
@@ -408,5 +418,45 @@ export const TECH = {
   flask: {
     name: "Flask",
     Icon: ({ className }) => <SiFlask className={className} />,
+  },
+  go: {
+    name: "Go",
+    Icon: ({ className }) => <SiGo className={className} />,
+  },
+  csharp: {
+    name: "C#",
+    Icon: ({ className }) => <SiCsharp className={className} />,
+  },
+  cplusplus: {
+    name: "C/C++",
+    Icon: ({ className }) => <SiCplusplus className={className} />,
+  },
+  dotnet: {
+    name: ".NET",
+    Icon: ({ className }) => <SiDotNet className={className} />,
+  },
+  postgresql: {
+    name: "PostgreSQL",
+    Icon: ({ className }) => <SiPostgresql className={className} />,
+  },
+  mongodb: {
+    name: "MongoDB",
+    Icon: ({ className }) => <SiMongodb className={className} />,
+  },
+  elasticsearch: {
+    name: "Elasticsearch",
+    Icon: ({ className }) => <SiElasticsearch className={className} />,
+  },
+  kafka: {
+    name: "Kafka",
+    Icon: ({ className }) => <SiApachekafka className={className} />,
+  },
+  docker: {
+    name: "Docker",
+    Icon: ({ className }) => <SiDocker className={className} />,
+  },
+  kubernetes: {
+    name: "Kubernetes",
+    Icon: ({ className }) => <SiKubernetes className={className} />,
   },
 } as const;
