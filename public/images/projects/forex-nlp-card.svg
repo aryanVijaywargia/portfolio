@@ -23,7 +23,7 @@
   <path d="M740 380H780" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
   <path d="M780 340V380" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
 
-  <rect x="150" y="80" width="500" height="240" rx="24" stroke="white" stroke-opacity="0.26" fill="url(#panel)" fill-opacity="0.06"/>
+  <rect x="150" y="80" width="500" height="240" rx="24" stroke="white" stroke-opacity="0.56" stroke-width="4" fill="url(#panel)" fill-opacity="0.06"/>
 
   <g transform="translate(340 120)">
     <rect width="120" height="80" rx="12" fill="white" fill-opacity="0.1"/>
