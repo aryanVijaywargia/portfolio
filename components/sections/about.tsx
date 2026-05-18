@@ -146,7 +146,14 @@ export const About: FC<AboutProps> = (props) => {
                   data-tip={tooltip}
                   className="cursor-help select-none spacing-1"
                 >
-                  <span className="bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-4xl font-extrabold tracking-tighter text-transparent">
+                  <span
+                    className={clsx(
+                      "text-4xl font-extrabold tracking-tighter",
+                      statistic === "∞"
+                        ? "text-blue-500"
+                        : "bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent"
+                    )}
+                  >
                     {statistic}
                   </span>
                   <figcaption className="text-[15px] font-semibold tracking-tight text-gray-400 d:text-gray-300/80">
