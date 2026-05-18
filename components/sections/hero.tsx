@@ -153,7 +153,7 @@ export const Hero: FC = () => {
               </span>
               {[
                 {
-                  label: "Hiker",
+                  label: "Traveler",
                   dot: "#06b6d4",
                   text: "#0e7490",
                   textDark: "#67e8f9",
@@ -161,7 +161,7 @@ export const Hero: FC = () => {
                   bg: "rgba(6,182,212,0.08)",
                 },
                 {
-                  label: "Chef",
+                  label: "Reader",
                   dot: "#22c55e",
                   text: "#15803d",
                   textDark: "#86efac",
@@ -169,7 +169,7 @@ export const Hero: FC = () => {
                   bg: "rgba(34,197,94,0.08)",
                 },
                 {
-                  label: "Runner",
+                  label: "Lifter",
                   dot: "#f59e0b",
                   text: "#b45309",
                   textDark: "#fcd34d",
@@ -177,7 +177,7 @@ export const Hero: FC = () => {
                   bg: "rgba(245,158,11,0.08)",
                 },
                 {
-                  label: "Mixologist",
+                  label: "Swimmer",
                   dot: "#d946ef",
                   text: "#a21caf",
                   textDark: "#f0abfc",
@@ -185,7 +185,7 @@ export const Hero: FC = () => {
                   bg: "rgba(217,70,239,0.08)",
                 },
                 {
-                  label: "Space Enthusiast",
+                  label: "Coffee Snob",
                   dot: "#7c3aed",
                   text: "#6d28d9",
                   textDark: "#c4b5fd",
