@@ -29,11 +29,11 @@ const SECTION_MESSAGES: readonly AmbientSection[] = [
   {
     selector: "#experience",
     messages: [
-      "Try the graph nodes",
-      "The experience map is interactive",
-      "Some work connects across roles",
+      "each bullet survived three managers",
+      "résumé voice is doing a lot of work here",
+      "the standups were not this short",
     ],
-    surprise: "switch to the case-file view?",
+    surprise: "open the unsanitized version",
   },
   {
     selector: "#portfolio",
