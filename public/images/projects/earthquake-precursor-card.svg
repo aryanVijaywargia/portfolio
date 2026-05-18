@@ -1,44 +1,65 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" fill="none" role="img" aria-labelledby="title desc">
   <title id="title">Earthquake Precursor</title>
-  <desc id="desc">Orange and red earthquake precursor banner with waveform icon and ionospheric signal label.</desc>
+  <desc id="desc">Amber and crimson artwork with a seismograph logo, wordmark, ionospheric tagline, and pill badges.</desc>
   <defs>
-    <linearGradient id="bg" x1="26" y1="14" x2="770" y2="382" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F59E0B"/>
-      <stop offset="0.48" stop-color="#F97316"/>
-      <stop offset="1" stop-color="#991B1B"/>
+    <linearGradient id="bg" x1="24" y1="18" x2="376" y2="182" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3F1505"/>
+      <stop offset="0.52" stop-color="#9A3412"/>
+      <stop offset="1" stop-color="#6E1414"/>
     </linearGradient>
-    <linearGradient id="panel" x1="120" y1="60" x2="680" y2="340" gradientUnits="userSpaceOnUse">
-      <stop stop-color="white" stop-opacity="0.18"/>
-      <stop offset="1" stop-color="white" stop-opacity="0.08"/>
+    <linearGradient id="logo" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBBF24"/>
+      <stop offset="1" stop-color="#F97316"/>
     </linearGradient>
+    <linearGradient id="trace" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#FCD34D"/>
+      <stop offset="1" stop-color="#F87171"/>
+    </linearGradient>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" stroke="white" stroke-opacity="0.06"/>
+    </pattern>
+    <filter id="blur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="24"/>
+    </filter>
   </defs>
 
-  <rect width="800" height="400" rx="18" fill="url(#bg)"/>
-  <circle cx="154" cy="76" r="120" fill="#FDE68A" fill-opacity="0.3"/>
-  <circle cx="650" cy="310" r="100" fill="#EF4444" fill-opacity="0.24"/>
+  <rect width="400" height="200" rx="24" fill="url(#bg)"/>
+  <rect width="400" height="200" rx="24" fill="url(#grid)"/>
+  <circle cx="345" cy="18" r="90" fill="#FBBF24" opacity="0.28" filter="url(#blur)"/>
+  <circle cx="34" cy="188" r="112" fill="#EF4444" opacity="0.34" filter="url(#blur)"/>
 
-  <path d="M28 28H70" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
-  <path d="M28 28V70" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
-  <path d="M730 370H770" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
-  <path d="M770 330V370" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
-
-  <rect x="120" y="60" width="560" height="280" rx="24" stroke="white" stroke-opacity="0.56" stroke-width="4" fill="url(#panel)" fill-opacity="0.05"/>
-
-  <path d="M-20 196C76 158 138 188 224 214C309 239 384 219 460 188C540 155 620 164 820 226" stroke="white" stroke-opacity="0.2" stroke-width="2"/>
-  <path d="M-20 220C80 192 152 224 224 232C305 242 384 208 467 198C550 188 620 209 820 240" stroke="white" stroke-opacity="0.15" stroke-width="2"/>
-
-  <g transform="translate(350 102)">
-    <circle cx="50" cy="50" r="44" stroke="white" stroke-opacity="0.42" stroke-width="4"/>
-    <circle cx="50" cy="50" r="9" fill="#FBBF24" fill-opacity="0.9"/>
-    <path d="M0 16L50 6L95 60" stroke="white" stroke-opacity="0.42" stroke-width="2" stroke-dasharray="4 4"/>
-    <circle cx="0" cy="16" r="5" fill="white"/>
-    <circle cx="50" cy="6" r="4" fill="white" fill-opacity="0.75"/>
-    <circle cx="95" cy="60" r="5" fill="white"/>
-    <path d="M-10 42L6 31L21 57L29 36" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="70" cy="70" r="4" fill="white" fill-opacity="0.88"/>
+  <g transform="translate(32 28)">
+    <circle cx="32" cy="32" r="28" stroke="url(#logo)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="118 30 22 6" stroke-dashoffset="-32"/>
+    <path d="M10 32 L20 32 L24 22 L30 44 L36 14 L42 50 L46 26 L50 32 L54 32" stroke="url(#logo)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="36" cy="14" r="2.4" fill="#FFF7ED"/>
+    <circle cx="42" cy="50" r="2.4" fill="#FFF7ED"/>
   </g>
 
-  <text x="400" y="260" fill="white" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="700" letter-spacing="1.5">EARTHQUAKE PRECURSOR</text>
-  <text x="400" y="292" fill="white" fill-opacity="0.82" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="4">ISRO-NESAC · IONOSPHERIC SIGNALS</text>
-  <text x="400" y="316" fill="white" fill-opacity="0.64" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="1">LSTM FORECASTING · ANOMALY DETECTION · SOM PREDICTION</text>
+  <text x="108" y="65" fill="#FFF7ED" font-family="Inter, ui-sans-serif, system-ui, Arial, sans-serif" font-size="32" font-weight="800" letter-spacing="-1.1">Precursor</text>
+  <text x="36" y="107" fill="#FED7AA" font-family="Inter, ui-sans-serif, system-ui, Arial, sans-serif" font-size="12" font-weight="600">Ionospheric LSTM forecasting · ISRO-NESAC</text>
+
+  <g font-family="Inter, ui-sans-serif, system-ui, Arial, sans-serif" font-size="11" font-weight="600">
+    <g transform="translate(36 129)">
+      <rect width="62" height="26" rx="13" fill="#1B0703" stroke="#7C2D12"/>
+      <circle cx="14" cy="13" r="3.5" fill="#FBBF24"/>
+      <text x="24" y="17" fill="#FED7AA">LSTM</text>
+    </g>
+    <g transform="translate(106 129)">
+      <rect width="84" height="26" rx="13" fill="#1B0703" stroke="#7C2D12"/>
+      <circle cx="14" cy="13" r="3.5" fill="#F87171"/>
+      <text x="24" y="17" fill="#FED7AA">Anomaly</text>
+    </g>
+    <g transform="translate(198 129)">
+      <rect width="84" height="26" rx="13" fill="#1B0703" stroke="#7C2D12"/>
+      <circle cx="14" cy="13" r="3.5" fill="#FB923C"/>
+      <text x="24" y="17" fill="#FED7AA">SOM Map</text>
+    </g>
+  </g>
+
+  <g transform="translate(36 174)">
+    <rect width="328" height="1" fill="#FCD34D" opacity="0.18"/>
+    <path d="M0 -8 L34 -8 L38 -4 L42 -14 L46 -4 L50 -8 L88 -8 L94 -12 L98 -6 L102 -8 L150 -8 L156 -16 L160 -2 L164 -8 L228 -8 L234 -13 L238 -4 L242 -8 L328 -8" stroke="url(#trace)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+    <circle cx="158" cy="-16" r="2.6" fill="#FCD34D"/>
+    <circle cx="308" cy="-8" r="3.5" fill="#FBBF24"/>
+  </g>
 </svg>

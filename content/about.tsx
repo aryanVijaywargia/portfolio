@@ -84,26 +84,33 @@ export const ABOUT = {
     {
       src: Aryan1,
       alt: "Aryan candid photo",
+      tooltip: "haven't taken a new one in years and don't plan to",
     },
     {
       src: Aryan2,
       alt: "Aryan travel photo",
+      tooltip:
+        "Hi, thanks for reaching out. I am currently out of office and will have limited access to messages. Please expect delays in response. For urgent matters, kindly reach out at.......",
     },
     {
       src: Aryan3,
-      alt: "Aryan at a tech event",
+      alt: "Aryan receiving his B.Tech degree",
+      tooltip: "Graduated, was a big day for my family whatsapp group",
     },
     {
       src: Aryan4,
-      alt: "Aryan working on ML projects",
+      alt: "Aryan with a deer in Nara, Japan",
+      tooltip: "Selfie with the extrovert final boss",
     },
     {
       src: Aryan5,
-      alt: "Aryan exploring new places",
+      alt: "Aryan trekking in the Himalayas, Nepal",
+      tooltip: "The mountains carried this picture.",
     },
     {
       src: Aryan6,
       alt: "Aryan Vijaywargia portrait",
+      tooltip: "hehe",
     },
   ],
 };

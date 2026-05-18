@@ -1,38 +1,88 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" fill="none" role="img" aria-labelledby="title desc">
   <title id="title">Forex NLP</title>
-  <desc id="desc">Purple and indigo Forex NLP banner with signal icon, corner marks, and sentiment analysis caption.</desc>
+  <desc id="desc">Violet and indigo artwork with a candlestick logo, wordmark, CNN-LSTM tagline, and pill badges.</desc>
   <defs>
-    <linearGradient id="bg" x1="34" y1="12" x2="768" y2="388" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#8A3FFC"/>
-      <stop offset="0.48" stop-color="#5C4CCC"/>
-      <stop offset="1" stop-color="#233E8F"/>
+    <linearGradient id="bg" x1="24" y1="18" x2="376" y2="182" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E1B4B"/>
+      <stop offset="0.5" stop-color="#4C1D95"/>
+      <stop offset="1" stop-color="#1E3A8A"/>
     </linearGradient>
-    <linearGradient id="panel" x1="150" y1="80" x2="650" y2="320" gradientUnits="userSpaceOnUse">
-      <stop stop-color="white" stop-opacity="0.18"/>
-      <stop offset="1" stop-color="white" stop-opacity="0.08"/>
+    <linearGradient id="logo" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78BFA"/>
+      <stop offset="1" stop-color="#60A5FA"/>
     </linearGradient>
+    <linearGradient id="up" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#4ADE80"/>
+      <stop offset="1" stop-color="#16A34A"/>
+    </linearGradient>
+    <linearGradient id="down" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#F87171"/>
+      <stop offset="1" stop-color="#DC2626"/>
+    </linearGradient>
+    <linearGradient id="spark" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#A78BFA"/>
+    </linearGradient>
+    <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#A78BFA" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#60A5FA" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" stroke="white" stroke-opacity="0.06"/>
+    </pattern>
+    <filter id="blur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="24"/>
+    </filter>
   </defs>
 
-  <rect width="800" height="400" rx="18" fill="url(#bg)"/>
+  <rect width="400" height="200" rx="24" fill="url(#bg)"/>
+  <rect width="400" height="200" rx="24" fill="url(#grid)"/>
+  <circle cx="345" cy="18" r="90" fill="#A855F7" opacity="0.30" filter="url(#blur)"/>
+  <circle cx="34" cy="188" r="112" fill="#2563EB" opacity="0.36" filter="url(#blur)"/>
 
-  <circle cx="160" cy="84" r="136" fill="#A855F7" fill-opacity="0.26"/>
-  <circle cx="650" cy="300" r="100" fill="#2563EB" fill-opacity="0.36"/>
-
-  <path d="M20 20H60" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
-  <path d="M20 20V60" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
-  <path d="M740 380H780" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
-  <path d="M780 340V380" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
-
-  <rect x="150" y="80" width="500" height="240" rx="24" stroke="white" stroke-opacity="0.56" stroke-width="4" fill="url(#panel)" fill-opacity="0.06"/>
-
-  <g transform="translate(340 120)">
-    <rect width="120" height="80" rx="12" fill="white" fill-opacity="0.1"/>
-    <path d="M10 60L30 40L54 61L78 34L100 50" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M-20 30L0 10L20 30" stroke="#4ADE80" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M120 50L140 70L160 50" stroke="#F87171" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="110" cy="15" r="7" fill="#38BDF8"/>
+  <g transform="translate(32 28)">
+    <circle cx="32" cy="32" r="28" stroke="url(#logo)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="118 30 22 6" stroke-dashoffset="-32"/>
+    <g stroke-linecap="round">
+      <line x1="16" y1="36" x2="16" y2="48" stroke="#FCA5A5" stroke-width="1.4"/>
+      <rect x="13.5" y="38" width="5" height="8" rx="1" fill="url(#down)"/>
+      <line x1="25" y1="22" x2="25" y2="46" stroke="#86EFAC" stroke-width="1.4"/>
+      <rect x="22.5" y="26" width="5" height="16" rx="1" fill="url(#up)"/>
+      <line x1="34" y1="18" x2="34" y2="42" stroke="#86EFAC" stroke-width="1.4"/>
+      <rect x="31.5" y="20" width="5" height="18" rx="1" fill="url(#up)"/>
+      <line x1="43" y1="28" x2="43" y2="50" stroke="#FCA5A5" stroke-width="1.4"/>
+      <rect x="40.5" y="30" width="5" height="14" rx="1" fill="url(#down)"/>
+      <line x1="52" y1="20" x2="52" y2="42" stroke="#86EFAC" stroke-width="1.4"/>
+      <rect x="49.5" y="24" width="5" height="14" rx="1" fill="url(#up)"/>
+    </g>
+    <circle cx="54" cy="18" r="3" fill="#38BDF8"/>
   </g>
 
-  <text x="400" y="260" fill="white" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="700" letter-spacing="1.4">FOREX NLP</text>
-  <text x="400" y="296" fill="white" fill-opacity="0.86" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="17" letter-spacing="6">SENTIMENT &amp; SIGNAL ANALYSIS</text>
+  <text x="108" y="65" fill="#F8FAFC" font-family="Inter, ui-sans-serif, system-ui, Arial, sans-serif" font-size="33" font-weight="800" letter-spacing="-1.2">Forex NLP</text>
+  <text x="36" y="107" fill="#DDD6FE" font-family="Inter, ui-sans-serif, system-ui, Arial, sans-serif" font-size="12" font-weight="600">CNN-LSTM with finance-domain sentiment</text>
+
+  <g font-family="Inter, ui-sans-serif, system-ui, Arial, sans-serif" font-size="11" font-weight="600">
+    <g transform="translate(36 129)">
+      <rect width="84" height="26" rx="13" fill="#0B0B2A" stroke="#3730A3"/>
+      <circle cx="14" cy="13" r="3.5" fill="#A78BFA"/>
+      <text x="24" y="17" fill="#E0E7FF">Sentiment</text>
+    </g>
+    <g transform="translate(128 129)">
+      <rect width="90" height="26" rx="13" fill="#0B0B2A" stroke="#3730A3"/>
+      <circle cx="14" cy="13" r="3.5" fill="#60A5FA"/>
+      <text x="24" y="17" fill="#E0E7FF">CNN-LSTM</text>
+    </g>
+    <g transform="translate(226 129)">
+      <rect width="66" height="26" rx="13" fill="#0B0B2A" stroke="#3730A3"/>
+      <circle cx="14" cy="13" r="3.5" fill="#FBBF24"/>
+      <text x="24" y="17" fill="#E0E7FF">FOREX</text>
+    </g>
+  </g>
+
+  <g transform="translate(36 174)">
+    <rect width="328" height="1" fill="#A78BFA" opacity="0.20"/>
+    <path d="M0 -6 L24 -8 L48 -5 L72 -10 L96 -7 L120 -13 L144 -9 L168 -15 L192 -10 L216 -16 L240 -11 L264 -8 L288 -14 L312 -9 L328 -12 L328 -2 L0 -2 Z" fill="url(#sparkFill)" opacity="0.7"/>
+    <path d="M0 -6 L24 -8 L48 -5 L72 -10 L96 -7 L120 -13 L144 -9 L168 -15 L192 -10 L216 -16 L240 -11 L264 -8 L288 -14 L312 -9 L328 -12" stroke="url(#spark)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="216" cy="-16" r="2.6" fill="#A78BFA"/>
+    <circle cx="328" cy="-12" r="3.5" fill="#38BDF8"/>
+  </g>
 </svg>

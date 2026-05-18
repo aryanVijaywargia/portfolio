@@ -32,11 +32,12 @@ export const LoadInitialData: FC<PropsWithChildren<any>> = ({ children }) => {
             arrowColor="white"
             delayHide={500}
             clickable={true}
+            multiline={true}
             // possibleCustomEventsOff="hide-global-tooltip"
             className="relative !border-none !border-transparent !p-0"
             getContent={(content) => {
               return (
-                <span className="pointer-events-auto block h-[calc(100%+1px)] w-[calc(100%+1px)] max-w-[calc(100vw-32px)] select-none rounded-sm border-card bg-white px-5 py-2 text-slate-700 opacity-100 shadow-xl">
+                <span className="pointer-events-auto block h-[calc(100%+1px)] w-[calc(100%+1px)] max-w-[min(420px,calc(100vw-32px))] select-none whitespace-normal rounded-sm border-card bg-white px-5 py-2 text-left text-slate-700 opacity-100 shadow-xl">
                   {content}
                 </span>
               );
