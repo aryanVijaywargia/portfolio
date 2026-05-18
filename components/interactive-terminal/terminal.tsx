@@ -497,6 +497,14 @@ export const Terminal: FC<TerminalProps> = ({
           min-height: 1.5em;
         }
 
+        .terminal-line.banner-line {
+          min-height: 0;
+          font-size: 8px;
+          line-height: 1.05;
+          white-space: pre;
+          word-break: normal;
+        }
+
         :global(.dark) .terminal-line {
           color: #d4d4d4;
         }
