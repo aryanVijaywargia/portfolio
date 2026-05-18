@@ -97,7 +97,7 @@ export const About: FC<AboutProps> = (props) => {
           onClick={handleImageClick}
           type="button"
           data-event="mouseover"
-          data-tip={images[focusImageIndex]?.alt}
+          data-tip={images[focusImageIndex]?.tooltip ?? images[focusImageIndex]?.alt}
         >
           <span className="sr-only">Cycle through Images</span>
           {images.map(({ src, alt, objectPosition }, index) => {
