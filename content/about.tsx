@@ -31,9 +31,14 @@ export const ABOUT = {
       caption: "Git Commits",
     },
     {
-      statistic: "171",
-      tooltip: "Logstash CDC pipelines spanning 28 business domains on the Leo Storage platform",
-      caption: "CDC Pipelines",
+      statistic: "200+",
+      tooltip: "Pull requests merged across owned + work repos",
+      caption: "PRs Merged",
+    },
+    {
+      statistic: "∞",
+      tooltip: "Coffee consumption is the one metric I refuse to track honestly",
+      caption: "Coffees",
     },
   ],
   descriptions: {
