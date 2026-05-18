@@ -6,7 +6,7 @@ export const ScrollGallery: FC<
   PropsWithChildren<{ itemWidth: number; gapWidth: number; filter }>
 > = ({ itemWidth, gapWidth, children, filter }) => {
   const scrollContainerRef = useRef<HTMLElement>(null);
-  const [scrollNavigation, setScrollNavigation] = useState({ prev: false, next: true });
+  const [scrollNavigation, setScrollNavigation] = useState({ prev: false, next: false });
   const [isScrolling, setIsScrolling] = useState(false);
 
   const handleClickPrevious = useCallback(() => {
@@ -39,19 +39,21 @@ export const ScrollGallery: FC<
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current as HTMLDivElement;
     const updateScrollNavigation = () => {
-      setScrollNavigation(() => ({
-        prev: scrollContainer?.scrollLeft > 0,
-        next:
-          scrollContainer.children[scrollContainer.children.length - 1]?.getBoundingClientRect()
-            .right > window.innerWidth,
-      }));
+      const maxScrollLeft = Math.max(scrollContainer.scrollWidth - scrollContainer.clientWidth, 0);
+      setScrollNavigation({
+        prev: scrollContainer.scrollLeft > 1,
+        next: maxScrollLeft - scrollContainer.scrollLeft > 1,
+      });
     };
 
+    updateScrollNavigation();
     scrollContainer?.addEventListener("scroll", updateScrollNavigation);
+    window.addEventListener("resize", updateScrollNavigation);
     return () => {
       scrollContainer?.removeEventListener("scroll", updateScrollNavigation);
+      window.removeEventListener("resize", updateScrollNavigation);
     };
-  }, []);
+  }, [filter]);
 
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current as HTMLDivElement;

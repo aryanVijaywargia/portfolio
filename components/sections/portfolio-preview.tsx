@@ -75,6 +75,9 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
         {PROJECTS.map((project, index) => {
           const rotationIndex = rotationIndexByName.get(project.name) ?? -1;
           const featuredImage = (project as any).featuredImage as string | undefined;
+          const projectLinks = (project as any).links as
+            | Array<{ label: string; href: string }>
+            | undefined;
 
           return (
             <section
@@ -87,11 +90,11 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                 rotationIndex % 2 === 0 && "sm:rotate-[1.5deg]",
                 rotationIndex % 2 === 1 && "sm:rotate-[-1.5deg]",
                 index % 8 === 0 &&
-                  "bg-[linear-gradient(40deg,var(--tw-gradient-stops))] from-pink-300/80 to-violet-500/40 shadow-[currentBg] shadow-violet-500/20",
+                  "bg-[linear-gradient(145deg,var(--tw-gradient-stops))] from-cyan-400/80 via-sky-600/70 to-indigo-700/70 shadow-[currentBg] shadow-sky-500/20",
                 index % 8 === 1 &&
                   "bg-[linear-gradient(120deg,var(--tw-gradient-stops))] from-yellow-300/80 to-rose-600/80 shadow-rose-600/20",
                 index % 8 === 2 &&
-                  "bg-[linear-gradient(180deg,var(--tw-gradient-stops))] from-gray-200/40 to-rose-500/80 shadow-rose-500/20",
+                  "bg-[linear-gradient(160deg,var(--tw-gradient-stops))] from-violet-500/75 via-indigo-500/60 to-sky-700/70 shadow-indigo-500/20",
                 index % 8 === 3 &&
                   "bg-[linear-gradient(120deg,var(--tw-gradient-stops))] from-green-400/70 to-cyan-600/80 shadow-cyan-600/20",
                 index % 8 === 4 &&
@@ -140,10 +143,10 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                   })}
                 </div>
               </header>
-              <main className="mt-2 text-[15px] tracking-tight text-gray-600 d:text-gray-200 ">
-                <p className="line-clamp-4">{project.description}</p>
+              <main className="mt-2 min-h-[84px] pb-8 text-[15px] tracking-tight text-gray-600 d:text-gray-200 ">
+                <p className="line-clamp-3">{project.description}</p>
               </main>
-              <footer className="absolute bottom-3 left-0 mt-auto flex w-full items-end justify-end gap-2 px-4">
+              <footer className="absolute bottom-4 left-0 mt-auto flex w-full items-end justify-end gap-2 px-4">
                 <div className="mr-auto text-sm font-semibold text-gray-700/80 d:text-gray-300/80">
                   {project.year}
                 </div>
@@ -171,6 +174,19 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                       <LinkIcon className="h-5 w-5 " />
                     </Link>
                   : null}
+                {projectLinks?.map((link) => (
+                  <Link
+                    key={link.href}
+                    target="_blank"
+                    href={link.href}
+                    onClick={handleProjectLinkOpen}
+                    className="p-1 text-gray-700/80 transition-all hfa:text-gray-900 d:text-gray-300/80 d:hfa:text-gray-50"
+                    data-tip={link.label}
+                  >
+                    <span className="sr-only">{link.label}</span>
+                    <LinkIcon className="h-5 w-5 " />
+                  </Link>
+                ))}
               </footer>
             </section>
           );
