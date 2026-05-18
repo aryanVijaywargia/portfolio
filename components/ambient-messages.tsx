@@ -20,11 +20,11 @@ const SECTION_MESSAGES: readonly AmbientSection[] = [
   {
     selector: "#timeline",
     messages: [
-      "Follow the timeline down the page",
-      "Each stop shaped the next one",
-      "The dates tell the path",
+      "started with python, got lost on purpose",
+      "every detour looks intentional in hindsight",
+      "the dots hide a lot of refactoring",
     ],
-    surprise: "view this path as a case file?",
+    surprise: "click to see the cut scenes",
   },
   {
     selector: "#experience",
