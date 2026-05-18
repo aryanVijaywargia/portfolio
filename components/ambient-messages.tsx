@@ -56,11 +56,11 @@ const SECTION_MESSAGES: readonly AmbientSection[] = [
   {
     selector: "#achievements",
     messages: [
-      "A few badges are still hidden",
-      "Some achievements need exploration",
-      "This section remembers what you found",
+      "self-awarded, fully unverified",
+      "this section is mostly here for the lore",
+      "no recruiter has ever asked about these",
     ],
-    surprise: "check the secret dossier?",
+    surprise: "click if you have found them all",
   },
 ];
 
