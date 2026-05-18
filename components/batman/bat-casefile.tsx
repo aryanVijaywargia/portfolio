@@ -24,7 +24,8 @@ const caseEntries: CaseEntry[] = [
     organization: "GEP Worldwide",
     period: "Jul 2025 — Present",
     type: "employment",
-    description: "Leading work on the Leo Agentic Runtime — streaming protocols, MCP pooling, durable HITL",
+    description:
+      "Leading work on the Leo Agentic Runtime — streaming protocols, MCP pooling, durable HITL",
     details: [
       "Engineered the AG-UI streaming protocol adapter — cut time-to-first-token from ~5s batch to ~500ms streaming",
       "Built session-scoped MCP client pooling (100-client LRU + promise-chain mutex) → measured 2.8× speedup on 5-tool workflows",
@@ -123,7 +124,8 @@ const caseEntries: CaseEntry[] = [
     organization: "NIT Agartala",
     period: "Jul 2019 — Jul 2023",
     type: "education",
-    description: "Bachelor of Technology in Computer Science & Engineering (CGPA 8.59) — GDSC Lead 2021–2022",
+    description:
+      "Bachelor of Technology in Computer Science & Engineering (CGPA 8.59) — GDSC Lead 2021–2022",
     details: [
       "GDSC Lead — led a chapter of 20+ members; hosted GDSC Explore, the biggest dev fest in Northeast India",
       "Co-authored 2 papers on seismic perturbation forecasting (IJPRAI under review, AGU Earth & Space in communication)",
