@@ -224,59 +224,6 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
       ],
     },
     {
-      id: "isro-nesac",
-      company: "ISRO-NESAC",
-      roleShort: "Research Assistant",
-      role: "Research Assistant · LSTM / LSTM-CNN / Dash · Earthquake precursor research",
-      period: "Sep 2021 — Jan 2022",
-      periodShort: "Sep '21 — Jan '22",
-      duration: "5 mo",
-      kind: "employment",
-      accentKey: "tertiary",
-      links: [
-        {
-          label: "Report",
-          href: "https://drive.google.com/file/d/1TVZKvFrsKzUoTK10MxhN6PfQ-PRd3yVr/view?usp=sharing",
-        },
-      ],
-      timeline: {
-        start: "2021-09-01",
-        end: "2022-01-01",
-        track: 3,
-        rowLabel: "ISRO-NESAC",
-        barLabel: "Research Assistant",
-      },
-      achievements: [
-        {
-          id: "isro-lstm",
-          category: "Deep Learning",
-          title: "Multivariate LSTM forecasting of ionospheric parameters",
-          summary:
-            "Designed stacked LSTM and LSTM-CNN models for multivariate time-series forecasting of ionospheric parameters over the North East Region of India.",
-          impact: "RMSE 0.22",
-          technologies: ["LSTM", "LSTM-CNN", "TensorFlow"],
-        },
-        {
-          id: "isro-anomaly",
-          category: "Anomaly Detection",
-          title: "LSTM-autoencoder earthquake precursor detection",
-          summary:
-            "Built an LSTM-autoencoder anomaly detection pipeline to surface earthquake precursors from satellite-derived geophysical signals.",
-          impact: "F1 0.78",
-          technologies: ["LSTM Autoencoder", "Time Series"],
-        },
-        {
-          id: "isro-som-dash",
-          category: "Research Platform",
-          title: "Mini SOM zone clustering + Dash UI",
-          summary:
-            "Generated earthquake-prone zone clusters via Mini Self-Organizing Maps for 1-day forecasts and shipped a Dash-framework web interface to automate the project pipeline.",
-          impact: "53% zone accuracy",
-          technologies: ["Mini SOM", "Dash", "Python"],
-        },
-      ],
-    },
-    {
       id: "imd",
       company: "India Meteorological Dept.",
       roleShort: "Research Intern",

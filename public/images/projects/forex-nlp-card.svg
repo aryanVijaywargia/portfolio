@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Forex NLP</title>
+  <desc id="desc">Purple and indigo Forex NLP banner with signal icon, corner marks, and sentiment analysis caption.</desc>
+  <defs>
+    <linearGradient id="bg" x1="34" y1="12" x2="768" y2="388" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8A3FFC"/>
+      <stop offset="0.48" stop-color="#5C4CCC"/>
+      <stop offset="1" stop-color="#233E8F"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="150" y1="80" x2="650" y2="320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="white" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="white" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="400" rx="18" fill="url(#bg)"/>
+
+  <circle cx="160" cy="84" r="136" fill="#A855F7" fill-opacity="0.26"/>
+  <circle cx="650" cy="300" r="100" fill="#2563EB" fill-opacity="0.36"/>
+
+  <path d="M20 20H60" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
+  <path d="M20 20V60" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
+  <path d="M740 380H780" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
+  <path d="M780 340V380" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
+
+  <rect x="150" y="80" width="500" height="240" rx="24" stroke="white" stroke-opacity="0.26" fill="url(#panel)" fill-opacity="0.06"/>
+
+  <g transform="translate(340 120)">
+    <rect width="120" height="80" rx="12" fill="white" fill-opacity="0.1"/>
+    <path d="M10 60L30 40L54 61L78 34L100 50" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M-20 30L0 10L20 30" stroke="#4ADE80" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M120 50L140 70L160 50" stroke="#F87171" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="110" cy="15" r="7" fill="#38BDF8"/>
+  </g>
+
+  <text x="400" y="260" fill="white" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="700" letter-spacing="1.4">FOREX NLP</text>
+  <text x="400" y="296" fill="white" fill-opacity="0.86" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="17" letter-spacing="6">SENTIMENT &amp; SIGNAL ANALYSIS</text>
+</svg>
