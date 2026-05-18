@@ -22,7 +22,7 @@
   <path d="M730 370H770" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
   <path d="M770 330V370" stroke="white" stroke-opacity="0.34" stroke-width="2"/>
 
-  <rect x="120" y="60" width="560" height="280" rx="24" stroke="white" stroke-opacity="0.42" fill="url(#panel)" fill-opacity="0.05"/>
+  <rect x="120" y="60" width="560" height="280" rx="24" stroke="white" stroke-opacity="0.56" stroke-width="4" fill="url(#panel)" fill-opacity="0.05"/>
 
   <path d="M-20 196C76 158 138 188 224 214C309 239 384 219 460 188C540 155 620 164 820 226" stroke="white" stroke-opacity="0.2" stroke-width="2"/>
   <path d="M-20 220C80 192 152 224 224 232C305 242 384 208 467 198C550 188 620 209 820 240" stroke="white" stroke-opacity="0.15" stroke-width="2"/>
