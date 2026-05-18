@@ -16,8 +16,8 @@ export const CV = {
     <>
       I'm a Senior Software Engineer at <strong>GEP Worldwide</strong>, building the Leo Agentic
       Runtime and the Leo search platform — agentic streaming protocols, durable Human-in-the-Loop
-      subsystems, a pluggable Elasticsearch query platform, and a Logstash CDC fabric spanning
-      171 pipelines across 28 business domains. On the side I'm building{" "}
+      subsystems, a pluggable Elasticsearch query platform, and a Logstash CDC fabric spanning 171
+      pipelines across 28 business domains. On the side I'm building{" "}
       <Link href="https://www.continua.in/">Continua</Link>, a Go/Postgres durable execution engine
       purpose-built for AI agents.
     </>
@@ -41,7 +41,8 @@ export const CV = {
       city: "Mumbai",
       country: "India",
       company: "GEP Worldwide",
-      title: "Senior Software Engineer (Jul 2025 — Present) · Software Engineer (Jul 2023 — Jul 2025)",
+      title:
+        "Senior Software Engineer (Jul 2025 — Present) · Software Engineer (Jul 2023 — Jul 2025)",
       type: ["web / tech dev", "relevant"],
       responsibilities: [
         {
@@ -171,6 +172,77 @@ export const CV = {
       ],
     },
   ],
+  projects: [
+    {
+      dateFrom: "2025-09-01",
+      dateTo: "2099-12-31",
+      city: "",
+      country: "",
+      company: "Continua",
+      title: "Durable execution engine for AI agents",
+      type: ["web / tech dev", "relevant"],
+      responsibilities: [
+        {
+          content:
+            "Architected a Go/Postgres durable execution engine with event-sourced replay, byte-exact divergence detection, lease workers, exponential-backoff retries, continue-as-new, and scope+key CAS dedup; p99 round-trip stays under 50 ms.",
+          type: ["web / tech dev", "relevant"],
+        },
+        {
+          content:
+            "Built a React trace debugger with virtualized 1K+ span waterfalls, state diffs, retry-safety classification, and per-span LLM token/cost attribution.",
+          type: ["web / tech dev", "relevant"],
+        },
+      ],
+    },
+    {
+      dateFrom: "2022-03-01",
+      dateTo: "2022-05-01",
+      city: "",
+      country: "",
+      company: "Forex Trading Recommendation System",
+      title: "Python · TensorFlow · NLP",
+      type: ["web / tech dev", "relevant"],
+      responsibilities: [
+        {
+          content:
+            "Built a CNN-LSTM recommendation system combining finance-domain Twitter sentiment with FOREX time-series signals, reaching an F1 validation score of 0.62.",
+          type: ["web / tech dev", "relevant"],
+        },
+      ],
+    },
+    {
+      dateFrom: "2022-07-01",
+      dateTo: "2099-12-31",
+      city: "",
+      country: "",
+      company: "DeepHandwritingSynthesis",
+      title: "Python · TensorFlow · NLP",
+      type: ["web / tech dev", "relevant"],
+      responsibilities: [
+        {
+          content:
+            "Implemented an attention-based encoder-decoder RNN handwriting synthesizer and studied sequence-to-sequence models from current research literature.",
+          type: ["web / tech dev", "relevant"],
+        },
+      ],
+    },
+    {
+      dateFrom: "2020-12-01",
+      dateTo: "2020-12-01",
+      city: "",
+      country: "",
+      company: "OpenCV Sudoku Solver",
+      title: "Python · OpenCV · TensorFlow",
+      type: ["web / tech dev", "relevant"],
+      responsibilities: [
+        {
+          content:
+            "Built a Sudoku solver with image processing, backtracking, and a fine-tuned VGG-16 digit recognizer reaching 99.3% accuracy.",
+          type: ["web / tech dev", "relevant"],
+        },
+      ],
+    },
+  ],
   capabilities: {
     languages: [
       {
@@ -199,22 +271,10 @@ export const CV = {
       TECH.pytorch,
       TECH.flask,
     ],
-    serviceProviders: [
-      TECH.github,
-      TECH.aws,
-    ],
+    serviceProviders: [TECH.github, TECH.aws],
     marketing: [],
-    dataProviders: [
-      TECH.postgresql,
-      TECH.mongodb,
-      TECH.elasticsearch,
-      TECH.kafka,
-    ],
-    tools: [
-      TECH.git,
-      TECH.docker,
-      TECH.kubernetes,
-    ],
+    dataProviders: [TECH.postgresql, TECH.mongodb, TECH.elasticsearch, TECH.kafka],
+    tools: [TECH.git, TECH.docker, TECH.kubernetes],
   },
   certifications: [
     {
@@ -236,16 +296,19 @@ export const CV = {
       name: "GDSC Lead, NIT Agartala (Jul 2021 — Jul 2022) — hosted GDSC Explore fest",
     },
     {
+      name: "Omdena Netherlands Chapter contributor (Sep 2021) — built an AI pest-detection pipeline for food-security work",
+    },
+    {
       name: "Dockship.io — Bike Sharing Prediction: 6th of 250+ participants",
     },
     {
       name: "HakinCodes Contributor's Hack 2020: 23rd of 500+ contributors",
     },
     {
-      name: "Publication: \"Forecasting Vertical Total Electron Content to Witness Seismic Perturbations prior to North Eastern Earthquake in India\" — IJPRAI (under review)",
+      name: 'Publication: "Forecasting Vertical Total Electron Content to Witness Seismic Perturbations prior to North Eastern Earthquake in India" — IJPRAI (under review)',
     },
     {
-      name: "Publication: \"Prediction of Future Earthquake Zones in the South East Asian Region viz. Ionospheric Precursors\" — AGU Earth & Space Science (in communication)",
+      name: 'Publication: "Prediction of Future Earthquake Zones in the South East Asian Region viz. Ionospheric Precursors" — AGU Earth & Space Science (in communication)',
     },
   ],
   references: [],

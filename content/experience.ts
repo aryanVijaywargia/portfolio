@@ -58,7 +58,7 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
   rootLabel: "Aryan Vijaywargia",
   rootPrompt: "Select a chapter",
   eyebrow: "Experience",
-  heading: "From research labs to production runtimes.",
+  heading: "The journey so far.",
   timelineStart: "2019-07-01",
   timelineEnd: "2026-06-01",
   stats: [

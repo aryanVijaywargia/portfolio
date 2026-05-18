@@ -207,6 +207,61 @@ export const Resume: FC = (props) => {
                       )}
                   </div>
                 </ResumeSection>
+                <ResumeSection
+                  title="Projects"
+                  className={clsx(
+                    !CV.projects.filter(({ type }) => type.includes(filter) || filter === "all")
+                      .length && "!hidden"
+                  )}
+                >
+                  <div className="spacing-8">
+                    {CV.projects
+                      .sort((a, b) => {
+                        if (new Date(a.dateFrom) < new Date(b.dateFrom)) return 1;
+                        if (new Date(a.dateFrom) > new Date(b.dateFrom)) return -1;
+                        return 0;
+                      })
+                      .filter(({ type }) => type.includes(filter) || filter === "all")
+                      .map(
+                        (
+                          {
+                            dateFrom,
+                            dateTo,
+                            city,
+                            country,
+                            title,
+                            responsibilities,
+                            company,
+                            type,
+                          },
+                          index,
+                          arr
+                        ) => (
+                          <section className="relative mb-auto break-inside-avoid-page" key={index}>
+                            <div className="relative flex">
+                              <ResumeSectionDateSidebar
+                                dateFrom={dateFrom}
+                                dateTo={dateTo}
+                                showDateRange
+                                isLast={index === arr.length - 1}
+                              />
+                              <ResumeSectionDateEvents
+                                name={title}
+                                organization={company}
+                                city={city}
+                                country={country}
+                                dateFrom={dateFrom}
+                                dateTo={dateTo}
+                                showDateRange
+                                description=""
+                                responsibilities={responsibilities}
+                              />
+                            </div>
+                          </section>
+                        )
+                      )}
+                  </div>
+                </ResumeSection>
                 <ResumeSection className="break-inside-avoid" title="Capabilities">
                   <div className="spacing-8 print:!-ml-24 print:!spacing-3">
                     <section className="relative max-w-prose spacing-1 print:!grid print:!max-w-3xl print:!grid-cols-[140px_1fr]">
