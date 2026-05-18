@@ -38,11 +38,11 @@ const SECTION_MESSAGES: readonly AmbientSection[] = [
   {
     selector: "#portfolio",
     messages: [
-      "Filter projects by type",
-      "Open a repo from here",
-      "The project cards have live links",
+      "every readme is more confident than the repo",
+      "shipped on vibes and questionable sleep",
+      "the demo works, please do not poke it",
     ],
-    surprise: "open the archive version?",
+    surprise: "click for the project graveyard",
   },
   {
     selector: "#contact",
