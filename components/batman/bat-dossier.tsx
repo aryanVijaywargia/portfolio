@@ -70,7 +70,8 @@ export const BatDossier: FC = () => {
                   fontFamily: "var(--bat-serif)",
                 }}
               >
-                &ldquo;I build the infrastructure other people&apos;s agents and applications run on.&rdquo;
+                &ldquo;I build the infrastructure other people&apos;s agents and applications
+                run on.&rdquo;
               </blockquote>
 
               <p className="bat-subtext">
