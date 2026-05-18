@@ -11,11 +11,11 @@ const SECTION_MESSAGES: readonly AmbientSection[] = [
   {
     selector: "#about",
     messages: [
-      "Hover the photo stack",
-      "Click through the portraits",
-      "The about photos shuffle after your first visit",
+      "yes, these are the curated ones",
+      "the bio went through four drafts and a friend",
+      "stats are real, the vibe is performance",
     ],
-    surprise: "open the hidden profile mode?",
+    surprise: "open the overexplained version",
   },
   {
     selector: "#timeline",
