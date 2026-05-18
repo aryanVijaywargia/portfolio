@@ -38,44 +38,45 @@ export const ABOUT = {
   ],
   descriptions: {
     brief: (
-      <p>
-        I'm an India-based <strong>Senior Software Engineer</strong> at <strong>GEP Worldwide</strong>,
-        building the Leo Agentic Runtime and the Leo search platform. My focus is backend
-        infrastructure — durable execution, streaming protocols, search, and CDC.
-      </p>
+      <p>I’m trying my very best.</p>
     ),
     standard: (
       <>
         <p>
-          I'm an India-based <strong>Senior Software Engineer</strong> at{" "}
-          <strong>GEP Worldwide</strong>, building the Leo Agentic Runtime and the Leo search
-          platform. My focus is backend infrastructure — durable execution, streaming protocols,
-          search, and CDC.
+          <strong>Senior Software Engineer</strong> at <strong>GEP Worldwide</strong>, based in
+          India. I work on an AI agent orchestration builder platform, mostly around agent
+          workflows, streaming experiences, tool integrations, and making complex systems feel
+          easier to use.
         </p>
         <p>
-          On the side, I'm building <strong>Continua</strong>, a Go/Postgres durable execution
-          engine purpose-built for AI agents — event-sourced replay, lease-based crash recovery,
-          and a React time-travel trace debugger over event-sourced history.
+          Outside work, I’m usually travelling, reading non-fiction suspiciously slowly, or
+          trying to balance gym, swimming, and pretending I have a routine.
+        </p>
+        <p>
+          I’m pretty sure AGI shows up eventually, so I’m trying my very best to understand
+          where things are headed.
         </p>
       </>
     ),
     detailed: (
       <>
         <p>
-          I'm an India-based <strong>Senior Software Engineer</strong> at{" "}
-          <strong>GEP Worldwide</strong>, building the Leo Agentic Runtime and the Leo search
-          platform. My focus is backend infrastructure — durable execution, streaming protocols,
-          search, and CDC.
+          <strong>Senior Software Engineer</strong> at <strong>GEP Worldwide</strong>, based in
+          India. I work on an AI agent orchestration builder platform — building the systems
+          that let agent workflows stream responses, render interactive UI, connect with tools,
+          and pause for human decisions when needed.
         </p>
         <p>
-          On the side, I'm building <strong>Continua</strong>, a Go/Postgres durable execution
-          engine purpose-built for AI agents — event-sourced replay, lease-based crash recovery,
-          and a React time-travel trace debugger over event-sourced history.
+          I enjoy working on products where the hard part is not just making something work,
+          but making it feel reliable, understandable, and useful for the people building on
+          top of it. Most of my work sits somewhere between backend engineering, agent
+          workflows, search, and developer experience.
         </p>
         <p>
-          Before GEP I studied Computer Science & Engineering at <strong>NIT Agartala</strong>{" "}
-          (CGPA 8.59) and interned at <strong>IHub-Data, IIIT Hyderabad</strong> building YOLO-based
-          CV pipelines on dash-cam video. I work primarily in Go, C#, Python, and TypeScript.
+          Outside work, I’m usually planning my next trip, reading non-fiction at a pace that
+          can generously be called “ongoing,” lifting during the week, or swimming on weekends.
+          I’m pretty sure AGI shows up eventually, so I’m trying my very best to understand
+          where things are headed before it starts assigning me story points.
         </p>
       </>
     ),
