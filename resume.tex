@@ -1,0 +1,164 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generated pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[itemsep=3pt, parsep=0pt, topsep=3pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape Aryan Vijaywargia} \\ \vspace{1pt}
+    \small \raisebox{-0.1\height}\faPhone\ +91-7424904411 ~
+    \href{mailto:aryanvijaywargia@gmail.com}{\raisebox{-0.2\height}\faEnvelope\ {aryanvijaywargia@gmail.com}} ~
+    \href{https://aryanvijaywargia.com}{\raisebox{-0.2\height}\faGlobe\ \underline{Portfolio}} ~
+    \href{https://www.linkedin.com/in/aryan-vijaywargia/}{\raisebox{-0.2\height}\faLinkedin\ \underline{LinkedIn}} ~
+    \href{https://github.com/aryanVijaywargia}{\raisebox{-0.2\height}\faGithub\ \underline{GitHub}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+\resumeSubHeadingListStart
+  \resumeSubheading
+    {National Institute of Technology Agartala}{July 2019 -- July 2023}
+    {Bachelor of Technology in Computer Science \& Engineering}{CGPA: 8.59}
+\resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+\resumeSubHeadingListStart
+
+  \resumeSubheading
+    {GEP Worldwide}{July 2023 -- Present}
+    {Senior Software Engineer (Jul 2025 -- Present) $\cdot$ Software Engineer (Jul 2023 -- Jul 2025) --- \href{https://drive.google.com/file/d/1Cp8QSlrNSy8OahXCybXpa-KrO8zp2RDX/view?usp=sharing}{\textcolor{blue}{\underline{Internship Certificate}}}}{}
+    \resumeItemListStart
+       \resumeItem{Engineered the \textbf{AG-UI streaming protocol adapter} for the Leo Agentic Runtime, a real-time SSE bridge translating LangGraph executions into typed AG-UI protocol events --- multi-stage event filtering preserves protocol-critical events while suppressing internal graph machinery, and tool-layer events for partial-view rendering \textbf{eliminated a second LLM call per widget}; cut time-to-first-token from \textbf{\textasciitilde5 s batch to \textasciitilde500 ms streaming} on typical multi-step workflows.}
+      \resumeItem{Engineered \textbf{session-scoped MCP client pooling}, a connection-multiplexing layer that reuses MCP connections across tool calls within an agent workflow --- 100-client LRU pool with 5-min idle TTL and a \textbf{promise-chain mutex} preventing overflow and delete-before-close race conditions; amortizing \textbf{\textasciitilde200 ms of MCP handshake per call} yielded a measured \textbf{2.8$\times$ speedup (1250 ms $\to$ 450 ms)} on a 5-tool workflow.}
+      \resumeItem{Architected the \textbf{durable Human-in-the-Loop interrupt/resume subsystem} that pauses agent runs for human action and durably resumes them across pod restarts --- 4 interrupt types via a \textbf{custom LangChain middleware preventing tool double-execution on review-mode resume}, with a \textbf{MongoDB checkpointer} persisting workflow state; \textbf{100\% in-flight survival across pod restart} and \textbf{P95 $<$ 500 ms} resume latency from interrupt to next event.}
+      \resumeItem{Architected the \textbf{Leo Search Runtime}, a pluggable Elasticsearch query platform exposing \textbf{7 query types} (KNN dense-vector, multi-match, query-string, simple-query-string, search-term, dynamic + native highlight), a recursive expression evaluator over \textbf{6 comparison operators} for nested AND/OR predicate trees, and a strategy-based text pipeline with \textbf{8 normalization strategies} plus a 4-way term classifier --- letting downstream teams ship new query semantics declaratively without touching core code.}
+      \resumeItem{Built and operated the \textbf{Leo Storage CDC platform}, a Logstash fabric consuming secured Kafka CDC topics (SCRAM-SHA-512) across \textbf{171 pipelines spanning 28 business domains} --- per-domain filter chains with 3-retry / 50s-timeout HTTP transforms feed a sync-strategy apply layer (full-document and nested-array variants) translating each change event into the correct Elasticsearch mutation, keeping ES in sync with upstream MSSQL/MongoDB sources across \textbf{Kubernetes on Azure and AWS}.}
+      \resumeItem{Shipped \textbf{semantic search} on the Leo platform via a KNN dense-vector query builder over Elasticsearch (configurable similarity threshold, boost factor, and multi-tenant pre-filters composed into the same ES DSL as lexical queries) backed by a \textbf{3-tier embedding cache} in the \textbf{TransformationService} --- \textbf{collapsed p95 vectorization latency from \textasciitilde200 ms to $<$10 ms on cache hits} and unified KNN with lexical queries behind a single query factory.}
+      \resumeItem{Designed the \textbf{SearchOps} admin service --- a REST API for Elasticsearch index lifecycle management (create / configure / reindex / sync) backed by a pluggable background-job framework (handler-per-job-type registered through a JSON-driven type registry) --- orchestrating \textbf{\textasciitilde1k bulk sync / reindex jobs per month across 80+ managed indices} with graceful cancellation recovery and structured correlation-ID logging for end-to-end traceability against the CDC ingestion fabric.}
+    \resumeItemListEnd
+
+  \resumeSubheading
+    {IHub-Data, IIIT Hyderabad}{July 2022 -- January 2023}
+    {Machine Learning Intern --- \href{https://drive.google.com/file/d/1IBy0mEoh8Ff2USNZMerSrLSoYFRCm1Id/view?usp=sharing}{\textcolor{blue}{\underline{Certificate}}}}{}
+    \resumeItemListStart
+      \resumeItem{Built a \textbf{Flask web app} for the \textbf{Roadex} project running \textbf{3 YOLO-based CV pipelines} (pothole, triple-rider, tree obstruction) on dash-cam video at \textbf{\textasciitilde12 FPS}, streaming annotated MJPEG frames and persisting run metadata in SQLite.}
+      \resumeItem{Built the \textbf{triple-rider violation pipeline} cascading \textbf{TensorFlow YOLOv4} (rider/motorcycle) with \textbf{PyTorch YOLOv5} (helmet) --- \textbf{0.83 mAP@0.5}, \textbf{91\% helmet accuracy} --- using \textbf{IoU-based} rider$\to$motorcycle matching and \textbf{Deep SORT} tracking with frame interpolation.}
+    \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+\vspace{-12pt}
+
+%-----------PROJECTS-----------
+\section{Projects}
+\resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Continua}{September 2025 -- Present}
+      {Durable execution engine for AI agents --- Go, PostgreSQL, React/TypeScript, Python, River $\cdot$ \href{https://www.continua.in/}{\textcolor{blue}{\underline{Site}}} $\cdot$ \href{https://github.com/aryanVijaywargia/Continua}{\textcolor{blue}{\underline{GitHub}}}}{}
+    \resumeItemListStart
+      \resumeItem{Architected Continua, a \textbf{Go/Postgres durable execution engine purpose-built for AI agents} --- event-sourced replay with byte-exact divergence detection, \texttt{FOR UPDATE SKIP LOCKED} lease workers (consensus-free crash recovery), exponential-backoff retries, continue-as-new, and scope+key CAS dedup; \textbf{p99 $<$ 50 ms} round-trip, recovery within one poll interval.}
+      \resumeItem{Engineered a \textbf{React trace debugger for agent workflows} (built for time-travel replay over event-sourced history): virtualized 1K+ span waterfall, \texttt{useDeferredValue} JSON search across 5K-node trees, idempotency-aware retry-safety classifier, state-diff viewer, and per-span \textbf{LLM token/cost} attribution with cumulative-cost step chart.}
+      \resumeItem{Designed a \textbf{Python SDK} with decorator-based agent tracing (\texttt{ContextVar} propagation, semantic decision/effect/tool events) and a remote activity worker (lease claim, 50\% TTL heartbeats, SIGTERM drain) --- \textbf{River}-backed ingest pipeline sustains \textbf{p95 $<$ 150 ms} on 1 MB batches.}
+    \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+\vspace{-4pt}
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+\begin{itemize}[leftmargin=0.15in, label={}]
+  \small{\item{
+    \textbf{Languages}{: Go, C\#, Python, JavaScript/TypeScript, C/C++, SQL} \\
+    \textbf{Frameworks \& Libraries}{: .NET, Angular, React, TensorFlow, PyTorch, Flask, OpenCV, Scikit-learn, Dash} \\
+    \textbf{Concepts}{: Durable execution, event sourcing, distributed systems, Change Data Capture (CDC), LLM-based agent orchestration, multi-agent systems, prompt engineering, time series forecasting, micro-frontends, REST APIs} \\
+    \textbf{Developer Tools}{: Git, GitHub, PostgreSQL, sqlc, River, Claude Code, CI/CD}
+  }}
+\end{itemize}
+
+\end{document}
