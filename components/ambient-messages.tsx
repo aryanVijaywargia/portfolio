@@ -95,11 +95,13 @@ const BLOCKER_SELECTORS = [
   '[class*="rounded-3xl"]',
   '[class*="rounded-[18px]"]',
   '[class*="rounded-[24px]"]',
+  ".ambient-message",
+  ".ambient-surprise",
 ].join(", ");
 
-const PADDING_PX = 6;
+const PADDING_PX = 12;
 const MAX_POSITION_ATTEMPTS = 40;
-const FONT_PX = 17;
+const FONT_PX = 18;
 const APPROX_CHAR_PX = FONT_PX * 0.55;
 const LINE_HEIGHT_PX = FONT_PX * 1.05;
 
@@ -449,7 +451,7 @@ export const AmbientMessages: FC = () => {
         .ambient-message,
         .ambient-surprise {
           font-family: "Caveat", "Patrick Hand", "Comic Sans MS", cursive;
-          font-size: 1.0625rem;
+          font-size: 1.125rem;
           line-height: 1.05;
           letter-spacing: 0.01em;
         }

@@ -31,9 +31,8 @@ export const HERO = {
   ] as const,
   body: (onWowClick?: () => void) => (
     <>
-      I build the kind of backend infrastructure that AI agents and search platforms run on —
-      durable execution engines, streaming protocol adapters, and CDC pipelines that make the
-      hard parts feel{" "}
+      I build cool things on the internet — backends, side projects, and the occasional
+      experiment that makes the hard parts feel{" "}
       <em
         className="relative cursor-pointer before:absolute b:bottom-0 b:-z-10 b:h-3 b:w-full b:-rotate-2 b:animate-hint-hint b:bg-pink-400/70 b:blur-sm d:b:bg-pink-600"
         onClick={async (e) => {
@@ -51,7 +50,7 @@ export const HERO = {
       <Link target="_blank" href="https://www.gep.com/" className="underline hfa:text-sky-500">
         GEP Worldwide
       </Link>
-      , where I work on agentic systems, platform reliability, and search infrastructure.
+      , shipping the kind of stuff I’d nerd out about on a weekend anyway.
       <span className="mt-4 block" />
       Outside work, I’m usually travelling, reading non-fiction, swimming, or trying to keep a gym
       routine alive.
