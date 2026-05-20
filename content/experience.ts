@@ -81,7 +81,7 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
       accentKey: "primary",
       links: [
         {
-          label: "Certificate",
+          label: "Internship Certificate",
           href: "https://drive.google.com/file/d/1Cp8QSlrNSy8OahXCybXpa-KrO8zp2RDX/view?usp=sharing",
         },
       ],
@@ -189,10 +189,6 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
         {
           label: "GDSC Certificate",
           href: "https://drive.google.com/file/d/1RKPOSUSs8iFrDiuJr9A6C6-vN_c4Hmso/view?usp=sharing",
-        },
-        {
-          label: "GDSC Explore",
-          href: "https://www.gdscexplore.live/",
         },
       ],
       timeline: {

@@ -51,11 +51,10 @@ export const HERO = {
       <Link target="_blank" href="https://www.gep.com/" className="underline hfa:text-sky-500">
         GEP Worldwide
       </Link>
-      , where I work on the Leo Agentic Runtime and search platform. On the side, I'm building{" "}
-      <Link target="_blank" href="https://www.continua.in/" className="underline hfa:text-sky-500">
-        Continua
-      </Link>
-      , a durable execution engine for AI agents.
+      , where I work on agentic systems, platform reliability, and search infrastructure.
+      <span className="mt-4 block" />
+      Outside work, I’m usually travelling, reading non-fiction, swimming, or trying to keep a gym
+      routine alive.
     </>
   ),
   cta1: {

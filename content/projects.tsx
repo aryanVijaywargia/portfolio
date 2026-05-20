@@ -83,7 +83,7 @@ export const PROJECTS = [
     tech: [TECH.python, TECH.tensorflow],
     featuredImage: "/images/projects/earthquake-precursor-card.svg",
     url: "",
-    repository: "",
+    repository: "https://github.com/aryanVijaywargia/EQ-prediction-research",
     links: [
       {
         label: "Report",

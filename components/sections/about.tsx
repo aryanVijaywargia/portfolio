@@ -138,25 +138,18 @@ export const About: FC<AboutProps> = (props) => {
           <div className="relative -z-50 h-full w-full -rotate-6 rounded-xl bg-gray-200/80"></div>
         </button>
         <section className="spacing-8">
-          <header className="grid max-w-xl grid-cols-2 gap-4 text-center sm:grid-cols-4 sm:text-left">
+          <header className="grid max-w-xl grid-cols-2 justify-items-center gap-x-8 gap-y-7 text-center sm:grid-cols-4 sm:justify-items-start sm:gap-x-6 sm:text-left">
             {ABOUT.stats.map(({ statistic, caption, tooltip }, index) => {
               return (
                 <figure
                   key={caption + index}
                   data-tip={tooltip}
-                  className="cursor-help select-none spacing-1"
+                  className="min-w-0 cursor-help select-none"
                 >
-                  <span
-                    className={clsx(
-                      "text-4xl font-extrabold tracking-tighter",
-                      statistic === "∞"
-                        ? "text-blue-500"
-                        : "bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent"
-                    )}
-                  >
+                  <span className="block bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-4xl font-extrabold leading-none tracking-tighter text-transparent">
                     {statistic}
                   </span>
-                  <figcaption className="text-[15px] font-semibold tracking-tight text-gray-400 d:text-gray-300/80">
+                  <figcaption className="mt-2 text-[15px] font-semibold leading-tight tracking-tight text-gray-400 d:text-gray-300/80">
                     {caption}
                   </figcaption>
                 </figure>

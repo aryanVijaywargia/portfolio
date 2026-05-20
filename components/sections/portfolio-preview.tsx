@@ -78,12 +78,13 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
           const projectLinks = (project as any).links as
             | Array<{ label: string; href: string }>
             | undefined;
+          const hasLongTitle = project.name.length > 34;
 
           return (
             <section
               key={project.name}
               className={clsx(
-                "relative h-[380px] w-[340px] min-w-[340px] snap-start rounded-xl border-2 border-gray-700/30 bg-clip-padding p-4 shadow-xl transition-[min-width,width,margin-left,opacity] duration-300 spacing-0 d:border-white/20",
+                "relative flex h-[380px] w-[340px] min-w-[340px] snap-start flex-col gap-2.5 rounded-xl border-2 border-gray-700/30 bg-clip-padding p-4 shadow-xl transition-[min-width,width,margin-left,opacity] duration-300 d:border-white/20",
                 filter === "All Projects" || project.type.includes(filter)
                   ? "flex"
                   : "-ml-8 !w-0 !min-w-0 !overflow-hidden !border-0 !px-0 opacity-20",
@@ -107,7 +108,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                   "bg-[linear-gradient(140deg,var(--tw-gradient-stops))] from-cyan-400/80 to-indigo-700/50 shadow-indigo-700/20"
               )}
             >
-              <figure className="relative flex aspect-2 w-full">
+              <figure className="relative flex aspect-2 w-full shrink-0">
                 {featuredImage
                   ? <Image
                       src={featuredImage}
@@ -125,11 +126,11 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                       <div className="absolute bottom-9 left-1/2 h-12 w-36 -translate-x-1/2 rounded-full bg-white/10 blur-xl" />
                     </div>}
               </figure>
-              <header>
-                <h2 className="text-2xl font-bold tracking-tighter text-gray-800 d:text-white">
+              <header className="grid gap-2">
+                <h2 className="text-[22px] font-bold leading-[1.08] tracking-tighter text-gray-800 d:text-white">
                   {project.name}
                 </h2>
-                <div className="-ml-0.5 mt-0.5 flex items-center gap-2 tracking-tight text-gray-600 d:text-gray-200">
+                <div className="-ml-0.5 flex items-center gap-2 tracking-tight text-gray-600 d:text-gray-200">
                   {project.tech?.map(({ name, Icon }, i) => {
                     if (i > 3) return null;
                     return (
@@ -143,10 +144,12 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                   })}
                 </div>
               </header>
-              <main className="mt-2 min-h-[84px] pb-8 text-[15px] tracking-tight text-gray-600 d:text-gray-200 ">
-                <p className="line-clamp-3">{project.description}</p>
+              <main className="text-[15px] leading-snug tracking-tight text-gray-600 d:text-gray-200">
+                <p className={hasLongTitle ? "line-clamp-2" : "line-clamp-3"}>
+                  {project.description}
+                </p>
               </main>
-              <footer className="absolute bottom-4 left-0 mt-auto flex w-full items-end justify-end gap-2 px-4">
+              <footer className="mt-auto flex w-full items-end justify-end gap-4 pt-1">
                 <div className="mr-auto text-sm font-semibold text-gray-700/80 d:text-gray-300/80">
                   {project.year}
                 </div>

@@ -471,14 +471,14 @@ function RoleDetail({ company }: { company: ExperienceCompany }) {
                 )}
                 style={{ borderColor: "var(--experience-border-faint)" }}
               >
-                <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+                <div className="flex flex-col items-start gap-2">
                   <span
                     className="font-mono text-[9.5px] font-bold uppercase tracking-[0.1em]"
                     style={{ color: style.color }}
                   >
                     {achievement.category}
                   </span>
-                  <span className="max-w-full text-right font-mono text-[10.5px] font-bold tracking-[-0.005em] text-amber-500">
+                  <span className="max-w-full font-mono text-[10.5px] font-bold leading-snug tracking-[-0.005em] text-amber-500">
                     {achievement.impact}
                   </span>
                 </div>
