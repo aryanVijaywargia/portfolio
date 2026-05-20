@@ -32,7 +32,7 @@ export const ABOUT = {
     },
     {
       statistic: "200+",
-      tooltip: "Pull requests merged across owned + work repos",
+      tooltip: "Pull requests merged across owned repos",
       caption: "PRs Merged",
     },
     {
