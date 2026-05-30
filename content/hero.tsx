@@ -46,9 +46,8 @@ export const HERO = {
       >
         WOW!
       </em>
-      .<span className="mt-4 block" />I’m not precious about stacks. If a problem’s interesting,
-      I’ll pick up whatever it needs - Go one week, Python the next, something I’ve never touched
-      the week after. Most of the job is figuring out what to build anyway; the rest is just typing.
+      . I’m not precious about stacks - Go one week, Python the next, something I’ve never touched
+      the week after. Most of the job is figuring out what to build; the rest is just typing.
       <span className="mt-4 block" />Currently a Senior Software Engineer at{" "}
       <Link target="_blank" href="https://www.gep.com/" className="underline hfa:text-sky-500">
         GEP Worldwide
