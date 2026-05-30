@@ -158,14 +158,14 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const terminalTitle = isExpanded
     ? "🐕 Byte v1.0 (Connected)"
     : mode === "snake"
-    ? "🐍 Snake — Terminal"
+    ? "🐍 Snake - Terminal"
     : mode === "dungeon"
-    ? "⚔️ Dungeon Quest — Terminal"
+    ? "⚔️ Dungeon Quest - Terminal"
     : mode === "game-menu"
-    ? "🎮 Games — Terminal"
+    ? "🎮 Games - Terminal"
     : mode === "editor"
     ? "/index.tsx"
-    : "aryan@macbook — zsh";
+    : "aryan@macbook - zsh";
 
   // Replay Rick intro (red button in terminal mode)
   const handleReplayIntro = () => {
@@ -305,7 +305,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           </button>
         </div>
 
-        {/* Tabs — decorative, both themes */}
+        {/* Tabs - decorative, both themes */}
         {!isModal && mode === "terminal" && (
           <div className="ml-3 flex items-center gap-1">
             <span className="rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 [background:rgba(6,182,212,0.12)] dark:text-[#67e8f9]">
@@ -361,7 +361,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         <div className="relative h-full">{terminalContent}</div>
       </main>
 
-      {/* Status strip — only on the default terminal view (not games/chatbot/editor/modal) */}
+      {/* Status strip - only on the default terminal view (not games/chatbot/editor/modal) */}
       {!isModal && mode === "terminal" && (
         <footer className="terminal-statusbar relative flex h-7 shrink-0 items-center justify-between border-t border-slate-200 bg-slate-100/80 px-4 font-mono text-[11px] text-slate-500 dark:border-slate-400/10 dark:bg-[#0f172a]/60 dark:text-[#64748b]">
           <div className="flex items-center gap-3.5">

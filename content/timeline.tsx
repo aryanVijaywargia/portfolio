@@ -74,7 +74,7 @@ export const TIMELINEOBJECT = {
       date: "2021-09-15",
       heading: "Omdena Netherlands Chapter",
       description:
-        "Joined Omdena Netherlands as an open-source contributor — worked on AI for food security and crop yield, building a pest-detection pipeline with TensorFlow Lite.",
+        "Joined Omdena Netherlands as an open-source contributor - worked on AI for food security and crop yield, building a pest-detection pipeline with TensorFlow Lite.",
       Icon: ({ className = "" }) => <FaRobot className={className} />,
     },
     {
@@ -141,7 +141,7 @@ export const TIMELINEOBJECT = {
       date: "2023-07-15",
       heading: "Joined GEP Worldwide",
       description:
-        "Started as a Software Engineer at GEP Worldwide, working on the Leo platform across search, storage, and agentic runtimes — Go, C#, .NET, Angular, Elasticsearch.",
+        "Started as a Software Engineer at GEP Worldwide, working on the Leo platform across search, storage, and agentic runtimes - Go, C#, .NET, Angular, Elasticsearch.",
       Icon: ({ className = "" }) => <BuildingOffice2Icon className={className} />,
     },
   ],
@@ -150,14 +150,14 @@ export const TIMELINEOBJECT = {
       date: "2024-03-01",
       heading: "Leo Storage CDC platform shipped",
       description:
-        "Built and operated a Logstash fabric over secured Kafka (SCRAM-SHA-512) — 171 CDC pipelines across 28 business domains, keeping Elasticsearch in sync with MSSQL/MongoDB sources on Azure and AWS.",
+        "Built and operated a Logstash fabric over secured Kafka (SCRAM-SHA-512) - 171 CDC pipelines across 28 business domains, keeping Elasticsearch in sync with MSSQL/MongoDB sources on Azure and AWS.",
       Icon: ({ className = "" }) => <ServerStackIcon className={className} />,
     },
     {
       date: "2024-09-01",
       heading: "Leo Search Runtime + semantic search",
       description:
-        "Architected a pluggable Elasticsearch query platform with 7 query types and shipped semantic KNN search backed by a 3-tier embedding cache — collapsed p95 vectorization latency from ~200 ms to <10 ms on cache hits.",
+        "Architected a pluggable Elasticsearch query platform with 7 query types and shipped semantic KNN search backed by a 3-tier embedding cache - collapsed p95 vectorization latency from ~200 ms to <10 ms on cache hits.",
       Icon: ({ className = "" }) => <MagnifyingGlassIcon className={className} />,
     },
   ],
@@ -173,14 +173,14 @@ export const TIMELINEOBJECT = {
       date: "2025-08-01",
       heading: "AG-UI streaming protocol adapter",
       description:
-        "Shipped a real-time SSE bridge translating LangGraph executions into typed AG-UI events — cut time-to-first-token from ~5 s batch to ~500 ms streaming on typical multi-step workflows.",
+        "Shipped a real-time SSE bridge translating LangGraph executions into typed AG-UI events - cut time-to-first-token from ~5 s batch to ~500 ms streaming on typical multi-step workflows.",
       Icon: ({ className = "" }) => <BoltIcon className={className} />,
     },
     {
       date: "2025-09-01",
       heading: "Continua launched",
       description:
-        "Started Continua — a Go/Postgres durable execution engine purpose-built for AI agents, with event-sourced replay, byte-exact divergence detection, and a React time-travel trace debugger.",
+        "Started Continua - a Go/Postgres durable execution engine purpose-built for AI agents, with event-sourced replay, byte-exact divergence detection, and a React time-travel trace debugger.",
       Icon: ({ className = "" }) => <RocketLaunchIcon className={className} />,
     },
   ],
