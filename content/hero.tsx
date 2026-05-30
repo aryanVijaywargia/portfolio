@@ -31,7 +31,7 @@ export const HERO = {
   ] as const,
   body: (onWowClick?: () => void) => (
     <>
-      I build cool things on the internet — backends, side projects, and the occasional
+      I build cool things on the internet - backends, side projects, and the occasional
       experiment that makes the hard parts feel{" "}
       <em
         className="relative cursor-pointer before:absolute b:bottom-0 b:-z-10 b:h-3 b:w-full b:-rotate-2 b:animate-hint-hint b:bg-pink-400/70 b:blur-sm d:b:bg-pink-600"
@@ -47,7 +47,7 @@ export const HERO = {
         WOW!
       </em>
       .<span className="mt-4 block" />I’m not precious about stacks. If a problem’s interesting,
-      I’ll pick up whatever it needs — Go one week, Python the next, something I’ve never touched
+      I’ll pick up whatever it needs - Go one week, Python the next, something I’ve never touched
       the week after. Most of the job is figuring out what to build anyway; the rest is just typing.
       <span className="mt-4 block" />Currently a Senior Software Engineer at{" "}
       <Link target="_blank" href="https://www.gep.com/" className="underline hfa:text-sky-500">

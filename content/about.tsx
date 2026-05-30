@@ -67,7 +67,7 @@ export const ABOUT = {
       <>
         <p>
           <strong>Senior Software Engineer</strong> at <strong>GEP Worldwide</strong>, based in
-          India. I work on an AI agent orchestration builder platform — building the systems
+          India. I work on an AI agent orchestration builder platform - building the systems
           that let agent workflows stream responses, render interactive UI, connect with tools,
           and pause for human decisions when needed.
         </p>

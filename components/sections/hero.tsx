@@ -146,7 +146,7 @@ export const Hero: FC = () => {
               <InteractiveTerminal language="tsx" />
               <div className="absolute -bottom-5 -right-5 -z-10 h-[calc(100%+1.25rem)] w-[calc(100%+1.25rem)] rounded-lg border border-gray-400/20 bg-gray-100/70 [mask-image:linear-gradient(-30deg,#fff_16.35%,rgb(255_255_255_/_0%)_61.66%)] d:border-gray-700/20 d:bg-gray-900/40"></div>
             </div>
-            {/* Identity rail: outlined chips with leading colored dot — both themes */}
+            {/* Identity rail: outlined chips with leading colored dot - both themes */}
             <div className="relative z-20 mt-0.5 flex flex-nowrap items-center justify-end gap-1.5 whitespace-nowrap xl:gap-2">
               <span className="mr-0.5 shrink-0 font-mono text-[11px] uppercase tracking-[0.1em] text-slate-500 d:text-slate-500">
                 also:

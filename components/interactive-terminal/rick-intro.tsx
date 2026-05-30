@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useRef, useCallback } from "react";
 
-// Rick with portal gun + portal opening — iconic scene
+// Rick with portal gun + portal opening - iconic scene
 const RICK_ASCII = `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -35,7 +35,7 @@ const RICK_ASCII = `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀
 const INTRO_LINES = [
   "MORTY!!!",
   "You're not gonna believe this, Morty...",
-  "I'm--I'm trapped in this kid's terminal!",
+  "I'm, I'm trapped in this kid's terminal!",
   "I'm Terminal Rick, baby!",
   "This Aryan guy built some kind of portfolio and I got stuck in it...",
   "Quick Morty, type 'help' to see what we're working with!",

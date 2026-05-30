@@ -1,5 +1,5 @@
 export const SEO = {
-  title: "Aryan Vijaywargia — Senior Software Engineer · Go, C#, .NET, TypeScript, Python",
+  title: "Aryan Vijaywargia - Senior Software Engineer · Go, C#, .NET, TypeScript, Python",
   url: "https://aryanvijaywargia.com",
   description:
     "Senior Software Engineer at GEP Worldwide. I build agentic runtimes, search platforms, and durable execution engines. Creator of Continua.",
@@ -23,7 +23,7 @@ export const SEO = {
     images: [
       {
         url: "https://aryanvijaywargia.com/images/sharing-image.jpg",
-        alt: "Aryan Vijaywargia — Senior Software Engineer",
+        alt: "Aryan Vijaywargia - Senior Software Engineer",
         width: 1200,
         height: 630,
       },
@@ -32,11 +32,11 @@ export const SEO = {
 };
 
 export const BLOG_SEO = {
-  title: "Aryan Vijaywargia — Blog",
+  title: "Aryan Vijaywargia - Blog",
   description:
     "Writing about durable execution, agentic runtimes, search platforms, CDC, and the systems that make AI agents reliable.",
   openGraph: {
-    title: "Aryan Vijaywargia — Blog",
+    title: "Aryan Vijaywargia - Blog",
     description:
       "Writing about durable execution, agentic runtimes, search platforms, CDC, and the systems that make AI agents reliable.",
   },

@@ -50,7 +50,7 @@ export const PROJECTS = [
     featuredImage: "/images/projects/continua-brand-card.svg",
     url: "https://www.continua.in/",
     repository: "https://github.com/aryanVijaywargia/Continua",
-    description: `A Go/Postgres durable execution engine purpose-built for AI agents — event-sourced replay, byte-exact divergence detection, and lease-based crash recovery with p99 < 50 ms RTT.`,
+    description: `A Go/Postgres durable execution engine purpose-built for AI agents - event-sourced replay, byte-exact divergence detection, and lease-based crash recovery with p99 < 50 ms RTT.`,
     content: (
       <>
         <p>
@@ -62,7 +62,7 @@ export const PROJECTS = [
         </p>
         <p>
           On top of the engine sits a React trace debugger built for time-travel replay over
-          event-sourced history — a virtualized 1K+ span waterfall, <code>useDeferredValue</code>{" "}
+          event-sourced history - a virtualized 1K+ span waterfall, <code>useDeferredValue</code>{" "}
           JSON search across 5K-node trees, an idempotency-aware retry-safety classifier, a
           state-diff viewer, and per-span LLM token/cost attribution with a cumulative-cost step
           chart.
@@ -78,7 +78,7 @@ export const PROJECTS = [
     year: "2025",
   },
   {
-    name: "Earthquake Precursor Detection — ISRO-NESAC",
+    name: "Earthquake Precursor Detection - ISRO-NESAC",
     type: ["Machine Learning", "Research"],
     tech: [TECH.python, TECH.tensorflow],
     featuredImage: "/images/projects/earthquake-precursor-card.svg",

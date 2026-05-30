@@ -75,20 +75,20 @@ export const BatDossier: FC = () => {
               </blockquote>
 
               <p className="bat-subtext">
-                I&apos;m Aryan Vijaywargia — a Senior Software Engineer at GEP Worldwide, working on
+                I&apos;m Aryan Vijaywargia - a Senior Software Engineer at GEP Worldwide, working on
                 the Leo Agentic Runtime and the Leo search platform. My focus is backend
-                infrastructure — durable execution, streaming protocols, search, and CDC.
+                infrastructure - durable execution, streaming protocols, search, and CDC.
               </p>
 
               <p className="bat-subtext">
                 On the side I&apos;m building <strong>Continua</strong>, a Go/Postgres durable
-                execution engine purpose-built for AI agents — event-sourced replay, lease-based
+                execution engine purpose-built for AI agents - event-sourced replay, lease-based
                 crash recovery, and a React time-travel trace debugger over event-sourced history.
               </p>
 
               <p className="bat-subtext">
                 Before GEP I studied Computer Science &amp; Engineering at NIT Agartala (CGPA 8.59)
-                and interned at IHub-Data IIIT Hyderabad, ISRO-NESAC, IMD, and Omdena × EnergyHub —
+                and interned at IHub-Data IIIT Hyderabad, ISRO-NESAC, IMD, and Omdena × EnergyHub -
                 research roles spanning earthquake-precursor detection, hailstorm forecasting, and
                 EV-charging optimization. Former GDSC Lead at NIT Agartala.
               </p>
@@ -150,7 +150,7 @@ export const BatDossier: FC = () => {
               <div className="space-y-3">
                 {[
                   ["Location", "India"],
-                  ["Education", "NIT Agartala — B.Tech CSE, CGPA 8.59"],
+                  ["Education", "NIT Agartala - B.Tech CSE, CGPA 8.59"],
                   ["Focus", "Durable execution · agentic runtimes · search"],
                   ["Status", "Building Continua"],
                 ].map(([key, value]) => (
