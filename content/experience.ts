@@ -1,11 +1,6 @@
 export type ExperienceAccentKey = "primary" | "secondary" | "tertiary";
 export type ExperienceKind = "employment" | "freelance" | "project" | "education";
 
-export interface ExperienceStat {
-  value: string;
-  label: string;
-}
-
 export interface ExperienceAchievement {
   id: string;
   category: string;
@@ -50,7 +45,6 @@ export interface ExperienceJourney {
   heading: string;
   timelineStart: string;
   timelineEnd: string;
-  stats: ExperienceStat[];
   companies: ExperienceCompany[];
 }
 
@@ -61,12 +55,6 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
   heading: "The journey so far.",
   timelineStart: "2019-07-01",
   timelineEnd: "2026-06-01",
-  stats: [
-    { value: "7+", label: "years coding" },
-    { value: "171", label: "CDC pipelines" },
-    { value: "2.8×", label: "MCP speedup" },
-    { value: "80+", label: "ES indices" },
-  ],
   companies: [
     {
       id: "gep-worldwide",
