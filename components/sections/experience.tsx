@@ -185,15 +185,6 @@ function ExperienceHeader() {
       <h2 className="heading-2xl -ml-1 max-w-4xl text-[var(--experience-text)]">
         {EXPERIENCE_JOURNEY.heading}
       </h2>
-
-      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 font-mono text-[12px] text-[var(--experience-text-subtle)] md:mt-4">
-        {EXPERIENCE_JOURNEY.stats.map((stat) => (
-          <span key={`${stat.value}-${stat.label}`} className="inline-flex items-baseline gap-1.5">
-            <b className="text-[15px] text-[var(--experience-text)]">{stat.value}</b>
-            {stat.label}
-          </span>
-        ))}
-      </div>
     </header>
   );
 }
