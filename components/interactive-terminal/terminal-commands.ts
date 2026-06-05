@@ -30,6 +30,7 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: '<span class="command">history</span>        View command history' },
     { text: '<span class="command">secret</span>         Find the hidden command' },
     { text: '<span class="command">chatbot</span>        Launch Byte, the AI companion' },
+    { text: '<span class="command">intro</span>          Play the AryanIntro reel' },
     { text: '<span class="command">clear</span>          Clear terminal' },
     { text: '<span class="command">help</span>           Show this help message' },
     { text: "" },
@@ -172,7 +173,16 @@ export const DESKTOP_GAME_HELP: CommandOutput = {
   text: '<span class="command">game</span>           Open the games menu',
 };
 
-export const SPECIAL_COMMANDS = ["clear", "history", "code", "sudo", "chatbot", "game"];
+export const SPECIAL_COMMANDS = [
+  "clear",
+  "history",
+  "code",
+  "sudo",
+  "chatbot",
+  "game",
+  "intro",
+  "reel",
+];
 
 export function isSpecialCommand(cmd: string): boolean {
   return SPECIAL_COMMANDS.includes(cmd.toLowerCase().trim());
