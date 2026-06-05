@@ -22,7 +22,7 @@
   "scripts": {
     "dev": "remotion studio",
     "studio": "remotion studio",
-    "render": "remotion render AryanIntro out/AryanIntro.raw.mp4 && ffmpeg -y -i out/AryanIntro.raw.mp4 -c:v copy -an out/AryanIntro.mp4 && rm out/AryanIntro.raw.mp4",
+    "render": "remotion render AryanIntro out/AryanIntro.raw.mp4 && ffmpeg -y -i out/AryanIntro.raw.mp4 -map_metadata -1 -c:v copy -an out/AryanIntro.mp4 && rm out/AryanIntro.raw.mp4",
     "still": "remotion still AryanIntro --frame=450 --scale=0.5 out/AryanIntro-frame450.png",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
