@@ -19,6 +19,9 @@ const DungeonGame = dynamic(() => import("./dungeon-game").then((mod) => mod.Dun
 const GameMenu = dynamic(() => import("./game-menu").then((mod) => mod.GameMenu), {
   ssr: false,
 });
+const IntroReel = dynamic(() => import("./intro-reel").then((mod) => mod.IntroReel), {
+  ssr: false,
+});
 const Code = dynamic(() => import("components/typography/code").then((mod) => mod.Code), {
   ssr: false,
 });
@@ -30,11 +33,12 @@ type InteractiveTerminalProps = {
 
 export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, language }) => {
   const [mode, setMode] = useState<
-    "terminal" | "editor" | "chatbot" | "game-menu" | "snake" | "dungeon"
+    "terminal" | "editor" | "chatbot" | "game-menu" | "snake" | "dungeon" | "intro-reel"
   >("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
   const [replayIntroKey, setReplayIntroKey] = useState(0);
+  const [skipTerminalIntroOnce, setSkipTerminalIntroOnce] = useState(false);
   const [editorCode, setEditorCode] = useState<string | string[] | null>(code ?? null);
   const triggerChatbot = useChatbot((state) => state.triggerChatbot);
   const requestChatbot = useChatbot((state) => state.requestChatbot);
@@ -64,6 +68,19 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     }
     return undefined;
   }, [isExpanded, isTerminalMaximized]);
+
+  useEffect(() => {
+    if (!skipTerminalIntroOnce || mode !== "terminal") return undefined;
+
+    const timeoutId = window.setTimeout(
+      () => {
+        setSkipTerminalIntroOnce(false);
+      },
+      0
+    );
+
+    return () => window.clearTimeout(timeoutId);
+  }, [mode, skipTerminalIntroOnce]);
 
   const handleSwitchToEditor = () => {
     setMode("editor");
@@ -97,6 +114,11 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     setIsTerminalMaximized(true);
   };
 
+  const handleSwitchToIntroReel = () => {
+    setMode("intro-reel");
+    setIsTerminalMaximized(true);
+  };
+
   const handleExitGame = () => {
     setMode("terminal");
     setIsTerminalMaximized(false);
@@ -119,6 +141,12 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   };
 
   const handleMinimizeTerminal = () => {
+    setMode("terminal");
+    setIsTerminalMaximized(false);
+  };
+
+  const handleExitIntroReel = () => {
+    setSkipTerminalIntroOnce(true);
     setMode("terminal");
     setIsTerminalMaximized(false);
   };
@@ -163,6 +191,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? "⚔️ Dungeon Quest - Terminal"
     : mode === "game-menu"
     ? "🎮 Games - Terminal"
+    : mode === "intro-reel"
+    ? "AryanIntro.mp4 - Terminal"
     : mode === "editor"
     ? "/index.tsx"
     : "aryan@macbook - zsh";
@@ -183,6 +213,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? handleExitChatbot
     : isTerminalMaximized && mode === "terminal"
     ? handleMinimizeAndReplayIntro
+    : isTerminalMaximized && mode === "intro-reel"
+    ? handleExitIntroReel
     : isTerminalMaximized
     ? handleMinimizeTerminal
     : mode === "editor"
@@ -197,6 +229,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const layoutTransition = { type: "spring" as const, damping: 25, stiffness: 300 };
   const windowSizeClass = isExpanded
     ? "h-[min(80svh,42rem)] w-[calc(100vw-2rem)] max-w-2xl sm:w-[90vw]"
+    : mode === "intro-reel" && isTerminalMaximized
+    ? "h-[min(86svh,48rem)] w-[calc(100vw-2rem)] max-w-5xl sm:w-[94vw]"
     : isTerminalMaximized
     ? "h-[min(80svh,42rem)] w-[calc(100vw-2rem)] max-w-3xl sm:w-[90vw]"
     : "h-[22rem] w-full sm:h-[24rem] lg:h-[27rem]";
@@ -210,6 +244,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? <SnakeGame onGameEnd={handleExitToGameMenu} onScoreChange={handleSnakeScoreChange} />
     : mode === "dungeon"
     ? <DungeonGame onGameEnd={handleExitToGameMenu} onEscape={handleDungeonEscape} />
+    : mode === "intro-reel"
+    ? <IntroReel onExit={handleExitIntroReel} />
     : mode === "editor"
     ? <div className="scrollbar-none h-full overflow-auto p-3">
         <Code
@@ -222,6 +258,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         onSwitchToEditor={handleSwitchToEditor}
         onSwitchToChatbot={handleSwitchToChatbot}
         onSwitchToGameMenu={handleSwitchToGame}
+        onSwitchToIntroReel={handleSwitchToIntroReel}
         triggerChatbot={triggerChatbot}
         onTriggerHandled={clearTrigger}
         onValidCommand={handleValidCommand}
@@ -230,6 +267,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         onRootAccess={handleRootAccess}
         onBatmanTheme={activateBatman}
         replayIntroKey={replayIntroKey}
+        skipIntro={skipTerminalIntroOnce}
       />;
 
   const terminalWindow = (

@@ -12,6 +12,7 @@ type TerminalProps = {
   onSwitchToEditor: () => void;
   onSwitchToChatbot: () => void;
   onSwitchToGameMenu: () => void;
+  onSwitchToIntroReel: () => void;
   triggerChatbot?: boolean;
   onTriggerHandled?: () => void;
   onValidCommand?: (command: string) => void;
@@ -20,12 +21,14 @@ type TerminalProps = {
   onRootAccess?: () => void;
   onBatmanTheme?: () => void;
   replayIntroKey?: number;
+  skipIntro?: boolean;
 };
 
 export const Terminal: FC<TerminalProps> = ({
   onSwitchToEditor,
   onSwitchToChatbot,
   onSwitchToGameMenu,
+  onSwitchToIntroReel,
   triggerChatbot,
   onTriggerHandled,
   onValidCommand,
@@ -34,8 +37,9 @@ export const Terminal: FC<TerminalProps> = ({
   onRootAccess,
   onBatmanTheme,
   replayIntroKey,
+  skipIntro = false,
 }) => {
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(() => !skipIntro);
   const [outputLines, setOutputLines] = useState<OutputLine[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -382,6 +386,19 @@ export const Terminal: FC<TerminalProps> = ({
           setTimeout(
             () => {
               onSwitchToGameMenu();
+            },
+            600
+          );
+          return;
+
+        case "intro":
+        case "reel":
+          addLine("", undefined, 0);
+          addLine("Loading AryanIntro reel...", "info", 80);
+          addLine("[##########] 100%", "info", 400);
+          setTimeout(
+            () => {
+              onSwitchToIntroReel();
             },
             600
           );
