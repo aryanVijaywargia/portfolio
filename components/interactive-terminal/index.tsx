@@ -192,7 +192,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     : mode === "game-menu"
     ? "🎮 Games - Terminal"
     : mode === "intro-reel"
-    ? "AryanIntro.mp4 - Terminal"
+    ? "whois.mp4 - Terminal"
     : mode === "editor"
     ? "/index.tsx"
     : "aryan@macbook - zsh";

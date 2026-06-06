@@ -19,7 +19,7 @@ export const IntroReel: FC<IntroReelProps> = ({ onExit }) => {
   const [hasEnded, setHasEnded] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(38);
+  const [duration, setDuration] = useState(10);
 
   const seekToTime = useCallback((nextTime: number) => {
     const video = videoRef.current;
@@ -97,8 +97,8 @@ export const IntroReel: FC<IntroReelProps> = ({ onExit }) => {
             ref={videoRef}
             src="/videos/aryan-intro.mp4"
             className="h-full w-full object-contain"
+            aria-label="Aryan profile video"
             autoPlay
-            muted
             playsInline
             preload="auto"
             onPlay={() => {
@@ -160,9 +160,9 @@ export const IntroReel: FC<IntroReelProps> = ({ onExit }) => {
 
         <div className="mt-2 grid grid-cols-[1fr_auto_1fr] items-center gap-3 text-xs">
           <div className="min-w-0 truncate text-slate-500">
-            <span className="text-cyan-300">AryanIntro</span>
+            <span className="text-cyan-300">whois</span>
             <span className="mx-2 text-slate-700">/</span>
-            <span>silent reel</span>
+            <span>profile video</span>
           </div>
 
           <div className="flex items-center gap-2 rounded-full border border-slate-700/70 bg-black/25 px-2 py-1 shadow-inner">
