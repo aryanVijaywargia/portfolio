@@ -23,35 +23,15 @@ export type CommandOutput = {
 export const COMMANDS: Record<string, CommandOutput[]> = {
   help: [
     { text: "" },
-    { text: '<span class="command">whois</span>          Who is Aryan?' },
+    { text: '<span class="command">whois</span>          Play Aryan profile video' },
     { text: '<span class="command">whoami</span>         Who are you?' },
     { text: '<span class="command">contact</span>        Show business card' },
     { text: '<span class="command">code</span>           View the code editor' },
     { text: '<span class="command">history</span>        View command history' },
     { text: '<span class="command">secret</span>         Find the hidden command' },
     { text: '<span class="command">chatbot</span>        Launch Byte, the AI companion' },
-    { text: '<span class="command">intro</span>          Play the AryanIntro reel' },
     { text: '<span class="command">clear</span>          Clear terminal' },
     { text: '<span class="command">help</span>           Show this help message' },
-    { text: "" },
-  ],
-
-  whois: [
-    { text: "" },
-    { text: "Hey, I'm Aryan Vijaywargia!" },
-    { text: "" },
-    { text: "I'm a Machine Learning Engineer passionate about building" },
-    { text: "intelligent systems and solving real-world problems with AI." },
-    { text: "" },
-    { text: "I specialize in Deep Learning, Computer Vision, NLP, and" },
-    { text: "Time Series Forecasting. I've worked on earthquake prediction," },
-    { text: "pothole detection, EV charging optimization, and more." },
-    { text: "" },
-    { text: "My tech stack includes Python, TensorFlow, PyTorch, Flask," },
-    { text: "TypeScript, Angular, and various ML/DL frameworks." },
-    { text: "" },
-    { text: "I'm a former GDSC Lead at NIT Agartala and love contributing" },
-    { text: "to open-source projects." },
     { text: "" },
   ],
 
@@ -173,16 +153,7 @@ export const DESKTOP_GAME_HELP: CommandOutput = {
   text: '<span class="command">game</span>           Open the games menu',
 };
 
-export const SPECIAL_COMMANDS = [
-  "clear",
-  "history",
-  "code",
-  "sudo",
-  "chatbot",
-  "game",
-  "intro",
-  "reel",
-];
+export const SPECIAL_COMMANDS = ["whois", "clear", "history", "code", "sudo", "chatbot", "game"];
 
 export function isSpecialCommand(cmd: string): boolean {
   return SPECIAL_COMMANDS.includes(cmd.toLowerCase().trim());

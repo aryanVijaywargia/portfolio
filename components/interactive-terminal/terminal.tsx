@@ -391,10 +391,9 @@ export const Terminal: FC<TerminalProps> = ({
           );
           return;
 
-        case "intro":
-        case "reel":
+        case "whois":
           addLine("", undefined, 0);
-          addLine("Loading AryanIntro reel...", "info", 80);
+          addLine("Loading Aryan profile video...", "info", 80);
           addLine("[##########] 100%", "info", 400);
           setTimeout(
             () => {
