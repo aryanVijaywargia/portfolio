@@ -341,25 +341,27 @@ const ContinuaScene: React.FC<{ duration: number }> = ({ duration }) => {
       <g transform={`translate(${shake} 0)`}>
         <ContinuaWorkspace frame={frame} />
         <g opacity={fadeIn(frame - 74, 10)}>
-          <ServerPod x={918} y={304} frame={Math.max(0, frame - 72)} />
+          <g transform="translate(1032 330) scale(0.74)">
+            <ServerPod x={0} y={0} frame={Math.max(0, frame - 72)} />
+          </g>
         </g>
       </g>
       <ComicBubble
-        x={748}
-        y={42}
-        width={396}
+        x={78}
+        y={58}
+        width={408}
         lines={["and Continua -", "my durable engine."]}
         opacity={fadeIn(frame - 58, 12)}
       />
       <ComicBubble
-        x={538}
-        y={486}
-        width={586}
+        x={736}
+        y={506}
+        width={430}
         lines={["when an agent face-plants", "mid-run, it picks back up."]}
         accent={colors.yellow}
         opacity={fadeIn(frame - 92, 12)}
       />
-      <TurnArcs x={390} y={262} frame={frame} />
+      <TurnArcs x={412} y={236} frame={frame} />
     </SceneLayer>
   );
 };
@@ -824,38 +826,42 @@ const SketchTerminal: React.FC<{
 );
 
 const ContinuaWorkspace: React.FC<{ frame: number }> = ({ frame }) => {
-  const reveal = fadeIn(frame - 56, 14);
-  const pop = Math.max(0, localPop(frame - 62));
-  const logOpacity = fadeIn(frame - 70, 10);
+  const reveal = fadeIn(frame - 62, 14);
+  const pop = Math.max(0, localPop(frame - 68));
+  const logOpacity = fadeIn(frame - 76, 10);
+  const typingOpacity = 1 - smooth((frame - 42) / 12);
 
   return (
     <g filter="url(#marker-wobble)">
-      <g {...ink} strokeWidth="7">
-        <path d="M 205 558 L 842 558" />
-        <path d="M 250 558 L 238 674" />
-        <path d="M 792 558 L 802 674" />
-        <path d="M 408 586 L 394 674" />
-      </g>
-      <SketchChair x={318} y={558} />
-      <g transform="translate(346 558)">
+      <path
+        d="M 112 666 Q 374 650 664 664 T 1168 660"
+        {...ink}
+        strokeWidth="7"
+        opacity="0.35"
+      />
+      <TypingLaptop x={398} y={202} frame={frame} reveal={reveal} />
+      <ProperOfficeChair x={640} y={584} frame={frame} />
+      <g transform="translate(640 574)">
         <BackTypingTurnFigure frame={frame} />
       </g>
-      <TypingLaptop x={474} y={326} frame={frame} reveal={reveal} />
+      <ContinuaDesk />
+      <TypingKeyboardDeck x={408} y={502} frame={frame} />
+      <TypingHandsOverlay x={640} y={574} frame={frame} opacity={typingOpacity} />
       <g
-        transform={`translate(594 176) scale(${pop})`}
+        transform={`translate(830 164) scale(${pop * 0.78})`}
         opacity={reveal}
         style={{ transformOrigin: "140px 128px" }}
       >
         <ContinuaPopPanel frame={frame} opacity={logOpacity} />
       </g>
       <text
-        x="236"
-        y="182"
+        x="202"
+        y="186"
         fill={colors.faintInk}
         fontFamily={handFont}
         fontSize="22"
         fontWeight="900"
-        opacity={fadeIn(frame - 12, 12) * (1 - reveal * 0.55)}
+        opacity={fadeIn(frame - 12, 12) * (1 - reveal)}
       >
         tap tap tap...
       </text>
@@ -863,57 +869,134 @@ const ContinuaWorkspace: React.FC<{ frame: number }> = ({ frame }) => {
   );
 };
 
-const BackTypingTurnFigure: React.FC<{ frame: number }> = ({ frame }) => {
-  const turn = smooth((frame - 34) / 42);
-  const tap = Math.sin(frame / 2.4);
-  const shoulderSway = Math.sin(frame / 8) * 4;
-  const backOpacity = 1 - smooth((turn - 0.18) / 0.62);
-  const sideOpacity = smooth((turn - 0.18) / 0.62);
+const ProperOfficeChair: React.FC<{ x: number; y: number; frame: number }> = ({
+  x,
+  y,
+  frame,
+}) => {
+  const settle = wiggle(frame, 1.1, 18);
 
   return (
-    <g>
-      <g opacity={backOpacity} transform={`translate(${turn * 16} ${wiggle(frame, 1.5, 10)})`}>
-        <BackDoodleHead frame={frame} x={10 + turn * 18} y={-216} r={43} />
-        <g {...ink} strokeWidth="7" filter="url(#marker-wobble)">
-          <path d={`M 8 -170 Q ${-2 + shoulderSway} -112 10 -54`} />
-          <path d={`M -54 ${-140 + shoulderSway * 0.3} Q 12 -126 74 ${-140 - shoulderSway * 0.25}`} />
-          <path d={`M -48 -136 Q 28 -92 162 ${-36 + tap * 5}`} />
-          <path d={`M 72 -136 Q 132 -96 196 ${-46 - tap * 5}`} />
-          <path d="M 8 -54 Q -44 -18 -78 54" />
-          <path d="M 8 -54 Q 54 -12 86 54" />
-          <path d="M -78 54 Q -56 66 -34 58" />
-          <path d="M 86 54 Q 110 66 132 58" />
-        </g>
-      </g>
+    <g
+      transform={`translate(${x} ${y + settle})`}
+      {...ink}
+      strokeWidth="6"
+      filter="url(#marker-wobble)"
+    >
+      <path d="M -150 -176 Q -140 -218 -94 -218 L 94 -218 Q 140 -218 150 -176 L 128 -20 L -128 -20 Z" fill={colors.paper} />
+      <path d="M -110 -142 Q -38 -122 0 -126 T 110 -142" opacity="0.55" />
+      <path d="M -128 -20 L -162 34" />
+      <path d="M 128 -20 L 162 34" />
+      <path d="M -132 -20 L -156 136" />
+      <path d="M 132 -20 L 156 136" />
+      <path d="M -94 20 L -112 140" />
+      <path d="M 94 20 L 112 140" />
+      <path d="M -118 -28 L 118 -28 L 94 34 L -96 34 Z" fill={colors.paper} />
+      <path d="M -88 34 L -78 112" />
+      <path d="M 88 34 L 78 112" />
+    </g>
+  );
+};
 
-      <g opacity={sideOpacity} transform={`translate(${14 + turn * 6} ${wiggle(frame, 1.2, 12)})`}>
-        <g {...ink} strokeWidth="7" filter="url(#marker-wobble)">
-          <path d="M 18 -168 Q 28 -110 20 -58" />
-          <path d={`M 20 -136 Q 104 -92 180 ${-38 + tap * 3}`} />
-          <path d={`M 20 -132 Q ${-22 - turn * 16} -108 ${-54 - turn * 10} -72`} />
-          <path d="M 20 -58 Q -34 -12 -74 52" />
-          <path d="M 20 -58 Q 70 -18 116 48" />
-          <path d="M -74 52 Q -48 64 -24 56" />
-          <path d="M 116 48 Q 140 62 166 54" />
+const BackTypingTurnFigure: React.FC<{ frame: number }> = ({ frame }) => {
+  const turn = clamp((frame - 36) / 42);
+  const pose = turn < 0.28 ? "back" : turn < 0.72 ? "mid" : "front";
+  const shoulderSway = Math.sin(frame / 8) * 3.5;
+  const breathe = Math.sin(frame / 16) * 2;
+
+  return (
+    <g transform={`translate(0 ${breathe})`}>
+      {pose === "back" ? (
+        <g>
+          <BackDoodleHead frame={frame} x={0} y={-254} r={43} />
+          <g {...ink} strokeWidth="7" filter="url(#marker-wobble)">
+            <path
+              d={`M -92 ${-166 + shoulderSway * 0.25}
+                Q -84 -108 -70 -46
+                Q -42 -18 0 -18
+                Q 42 -18 70 -46
+                Q 84 -108 92 ${-166 - shoulderSway * 0.25}
+                Q 42 -184 0 -178
+                Q -42 -184 -92 ${-166 + shoulderSway * 0.25} Z`}
+              fill={colors.paper}
+            />
+            <path d={`M -72 ${-166 + shoulderSway * 0.25} Q 0 -148 72 ${-166 - shoulderSway * 0.25}`} />
+            <path d="M 0 -174 Q -5 -106 0 -32" strokeWidth="4" opacity="0.45" />
+            <path d="M -20 -18 Q -36 24 -64 52" />
+            <path d="M 20 -18 Q 46 24 86 52" />
+            <path d="M -64 52 Q -42 64 -18 56" />
+            <path d="M 86 52 Q 110 64 134 56" />
+          </g>
         </g>
-        <CartoonHead
-          x={38}
-          y={-214}
-          r={43}
-          expression="worried"
-          frame={frame}
-          look="right"
-          facing="right"
-          sweat={frame > 86}
-        />
-        <path
-          d="M -86 -100 Q -128 -132 -152 -178"
-          {...ink}
-          strokeWidth="4"
-          opacity={fadeIn(frame - 48, 10)}
-          filter="url(#marker-wobble)"
-        />
+      ) : null}
+
+      {pose === "mid" ? (
+        <g transform="translate(10 0)">
+          <g {...ink} strokeWidth="7" filter="url(#marker-wobble)">
+            <ellipse cx="8" cy="-254" rx="24" ry="43" fill={colors.paper} />
+            <path d="M -10 -296 L 10 -318 L 10 -292" />
+            <path d="M 12 -294 L 38 -310" />
+            <path d="M -48 -166 Q -12 -182 36 -166 Q 60 -112 44 -30 Q 14 -14 -24 -24 Q -48 -86 -48 -166 Z" fill={colors.paper} />
+            <path d="M 2 -160 Q 16 -104 10 -32" />
+            <path d="M -16 -24 Q -34 20 -60 48" />
+            <path d="M 28 -24 Q 58 16 96 44" />
+          </g>
+          <circle cx="18" cy="-262" r="4" fill={colors.ink} />
+          <path d="M 24 -242 Q 12 -232 -2 -240" {...ink} strokeWidth="4" />
+        </g>
+      ) : null}
+
+      {pose === "front" ? (
+        <g transform="translate(12 0)">
+          <g {...ink} strokeWidth="7" filter="url(#marker-wobble)">
+            <path d="M -42 -168 Q 6 -188 58 -164 Q 82 -104 62 -24 Q 18 -8 -32 -22 Q -48 -90 -42 -168 Z" fill={colors.paper} />
+            <path d="M 8 -174 Q 20 -118 12 -34" />
+            <path d="M 12 -170 Q 78 -128 110 -86" />
+            <path d="M 8 -166 Q -48 -134 -74 -92" />
+            <path d="M -12 -22 Q -34 16 -62 46" />
+            <path d="M 36 -22 Q 62 14 100 44" />
+            <path d="M -62 46 Q -38 58 -14 50" />
+            <path d="M 100 44 Q 126 56 148 48" />
+          </g>
+          <CartoonHead
+            x={28}
+            y={-254}
+            r={43}
+            expression="worried"
+            frame={frame}
+            look="right"
+            facing="right"
+            sweat={frame > 86}
+          />
+        </g>
+      ) : null}
+    </g>
+  );
+};
+
+const TypingHandsOverlay: React.FC<{
+  x: number;
+  y: number;
+  frame: number;
+  opacity: number;
+}> = ({ x, y, frame, opacity }) => {
+  const leftTap = wiggle(frame, 6, 2.3);
+  const rightTap = wiggle(frame + 7, 6, 2.3);
+  const leftElbow = wiggle(frame, 3, 5);
+  const rightElbow = wiggle(frame + 8, 3, 5);
+
+  return (
+    <g transform={`translate(${x} ${y})`} opacity={opacity} filter="url(#marker-wobble)">
+      <g {...ink} strokeWidth="7">
+        <path d={`M -66 -174 C -96 -136 -122 -94 -160 ${-22 + leftTap}`} />
+        <path d={`M 66 -174 C 96 -136 122 -94 160 ${-22 + rightTap}`} />
+        <path d={`M -66 -174 Q -88 ${-122 + leftElbow} -118 -92`} opacity="0.45" />
+        <path d={`M 66 -174 Q 88 ${-122 + rightElbow} 118 -92`} opacity="0.45" />
       </g>
+      <ellipse cx="-160" cy={-20 + leftTap} rx="18" ry="10" fill={colors.paper} stroke={colors.ink} strokeWidth="5" />
+      <ellipse cx="160" cy={-20 + rightTap} rx="18" ry="10" fill={colors.paper} stroke={colors.ink} strokeWidth="5" />
+      <circle cx="-146" cy={-18 + leftTap} r="3" fill={colors.ink} opacity="0.55" />
+      <circle cx="146" cy={-18 + rightTap} r="3" fill={colors.ink} opacity="0.55" />
     </g>
   );
 };
@@ -943,23 +1026,69 @@ const TypingLaptop: React.FC<{ x: number; y: number; frame: number; reveal: numb
 
   return (
     <g transform={`translate(${x} ${y})`} filter="url(#marker-wobble)">
-      <rect x="0" y="0" width="318" height="204" rx="12" fill={colors.paper} stroke={colors.ink} strokeWidth="7" />
-      <rect x="24" y="24" width="270" height="144" rx="9" fill={colors.blueSoft} stroke={colors.ink} strokeWidth="4" />
-      <path d="M -76 204 L 352 204 L 408 238 L -124 238 Z" fill={colors.paper} stroke={colors.ink} strokeWidth="7" strokeLinejoin="round" />
+      <rect x="0" y="0" width="484" height="278" rx="18" fill={colors.paper} stroke={colors.ink} strokeWidth="7" />
+      <rect x="30" y="30" width="424" height="202" rx="11" fill={colors.blueSoft} stroke={colors.ink} strokeWidth="4" />
       <g opacity={1 - reveal * 0.75}>
-        <text x="48" y="78" fill={colors.ink} fontFamily={monoFont} fontSize="15" fontWeight="900">
+        <text x="58" y="90" fill={colors.ink} fontFamily={monoFont} fontSize="18" fontWeight="900">
           continua run{cursor}
         </text>
-        <path d={`M 46 112 Q 104 ${104 + wiggle(frame, 3, 7)} 164 112 T 260 112`} {...ink} strokeWidth="4" opacity="0.35" />
+        <path d={`M 58 132 Q 142 ${124 + wiggle(frame, 3, 7)} 226 132 T 402 132`} {...ink} strokeWidth="4" opacity="0.35" />
+        <path d="M 58 166 L 384 166" {...ink} strokeWidth="4" opacity="0.28" />
       </g>
       <g opacity={reveal}>
-        <text x="44" y="62" fill={colors.ink} fontFamily={handFont} fontSize="22" fontWeight="900">
+        <text x="52" y="72" fill={colors.ink} fontFamily={handFont} fontSize="27" fontWeight="900">
           Continua
         </text>
-        <path d="M 44 92 L 246 92 M 44 122 L 218 122 M 44 152 L 264 152" {...ink} strokeWidth="4" opacity="0.55" />
-        <circle cx="250" cy="58" r="10" fill={colors.green} stroke={colors.ink} strokeWidth="3" />
+        <path d="M 54 106 L 388 106 M 54 146 L 354 146 M 54 188 L 414 188" {...ink} strokeWidth="4" opacity="0.55" />
+        <circle cx="406" cy="70" r="11" fill={colors.green} stroke={colors.ink} strokeWidth="3" />
       </g>
-      <Pencil x={330} y={184} angle={-7} />
+    </g>
+  );
+};
+
+const ContinuaDesk: React.FC = () => (
+  <g {...ink} strokeWidth="7" filter="url(#marker-wobble)">
+    <path d="M 180 594 L 1020 594 L 1086 632 L 116 632 Z" fill={colors.paper} />
+    <path d="M 242 632 L 228 704" />
+    <path d="M 982 632 L 996 704" />
+    <path d="M 474 632 L 458 704" />
+    <path d="M 184 600 Q 410 584 646 596 T 1010 594" opacity="0.2" />
+  </g>
+);
+
+const TypingKeyboardDeck: React.FC<{ x: number; y: number; frame: number }> = ({
+  x,
+  y,
+  frame,
+}) => {
+  const keyRows = [
+    { y: 64, count: 13, x: 68, width: 22 },
+    { y: 90, count: 11, x: 94, width: 24 },
+    { y: 116, count: 8, x: 134, width: 30 },
+  ];
+
+  return (
+    <g transform={`translate(${x} ${y})`} filter="url(#marker-wobble)">
+      <path d="M -56 0 L 518 0 L 578 138 L -122 138 Z" fill={colors.paper} stroke={colors.ink} strokeWidth="7" strokeLinejoin="round" />
+      <path d="M 90 -6 L 402 -6" {...ink} strokeWidth="4" opacity="0.4" />
+      <rect x="178" y="108" width="188" height="12" rx="6" fill={colors.paperShadow} stroke={colors.ink} strokeWidth="3" />
+      {keyRows.map((row, rowIndex) =>
+        Array.from({ length: row.count }).map((_, index) => (
+          <rect
+            key={`${row.y}-${index}`}
+            x={row.x + index * (row.width + 7)}
+            y={row.y + wiggle(frame + index * 2 + rowIndex, 1.4, 3)}
+            width={row.width}
+            height="14"
+            rx="4"
+            fill={colors.paperShadow}
+            stroke={colors.ink}
+            strokeWidth="2"
+            opacity="0.9"
+          />
+        )),
+      )}
+      <Pencil x={408} y={68} angle={-7} />
     </g>
   );
 };
