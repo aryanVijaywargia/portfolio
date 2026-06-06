@@ -334,33 +334,32 @@ const AgentsScene: React.FC<{ duration: number }> = ({ duration }) => {
 
 const ContinuaScene: React.FC<{ duration: number }> = ({ duration }) => {
   const frame = useCurrentFrame();
-  const shake = frame > 32 && frame < 62 ? wiggle(frame, 5, 2) : 0;
+  const shake = frame > 92 && frame < 118 ? wiggle(frame, 4, 2) : 0;
 
   return (
     <SceneLayer duration={duration}>
       <g transform={`translate(${shake} 0)`}>
-        <SketchChair x={300} y={560} />
-        <g transform="translate(312 560) scale(0.95)">
-          <StickFigure pose="sit-type" expression="worried" />
+        <ContinuaWorkspace frame={frame} />
+        <g opacity={fadeIn(frame - 74, 10)}>
+          <ServerPod x={918} y={304} frame={Math.max(0, frame - 72)} />
         </g>
-        <DeskWithLaptop x={342} y={330} mode="continua" frame={frame} />
-        <ServerPod x={914} y={302} frame={frame} />
       </g>
       <ComicBubble
-        x={595}
-        y={72}
-        width={468}
+        x={748}
+        y={42}
+        width={396}
         lines={["and Continua -", "my durable engine."]}
-        opacity={fadeIn(frame - 2, 12)}
-      />
-      <ComicBubble
-        x={560}
-        y={486}
-        width={560}
-        lines={["when an agent face-plants", "mid-run, it picks back up."]}
-        accent={colors.yellow}
         opacity={fadeIn(frame - 58, 12)}
       />
+      <ComicBubble
+        x={538}
+        y={486}
+        width={586}
+        lines={["when an agent face-plants", "mid-run, it picks back up."]}
+        accent={colors.yellow}
+        opacity={fadeIn(frame - 92, 12)}
+      />
+      <TurnArcs x={390} y={262} frame={frame} />
     </SceneLayer>
   );
 };
@@ -626,39 +625,38 @@ const CartoonHead: React.FC<{
   facing?: "front" | "right";
   sweat?: boolean;
 }> = ({ x = 0, y = -220, r = 56, expression, frame, look = "center", facing = "front", sweat }) => {
-  const pupilOffset = look === "left" ? -9 : look === "right" ? 9 : wiggle(frame, 2, 30);
+  const pupilOffset = look === "left" ? -4 : look === "right" ? 4 : wiggle(frame, 1.4, 30);
   const brow = expression === "worried" ? -10 : expression === "focused" ? 6 : 0;
   const openMouth = expression === "open";
-  // 3/4 turn: slide the features toward the side he is looking at.
-  const eyeShift = facing === "right" ? 13 : 0;
+  const faceShift = facing === "right" ? 11 : 0;
+  const bob = wiggle(frame, 1.2, 12);
 
   return (
-    <g filter="url(#marker-wobble)">
-      <circle cx={x} cy={y} r={r} fill={colors.paper} stroke={colors.ink} strokeWidth="7" />
-      <path d={`M ${x - 34} ${y - r + 6} L ${x - 12} ${y - r - 26} L ${x - 5} ${y - r + 4}`} {...ink} strokeWidth="7" />
-      <path d={`M ${x + 2} ${y - r + 2} L ${x + 26} ${y - r - 20} L ${x + 22} ${y - r + 8}`} {...ink} strokeWidth="7" />
-      <path d={`M ${x + 28} ${y - r + 12} L ${x + 48} ${y - r - 2}`} {...ink} strokeWidth="6" />
-      <ellipse cx={x - 22 + eyeShift} cy={y - 8} rx={facing === "right" ? 15 : 18} ry="24" fill={colors.paper} stroke={colors.ink} strokeWidth="5" />
-      <ellipse cx={x + 22 + eyeShift} cy={y - 8} rx="18" ry="24" fill={colors.paper} stroke={colors.ink} strokeWidth="5" />
-      <circle cx={x - 20 + eyeShift + pupilOffset} cy={y - 8} r="8" fill={colors.ink} />
-      <circle cx={x + 20 + eyeShift + pupilOffset} cy={y - 8} r="8" fill={colors.ink} />
-      <path d={`M ${x - 32 + eyeShift} ${y - 42 + brow} Q ${x - 21 + eyeShift} ${y - 50 + brow} ${x - 9 + eyeShift} ${y - 42 + brow}`} {...ink} strokeWidth="5" />
-      <path d={`M ${x + 9 + eyeShift} ${y - 42 - brow} Q ${x + 22 + eyeShift} ${y - 50 - brow} ${x + 34 + eyeShift} ${y - 42 - brow}`} {...ink} strokeWidth="5" />
+    <g filter="url(#marker-wobble)" transform={`translate(0 ${bob})`}>
+      <circle cx={x} cy={y} r={r} fill={colors.paper} stroke={colors.ink} strokeWidth="6" />
+      <path d={`M ${x - 32} ${y - r + 8} L ${x - 12} ${y - r - 22} L ${x - 5} ${y - r + 4}`} {...ink} strokeWidth="6" />
+      <path d={`M ${x - 2} ${y - r + 4} L ${x + 22} ${y - r - 18} L ${x + 18} ${y - r + 8}`} {...ink} strokeWidth="6" />
+      <path d={`M ${x + 25} ${y - r + 12} L ${x + 44} ${y - r - 1}`} {...ink} strokeWidth="5" />
+
+      <circle cx={x - 18 + faceShift + pupilOffset} cy={y - 8} r={facing === "right" ? 4.5 : 5.5} fill={colors.ink} />
+      <circle cx={x + 18 + faceShift + pupilOffset * 0.4} cy={y - 8} r="5.5" fill={colors.ink} />
+      <path d={`M ${x - 30 + faceShift} ${y - 30 + brow} Q ${x - 18 + faceShift} ${y - 36 + brow} ${x - 7 + faceShift} ${y - 29 + brow}`} {...ink} strokeWidth="4" />
+      <path d={`M ${x + 8 + faceShift} ${y - 29 - brow} Q ${x + 20 + faceShift} ${y - 36 - brow} ${x + 32 + faceShift} ${y - 29 - brow}`} {...ink} strokeWidth="4" />
       {facing === "right" ? (
-        <path d={`M ${x + 44} ${y - 4} Q ${x + 58} ${y + 6} ${x + 44} ${y + 16}`} {...ink} strokeWidth="5" />
+        <path d={`M ${x + 37} ${y - 3} Q ${x + 49} ${y + 6} ${x + 37} ${y + 14}`} {...ink} strokeWidth="4" />
       ) : null}
       {openMouth ? (
         <g>
-          <ellipse cx={x + 6 + eyeShift} cy={y + 31} rx="30" ry="25" fill={colors.ink} />
-          <path d={`M ${x - 16 + eyeShift} ${y + 43} Q ${x + 5 + eyeShift} ${y + 54} ${x + 24 + eyeShift} ${y + 40}`} fill={colors.red} />
-          <rect x={x - 14 + eyeShift} y={y + 12} width="36" height="11" rx="2" fill={colors.paper} />
+          <ellipse cx={x + 5 + faceShift} cy={y + 28} rx="20" ry="18" fill={colors.ink} />
+          <path d={`M ${x - 8 + faceShift} ${y + 36} Q ${x + 6 + faceShift} ${y + 46} ${x + 20 + faceShift} ${y + 35}`} fill={colors.red} />
+          <rect x={x - 8 + faceShift} y={y + 14} width="27" height="8" rx="2" fill={colors.paper} />
         </g>
       ) : expression === "worried" ? (
-        <path d={`M ${x - 20 + eyeShift} ${y + 34} Q ${x + 2 + eyeShift} ${y + 18} ${x + 28 + eyeShift} ${y + 34}`} {...ink} strokeWidth="6" />
+        <path d={`M ${x - 18 + faceShift} ${y + 31} Q ${x + 4 + faceShift} ${y + 16} ${x + 28 + faceShift} ${y + 30}`} {...ink} strokeWidth="5" />
       ) : expression === "focused" ? (
-        <path d={`M ${x - 18 + eyeShift} ${y + 28} Q ${x + 4 + eyeShift} ${y + 32} ${x + 25 + eyeShift} ${y + 26}`} {...ink} strokeWidth="5" />
+        <path d={`M ${x - 18 + faceShift} ${y + 27} Q ${x + 4 + faceShift} ${y + 31} ${x + 25 + faceShift} ${y + 25}`} {...ink} strokeWidth="4" />
       ) : (
-        <path d={`M ${x - 22 + eyeShift} ${y + 26} Q ${x + 4 + eyeShift} ${y + 45} ${x + 30 + eyeShift} ${y + 24}`} {...ink} strokeWidth="5" />
+        <path d={`M ${x - 22 + faceShift} ${y + 25} Q ${x + 4 + faceShift} ${y + 42} ${x + 30 + faceShift} ${y + 24}`} {...ink} strokeWidth="4" />
       )}
       {sweat ? (
         <g fill={colors.blue} stroke={colors.ink} strokeWidth="3">
@@ -676,20 +674,22 @@ const StandingFigure: React.FC<{
   waving?: boolean;
 }> = ({ frame, expression, waving = false }) => {
   const wave = waving ? wiggle(frame, 16, 4) : 0;
+  const sway = wiggle(frame, 4, 18);
+  const knee = wiggle(frame, 3, 14);
 
   return (
-    <g>
+    <g transform={`translate(${sway * 0.4} ${wiggle(frame, 1.4, 10)}) rotate(${sway * 0.35})`}>
       <CartoonHead expression={expression} frame={frame} sweat={expression === "open"} />
       <g {...ink} strokeWidth="8" filter="url(#marker-wobble)">
-        <path d="M 0 -164 Q -10 -112 -2 -60" />
-        <path d="M -2 -134 Q -46 -106 -70 -66" />
+        <path d={`M 0 -164 Q ${-10 + sway} -112 ${-2 - sway * 0.4} -60`} />
+        <path d={`M -2 -134 Q ${-46 - sway} ${-106 + knee} -70 -66`} />
         {waving ? (
           <path d={`M 2 -136 Q ${42 + wave} ${-176 - wave * 0.2} ${72 + wave} ${-214 + wave * 0.15}`} />
         ) : (
-          <path d="M 2 -136 Q 46 -106 70 -66" />
+          <path d={`M 2 -136 Q ${46 + sway} ${-106 - knee} 70 -66`} />
         )}
-        <path d="M -2 -60 Q -34 0 -58 54" />
-        <path d="M -2 -60 Q 34 0 58 54" />
+        <path d={`M -2 -60 Q ${-34 - knee} 0 ${-58 - sway} 54`} />
+        <path d={`M -2 -60 Q ${34 + knee} 0 ${58 + sway} 54`} />
       </g>
       {waving ? <circle cx={76 + wave} cy={-216 + wave * 0.15} r="9" fill={colors.yellow} stroke={colors.ink} strokeWidth="4" /> : null}
     </g>
@@ -703,24 +703,25 @@ const SittingFigure: React.FC<{ frame: number; expression: Expression }> = ({
   expression,
 }) => {
   const tap = wiggle(frame, 2.5, 3);
+  const lean = wiggle(frame, 3, 18);
 
   return (
-    <g>
+    <g transform={`translate(${lean * 0.3} ${wiggle(frame, 1.2, 11)})`}>
       <g {...ink} strokeWidth="8" filter="url(#marker-wobble)">
         {/* far arm + far leg, drawn first so the near side overlaps them */}
-        <path d={`M 48 -138 Q 124 -96 152 ${-24 - tap}`} />
-        <path d="M 0 -12 Q 54 -16 100 -10" />
+        <path d={`M 48 -138 Q ${124 + lean} -96 152 ${-24 - tap}`} />
+        <path d={`M 0 -12 Q ${54 + lean} -16 100 -10`} />
         <path d="M 100 -10 L 110 96" />
         <path d="M 110 96 L 138 102" />
         {/* spine leaning toward the screen + neck */}
-        <path d="M 6 -12 Q 18 -92 52 -138" />
+        <path d={`M 6 -12 Q ${18 + lean} -92 52 -138`} />
         <path d="M 52 -138 L 62 -156" />
         {/* near leg: thigh forward, shin down to the floor, foot */}
-        <path d="M 6 -12 Q 60 -18 112 -14" />
+        <path d={`M 6 -12 Q ${60 + lean} -18 112 -14`} />
         <path d="M 112 -14 L 124 98" />
         <path d="M 124 98 L 154 104" />
         {/* near arm reaching down onto the keyboard */}
-        <path d={`M 52 -138 Q 134 -92 164 ${-16 + tap}`} />
+        <path d={`M 52 -138 Q ${134 + lean} -92 164 ${-16 + tap}`} />
       </g>
       <CartoonHead
         x={62}
@@ -821,6 +822,187 @@ const SketchTerminal: React.FC<{
     </text>
   </g>
 );
+
+const ContinuaWorkspace: React.FC<{ frame: number }> = ({ frame }) => {
+  const reveal = fadeIn(frame - 56, 14);
+  const pop = Math.max(0, localPop(frame - 62));
+  const logOpacity = fadeIn(frame - 70, 10);
+
+  return (
+    <g filter="url(#marker-wobble)">
+      <g {...ink} strokeWidth="7">
+        <path d="M 205 558 L 842 558" />
+        <path d="M 250 558 L 238 674" />
+        <path d="M 792 558 L 802 674" />
+        <path d="M 408 586 L 394 674" />
+      </g>
+      <SketchChair x={318} y={558} />
+      <g transform="translate(346 558)">
+        <BackTypingTurnFigure frame={frame} />
+      </g>
+      <TypingLaptop x={474} y={326} frame={frame} reveal={reveal} />
+      <g
+        transform={`translate(594 176) scale(${pop})`}
+        opacity={reveal}
+        style={{ transformOrigin: "140px 128px" }}
+      >
+        <ContinuaPopPanel frame={frame} opacity={logOpacity} />
+      </g>
+      <text
+        x="236"
+        y="182"
+        fill={colors.faintInk}
+        fontFamily={handFont}
+        fontSize="22"
+        fontWeight="900"
+        opacity={fadeIn(frame - 12, 12) * (1 - reveal * 0.55)}
+      >
+        tap tap tap...
+      </text>
+    </g>
+  );
+};
+
+const BackTypingTurnFigure: React.FC<{ frame: number }> = ({ frame }) => {
+  const turn = smooth((frame - 34) / 42);
+  const tap = Math.sin(frame / 2.4);
+  const shoulderSway = Math.sin(frame / 8) * 4;
+  const backOpacity = 1 - smooth((turn - 0.18) / 0.62);
+  const sideOpacity = smooth((turn - 0.18) / 0.62);
+
+  return (
+    <g>
+      <g opacity={backOpacity} transform={`translate(${turn * 16} ${wiggle(frame, 1.5, 10)})`}>
+        <BackDoodleHead frame={frame} x={10 + turn * 18} y={-216} r={43} />
+        <g {...ink} strokeWidth="7" filter="url(#marker-wobble)">
+          <path d={`M 8 -170 Q ${-2 + shoulderSway} -112 10 -54`} />
+          <path d={`M -54 ${-140 + shoulderSway * 0.3} Q 12 -126 74 ${-140 - shoulderSway * 0.25}`} />
+          <path d={`M -48 -136 Q 28 -92 162 ${-36 + tap * 5}`} />
+          <path d={`M 72 -136 Q 132 -96 196 ${-46 - tap * 5}`} />
+          <path d="M 8 -54 Q -44 -18 -78 54" />
+          <path d="M 8 -54 Q 54 -12 86 54" />
+          <path d="M -78 54 Q -56 66 -34 58" />
+          <path d="M 86 54 Q 110 66 132 58" />
+        </g>
+      </g>
+
+      <g opacity={sideOpacity} transform={`translate(${14 + turn * 6} ${wiggle(frame, 1.2, 12)})`}>
+        <g {...ink} strokeWidth="7" filter="url(#marker-wobble)">
+          <path d="M 18 -168 Q 28 -110 20 -58" />
+          <path d={`M 20 -136 Q 104 -92 180 ${-38 + tap * 3}`} />
+          <path d={`M 20 -132 Q ${-22 - turn * 16} -108 ${-54 - turn * 10} -72`} />
+          <path d="M 20 -58 Q -34 -12 -74 52" />
+          <path d="M 20 -58 Q 70 -18 116 48" />
+          <path d="M -74 52 Q -48 64 -24 56" />
+          <path d="M 116 48 Q 140 62 166 54" />
+        </g>
+        <CartoonHead
+          x={38}
+          y={-214}
+          r={43}
+          expression="worried"
+          frame={frame}
+          look="right"
+          facing="right"
+          sweat={frame > 86}
+        />
+        <path
+          d="M -86 -100 Q -128 -132 -152 -178"
+          {...ink}
+          strokeWidth="4"
+          opacity={fadeIn(frame - 48, 10)}
+          filter="url(#marker-wobble)"
+        />
+      </g>
+    </g>
+  );
+};
+
+const BackDoodleHead: React.FC<{ frame: number; x: number; y: number; r: number }> = ({
+  frame,
+  x,
+  y,
+  r,
+}) => (
+  <g filter="url(#marker-wobble)" transform={`translate(0 ${wiggle(frame, 1.4, 9)})`}>
+    <circle cx={x} cy={y} r={r} fill={colors.paper} stroke={colors.ink} strokeWidth="6" />
+    <path d={`M ${x - 30} ${y - r + 8} L ${x - 10} ${y - r - 20} L ${x - 5} ${y - r + 6}`} {...ink} strokeWidth="6" />
+    <path d={`M ${x + 0} ${y - r + 4} L ${x + 22} ${y - r - 18} L ${x + 18} ${y - r + 8}`} {...ink} strokeWidth="6" />
+    <path d={`M ${x + 24} ${y - r + 10} L ${x + 42} ${y - r - 3}`} {...ink} strokeWidth="5" />
+    <path d={`M ${x - 22} ${y + 24} Q ${x + 2} ${y + 34} ${x + 28} ${y + 22}`} {...ink} strokeWidth="3" opacity="0.25" />
+  </g>
+);
+
+const TypingLaptop: React.FC<{ x: number; y: number; frame: number; reveal: number }> = ({
+  x,
+  y,
+  frame,
+  reveal,
+}) => {
+  const cursor = Math.floor(frame / 8) % 2 === 0 ? "_" : " ";
+
+  return (
+    <g transform={`translate(${x} ${y})`} filter="url(#marker-wobble)">
+      <rect x="0" y="0" width="318" height="204" rx="12" fill={colors.paper} stroke={colors.ink} strokeWidth="7" />
+      <rect x="24" y="24" width="270" height="144" rx="9" fill={colors.blueSoft} stroke={colors.ink} strokeWidth="4" />
+      <path d="M -76 204 L 352 204 L 408 238 L -124 238 Z" fill={colors.paper} stroke={colors.ink} strokeWidth="7" strokeLinejoin="round" />
+      <g opacity={1 - reveal * 0.75}>
+        <text x="48" y="78" fill={colors.ink} fontFamily={monoFont} fontSize="15" fontWeight="900">
+          continua run{cursor}
+        </text>
+        <path d={`M 46 112 Q 104 ${104 + wiggle(frame, 3, 7)} 164 112 T 260 112`} {...ink} strokeWidth="4" opacity="0.35" />
+      </g>
+      <g opacity={reveal}>
+        <text x="44" y="62" fill={colors.ink} fontFamily={handFont} fontSize="22" fontWeight="900">
+          Continua
+        </text>
+        <path d="M 44 92 L 246 92 M 44 122 L 218 122 M 44 152 L 264 152" {...ink} strokeWidth="4" opacity="0.55" />
+        <circle cx="250" cy="58" r="10" fill={colors.green} stroke={colors.ink} strokeWidth="3" />
+      </g>
+      <Pencil x={330} y={184} angle={-7} />
+    </g>
+  );
+};
+
+const ContinuaPopPanel: React.FC<{ frame: number; opacity: number }> = ({
+  frame,
+  opacity,
+}) => {
+  const rows = [
+    "step 1  checkpoint",
+    "step 2  tool call",
+    "crash   saved",
+    "resume  replay",
+  ];
+
+  return (
+    <g opacity={opacity}>
+      <rect x="0" y="0" width="318" height="214" rx="18" fill={colors.paper} stroke={colors.ink} strokeWidth="6" />
+      <rect x="20" y="18" width="278" height="176" rx="12" fill={colors.blueSoft} stroke={colors.ink} strokeWidth="3" opacity="0.9" />
+      <text x="36" y="52" fill={colors.ink} fontFamily={handFont} fontSize="25" fontWeight="900">
+        durable event log
+      </text>
+      {rows.map((row, index) => (
+        <text
+          key={row}
+          x="38"
+          y={88 + index * 28}
+          fill={colors.ink}
+          fontFamily={monoFont}
+          fontSize="14"
+          fontWeight="900"
+          opacity={fadeIn(frame - 70 - index * 7, 8)}
+        >
+          {row}
+        </text>
+      ))}
+      <g transform="translate(246 158)" opacity={fadeIn(frame - 96, 10)}>
+        <path d="M 0 -14 C 42 -34 52 30 8 38 C -36 46 -46 -18 -2 -24" {...ink} strokeWidth="5" />
+        <path d="M 0 -14 L -4 -40 L 24 -28" {...ink} strokeWidth="5" />
+      </g>
+    </g>
+  );
+};
 
 const DeskWithLaptop: React.FC<{
   x: number;
@@ -1186,6 +1368,22 @@ const MotionLines: React.FC<{ x: number; y: number; frame: number }> = ({ x, y, 
     <path d="M 34 -80 Q 72 -112 128 -114" {...ink} strokeWidth="4" />
   </g>
 );
+
+const TurnArcs: React.FC<{ x: number; y: number; frame: number }> = ({
+  x,
+  y,
+  frame,
+}) => {
+  const opacity = fadeIn(frame - 34, 8) * fadeOut(frame, 86, 14);
+
+  return (
+    <g transform={`translate(${x} ${y})`} opacity={opacity} filter="url(#marker-wobble)">
+      <path d="M -70 -34 Q -28 -70 30 -58" {...ink} strokeWidth="4" />
+      <path d="M -56 -6 Q -16 -34 36 -28" {...ink} strokeWidth="3" opacity="0.75" />
+      <path d="M 28 -58 L 10 -48 L 22 -78" {...ink} strokeWidth="4" />
+    </g>
+  );
+};
 
 const MiniSketch: React.FC<{ x: number; y: number; label: string }> = ({ x, y, label }) => (
   <g transform={`translate(${x} ${y})`} opacity="0.65" filter="url(#marker-wobble)">
