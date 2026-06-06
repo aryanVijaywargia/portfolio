@@ -296,24 +296,20 @@ const AgentsScene: React.FC<{ duration: number }> = ({ duration }) => {
 
   return (
     <SceneLayer duration={duration}>
-      <g transform={`translate(0 ${slide})`}>
-        <SketchChair x={250} y={560} />
-        <g transform="translate(288 560) scale(0.95)">
-          <StickFigure pose="sit-type" expression="focused" />
-        </g>
-        <DeskWithLaptop x={414} y={318} frame={frame} />
+      <g transform={`translate(104 ${34 + slide}) scale(0.9)`}>
+        <DeskWithLaptop x={0} y={0} frame={frame} />
       </g>
       <ComicBubble
-        x={760}
-        y={88}
-        width={428}
+        x={42}
+        y={54}
+        width={330}
         lines={["mostly i build", "AI agent systems -"]}
         opacity={fadeIn(frame - 8, 12)}
       />
       <ComicBubble
-        x={724}
-        y={472}
-        width={454}
+        x={816}
+        y={454}
+        width={360}
         lines={["they stream, use tools,", "and pause for humans."]}
         opacity={fadeIn(frame - 80, 12)}
         accent={colors.green}
@@ -786,50 +782,76 @@ const DeskWithLaptop: React.FC<{
   y: number;
   frame: number;
 }> = ({ x, y, frame }) => {
-  const laptopWidth = 430;
-  const screenWidth = laptopWidth - 44;
-  const deskEnd = 650;
+  const tapLeft = wiggle(frame, 4, 2.5);
+  const tapRight = wiggle(frame + 7, 4, 2.5);
+  const breathe = wiggle(frame, 2, 4);
 
   return (
     <g transform={`translate(${x} ${y})`} filter="url(#marker-wobble)">
       <g {...ink} strokeWidth="7">
-        <path d={`M -112 226 L ${deskEnd} 226`} />
-        <path d="M -64 226 L -64 368" />
-        <path d={`M ${deskEnd - 50} 226 L ${deskEnd - 50} 368`} />
-        <path d="M 42 256 L 42 360" />
+        <path d="M 126 342 L 1006 344 L 1118 456 L 42 454 Z" fill={colors.paper} />
+        <path d="M 126 342 L 462 248 L 1006 344" />
+        <path d="M 42 454 L 36 664" />
+        <path d="M 1118 456 L 1110 668" />
+        <path d="M 860 456 L 852 678" />
+        <path d="M 154 454 L 148 658" />
       </g>
-      <g transform="translate(66 0)">
-        <rect
-          x="0"
-          y="0"
-          width={laptopWidth}
-          height="226"
-          rx="12"
-          fill={colors.paper}
-          stroke={colors.ink}
-          strokeWidth="7"
-        />
-        <rect
-          x="22"
-          y="22"
-          width={screenWidth}
-          height="170"
-          rx="9"
-          fill={colors.blueSoft}
-          stroke={colors.ink}
-          strokeWidth="4"
-        />
+
+      <g transform="translate(574 28) rotate(3)">
+        <rect x="0" y="0" width="452" height="260" rx="4" fill={colors.paper} stroke={colors.ink} strokeWidth="7" />
+        <rect x="20" y="21" width="410" height="212" rx="3" fill={colors.blueSoft} stroke={colors.ink} strokeWidth="4" />
+        <g transform="translate(22 22) scale(0.98)">
+          <AgentScreen frame={frame} width={372} />
+        </g>
+        <path d="M 222 260 L 230 330" {...ink} strokeWidth="6" />
+        <path d="M 276 260 L 284 330" {...ink} strokeWidth="6" />
+        <path d="M 176 330 L 322 336 L 322 362 L 154 356 Z" fill={colors.paper} stroke={colors.ink} strokeWidth="6" />
+      </g>
+
+      <g transform={`translate(344 ${184 + breathe})`}>
+        <circle cx="0" cy="0" r="78" fill={colors.paper} stroke={colors.ink} strokeWidth="7" />
+        <path d="M -8 78 L -8 132" {...ink} strokeWidth="8" />
+        <path d="M -8 132 L -6 292" {...ink} strokeWidth="7" />
+        <path d="M -18 145 Q -54 204 -70 300" {...ink} strokeWidth="7" />
+        <path d="M 8 146 Q 54 214 96 304" {...ink} strokeWidth="7" />
+        <path d={`M -70 300 Q 22 ${326 + tapLeft} 214 ${314 + tapLeft}`} {...ink} strokeWidth="7" />
+        <path d={`M 74 302 Q 168 ${334 + tapRight} 320 ${320 + tapRight}`} {...ink} strokeWidth="7" />
+        <ellipse cx="214" cy={314 + tapLeft} rx="22" ry="12" fill={colors.paper} stroke={colors.ink} strokeWidth="6" />
+        <ellipse cx="320" cy={320 + tapRight} rx="22" ry="12" fill={colors.paper} stroke={colors.ink} strokeWidth="6" />
+      </g>
+
+      <g transform="translate(456 374)">
+        <path d="M 0 0 L 342 0 L 392 74 L -52 74 Z" fill={colors.paper} stroke={colors.ink} strokeWidth="6" strokeLinejoin="round" />
+        <g stroke={colors.ink} strokeWidth="3" fill={colors.paperShadow}>
+          {Array.from({ length: 11 }, (_, index) => (
+            <rect key={`top-${index}`} x={26 + index * 27} y={14} width="18" height="12" rx="3" />
+          ))}
+          {Array.from({ length: 10 }, (_, index) => (
+            <rect key={`mid-${index}`} x={44 + index * 27} y={34} width="18" height="12" rx="3" />
+          ))}
+          {Array.from({ length: 7 }, (_, index) => (
+            <rect key={`bot-${index}`} x={94 + index * 29} y={54} width="22" height="10" rx="3" />
+          ))}
+        </g>
+        <path d="M 24 7 L 314 8 M 42 67 L 300 68" {...ink} strokeWidth="3" opacity="0.35" />
+      </g>
+
+      <g transform="translate(234 350)" {...ink} strokeWidth="7">
         <path
-          d={`M -40 226 L ${laptopWidth + 36} 226 L ${laptopWidth + 92} 260 L -92 260 Z`}
+          d="M 58 4 C 24 8 4 31 8 70 L 25 194 C 31 230 58 249 98 251 L 168 251 C 211 249 236 226 232 188 L 212 58 C 207 24 180 4 144 2 Z"
           fill={colors.paper}
-          stroke={colors.ink}
-          strokeWidth="7"
-          strokeLinejoin="round"
         />
-        <AgentScreen frame={frame} width={screenWidth} />
+        <path d="M 36 226 C 92 244 188 243 250 224 L 280 254 C 226 288 86 290 30 258 Z" fill={colors.paper} />
+        <path d="M 138 268 L 138 318" />
+        <path d="M 138 318 L 38 360 M 138 318 L 256 356 M 138 318 L 138 384" />
+        <circle cx="32" cy="366" r="14" fill={colors.paper} />
+        <circle cx="262" cy="362" r="14" fill={colors.paper} />
+        <circle cx="138" cy="394" r="14" fill={colors.paper} />
+        <path d="M 226 202 L 334 176 L 350 318" />
+        <path d="M 350 318 Q 382 313 388 338 Q 362 356 334 341" />
+        <path d="M 244 238 L 416 214 L 442 350" />
+        <path d="M 442 350 Q 476 342 484 368 Q 454 390 426 372" />
       </g>
-      <Pencil x={574} y={204} angle={-7} />
-      <CrumpledPaper x={646} y={192} scale={0.8} />
     </g>
   );
 };
@@ -906,18 +928,6 @@ const BuilderNode: React.FC<{
     </g>
   );
 };
-
-const SketchChair: React.FC<{ x: number; y: number }> = ({ x, y }) => (
-  <g transform={`translate(${x} ${y})`} {...ink} strokeWidth="6" filter="url(#marker-wobble)">
-    <path d="M -86 -142 L -58 78" />
-    <path d="M 72 -134 L 42 72" />
-    <path d="M -74 -72 L 60 -92" />
-    <path d="M -66 -20 L 52 -38" />
-    <path d="M -86 0 L 82 0 L 66 42 L -70 42 Z" fill={colors.paper} />
-    <path d="M -54 42 L -60 142" />
-    <path d="M 52 42 L 48 142" />
-  </g>
-);
 
 const Pool: React.FC<{ frame: number }> = ({ frame }) => {
   const points = Array.from({ length: 17 }, (_, index) => {
@@ -1009,25 +1019,6 @@ const Heart: React.FC = () => (
     strokeWidth="5"
     filter="url(#marker-wobble)"
   />
-);
-
-const Pencil: React.FC<{ x: number; y: number; angle: number }> = ({ x, y, angle }) => (
-  <g transform={`translate(${x} ${y}) rotate(${angle})`} filter="url(#marker-wobble)">
-    <rect x="-54" y="-8" width="92" height="16" rx="4" fill={colors.yellow} stroke={colors.ink} strokeWidth="4" />
-    <path d="M 38 -8 L 62 0 L 38 8 Z" fill={colors.paper} stroke={colors.ink} strokeWidth="4" />
-    <line x1="-30" y1="-8" x2="-30" y2="8" stroke={colors.ink} strokeWidth="3" />
-  </g>
-);
-
-const CrumpledPaper: React.FC<{ x: number; y: number; scale?: number }> = ({
-  x,
-  y,
-  scale = 1,
-}) => (
-  <g transform={`translate(${x} ${y}) scale(${scale})`} filter="url(#marker-wobble)">
-    <path d="M -26 -22 L -2 -34 L 20 -22 L 34 6 L 10 30 L -18 24 L -36 4 Z" fill={colors.paper} stroke={colors.ink} strokeWidth="5" />
-    <path d="M -22 -4 L -2 -12 L 18 10 M -2 -34 L 0 10 M 20 -22 L 8 -4" {...ink} strokeWidth="3" />
-  </g>
 );
 
 const GroundLine: React.FC<{ frame: number }> = ({ frame }) => (
