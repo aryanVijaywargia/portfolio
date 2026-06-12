@@ -16,6 +16,9 @@ const SnakeGame = dynamic(() => import("./snake-game").then((mod) => mod.SnakeGa
 const DungeonGame = dynamic(() => import("./dungeon-game").then((mod) => mod.DungeonGame), {
   ssr: false,
 });
+const RacerGame = dynamic(() => import("./racer-game").then((mod) => mod.RacerGame), {
+  ssr: false,
+});
 const GameMenu = dynamic(() => import("./game-menu").then((mod) => mod.GameMenu), {
   ssr: false,
 });
@@ -33,7 +36,7 @@ type InteractiveTerminalProps = {
 
 export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, language }) => {
   const [mode, setMode] = useState<
-    "terminal" | "editor" | "chatbot" | "game-menu" | "snake" | "dungeon" | "intro-reel"
+    "terminal" | "editor" | "chatbot" | "game-menu" | "snake" | "dungeon" | "racer" | "intro-reel"
   >("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
@@ -102,6 +105,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   };
 
   const handleExitChatbot = () => {
+    setSkipTerminalIntroOnce(true);
     setMode("terminal");
     setIsExpanded(false);
     closeChat();
@@ -120,6 +124,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   };
 
   const handleExitGame = () => {
+    setSkipTerminalIntroOnce(true);
     setMode("terminal");
     setIsTerminalMaximized(false);
   };
@@ -129,6 +134,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       setMode("snake");
     } else if (gameId === "dungeon") {
       setMode("dungeon");
+    } else if (gameId === "racer") {
+      setMode("racer");
     }
   };
 
@@ -141,6 +148,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   };
 
   const handleMinimizeTerminal = () => {
+    setSkipTerminalIntroOnce(true);
     setMode("terminal");
     setIsTerminalMaximized(false);
   };
@@ -157,6 +165,10 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   );
   const handleSnakeScoreChange = useCallback(
     (score: number) => trackAchievementEvent({ type: "snake:score", score }),
+    [trackAchievementEvent]
+  );
+  const handleRacerScoreChange = useCallback(
+    (score: number) => trackAchievementEvent({ type: "racer:score", score }),
     [trackAchievementEvent]
   );
   const handleDungeonEscape = useCallback(
@@ -189,6 +201,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? "🐍 Snake - Terminal"
     : mode === "dungeon"
     ? "⚔️ Dungeon Quest - Terminal"
+    : mode === "racer"
+    ? "🏎️ Turbo Racer - Terminal"
     : mode === "game-menu"
     ? "🎮 Games - Terminal"
     : mode === "intro-reel"
@@ -244,6 +258,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? <SnakeGame onGameEnd={handleExitToGameMenu} onScoreChange={handleSnakeScoreChange} />
     : mode === "dungeon"
     ? <DungeonGame onGameEnd={handleExitToGameMenu} onEscape={handleDungeonEscape} />
+    : mode === "racer"
+    ? <RacerGame onGameEnd={handleExitToGameMenu} onScoreChange={handleRacerScoreChange} />
     : mode === "intro-reel"
     ? <IntroReel onExit={handleExitIntroReel} />
     : mode === "editor"

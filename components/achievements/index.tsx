@@ -1,6 +1,6 @@
 import { ACHIEVEMENTS, ACHIEVEMENT_CATEGORY_LABELS, ACHIEVEMENT_ORDER, AchievementCategory, AchievementDefinition, AchievementId } from "./achievementsList";
 import clsx from "clsx";
-import { ArrowPathIcon, CameraIcon, ClockIcon, CodeBracketIcon, FireIcon, KeyIcon, CommandLineIcon, EyeIcon, ShieldCheckIcon, CheckCircleIcon, AcademicCapIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, BoltIcon, CameraIcon, ClockIcon, CodeBracketIcon, FireIcon, KeyIcon, CommandLineIcon, EyeIcon, ShieldCheckIcon, CheckCircleIcon, AcademicCapIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -33,6 +33,7 @@ type AchievementEvent =
   | { type: "contact:action"; action: "copy-email" | "download-vcard" }
   | { type: "arcade:opened" }
   | { type: "snake:score"; score: number }
+  | { type: "racer:score"; score: number }
   | { type: "dungeon:escaped" }
   | { type: "quiz:completed" }
   | { type: "quiz:perfect-score" };
@@ -51,6 +52,7 @@ type AchievementProgress = {
   arcadeOpened: boolean;
   devtoolsOpened: boolean;
   snakeBestScore: number;
+  racerBestScore: number;
   dungeonEscaped: boolean;
   wowClicked: boolean;
   sourceDiverOpened: boolean;
@@ -91,6 +93,7 @@ const DEFAULT_PROGRESS: AchievementProgress = {
   arcadeOpened: false,
   devtoolsOpened: false,
   snakeBestScore: 0,
+  racerBestScore: 0,
   dungeonEscaped: false,
   wowClicked: false,
   sourceDiverOpened: false,
@@ -127,6 +130,7 @@ const getAchievementIdsToUnlock = (progress: AchievementProgress) => {
   if (progress.experienceEntriesViewed.length >= 4) nextUnlocks.push("GIT_ARCHAEOLOGIST");
   if (progress.snakeBestScore >= 30) nextUnlocks.push("SNAKE_CHARMER");
   if (progress.dungeonEscaped) nextUnlocks.push("ESCAPE_ARTIST");
+  if (progress.racerBestScore >= 300) nextUnlocks.push("ROAD_WARRIOR");
   if (progress.devtoolsOpened) nextUnlocks.push("HACKER");
   if (progress.sourceDiverOpened) nextUnlocks.push("SOURCE_DIVER");
   if (progress.secretDiscovered && progress.rootAccessGranted) nextUnlocks.push("ROOT_ACCESS");
@@ -191,6 +195,9 @@ const applyAchievementEvent = (
     case "snake:score":
       next.snakeBestScore = Math.max(previous.snakeBestScore, event.score);
       break;
+    case "racer:score":
+      next.racerBestScore = Math.max(previous.racerBestScore, event.score);
+      break;
     case "dungeon:escaped":
       next.dungeonEscaped = true;
       break;
@@ -215,6 +222,7 @@ const ACHIEVEMENT_ICONS: Record<AchievementId, React.ComponentType<{ className?:
   GIT_ARCHAEOLOGIST: CodeBracketIcon,
   SNAKE_CHARMER: FireIcon,
   ESCAPE_ARTIST: KeyIcon,
+  ROAD_WARRIOR: BoltIcon,
   HACKER: CommandLineIcon,
   SOURCE_DIVER: EyeIcon,
   ROOT_ACCESS: ShieldCheckIcon,

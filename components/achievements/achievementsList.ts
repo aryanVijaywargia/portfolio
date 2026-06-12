@@ -51,6 +51,13 @@ const ACHIEVEMENTS_MAP = {
     category: "games",
     hidden: true,
   },
+  ROAD_WARRIOR: {
+    title: "Road Warrior",
+    description: "Scored 300+ in Turbo Racer.",
+    hint: "The arcade has a need for speed. Stay on the road long enough.",
+    category: "games",
+    hidden: true,
+  },
   HACKER: {
     title: "Hacker",
     description: "Opened the browser console and peeked behind the curtain.",
@@ -99,6 +106,7 @@ export const ACHIEVEMENT_ORDER = [
   "GIT_ARCHAEOLOGIST",
   "SNAKE_CHARMER",
   "ESCAPE_ARTIST",
+  "ROAD_WARRIOR",
   "HACKER",
   "SOURCE_DIVER",
   "ROOT_ACCESS",
