@@ -23,6 +23,13 @@ const GAMES: GameOption[] = [
     icon: "⚔️",
     command: "./dungeon --adventure",
   },
+  {
+    id: "racer",
+    name: "Turbo Racer",
+    description: "Top-down highway racer - dodge traffic, grab bonuses, survive the speed!",
+    icon: "🏎️",
+    command: "./racer --turbo",
+  },
 ];
 
 interface GameMenuProps {
@@ -35,8 +42,9 @@ export const GameMenu: FC<GameMenuProps> = ({ onSelectGame, onExit }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingGame, setLoadingGame] = useState<string | null>(null);
 
-  const handleSelect = useCallback(() => {
-    const selectedGame = GAMES[selectedIndex];
+  const handleSelect = useCallback((index: number) => {
+    const selectedGame = GAMES[index];
+    setSelectedIndex(index);
     setIsLoading(true);
     setLoadingGame(selectedGame.id);
 
@@ -47,7 +55,7 @@ export const GameMenu: FC<GameMenuProps> = ({ onSelectGame, onExit }) => {
       },
       800
     );
-  }, [selectedIndex, onSelectGame]);
+  }, [onSelectGame]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -73,7 +81,7 @@ export const GameMenu: FC<GameMenuProps> = ({ onSelectGame, onExit }) => {
         case "Enter":
         case " ":
           e.preventDefault();
-          handleSelect();
+          handleSelect(selectedIndex);
           break;
         case "Escape":
         case "q":
@@ -81,24 +89,20 @@ export const GameMenu: FC<GameMenuProps> = ({ onSelectGame, onExit }) => {
           e.preventDefault();
           onExit();
           break;
-        case "1":
-          e.preventDefault();
-          setSelectedIndex(0);
-          handleSelect();
-          break;
-        case "2":
-          e.preventDefault();
-          if (GAMES.length > 1) {
-            setSelectedIndex(1);
-            handleSelect();
+        default: {
+          const gameNumber = parseInt(e.key, 10);
+          if (gameNumber >= 1 && gameNumber <= GAMES.length) {
+            e.preventDefault();
+            handleSelect(gameNumber - 1);
           }
           break;
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isLoading, handleSelect, onExit]);
+  }, [isLoading, handleSelect, onExit, selectedIndex]);
 
   return (
     <div className="flex h-full flex-col bg-[#1e1e1e] dark:bg-transparent p-4 font-mono text-sm text-[#D4D4D4]">
@@ -123,10 +127,7 @@ export const GameMenu: FC<GameMenuProps> = ({ onSelectGame, onExit }) => {
           {GAMES.map((game, index) => (
             <button
               key={game.id}
-              onClick={() => {
-                setSelectedIndex(index);
-                handleSelect();
-              }}
+              onClick={() => handleSelect(index)}
               className={`block w-full cursor-pointer rounded border p-3 text-left transition-all duration-150 ${
                 selectedIndex === index
                   ? "border-[#4EC9B0] bg-[#4EC9B0]/10"

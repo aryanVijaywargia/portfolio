@@ -1,5 +1,5 @@
-import { FC, useState, useRef, useEffect, KeyboardEvent, useCallback } from "react";
-import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, DESKTOP_GAME_HELP, STARTUP_BANNER, getCommandOutput, isSpecialCommand, CommandOutput } from "./terminal-commands";
+import { FC, useState, useRef, useEffect, KeyboardEvent, useCallback, useMemo } from "react";
+import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, DESKTOP_GAME_HELP, STARTUP_BANNER, AUTOCOMPLETE_COMMANDS, escapeHtml, getCommandOutput, getCommandSuggestion, isSpecialCommand, CommandOutput } from "./terminal-commands";
 import { RickIntro } from "./rick-intro";
 
 type OutputLine = {
@@ -91,6 +91,11 @@ export const Terminal: FC<TerminalProps> = ({
       ...(canPlayKeyboardGames ? [DESKTOP_GAME_HELP] : []),
       ...COMMANDS.help.slice(-2),
     ],
+    [canPlayKeyboardGames]
+  );
+
+  const availableCommands = useMemo(
+    () => [...AUTOCOMPLETE_COMMANDS, ...(canPlayKeyboardGames ? ["game"] : [])].sort(),
     [canPlayKeyboardGames]
   );
 
@@ -247,14 +252,15 @@ export const Terminal: FC<TerminalProps> = ({
   const handleCommand = (cmd: string) => {
     const normalizedCmd = cmd.toLowerCase().trim();
 
-    // Add command to history
-    if (cmd.trim()) {
+    // Add command to history (never record passwords)
+    if (cmd.trim() && !isPasswordMode) {
       setCommandHistory((prev) => [...prev, cmd]);
       setHistoryIndex(-1);
     }
 
-    // Add the command line to output
-    addLine(`${TERMINAL_CONFIG.prompt} ${cmd}`, "command-line", 0);
+    // Echo the command line, masking password input
+    const echoedCmd = isPasswordMode ? "*".repeat(cmd.length) : escapeHtml(cmd);
+    addLine(`${TERMINAL_CONFIG.prompt} ${echoedCmd}`, "command-line", 0);
 
     // Handle password mode
     if (isPasswordMode) {
@@ -326,7 +332,7 @@ export const Terminal: FC<TerminalProps> = ({
         case "history":
           addLine("", undefined, 0);
           commandHistory.forEach((histCmd, index) => {
-            addLine(`  ${index + 1}  ${histCmd}`, undefined, (index + 1) * 50);
+            addLine(`  ${index + 1}  ${escapeHtml(histCmd)}`, undefined, (index + 1) * 50);
           });
           addLine("", undefined, (commandHistory.length + 1) * 50);
           return;
@@ -376,7 +382,11 @@ export const Terminal: FC<TerminalProps> = ({
 
         case "game":
           if (!canPlayKeyboardGames) {
-            addLine(`Command not found: ${cmd}. Type 'help' for available commands.`, "error", 80);
+            addLine(
+              `Command not found: ${escapeHtml(cmd)}. Type 'help' for available commands.`,
+              "error",
+              80
+            );
             return;
           }
 
@@ -422,13 +432,83 @@ export const Terminal: FC<TerminalProps> = ({
         return;
       }
       addLines(output, 80);
-    } else {
-      addLine(`Command not found: ${cmd}. Type 'help' for available commands.`, "error", 80);
+    } else if (normalizedCmd) {
+      const suggestion = getCommandSuggestion(normalizedCmd, availableCommands);
+      if (suggestion) {
+        addLine(
+          `Command not found: ${escapeHtml(
+            cmd
+          )}. Did you mean '<span class="command">${suggestion}</span>'?`,
+          "error",
+          80
+        );
+      } else {
+        addLine(
+          `Command not found: ${escapeHtml(cmd)}. Type 'help' for available commands.`,
+          "error",
+          80
+        );
+      }
+    }
+  };
+
+  const handleTabComplete = () => {
+    if (isPasswordMode) return;
+
+    const input = currentInput.trimStart().toLowerCase();
+    if (!input) return;
+
+    const matches = availableCommands.filter((command) => command.startsWith(input));
+    if (matches.length === 1) {
+      setCurrentInput(matches[0]);
+      return;
+    }
+    if (matches.length > 1) {
+      // Extend to the longest common prefix; if we're already there, list matches
+      let prefix = matches[0];
+      matches.slice(1).forEach((match) => {
+        while (!match.startsWith(prefix)) {
+          prefix = prefix.slice(0, -1);
+        }
+      });
+
+      if (prefix.length > input.length) {
+        setCurrentInput(prefix);
+      } else {
+        addLineImmediate(`${TERMINAL_CONFIG.prompt} ${escapeHtml(currentInput)}`, "command-line");
+        addLineImmediate(
+          matches.map((match) => `<span class="command">${match}</span>`).join("  ")
+        );
+      }
     }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    // Shell-style control shortcuts
+    if (e.ctrlKey && (e.key === "l" || e.key === "L")) {
+      e.preventDefault();
+      clearTerminal();
+      return;
+    }
+    if (e.ctrlKey && (e.key === "c" || e.key === "C")) {
+      // Keep native copy when text is selected
+      if (window.getSelection()?.toString()) return;
+      e.preventDefault();
+      addLineImmediate(`${TERMINAL_CONFIG.prompt} ${escapeHtml(displayInput)}^C`, "command-line");
+      setCurrentInput("");
+      setIsPasswordMode(false);
+      return;
+    }
+    if (e.ctrlKey && (e.key === "u" || e.key === "U")) {
+      e.preventDefault();
+      setCurrentInput("");
+      return;
+    }
+
+    if (e.key === "Tab") {
+      e.preventDefault();
+      handleTabComplete();
+    } else if (e.key === "Enter") {
       e.preventDefault();
       handleCommand(currentInput);
       setCurrentInput("");
