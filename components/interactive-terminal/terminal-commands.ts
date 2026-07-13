@@ -23,14 +23,10 @@ export type CommandOutput = {
 export const COMMANDS: Record<string, CommandOutput[]> = {
   help: [
     { text: "" },
-    { text: '<span class="command">whois</span>          Play Aryan profile video' },
     { text: '<span class="command">whoami</span>         Who are you?' },
     { text: '<span class="command">contact</span>        Show business card' },
-    { text: '<span class="command">projects</span>       Browse featured projects' },
     { text: '<span class="command">skills</span>         List the tech stack' },
-    { text: '<span class="command">experience</span>     Show the work history' },
     { text: '<span class="command">code</span>           View the code editor' },
-    { text: '<span class="command">history</span>        View command history' },
     { text: '<span class="command">secret</span>         Find the hidden command' },
     { text: '<span class="command">chatbot</span>        Launch Byte, the AI companion' },
     { text: '<span class="command">clear</span>          Clear terminal' },
@@ -249,14 +245,10 @@ export const AUTOCOMPLETE_COMMANDS = [
   "clear",
   "code",
   "contact",
-  "experience",
   "help",
-  "history",
-  "projects",
   "secret",
   "skills",
   "whoami",
-  "whois",
 ];
 
 export function isSpecialCommand(cmd: string): boolean {
