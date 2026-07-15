@@ -9,6 +9,7 @@ import { useTheme } from "next-themes";
 import { FC, useEffect, useState } from "react";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { DogIcon } from "components/icons/dog-icon";
+import { AnimatedRoleHeading } from "components/animated-role-heading";
 
 export const Hero: FC = () => {
   const { theme, setTheme } = useTheme();
@@ -86,19 +87,7 @@ export const Hero: FC = () => {
         <section className="col-span-2">
           <header>
             <div className="heading-pre">{HERO.pre}</div>
-            <h1 className="heading-hero ">{HERO.heading}</h1>
-            {/* <h2 className="heading-hero ">
-                <Typewriter
-                  loop={false}
-                  items={[
-                    <>
-                      I'm a <u>Fullstack</u> developer
-                    </>,
-
-                    <>I build websites & web apps</>,
-                  ]}
-                />
-              </h2>*/}
+            <AnimatedRoleHeading name={HERO.name} roles={HERO.roles} />
             <ul className="scrollbar-none -mx-4 mb-3 flex items-center gap-5 overflow-x-auto px-4 pb-2 text-[13px] font-medium sm:gap-6">
               {HERO.tech.map(({ name, Icon }) => (
                 <li
