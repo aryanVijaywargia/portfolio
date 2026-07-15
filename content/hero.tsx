@@ -6,11 +6,8 @@ import { Link } from "components/link";
 
 export const HERO = {
   pre: "Welcome to my site.",
-  heading: (
-    <>
-      I'm <strong>Aryan Vijaywargia</strong>, a FullStack Engineer.
-    </>
-  ),
+  name: "Aryan Vijaywargia",
+  roles: ["Backend", "Fullstack", "AI", ""] as const,
   tech: [
     {
       name: "Go",
@@ -31,8 +28,8 @@ export const HERO = {
   ] as const,
   body: (onWowClick?: () => void) => (
     <>
-      I build cool things on the internet - backends, side projects, and the occasional
-      experiment that ends in{" "}
+      I build cool things on the internet - backends, side projects, and the occasional experiment
+      that ends in{" "}
       <em
         className="relative cursor-pointer before:absolute b:bottom-0 b:-z-10 b:h-3 b:w-full b:-rotate-2 b:animate-hint-hint b:bg-pink-400/70 b:blur-sm d:b:bg-pink-600"
         onClick={async (e) => {
@@ -48,7 +45,8 @@ export const HERO = {
       </em>
       . I’m stack-agnostic: Go one week, Python the next, something new after that. The hard part is
       figuring out what to build; the rest is just prompting.
-      <span className="mt-4 block" />Currently a Senior Software Engineer at{" "}
+      <span className="mt-4 block" />
+      Currently a Senior Software Engineer at{" "}
       <Link target="_blank" href="https://www.gep.com/" className="underline hfa:text-sky-500">
         GEP Worldwide
       </Link>
