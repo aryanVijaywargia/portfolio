@@ -1,5 +1,5 @@
 import { useAchievementActions } from "components/achievements";
-import { LinkIcon } from "@heroicons/react/24/solid";
+import { DocumentTextIcon, LinkIcon } from "@heroicons/react/24/solid";
 import { FaGithub } from "@react-icons/all-files/fa/FaGithub";
 import { Image } from "components/image";
 import { Link } from "components/link";
@@ -187,7 +187,9 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
                     data-tip={link.label}
                   >
                     <span className="sr-only">{link.label}</span>
-                    <LinkIcon className="h-5 w-5 " />
+                    {link.label === "Report"
+                      ? <DocumentTextIcon className="h-5 w-5" />
+                      : <LinkIcon className="h-5 w-5" />}
                   </Link>
                 ))}
               </footer>
