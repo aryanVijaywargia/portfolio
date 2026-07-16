@@ -106,7 +106,7 @@ export const ABOUT = {
     {
       src: Aryan4,
       alt: "Aryan with a deer in Nara, Japan",
-      tooltip: "Selfie with the extrovert final boss",
+      tooltip: "One must imagine Sisyphus happy",
     },
     {
       src: Aryan5,
