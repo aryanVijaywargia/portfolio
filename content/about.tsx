@@ -101,7 +101,7 @@ export const ABOUT = {
     {
       src: Aryan3,
       alt: "Aryan receiving his B.Tech degree",
-      tooltip: "Graduated, was a big day for my family whatsapp group",
+      tooltip: "The good old days",
     },
     {
       src: Aryan4,
