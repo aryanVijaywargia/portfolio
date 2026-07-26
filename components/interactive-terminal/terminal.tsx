@@ -527,21 +527,6 @@ export const Terminal: FC<TerminalProps> = ({
           );
           return;
 
-        case "boring": {
-          const boringUrl = `${window.location.origin}/boring`;
-          addLine("", undefined, 0);
-          addLine("Booting the scenic route...", "info", 80);
-          addLine("Dedicated game route ready:", undefined, 220);
-          addLine(
-            `<a href="${escapeHtml(
-              boringUrl
-            )}" class="terminal-link terminal-game-url">${escapeHtml(boringUrl)}</a>`,
-            "info",
-            420
-          );
-          return;
-        }
-
         case "sudo":
           addLine("Enter password:", "info", 80);
           setIsPasswordMode(true);
@@ -1080,38 +1065,8 @@ export const Terminal: FC<TerminalProps> = ({
           color: #0d7377;
         }
 
-        .terminal-line :global(.terminal-launch-command) {
-          appearance: none;
-          border: 0;
-          background: transparent;
-          color: #0d7377;
-          cursor: pointer;
-          font: inherit;
-          font-weight: 700;
-          padding: 0;
-          text-decoration: underline;
-          text-decoration-style: dotted;
-          text-underline-offset: 3px;
-        }
-
-        .terminal-line :global(.terminal-launch-command:hover),
-        .terminal-line :global(.terminal-launch-command:focus-visible) {
-          color: #e45649;
-          outline: none;
-          text-decoration-style: solid;
-        }
-
         :global(.dark) .terminal-line :global(.command) {
           color: #4ec9b0;
-        }
-
-        :global(.dark) .terminal-line :global(.terminal-launch-command) {
-          color: #4ec9b0;
-        }
-
-        :global(.dark) .terminal-line :global(.terminal-launch-command:hover),
-        :global(.dark) .terminal-line :global(.terminal-launch-command:focus-visible) {
-          color: #fbbf24;
         }
 
         .terminal-line :global(.terminal-link) {

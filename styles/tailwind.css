@@ -1,7 +1,6 @@
 @import "typography.scss";
 @import "prism.scss";
 @import "batman-theme.scss";
-@import "boring-theme.scss";
 
 @tailwind base;
 @tailwind components;
@@ -150,4 +149,3 @@
   }
 
 }
-
