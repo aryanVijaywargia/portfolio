@@ -13,6 +13,7 @@ type TerminalProps = {
   onSwitchToChatbot: () => void;
   onSwitchToGameMenu: () => void;
   onSwitchToIntroReel: () => void;
+  onSwitchToMusic: () => void;
   triggerChatbot?: boolean;
   onTriggerHandled?: () => void;
   onValidCommand?: (command: string) => void;
@@ -29,6 +30,7 @@ export const Terminal: FC<TerminalProps> = ({
   onSwitchToChatbot,
   onSwitchToGameMenu,
   onSwitchToIntroReel,
+  onSwitchToMusic,
   triggerChatbot,
   onTriggerHandled,
   onValidCommand,
@@ -377,6 +379,18 @@ export const Terminal: FC<TerminalProps> = ({
               },
               1500
             )
+          );
+          return;
+
+        case "music":
+          addLine("", undefined, 0);
+          addLine("Tuning into Reddit's coding frequency...", "info", 80);
+          addLine("[##########] playlist ready", "info", 360);
+          setTimeout(
+            () => {
+              onSwitchToMusic();
+            },
+            520
           );
           return;
 

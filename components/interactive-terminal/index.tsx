@@ -25,6 +25,9 @@ const GameMenu = dynamic(() => import("./game-menu").then((mod) => mod.GameMenu)
 const IntroReel = dynamic(() => import("./intro-reel").then((mod) => mod.IntroReel), {
   ssr: false,
 });
+const MusicPlayer = dynamic(() => import("./music-player").then((mod) => mod.MusicPlayer), {
+  ssr: false,
+});
 const Code = dynamic(() => import("components/typography/code").then((mod) => mod.Code), {
   ssr: false,
 });
@@ -36,7 +39,15 @@ type InteractiveTerminalProps = {
 
 export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, language }) => {
   const [mode, setMode] = useState<
-    "terminal" | "editor" | "chatbot" | "game-menu" | "snake" | "dungeon" | "racer" | "intro-reel"
+    | "terminal"
+    | "editor"
+    | "chatbot"
+    | "game-menu"
+    | "snake"
+    | "dungeon"
+    | "racer"
+    | "intro-reel"
+    | "music"
   >("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
@@ -120,6 +131,11 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
   const handleSwitchToIntroReel = () => {
     setMode("intro-reel");
+    setIsTerminalMaximized(true);
+  };
+
+  const handleSwitchToMusic = () => {
+    setMode("music");
     setIsTerminalMaximized(true);
   };
 
@@ -207,6 +223,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? "🎮 Games - Terminal"
     : mode === "intro-reel"
     ? "whois.mp4 - Terminal"
+    : mode === "music"
+    ? "♫ coding-frequency — YouTube"
     : mode === "editor"
     ? "/index.tsx"
     : "aryan@macbook - zsh";
@@ -262,6 +280,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? <RacerGame onGameEnd={handleExitToGameMenu} onScoreChange={handleRacerScoreChange} />
     : mode === "intro-reel"
     ? <IntroReel onExit={handleExitIntroReel} />
+    : mode === "music"
+    ? <MusicPlayer onExit={handleMinimizeTerminal} />
     : mode === "editor"
     ? <div className="scrollbar-none h-full overflow-auto p-3">
         <Code
@@ -275,6 +295,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         onSwitchToChatbot={handleSwitchToChatbot}
         onSwitchToGameMenu={handleSwitchToGame}
         onSwitchToIntroReel={handleSwitchToIntroReel}
+        onSwitchToMusic={handleSwitchToMusic}
         triggerChatbot={triggerChatbot}
         onTriggerHandled={clearTrigger}
         onValidCommand={handleValidCommand}
