@@ -67,6 +67,29 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
     });
   }, [appendLog, audio]);
 
+  const toggleStation = useCallback((index: number) => {
+    const nextIndex = wrapIndex(index);
+
+    if (nextIndex === activeIndex && !audio.paused) {
+      audio.pause();
+      appendLog(`signal stopped :: ${RADIO_STATIONS[nextIndex].name}`, "warning");
+      return;
+    }
+
+    if (nextIndex === activeIndex && audio.src) {
+      setStatus("connecting");
+      const expectedUrl = audio.src;
+      audio.play().catch((error: unknown) => {
+        if (isCancelledOrStalePlay(error, audio, expectedUrl)) return;
+        setStatus("blocked");
+        appendLog("browser refused playback — press enter once more", "error");
+      });
+      return;
+    }
+
+    playStation(nextIndex);
+  }, [activeIndex, appendLog, audio, playStation]);
+
   useEffect(() => {
     const handlePlaying = () => {
       setStatus("playing");
@@ -142,7 +165,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
     const [command, ...args] = commandLine.split(/\s+/);
 
     if (!command) {
-      playStation(selectedIndex);
+      toggleStation(selectedIndex);
       return;
     }
 
@@ -297,7 +320,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
                 aria-selected={isSelected}
                 onClick={(event) => {
                   event.stopPropagation();
-                  playStation(index);
+                  toggleStation(index);
                   inputRef.current?.focus({ preventScroll: true });
                 }}
                 className={`block w-full truncate text-left leading-5 ${
@@ -342,7 +365,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
       </form>
 
       <footer className="shrink-0 truncate px-3 pb-2 text-[9px] text-slate-700">
-        ↑↓ select · ↵ tune · help · q exit · keeps playing on scroll
+        ↑↓ select · ↵ tune/pause · stop · q exit · keeps playing on scroll
       </footer>
     </section>
   );
