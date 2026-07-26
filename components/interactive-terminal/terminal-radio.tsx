@@ -28,6 +28,12 @@ const statusText: Record<PlaybackStatus, string> = {
   error: "OFFLINE",
 };
 
+const formatPlayCount = (playCount: number) =>
+  new Intl.NumberFormat("en", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(playCount);
+
 export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationIndex, onExit }) => {
   const initialIndex = wrapIndex(initialStationIndex);
   const [activeIndex, setActiveIndex] = useState(initialIndex);
@@ -36,8 +42,8 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
   const [input, setInput] = useState("");
   const [volume, setVolume] = useState(Math.round(audio.volume * 100));
   const [logs, setLogs] = useState<LogLine[]>([
-    { id: 1, text: "radio 1.0.0 — terminal focus receiver", tone: "muted" },
-    { id: 2, text: `dialing ${RADIO_STATIONS[initialIndex].name}...`, tone: "normal" },
+    { id: 1, text: "radio 2.0.0 — Spotify top-10 preview queue", tone: "muted" },
+    { id: 2, text: `loading ${RADIO_STATIONS[initialIndex].name}...`, tone: "normal" },
   ]);
   const logId = useRef(2);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -93,40 +99,33 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
   useEffect(() => {
     const handlePlaying = () => {
       setStatus("playing");
-      appendLog(`signal locked :: ${RADIO_STATIONS[activeIndex].name} :: 128kbps mp3`, "success");
+      appendLog(`playing preview :: ${RADIO_STATIONS[activeIndex].name}`, "success");
     };
     const handleWaiting = () => setStatus("connecting");
     const handlePause = () => setStatus("paused");
+    const handleEnded = () => {
+      appendLog("preview complete :: advancing queue", "muted");
+      playStation(activeIndex + 1);
+    };
     const handleError = () => {
-      const station = RADIO_STATIONS[activeIndex];
-      if (audio.src !== station.fallbackStreamUrl) {
-        appendLog("primary relay missed; trying backup...", "warning");
-        setStatus("connecting");
-        audio.src = station.fallbackStreamUrl;
-        audio.load();
-        const expectedUrl = station.fallbackStreamUrl;
-        audio.play().catch((error: unknown) => {
-          if (isCancelledOrStalePlay(error, audio, expectedUrl)) return;
-          setStatus("error");
-        });
-        return;
-      }
       setStatus("error");
-      appendLog("no signal — type `next` to try another station", "error");
+      appendLog("preview unavailable — type `next` to continue", "error");
     };
 
     audio.addEventListener("playing", handlePlaying);
     audio.addEventListener("waiting", handleWaiting);
     audio.addEventListener("pause", handlePause);
+    audio.addEventListener("ended", handleEnded);
     audio.addEventListener("error", handleError);
 
     return () => {
       audio.removeEventListener("playing", handlePlaying);
       audio.removeEventListener("waiting", handleWaiting);
       audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("error", handleError);
     };
-  }, [activeIndex, appendLog, audio]);
+  }, [activeIndex, appendLog, audio, playStation]);
 
   useEffect(() => {
     outputRef.current?.scrollTo({ top: outputRef.current.scrollHeight, behavior: "smooth" });
@@ -174,7 +173,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
       case "tune": {
         const stationIndex = resolveStation(args.join(" "));
         if (stationIndex === null) {
-          appendLog("station not found — type `list`", "error");
+          appendLog("track not found — type `list`", "error");
           return;
         }
         playStation(stationIndex);
@@ -231,7 +230,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
         return;
       case "help":
       case "?":
-        appendLog("play <1-5>  next  prev  pause  resume  volume <0-100>  list  exit", "muted");
+        appendLog("play <1-10>  next  prev  pause  resume  volume <0-100>  list  exit", "muted");
         return;
       case "clear":
         setLogs([]);
@@ -330,7 +329,10 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
                 <span className="inline-block w-4">{isSelected ? ">" : " "}</span>
                 <span className="inline-block w-6">{String(index + 1).padStart(2, "0")}</span>
                 <span className={isActive ? "text-white" : undefined}>{station.name}</span>
-                <span className="hidden text-slate-700 sm:inline"> :: {station.vibe}</span>
+                <span className="hidden text-slate-700 sm:inline">
+                  {" "}
+                  :: {station.artists} :: {formatPlayCount(station.playCount)} plays
+                </span>
               </button>
             );
           })}
@@ -365,7 +367,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
       </form>
 
       <footer className="shrink-0 truncate px-3 pb-2 text-[9px] text-slate-700">
-        ↑↓ select · ↵ tune/pause · stop · q exit · keeps playing on scroll
+        ↑↓ select · ↵ play/pause · next · stop · q exit · Spotify previews auto-advance
       </footer>
     </section>
   );
