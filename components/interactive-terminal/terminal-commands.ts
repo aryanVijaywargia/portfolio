@@ -21,17 +21,18 @@ export type CommandOutput = {
 };
 
 export const COMMANDS: Record<string, CommandOutput[]> = {
+  // whois, projects, experience, and history intentionally remain callable easter eggs.
+  // Keep them out of this help list and AUTOCOMPLETE_COMMANDS below.
   help: [
     { text: "" },
     { text: '<span class="command">whoami</span>         Who are you?' },
     { text: '<span class="command">contact</span>        Show business card' },
     { text: '<span class="command">skills</span>         List the tech stack' },
-    { text: '<span class="command">experience</span>     Show the work history' },
     { text: '<span class="command">achievements</span>   Check achievement progress' },
     { text: '<span class="command">code</span>           View the code editor' },
     { text: '<span class="command">secret</span>         Find the hidden command' },
     { text: '<span class="command">chatbot</span>        Launch Byte, the AI companion' },
-    { text: '<span class="command">radio</span>          Play the EDM playlist first 10' },
+    { text: '<span class="command">radio</span>          Tune into my current rotation' },
     { text: '<span class="command">clear</span>          Clear terminal' },
     { text: '<span class="command">help</span>           Show this help message' },
     { text: "" },

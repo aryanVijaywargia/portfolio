@@ -36,7 +36,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
   const [input, setInput] = useState("");
   const [volume, setVolume] = useState(Math.round(audio.volume * 100));
   const [logs, setLogs] = useState<LogLine[]>([
-    { id: 1, text: "radio 2.0.0 — EDM and Techno mix / first 10", tone: "muted" },
+    { id: 1, text: "radio 2.0.0 — Aryan's current rotation", tone: "muted" },
     { id: 2, text: `loading ${RADIO_STATIONS[initialIndex].name}...`, tone: "normal" },
   ]);
   const logId = useRef(2);
@@ -93,17 +93,17 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
   useEffect(() => {
     const handlePlaying = () => {
       setStatus("playing");
-      appendLog(`playing preview :: ${RADIO_STATIONS[activeIndex].name}`, "success");
+      appendLog(`now playing :: ${RADIO_STATIONS[activeIndex].name}`, "success");
     };
     const handleWaiting = () => setStatus("connecting");
     const handlePause = () => setStatus("paused");
     const handleEnded = () => {
-      appendLog("preview complete :: advancing queue", "muted");
+      appendLog("track complete :: advancing queue", "muted");
       playStation(activeIndex + 1);
     };
     const handleError = () => {
       setStatus("error");
-      appendLog("preview unavailable — type `next` to continue", "error");
+      appendLog("track unavailable — type `next` to continue", "error");
     };
 
     audio.addEventListener("playing", handlePlaying);
@@ -332,7 +332,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
                 </span>
                 <span className="hidden text-slate-400 dark:text-slate-700 sm:inline">
                   {" "}
-                  :: {station.artists} :: {station.previewSource} preview
+                  :: {station.artists}
                 </span>
               </button>
             );
@@ -374,7 +374,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
       </form>
 
       <footer className="shrink-0 truncate px-3 pb-2 text-[9px] text-slate-400 dark:text-slate-700">
-        ↑↓ select · ↵ play/pause · next · stop · q exit · public previews auto-advance
+        ↑↓ select · ↵ play/pause · next · stop · q exit · queue auto-advances
       </footer>
     </section>
   );
