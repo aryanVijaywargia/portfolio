@@ -1,4 +1,7 @@
-import { FC, useState, useRef, useEffect, KeyboardEvent, useCallback, useMemo } from "react";
+import { FC, useState, useRef, useEffect, KeyboardEvent, MouseEvent as ReactMouseEvent, useCallback, useMemo } from "react";
+import { useAchievements } from "components/achievements";
+import { ACHIEVEMENTS, ACHIEVEMENT_ORDER } from "components/achievements/achievementsList";
+import type { AchievementId } from "components/achievements/achievementsList";
 import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, DESKTOP_GAME_HELP, STARTUP_BANNER, AUTOCOMPLETE_COMMANDS, escapeHtml, getCommandOutput, getCommandSuggestion, isSpecialCommand, CommandOutput } from "./terminal-commands";
 import { RickIntro } from "./rick-intro";
 
@@ -6,6 +9,75 @@ type OutputLine = {
   id: number;
   text: string;
   className?: string;
+};
+
+const TROPHIES_PER_SHELF = 4;
+
+const buildAchievementShelfMarkup = (unlockedIds: AchievementId[]) => {
+  const unlockedSet = new Set(unlockedIds);
+  const progress = Math.round((unlockedIds.length / ACHIEVEMENT_ORDER.length) * 100);
+  const shelves: AchievementId[][] = [];
+
+  for (let index = 0; index < ACHIEVEMENT_ORDER.length; index += TROPHIES_PER_SHELF) {
+    shelves.push(ACHIEVEMENT_ORDER.slice(index, index + TROPHIES_PER_SHELF));
+  }
+
+  const shelfMarkup = shelves
+    .map((shelf) => {
+      const trophies = shelf
+        .map((id) => {
+          const achievement = ACHIEVEMENTS[id];
+          const isUnlocked = unlockedSet.has(id);
+          const label = isUnlocked ? achievement.title : "Locked";
+          const detail = isUnlocked ? achievement.description : achievement.hint;
+
+          return `
+            <div
+              class="achievement-trophy achievement-trophy--${escapeHtml(achievement.category)} ${
+            isUnlocked ? "is-unlocked" : "is-locked"
+          }"
+              aria-label="${escapeHtml(`${label}. ${detail}`)}"
+              title="${escapeHtml(detail)}"
+            >
+              <span class="achievement-cup" aria-hidden="true">
+                <span class="achievement-cup-bowl">${isUnlocked ? "★" : "?"}</span>
+                <span class="achievement-cup-stem"></span>
+                <span class="achievement-cup-base"></span>
+              </span>
+              <span class="achievement-trophy-label">${escapeHtml(label)}</span>
+            </div>`;
+        })
+        .join("");
+
+      return `<div class="achievement-shelf-row"><div class="achievement-trophies">${trophies}</div><div class="achievement-shelf-plank" aria-hidden="true"></div></div>`;
+    })
+    .join("");
+
+  const lockedCount = ACHIEVEMENT_ORDER.length - unlockedIds.length;
+
+  return `
+    <section class="achievement-case" aria-label="Achievement trophy case">
+      <div class="achievement-case-header">
+        <div>
+          <span class="achievement-case-kicker">ACHIEVEMENT ARCHIVE</span>
+          <strong class="achievement-case-title">Trophy case</strong>
+        </div>
+        <span class="achievement-case-count">${unlockedIds.length}<small> / ${
+    ACHIEVEMENT_ORDER.length
+  }</small></span>
+      </div>
+      <div class="achievement-progress" aria-label="${progress}% complete">
+        <span class="achievement-progress-fill" style="width: ${progress}%"></span>
+      </div>
+      <div class="achievement-shelves">${shelfMarkup}</div>
+      <p class="achievement-case-note">${
+        lockedCount === 0
+          ? "Case complete. Every trophy recovered."
+          : `${lockedCount} hidden ${
+              lockedCount === 1 ? "trophy" : "trophies"
+            } remain — keep exploring.`
+      }</p>
+    </section>`;
 };
 
 type TerminalProps = {
@@ -50,6 +122,7 @@ export const Terminal: FC<TerminalProps> = ({
   const [lineIdCounter, setLineIdCounter] = useState(0);
   const [canPlayKeyboardGames, setCanPlayKeyboardGames] = useState(false);
   const [showStartupBanner, setShowStartupBanner] = useState(false);
+  const { unlockedIds } = useAchievements();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -218,8 +291,16 @@ export const Terminal: FC<TerminalProps> = ({
     }
   }, [outputLines]);
 
-  // Focus input on click
-  const handleTerminalClick = () => {
+  // Focus input on click, or run commands exposed as buttons in terminal output.
+  const handleTerminalClick = (event: ReactMouseEvent<HTMLDivElement>) => {
+    const commandButton = (event.target as HTMLElement).closest<HTMLElement>(
+      "[data-terminal-command]"
+    );
+    const command = commandButton?.dataset.terminalCommand;
+    if (command) {
+      handleCommand(command);
+      return;
+    }
     inputRef.current?.focus({ preventScroll: true });
   };
 
@@ -343,6 +424,17 @@ export const Terminal: FC<TerminalProps> = ({
       onValidCommand?.(normalizedCmd);
 
       switch (normalizedCmd) {
+        case "achievements": {
+          const unlockedSet = new Set(unlockedIds);
+          const unlocked = ACHIEVEMENT_ORDER.filter((id) => unlockedSet.has(id));
+
+          addLine("", undefined, 0);
+          addLine("$ achievements --trophy-case", "info", 60);
+          addLine(buildAchievementShelfMarkup(unlocked), "achievement-display", 140);
+          addLine("", undefined, 220);
+          return;
+        }
+
         case "clear":
           clearTerminal();
           return;
@@ -434,6 +526,21 @@ export const Terminal: FC<TerminalProps> = ({
             600
           );
           return;
+
+        case "boring": {
+          const boringUrl = `${window.location.origin}/boring`;
+          addLine("", undefined, 0);
+          addLine("Booting the scenic route...", "info", 80);
+          addLine("Dedicated game route ready:", undefined, 220);
+          addLine(
+            `<a href="${escapeHtml(
+              boringUrl
+            )}" class="terminal-link terminal-game-url">${escapeHtml(boringUrl)}</a>`,
+            "info",
+            420
+          );
+          return;
+        }
 
         case "sudo":
           addLine("Enter password:", "info", 80);
@@ -627,6 +734,324 @@ export const Terminal: FC<TerminalProps> = ({
           color: #d4d4d4;
         }
 
+        .terminal-line.achievement-display {
+          min-height: 0;
+          white-space: normal;
+        }
+
+        .terminal-line :global(.achievement-case) {
+          width: min(100%, 760px);
+          margin: 0.5rem 0 1rem;
+          overflow: hidden;
+          border: 1px solid rgba(71, 85, 105, 0.28);
+          border-radius: 14px;
+          background:
+            radial-gradient(circle at 82% 5%, rgba(56, 189, 248, 0.1), transparent 32%),
+            linear-gradient(145deg, rgba(248, 250, 252, 0.96), rgba(226, 232, 240, 0.78));
+          box-shadow:
+            0 18px 45px rgba(15, 23, 42, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9);
+          padding: 1rem 1rem 0.8rem;
+        }
+
+        :global(.dark) .terminal-line :global(.achievement-case) {
+          border-color: rgba(71, 85, 105, 0.44);
+          background:
+            radial-gradient(circle at 82% 5%, rgba(14, 165, 233, 0.12), transparent 34%),
+            linear-gradient(145deg, rgba(8, 17, 32, 0.98), rgba(13, 24, 42, 0.94));
+          box-shadow:
+            0 18px 52px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(148, 163, 184, 0.08);
+        }
+
+        .terminal-line :global(.achievement-case-header) {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 0.05rem 0.15rem 0.7rem;
+        }
+
+        .terminal-line :global(.achievement-case-kicker),
+        .terminal-line :global(.achievement-case-title) {
+          display: block;
+        }
+
+        .terminal-line :global(.achievement-case-kicker) {
+          margin-bottom: 0.16rem;
+          color: #0284c7;
+          font-size: 0.58rem;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+        }
+
+        :global(.dark) .terminal-line :global(.achievement-case-kicker) {
+          color: #38bdf8;
+        }
+
+        .terminal-line :global(.achievement-case-title) {
+          color: #0f172a;
+          font-size: clamp(1rem, 2.5vw, 1.35rem);
+          line-height: 1;
+          letter-spacing: -0.035em;
+        }
+
+        :global(.dark) .terminal-line :global(.achievement-case-title) {
+          color: #f8fafc;
+        }
+
+        .terminal-line :global(.achievement-case-count) {
+          color: #0f172a;
+          font-size: 1.3rem;
+          font-weight: 700;
+          line-height: 1;
+        }
+
+        :global(.dark) .terminal-line :global(.achievement-case-count) {
+          color: #f8fafc;
+        }
+
+        .terminal-line :global(.achievement-case-count small) {
+          color: #64748b;
+          font-size: 0.68rem;
+          font-weight: 600;
+        }
+
+        .terminal-line :global(.achievement-progress) {
+          height: 3px;
+          overflow: hidden;
+          border-radius: 999px;
+          background: rgba(100, 116, 139, 0.2);
+        }
+
+        .terminal-line :global(.achievement-progress-fill) {
+          display: block;
+          height: 100%;
+          border-radius: inherit;
+          background: linear-gradient(90deg, #22d3ee, #3b82f6);
+          box-shadow: 0 0 12px rgba(34, 211, 238, 0.55);
+        }
+
+        .terminal-line :global(.achievement-shelves) {
+          display: grid;
+          gap: 0.5rem;
+          padding-top: 0.6rem;
+        }
+
+        .terminal-line :global(.achievement-shelf-row) {
+          position: relative;
+          padding: 0.2rem 0.35rem 0;
+        }
+
+        .terminal-line :global(.achievement-trophies) {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          align-items: end;
+          min-height: 62px;
+          gap: 0.35rem;
+        }
+
+        .terminal-line :global(.achievement-trophy) {
+          --trophy-color: #64748b;
+          display: flex;
+          min-width: 0;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 0.22rem;
+          color: var(--trophy-color);
+          transition:
+            transform 180ms ease,
+            filter 180ms ease;
+        }
+
+        .terminal-line :global(.achievement-trophy.is-unlocked:hover) {
+          transform: translateY(-2px);
+          filter: brightness(1.12);
+        }
+
+        .terminal-line :global(.achievement-trophy--hero) {
+          --trophy-color: #38bdf8;
+        }
+
+        .terminal-line :global(.achievement-trophy--terminal) {
+          --trophy-color: #22d3ee;
+        }
+
+        .terminal-line :global(.achievement-trophy--explorer) {
+          --trophy-color: #818cf8;
+        }
+
+        .terminal-line :global(.achievement-trophy--projects) {
+          --trophy-color: #8b5cf6;
+        }
+
+        .terminal-line :global(.achievement-trophy--contact) {
+          --trophy-color: #34d399;
+        }
+
+        .terminal-line :global(.achievement-trophy--games) {
+          --trophy-color: #fbbf24;
+        }
+
+        .terminal-line :global(.achievement-trophy--hidden) {
+          --trophy-color: #e879f9;
+        }
+
+        .terminal-line :global(.achievement-trophy.is-locked) {
+          --trophy-color: #64748b;
+          opacity: 0.43;
+          filter: grayscale(1);
+        }
+
+        .terminal-line :global(.achievement-cup) {
+          position: relative;
+          display: block;
+          width: 36px;
+          height: 39px;
+          filter: drop-shadow(0 0 7px var(--trophy-color));
+        }
+
+        .terminal-line :global(.achievement-trophy.is-locked .achievement-cup) {
+          filter: none;
+        }
+
+        .terminal-line :global(.achievement-cup-bowl) {
+          position: absolute;
+          top: 1px;
+          left: 6px;
+          z-index: 1;
+          display: flex;
+          width: 24px;
+          height: 19px;
+          align-items: center;
+          justify-content: center;
+          border-radius: 3px 3px 11px 11px;
+          background: var(--trophy-color);
+          color: #07111f;
+          font-size: 9px;
+          font-weight: 900;
+          line-height: 1;
+        }
+
+        .terminal-line :global(.achievement-cup-bowl::before),
+        .terminal-line :global(.achievement-cup-bowl::after) {
+          position: absolute;
+          top: 2px;
+          width: 8px;
+          height: 10px;
+          border: 3px solid var(--trophy-color);
+          content: "";
+        }
+
+        .terminal-line :global(.achievement-cup-bowl::before) {
+          right: calc(100% - 2px);
+          border-right: 0;
+          border-radius: 7px 0 0 7px;
+        }
+
+        .terminal-line :global(.achievement-cup-bowl::after) {
+          left: calc(100% - 2px);
+          border-left: 0;
+          border-radius: 0 7px 7px 0;
+        }
+
+        .terminal-line :global(.achievement-cup-stem) {
+          position: absolute;
+          top: 18px;
+          left: 16px;
+          width: 4px;
+          height: 12px;
+          border-radius: 0 0 3px 3px;
+          background: var(--trophy-color);
+        }
+
+        .terminal-line :global(.achievement-cup-base) {
+          position: absolute;
+          bottom: 4px;
+          left: 10px;
+          width: 16px;
+          height: 5px;
+          border-radius: 3px 3px 1px 1px;
+          background: var(--trophy-color);
+          box-shadow: 0 3px 0 -1px var(--trophy-color);
+        }
+
+        .terminal-line :global(.achievement-trophy-label) {
+          width: 100%;
+          overflow: hidden;
+          color: #475569;
+          font-size: 0.58rem;
+          font-weight: 650;
+          line-height: 1.15;
+          text-align: center;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        :global(.dark) .terminal-line :global(.achievement-trophy-label) {
+          color: #cbd5e1;
+        }
+
+        .terminal-line :global(.achievement-shelf-plank) {
+          position: relative;
+          height: 7px;
+          margin-top: 0.22rem;
+          border: 1px solid rgba(51, 65, 85, 0.34);
+          border-radius: 2px;
+          background: linear-gradient(180deg, #94a3b8 0%, #64748b 46%, #334155 100%);
+          box-shadow:
+            0 6px 12px rgba(15, 23, 42, 0.2),
+            inset 0 1px rgba(255, 255, 255, 0.35);
+        }
+
+        .terminal-line :global(.achievement-shelf-plank::after) {
+          position: absolute;
+          right: 7%;
+          bottom: -5px;
+          left: 7%;
+          height: 4px;
+          border-radius: 0 0 4px 4px;
+          background: rgba(30, 41, 59, 0.72);
+          content: "";
+        }
+
+        .terminal-line :global(.achievement-case-note) {
+          margin: 0.75rem 0.15rem 0;
+          color: #64748b;
+          font-size: 0.66rem;
+          line-height: 1.35;
+        }
+
+        :global(.dark) .terminal-line :global(.achievement-case-note) {
+          color: #94a3b8;
+        }
+
+        @media (max-width: 520px) {
+          .terminal-line :global(.achievement-case) {
+            border-radius: 10px;
+            padding: 0.8rem 0.6rem 0.7rem;
+          }
+
+          .terminal-line :global(.achievement-shelf-row) {
+            padding-inline: 0.1rem;
+          }
+
+          .terminal-line :global(.achievement-trophies) {
+            min-height: 57px;
+            gap: 0.12rem;
+          }
+
+          .terminal-line :global(.achievement-cup) {
+            transform: scale(0.9);
+            transform-origin: bottom center;
+          }
+
+          .terminal-line :global(.achievement-trophy-label) {
+            font-size: 0.5rem;
+          }
+        }
+
         .terminal-line.command-line {
           color: #383a42;
         }
@@ -655,8 +1080,38 @@ export const Terminal: FC<TerminalProps> = ({
           color: #0d7377;
         }
 
+        .terminal-line :global(.terminal-launch-command) {
+          appearance: none;
+          border: 0;
+          background: transparent;
+          color: #0d7377;
+          cursor: pointer;
+          font: inherit;
+          font-weight: 700;
+          padding: 0;
+          text-decoration: underline;
+          text-decoration-style: dotted;
+          text-underline-offset: 3px;
+        }
+
+        .terminal-line :global(.terminal-launch-command:hover),
+        .terminal-line :global(.terminal-launch-command:focus-visible) {
+          color: #e45649;
+          outline: none;
+          text-decoration-style: solid;
+        }
+
         :global(.dark) .terminal-line :global(.command) {
           color: #4ec9b0;
+        }
+
+        :global(.dark) .terminal-line :global(.terminal-launch-command) {
+          color: #4ec9b0;
+        }
+
+        :global(.dark) .terminal-line :global(.terminal-launch-command:hover),
+        :global(.dark) .terminal-line :global(.terminal-launch-command:focus-visible) {
+          color: #fbbf24;
         }
 
         .terminal-line :global(.terminal-link) {

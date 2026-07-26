@@ -13,15 +13,11 @@ const PortfolioPreview = dynamic(() =>
   import("components/sections/portfolio-preview").then((mod) => mod.PortfolioPreview)
 );
 const Contact = dynamic(() => import("components/sections/contact").then((mod) => mod.Contact));
-const AchievementsSection = dynamic(
-  () => import("components/achievements").then((mod) => mod.AchievementsSection),
-  { ssr: false }
-);
+const Quiz = dynamic(() => import("components/quiz").then((mod) => mod.Quiz), { ssr: false });
 const BatmanHome = dynamic(
   () => import("components/batman/batman-home").then((mod) => mod.BatmanHome),
   { ssr: false }
 );
-
 export const Index: FC = () => {
   const { mode } = usePortfolioMode();
 
@@ -37,8 +33,7 @@ export const Index: FC = () => {
       <Experience />
       <PortfolioPreview />
       <Contact />
-      <AchievementsSection />
-      {/* <Quiz /> */}
+      <Quiz />
     </AchievementProvider>
   );
 };

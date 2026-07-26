@@ -11,7 +11,12 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "export": "next build && next export -o .export",
-    "analyze": "ANALYZE=true next build"
+    "analyze": "ANALYZE=true next build",
+    "game:map:fetch": "tsx scripts/boring/map/fetch.ts",
+    "game:map:build": "tsx scripts/boring/map/build.ts",
+    "game:map:validate": "tsx scripts/boring/map/validate.ts",
+    "test:game": "tsx --test lib/boring/**/*.test.ts scripts/boring/**/*.test.ts",
+    "typecheck:game": "tsc --project tsconfig.boring.json --pretty false"
   },
   "engines": {
     "node": ">=16.0.0"
@@ -24,7 +29,11 @@
     "@headlessui/react": "^1.7.2",
     "@heroicons/react": "^2.0.11",
     "@react-icons/all-files": "^4.1.0",
+    "@react-three/drei": "9.122.0",
+    "@react-three/fiber": "8.18.0",
+    "@react-three/postprocessing": "2.19.1",
     "@types/prismjs": "^1.26.0",
+    "@types/three": "0.170.0",
     "framer-motion": "^7.3.6",
     "immer": "^9.0.15",
     "next": "^12.3.1",
@@ -33,6 +42,7 @@
     "next-themes": "0.2.1",
     "nodemailer": "^6.7.8",
     "party-js": "^2.2.0",
+    "postprocessing": "6.36.4",
     "prismjs": "^1.29.0",
     "raw-loader": "^4.0.2",
     "react": "^18.2.0",
@@ -42,6 +52,7 @@
     "react-use": "^17.4.0",
     "rimraf": "^5.0.1",
     "short-uuid": "^4.2.0",
+    "three": "0.170.0",
     "twitter-api-sdk": "^1.1.0",
     "zod": "^3.20.2",
     "zustand": "^4.1.1"
@@ -69,7 +80,8 @@
     "tailwind-gradient-mask-image": "^1.0.0",
     "tailwindcss": "^3.1.8",
     "type-fest": "^3.0.0",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.3",
+    "tsx": "^4.19.2"
   },
   "typeRoots": [
     "./node_modules/@types",

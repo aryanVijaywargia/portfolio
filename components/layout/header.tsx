@@ -88,13 +88,28 @@ export const Header: FC = ({}) => {
   }, [isMinimal]);
 
   if (isMinimal) {
+    const isResume = router.pathname === "/resume";
+
     return (
-      <header className="fixed inset-x-0 top-0 z-50 h-20 print:hidden">
+      <header className="fixed inset-x-0 top-0 z-50 h-20 border-b border-gray-200/70 bg-white/80 backdrop-blur-xl d:border-gray-700/60 d:bg-gray-900/80 print:hidden">
         <div className="mx-auto flex h-full max-w-6xl items-center px-4 md:px-8">
           <Link href="/" className="z-10 w-min" data-tip="Back to home" data-delay-show={500}>
             <span className="sr-only">Back to home</span>
             {HEADER.logo.title}
           </Link>
+          <nav className="ml-auto flex items-center gap-5 text-sm font-medium text-gray-500 d:text-gray-400 sm:gap-7">
+            <Link
+              href="/resume"
+              aria-current={isResume ? "page" : undefined}
+              className={`relative inline-flex min-h-[44px] items-center py-2 transition-colors hfa:text-sky-600 d:hfa:text-sky-400 ${
+                isResume
+                  ? "text-gray-900 after:absolute a:inset-x-0 a:-bottom-0.5 a:h-px a:bg-sky-500 d:text-white"
+                  : ""
+              }`}
+            >
+              Resume
+            </Link>
+          </nav>
         </div>
       </header>
     );
@@ -114,7 +129,7 @@ export const Header: FC = ({}) => {
           willChange: "transform, opacity",
         }}
       >
-        <div className="mx-auto flex h-full max-w-6xl grid-cols-[210px_1fr_210px] items-center gap-1 px-4 md:grid md:gap-4 md:px-8">
+        <div className="mx-auto flex h-full max-w-6xl items-center gap-1 px-4 md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:gap-4 md:px-8 xl:grid-cols-[210px_1fr_210px]">
           <Link
             href="/"
             className="z-10 w-min"

@@ -1,6 +1,6 @@
 import { ACHIEVEMENTS, ACHIEVEMENT_CATEGORY_LABELS, ACHIEVEMENT_ORDER, AchievementCategory, AchievementDefinition, AchievementId } from "./achievementsList";
 import clsx from "clsx";
-import { ArrowPathIcon, BoltIcon, CameraIcon, ClockIcon, CodeBracketIcon, FireIcon, KeyIcon, CommandLineIcon, EyeIcon, ShieldCheckIcon, CheckCircleIcon, AcademicCapIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, CameraIcon, ClockIcon, FireIcon, KeyIcon, CommandLineIcon, EyeIcon, ShieldCheckIcon, CheckCircleIcon, AcademicCapIcon, SparklesIcon, TrophyIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -35,6 +35,9 @@ type AchievementEvent =
   | { type: "snake:score"; score: number }
   | { type: "racer:score"; score: number }
   | { type: "dungeon:escaped" }
+  | { type: "contra:completed" }
+  | { type: "quiz:scroll-cheat" }
+  | { type: "quiz:confessed-cheat" }
   | { type: "quiz:completed" }
   | { type: "quiz:perfect-score" };
 
@@ -54,10 +57,13 @@ type AchievementProgress = {
   snakeBestScore: number;
   racerBestScore: number;
   dungeonEscaped: boolean;
+  contraCompleted: boolean;
   wowClicked: boolean;
   sourceDiverOpened: boolean;
   secretDiscovered: boolean;
   rootAccessGranted: boolean;
+  quizScrollCheated: boolean;
+  quizCheatConfessed: boolean;
   quizCompleted: boolean;
   quizPerfectScore: boolean;
 };
@@ -95,10 +101,13 @@ const DEFAULT_PROGRESS: AchievementProgress = {
   snakeBestScore: 0,
   racerBestScore: 0,
   dungeonEscaped: false,
+  contraCompleted: false,
   wowClicked: false,
   sourceDiverOpened: false,
   secretDiscovered: false,
   rootAccessGranted: false,
+  quizScrollCheated: false,
+  quizCheatConfessed: false,
   quizCompleted: false,
   quizPerfectScore: false,
 };
@@ -127,13 +136,14 @@ const getAchievementIdsToUnlock = (progress: AchievementProgress) => {
 
   if (progress.aboutCyclesCompleted >= 1) nextUnlocks.push("BEHIND_THE_PIXELS");
   if (progress.timelineYearsViewed.length >= 5) nextUnlocks.push("TIMELINE_TRAVELER");
-  if (progress.experienceEntriesViewed.length >= 4) nextUnlocks.push("GIT_ARCHAEOLOGIST");
   if (progress.snakeBestScore >= 30) nextUnlocks.push("SNAKE_CHARMER");
   if (progress.dungeonEscaped) nextUnlocks.push("ESCAPE_ARTIST");
-  if (progress.racerBestScore >= 300) nextUnlocks.push("ROAD_WARRIOR");
+  if (progress.contraCompleted) nextUnlocks.push("LOCKBREAKER");
   if (progress.devtoolsOpened) nextUnlocks.push("HACKER");
   if (progress.sourceDiverOpened) nextUnlocks.push("SOURCE_DIVER");
   if (progress.secretDiscovered && progress.rootAccessGranted) nextUnlocks.push("ROOT_ACCESS");
+  if (progress.quizScrollCheated) nextUnlocks.push("SHAME");
+  if (progress.quizCheatConfessed) nextUnlocks.push("BOOOO");
   if (progress.quizCompleted) nextUnlocks.push("POP_QUIZ_SURVIVOR");
   if (progress.quizPerfectScore) nextUnlocks.push("BYTE_APPROVED");
 
@@ -201,6 +211,15 @@ const applyAchievementEvent = (
     case "dungeon:escaped":
       next.dungeonEscaped = true;
       break;
+    case "contra:completed":
+      next.contraCompleted = true;
+      break;
+    case "quiz:scroll-cheat":
+      next.quizScrollCheated = true;
+      break;
+    case "quiz:confessed-cheat":
+      next.quizCheatConfessed = true;
+      break;
     case "quiz:completed":
       next.quizCompleted = true;
       break;
@@ -219,13 +238,14 @@ const applyAchievementEvent = (
 const ACHIEVEMENT_ICONS: Record<AchievementId, React.ComponentType<{ className?: string }>> = {
   BEHIND_THE_PIXELS: CameraIcon,
   TIMELINE_TRAVELER: ClockIcon,
-  GIT_ARCHAEOLOGIST: CodeBracketIcon,
   SNAKE_CHARMER: FireIcon,
   ESCAPE_ARTIST: KeyIcon,
-  ROAD_WARRIOR: BoltIcon,
+  LOCKBREAKER: ShieldCheckIcon,
   HACKER: CommandLineIcon,
   SOURCE_DIVER: EyeIcon,
   ROOT_ACCESS: ShieldCheckIcon,
+  SHAME: TrophyIcon,
+  BOOOO: TrophyIcon,
   POP_QUIZ_SURVIVOR: AcademicCapIcon,
   BYTE_APPROVED: SparklesIcon,
 };
@@ -432,8 +452,8 @@ export const AchievementProvider: React.FC<{ children: React.ReactNode }> = ({ c
     };
 
     window.__ARYAN_DEVTOOLS__ = {
-      achievements: `${window.location.origin}/#achievements`,
-      hint: "Try window.__ARYAN_DEVTOOLS__.openRepo()",
+      achievements: `${window.location.origin}/#terminal-section`,
+      hint: "Check the achievements in the terminal: run `achievements`.",
       openRepo: () => {
         trackAchievementEvent({ type: "portfolio:link-opened" });
         window.open(repoUrl, "_blank", "noopener,noreferrer");
@@ -516,9 +536,15 @@ const AchievementToasts: React.FC<{ latestAchievementId: AchievementId | null }>
   const achievement = latestAchievementId ? ACHIEVEMENTS[latestAchievementId] : null;
   const accent = achievement ? getCategoryAccent(achievement.category) : null;
   const Icon = latestAchievementId ? ACHIEVEMENT_ICONS[latestAchievementId] : null;
+  const isCheatAchievement = latestAchievementId === "SHAME" || latestAchievementId === "BOOOO";
 
   return (
-    <div className="pointer-events-none fixed inset-x-4 bottom-4 z-[100] md:left-6 md:right-auto md:max-w-sm">
+    <div
+      className={clsx(
+        "pointer-events-none fixed inset-x-4 bottom-4 z-[100] md:left-6 md:right-auto",
+        isCheatAchievement ? "md:max-w-2xl" : "md:max-w-sm"
+      )}
+    >
       <AnimatePresence>
         {achievement && latestAchievementId && accent && Icon && (
           <motion.div
@@ -528,25 +554,52 @@ const AchievementToasts: React.FC<{ latestAchievementId: AchievementId | null }>
             exit={{ opacity: 0, y: 20, scale: 0.97 }}
             transition={{ type: "spring", stiffness: 380, damping: 26 }}
           >
-            <Link href="/#achievements">
-              <a className="pointer-events-auto flex items-center gap-3.5 rounded-xl border border-gray-200 bg-white px-4 py-3.5 shadow-xl shadow-gray-900/10 transition-transform hfa:scale-[1.01] d:border-gray-700 d:bg-gray-800 d:shadow-black/30">
-                <div
-                  className={clsx(
-                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
-                    accent.iconBg
-                  )}
-                >
-                  <Icon className={clsx("h-5 w-5", accent.iconText)} />
-                </div>
+            <Link href="/#terminal-section">
+              <a
+                className={clsx(
+                  "pointer-events-auto flex items-center gap-3.5 px-4 py-3.5 shadow-xl transition-transform hfa:scale-[1.01]",
+                  isCheatAchievement
+                    ? "rounded-[1.75rem] border border-emerald-400/20 bg-emerald-950 text-white shadow-emerald-950/30"
+                    : "rounded-xl border border-gray-200 bg-white shadow-gray-900/10 d:border-gray-700 d:bg-gray-800 d:shadow-black/30"
+                )}
+              >
+                {isCheatAchievement
+                  ? <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-700 text-2xl shadow-inner shadow-emerald-300/15">
+                      <span aria-hidden="true">🏆</span>
+                    </div>
+                  : <div
+                      className={clsx(
+                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
+                        accent.iconBg
+                      )}
+                    >
+                      <Icon className={clsx("h-5 w-5", accent.iconText)} />
+                    </div>}
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 d:text-gray-500">
-                    Achievement unlocked
-                  </p>
-                  <p className="mt-0.5 truncate text-sm font-semibold text-gray-900 d:text-white">
-                    {achievement.title}
-                  </p>
+                  {isCheatAchievement
+                    ? <>
+                        <p className="font-mono text-sm font-black uppercase tracking-[0.16em] text-white">
+                          {achievement.title}
+                        </p>
+                        <p className="mt-0.5 text-xs leading-snug text-emerald-50 md:text-sm">
+                          {achievement.description}
+                        </p>
+                      </>
+                    : <>
+                        <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 d:text-gray-500">
+                          Achievement unlocked
+                        </p>
+                        <p className="mt-0.5 truncate text-sm font-semibold text-gray-900 d:text-white">
+                          {achievement.title}
+                        </p>
+                        <p className="mt-1 text-[11px] leading-snug text-gray-500 d:text-gray-400">
+                          Check the achievements in the terminal.
+                        </p>
+                      </>}
                 </div>
-                <CheckCircleIcon className="h-5 w-5 shrink-0 text-emerald-500" />
+                {!isCheatAchievement && (
+                  <CheckCircleIcon className="h-5 w-5 shrink-0 text-emerald-500" />
+                )}
               </a>
             </Link>
           </motion.div>

@@ -21,6 +21,9 @@ const DungeonGame = dynamic(() => import("./dungeon-game").then((mod) => mod.Dun
 const RacerGame = dynamic(() => import("./racer-game").then((mod) => mod.RacerGame), {
   ssr: false,
 });
+const ContraGame = dynamic(() => import("./contra-game").then((mod) => mod.ContraGame), {
+  ssr: false,
+});
 const GameMenu = dynamic(() => import("./game-menu").then((mod) => mod.GameMenu), {
   ssr: false,
 });
@@ -48,6 +51,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     | "snake"
     | "dungeon"
     | "racer"
+    | "contra"
     | "intro-reel"
     | "radio"
   >("terminal");
@@ -187,7 +191,9 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   };
 
   const handleSelectGame = (gameId: string) => {
-    if (gameId === "snake") {
+    if (gameId === "contra") {
+      setMode("contra");
+    } else if (gameId === "snake") {
       setMode("snake");
     } else if (gameId === "dungeon") {
       setMode("dungeon");
@@ -232,6 +238,10 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     () => trackAchievementEvent({ type: "dungeon:escaped" }),
     [trackAchievementEvent]
   );
+  const handleContraComplete = useCallback(
+    () => trackAchievementEvent({ type: "contra:completed" }),
+    [trackAchievementEvent]
+  );
   const handleValidCommand = useCallback(
     (command: string) => trackAchievementEvent({ type: "terminal:valid-command", command }),
     [trackAchievementEvent]
@@ -261,6 +271,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? "⚔️ Dungeon Quest - Terminal"
     : mode === "racer"
     ? "🏎️ Turbo Racer - Terminal"
+    : mode === "contra"
+    ? "🔫 Contra: Terminal Assault"
     : mode === "game-menu"
     ? "🎮 Games - Terminal"
     : mode === "intro-reel"
@@ -326,6 +338,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? <DungeonGame onGameEnd={handleExitToGameMenu} onEscape={handleDungeonEscape} />
     : mode === "racer"
     ? <RacerGame onGameEnd={handleExitToGameMenu} onScoreChange={handleRacerScoreChange} />
+    : mode === "contra"
+    ? <ContraGame onGameEnd={handleExitToGameMenu} onMissionComplete={handleContraComplete} />
     : mode === "intro-reel"
     ? <IntroReel onExit={handleExitIntroReel} />
     : mode === "radio"
@@ -525,8 +539,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       <style jsx>{`
         .terminal-window {
           box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6),
-            0 20px 50px -18px rgba(15, 23, 42, 0.25),
-            0 0 80px -25px rgba(6, 182, 212, 0.18);
+            0 20px 50px -18px rgba(15, 23, 42, 0.25), 0 0 80px -25px rgba(6, 182, 212, 0.18);
         }
         :global(.dark) .terminal-window {
           box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08),

@@ -40,6 +40,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
   const router = useRouter();
   const { mode, showTransition } = usePortfolioMode();
   const isBatman = mode === "batman";
+  const isBoring = router.pathname === "/boring";
   const canonicalPath = router.asPath.split(/[?#]/)[0] || "/";
 
   useEffect(() => {
@@ -62,19 +63,31 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
         {...SEO}
         canonical={`${SEO.url}${canonicalPath}`}
         twitter={SEO.twitter}
-        title={isBatman ? "Aryan Vijaywargia | The Dark Knight" : SEO.title}
+        title={
+          isBatman
+            ? "Aryan Vijaywargia | The Dark Knight"
+            : isBoring
+            ? "Boring Mode | The Portfolio Job"
+            : SEO.title
+        }
         description={SEO.description}
         openGraph={SEO.openGraph}
       />
-      {isBatman ? <BatmanHeader /> : <Header />}
-      <main className="relative z-10 min-h-screen print:!mx-auto print:!w-[1024px]">
+      {isBoring ? null : isBatman ? <BatmanHeader /> : <Header />}
+      <main
+        className={
+          isBoring
+            ? "relative z-10 h-screen overflow-hidden"
+            : "relative z-10 min-h-screen print:!mx-auto print:!w-[1024px]"
+        }
+      >
         <Component {...pageProps} />
       </main>
-      {isBatman ? <BatmanFooter /> : <Footer />}
-      <MobileExperienceNotice />
+      {isBoring ? null : isBatman ? <BatmanFooter /> : <Footer />}
+      {!isBoring && router.pathname === "/" ? <MobileExperienceNotice /> : null}
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
-      {!isBatman && router.pathname === "/" ? <AmbientMessages /> : null}
+      {!isBatman && !isBoring && router.pathname === "/" ? <AmbientMessages /> : null}
     </>
   );
 };
