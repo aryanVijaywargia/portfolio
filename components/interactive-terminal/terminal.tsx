@@ -13,7 +13,6 @@ type TerminalProps = {
   onSwitchToChatbot: () => void;
   onSwitchToGameMenu: () => void;
   onSwitchToIntroReel: () => void;
-  onSwitchToMusic: () => void;
   onSwitchToRadio: () => void;
   triggerChatbot?: boolean;
   onTriggerHandled?: () => void;
@@ -31,7 +30,6 @@ export const Terminal: FC<TerminalProps> = ({
   onSwitchToChatbot,
   onSwitchToGameMenu,
   onSwitchToIntroReel,
-  onSwitchToMusic,
   onSwitchToRadio,
   triggerChatbot,
   onTriggerHandled,
@@ -398,10 +396,6 @@ export const Terminal: FC<TerminalProps> = ({
               1500
             )
           );
-          return;
-
-        case "music":
-          onSwitchToMusic();
           return;
 
         case "radio":

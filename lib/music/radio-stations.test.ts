@@ -2,20 +2,35 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { getMusicRequestKind, pickRandomStationIndex, RADIO_STATIONS } from "./radio-stations";
 
-test("coding radio stations use unique direct HTTPS streams", () => {
-  assert.ok(RADIO_STATIONS.length >= 4);
+test("playlist first ten uses unique public preview streams in order", () => {
+  assert.equal(RADIO_STATIONS.length, 10);
   assert.equal(new Set(RADIO_STATIONS.map(({ id }) => id)).size, RADIO_STATIONS.length);
-  const allStreamUrls = RADIO_STATIONS.flatMap(({ streamUrl, fallbackStreamUrl }) => [
-    streamUrl,
-    fallbackStreamUrl,
-  ]);
-  assert.equal(new Set(allStreamUrls).size, RADIO_STATIONS.length * 2);
+  assert.deepEqual(
+    RADIO_STATIONS.map(({ name }) => name),
+    [
+      "Axis",
+      "NRG",
+      "Kaelo",
+      "Pale Light",
+      "Daeo",
+      "Corrupted",
+      "Nuova",
+      "COSMIC",
+      "Lohka",
+      "Hypersquare",
+    ]
+  );
+  const allStreamUrls = RADIO_STATIONS.map(({ streamUrl }) => streamUrl);
+  assert.equal(new Set(allStreamUrls).size, RADIO_STATIONS.length);
 
   allStreamUrls.forEach((streamUrl) => {
     const url = new URL(streamUrl);
     assert.equal(url.protocol, "https:");
-    assert.match(url.hostname, /^ice[25]\.somafm\.com$/);
-    assert.match(url.pathname, /-128-mp3$/);
+    assert.ok(["p.scdn.co", "audio-ssl.itunes.apple.com"].includes(url.hostname));
+  });
+
+  RADIO_STATIONS.forEach(({ id, spotifyUrl }) => {
+    assert.equal(spotifyUrl, `https://open.spotify.com/track/${id}`);
   });
 });
 
