@@ -17,6 +17,8 @@ type LogLine = {
 };
 
 const wrapIndex = (index: number) => (index + RADIO_STATIONS.length) % RADIO_STATIONS.length;
+const isCancelledOrStalePlay = (error: unknown, audio: HTMLAudioElement, expectedUrl: string) =>
+  (error instanceof Error && error.name === "AbortError") || audio.src !== expectedUrl;
 
 const statusText: Record<PlaybackStatus, string> = {
   connecting: "DIALING",
@@ -32,7 +34,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
   const [selectedIndex, setSelectedIndex] = useState(initialIndex);
   const [status, setStatus] = useState<PlaybackStatus>(audio.paused ? "connecting" : "playing");
   const [input, setInput] = useState("");
-  const [volume, setVolume] = useState(Math.round(audio.volume * 100) || 72);
+  const [volume, setVolume] = useState(Math.round(audio.volume * 100));
   const [logs, setLogs] = useState<LogLine[]>([
     { id: 1, text: "radio 1.0.0 — terminal focus receiver", tone: "muted" },
     { id: 2, text: `dialing ${RADIO_STATIONS[initialIndex].name}...`, tone: "normal" },
@@ -57,7 +59,9 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
     audio.muted = false;
     audio.src = station.streamUrl;
     audio.load();
-    audio.play().catch(() => {
+    const expectedUrl = station.streamUrl;
+    audio.play().catch((error: unknown) => {
+      if (isCancelledOrStalePlay(error, audio, expectedUrl)) return;
       setStatus("blocked");
       appendLog("autoplay blocked — type `resume` or press enter", "warning");
     });
@@ -77,7 +81,11 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
         setStatus("connecting");
         audio.src = station.fallbackStreamUrl;
         audio.load();
-        audio.play().catch(() => setStatus("error"));
+        const expectedUrl = station.fallbackStreamUrl;
+        audio.play().catch((error: unknown) => {
+          if (isCancelledOrStalePlay(error, audio, expectedUrl)) return;
+          setStatus("error");
+        });
         return;
       }
       setStatus("error");
@@ -164,13 +172,16 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
         appendLog("playback paused", "warning");
         return;
       case "resume":
-      case "start":
+      case "start": {
         setStatus("connecting");
-        audio.play().catch(() => {
+        const expectedUrl = audio.src;
+        audio.play().catch((error: unknown) => {
+          if (isCancelledOrStalePlay(error, audio, expectedUrl)) return;
           setStatus("blocked");
           appendLog("browser refused playback — press enter once more", "error");
         });
         return;
+      }
       case "volume":
       case "vol": {
         const nextVolume = Number(args[0]);

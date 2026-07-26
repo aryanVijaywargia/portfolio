@@ -27,9 +27,6 @@ const GameMenu = dynamic(() => import("./game-menu").then((mod) => mod.GameMenu)
 const IntroReel = dynamic(() => import("./intro-reel").then((mod) => mod.IntroReel), {
   ssr: false,
 });
-const MusicPlayer = dynamic(() => import("./music-player").then((mod) => mod.MusicPlayer), {
-  ssr: false,
-});
 const TerminalRadio = dynamic(() => import("./terminal-radio").then((mod) => mod.TerminalRadio), {
   ssr: false,
 });
@@ -52,7 +49,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     | "dungeon"
     | "racer"
     | "intro-reel"
-    | "music"
     | "radio"
   >("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
@@ -61,7 +57,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const [skipTerminalIntroOnce, setSkipTerminalIntroOnce] = useState(false);
   const [editorCode, setEditorCode] = useState<string | string[] | null>(code ?? null);
   const [musicStationIndex, setMusicStationIndex] = useState(0);
-  const [musicLaunchedByChatbot, setMusicLaunchedByChatbot] = useState(false);
   const musicAudioRef = useRef<HTMLAudioElement | null>(null);
   const triggerChatbot = useChatbot((state) => state.triggerChatbot);
   const requestChatbot = useChatbot((state) => state.requestChatbot);
@@ -143,46 +138,38 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     setIsTerminalMaximized(true);
   };
 
-  const startMusic = useCallback(
-    (stationIndex: number, launchedByChatbot: boolean, targetMode: "music" | "radio" = "music") => {
-      const audio = musicAudioRef.current;
-      const station = RADIO_STATIONS[stationIndex];
-      if (!audio) return station;
+  const startRadio = useCallback((stationIndex: number) => {
+    const audio = musicAudioRef.current;
+    const station = RADIO_STATIONS[stationIndex];
+    if (!audio) return station;
 
-      audio.volume = 0.72;
-      audio.muted = false;
-      if (audio.src !== station.streamUrl) {
-        audio.src = station.streamUrl;
-        audio.load();
-      }
-      audio.play().catch(() => undefined);
-      setMusicStationIndex(stationIndex);
-      setMusicLaunchedByChatbot(launchedByChatbot);
-      setMode(targetMode);
-      return station;
-    },
-    []
-  );
-
-  const handleSwitchToMusic = () => {
-    startMusic(0, false);
-  };
+    audio.volume = 1;
+    audio.muted = false;
+    if (audio.src !== station.streamUrl) {
+      audio.src = station.streamUrl;
+      audio.load();
+    }
+    audio.play().catch(() => undefined);
+    setMusicStationIndex(stationIndex);
+    setMode("radio");
+    return station;
+  }, []);
 
   const handleSwitchToRadio = () => {
-    startMusic(0, false, "radio");
+    startRadio(0);
   };
 
   const handleChatbotMusicRequest = useCallback((_kind: MusicRequestKind): RadioStation => {
     const stationIndex = pickRandomStationIndex();
-    const station = startMusic(stationIndex, true);
+    const station = startRadio(stationIndex);
     setIsExpanded(false);
     setSkipTerminalIntroOnce(false);
     closeChat();
     clearTrigger();
     return station;
-  }, [clearTrigger, closeChat, startMusic]);
+  }, [clearTrigger, closeChat, startRadio]);
 
-  const handleExitMusic = () => {
+  const handleExitRadio = () => {
     const audio = musicAudioRef.current;
     if (audio) {
       audio.pause();
@@ -263,7 +250,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   );
 
   const isModal = isExpanded || isTerminalMaximized;
-  const isInlineAudioMode = mode === "music" || mode === "radio";
+  const isInlineAudioMode = mode === "radio";
 
   // Determine terminal title
   const terminalTitle = isExpanded
@@ -278,8 +265,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? "🎮 Games - Terminal"
     : mode === "intro-reel"
     ? "whois.mp4 - Terminal"
-    : mode === "music"
-    ? "♫ coding-radio — zsh"
     : mode === "radio"
     ? "radio — zsh"
     : mode === "editor"
@@ -307,7 +292,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     : isTerminalMaximized
     ? handleMinimizeTerminal
     : isInlineAudioMode
-    ? handleExitMusic
+    ? handleExitRadio
     : mode === "editor"
     ? handleSwitchToTerminal
     : mode === "terminal"
@@ -343,18 +328,11 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? <RacerGame onGameEnd={handleExitToGameMenu} onScoreChange={handleRacerScoreChange} />
     : mode === "intro-reel"
     ? <IntroReel onExit={handleExitIntroReel} />
-    : mode === "music"
-    ? <MusicPlayer
-        audio={musicAudioRef.current!}
-        initialStationIndex={musicStationIndex}
-        launchedByChatbot={musicLaunchedByChatbot}
-        onExit={handleExitMusic}
-      />
     : mode === "radio"
     ? <TerminalRadio
         audio={musicAudioRef.current!}
         initialStationIndex={musicStationIndex}
-        onExit={handleExitMusic}
+        onExit={handleExitRadio}
       />
     : mode === "editor"
     ? <div className="scrollbar-none h-full overflow-auto p-3">
@@ -369,7 +347,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         onSwitchToChatbot={handleSwitchToChatbot}
         onSwitchToGameMenu={handleSwitchToGame}
         onSwitchToIntroReel={handleSwitchToIntroReel}
-        onSwitchToMusic={handleSwitchToMusic}
         onSwitchToRadio={handleSwitchToRadio}
         triggerChatbot={triggerChatbot}
         onTriggerHandled={clearTrigger}
@@ -489,7 +466,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
         {!isModal && isInlineAudioMode && (
           <button
-            onClick={handleExitMusic}
+            onClick={handleExitRadio}
             className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
             aria-label="Back to terminal"
           >
