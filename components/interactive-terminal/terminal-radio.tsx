@@ -28,12 +28,6 @@ const statusText: Record<PlaybackStatus, string> = {
   error: "OFFLINE",
 };
 
-const formatPlayCount = (playCount: number) =>
-  new Intl.NumberFormat("en", {
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(playCount);
-
 export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationIndex, onExit }) => {
   const initialIndex = wrapIndex(initialStationIndex);
   const [activeIndex, setActiveIndex] = useState(initialIndex);
@@ -42,7 +36,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
   const [input, setInput] = useState("");
   const [volume, setVolume] = useState(Math.round(audio.volume * 100));
   const [logs, setLogs] = useState<LogLine[]>([
-    { id: 1, text: "radio 2.0.0 — Spotify top-10 preview queue", tone: "muted" },
+    { id: 1, text: "radio 2.0.0 — EDM and Techno mix / first 10", tone: "muted" },
     { id: 2, text: `loading ${RADIO_STATIONS[initialIndex].name}...`, tone: "normal" },
   ]);
   const logId = useRef(2);
@@ -331,7 +325,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
                 <span className={isActive ? "text-white" : undefined}>{station.name}</span>
                 <span className="hidden text-slate-700 sm:inline">
                   {" "}
-                  :: {station.artists} :: {formatPlayCount(station.playCount)} plays
+                  :: {station.artists} :: {station.previewSource} preview
                 </span>
               </button>
             );
@@ -367,7 +361,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
       </form>
 
       <footer className="shrink-0 truncate px-3 pb-2 text-[9px] text-slate-700">
-        ↑↓ select · ↵ play/pause · next · stop · q exit · Spotify previews auto-advance
+        ↑↓ select · ↵ play/pause · next · stop · q exit · public previews auto-advance
       </footer>
     </section>
   );
