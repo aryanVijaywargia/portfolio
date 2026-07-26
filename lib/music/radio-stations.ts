@@ -6,6 +6,8 @@ export type RadioStation = {
   vibe: string;
 };
 
+export type MusicRequestKind = "favorite" | "play";
+
 // Reddit's recurring coding-music recommendations lean toward lyric-free ambient,
 // downtempo, and DEF CON Radio. SomaFM exposes direct, commercial-free streams,
 // so playback can stay inside the terminal without a third-party player widget.
@@ -46,3 +48,28 @@ export const RADIO_STATIONS: RadioStation[] = [
     vibe: "flow / electronica",
   },
 ];
+
+const MUSIC_WORDS = "music|song|songs|tune|tunes|beats|radio|playlist|station";
+const PLAY_WORDS = "play|spin|spun|start|queue|shuffle|stream|put on|turn on";
+
+export const getMusicRequestKind = (message: string): MusicRequestKind | null => {
+  const normalized = message
+    .toLowerCase()
+    .replace(/[^a-z0-9\s']/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const asksForFavorite = new RegExp(
+    `(?:favourite|favorite|fav).*(?:${MUSIC_WORDS})|(?:${MUSIC_WORDS}).*(?:favourite|favorite|fav)`
+  ).test(normalized);
+
+  if (asksForFavorite) return "favorite";
+
+  const asksToPlay = new RegExp(
+    `(?:${PLAY_WORDS}).*(?:${MUSIC_WORDS})|(?:${MUSIC_WORDS}).*(?:please|now)`
+  ).test(normalized);
+
+  return asksToPlay ? "play" : null;
+};
+
+export const pickRandomStationIndex = (random = Math.random): number =>
+  Math.min(RADIO_STATIONS.length - 1, Math.floor(random() * RADIO_STATIONS.length));

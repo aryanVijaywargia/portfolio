@@ -3,6 +3,8 @@ import { RADIO_STATIONS } from "lib/music/radio-stations";
 
 type MusicPlayerProps = {
   audio: HTMLAudioElement;
+  initialStationIndex: number;
+  launchedByChatbot?: boolean;
   onExit: () => void;
 };
 
@@ -10,10 +12,15 @@ type PlaybackStatus = "connecting" | "playing" | "paused" | "blocked" | "error";
 
 const wrapIndex = (index: number) => (index + RADIO_STATIONS.length) % RADIO_STATIONS.length;
 
-export const MusicPlayer: FC<MusicPlayerProps> = ({ audio, onExit }) => {
+export const MusicPlayer: FC<MusicPlayerProps> = ({
+  audio,
+  initialStationIndex,
+  launchedByChatbot = false,
+  onExit,
+}) => {
   const stationRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(() => wrapIndex(initialStationIndex));
+  const [activeIndex, setActiveIndex] = useState(() => wrapIndex(initialStationIndex));
   const [status, setStatus] = useState<PlaybackStatus>("connecting");
   const [volume, setVolume] = useState(0.72);
 
@@ -114,9 +121,13 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({ audio, onExit }) => {
     >
       <header className="flex shrink-0 items-center justify-between border-b border-cyan-300/10 px-3 py-2">
         <div className="min-w-0">
-          <p className="truncate text-xs text-cyan-300">$ radio --reddit-picks</p>
+          <p className="truncate text-xs text-cyan-300">
+            {launchedByChatbot ? "$ byte --shuffle coding-radio" : "$ radio --reddit-picks"}
+          </p>
           <p className="mt-0.5 truncate text-[10px] text-slate-600">
-            Reddit-picked focus stations · direct commercial-free streams
+            {launchedByChatbot
+              ? "Byte picked a random favorite · playback continues while you scroll"
+              : "Reddit-picked focus stations · playback continues while you scroll"}
           </p>
         </div>
         <span className="ml-3 flex shrink-0 items-center gap-1.5 text-[10px] uppercase tracking-wider text-slate-500">

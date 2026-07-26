@@ -9,7 +9,8 @@ import { CopyButton } from "components/copy-button";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
 import type { CodeGroupProps } from "components/typography/code";
-import { RADIO_STATIONS } from "lib/music/radio-stations";
+import { pickRandomStationIndex, RADIO_STATIONS } from "lib/music/radio-stations";
+import type { MusicRequestKind, RadioStation } from "lib/music/radio-stations";
 
 const SnakeGame = dynamic(() => import("./snake-game").then((mod) => mod.SnakeGame), {
   ssr: false,
@@ -55,6 +56,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const [replayIntroKey, setReplayIntroKey] = useState(0);
   const [skipTerminalIntroOnce, setSkipTerminalIntroOnce] = useState(false);
   const [editorCode, setEditorCode] = useState<string | string[] | null>(code ?? null);
+  const [musicStationIndex, setMusicStationIndex] = useState(0);
+  const [musicLaunchedByChatbot, setMusicLaunchedByChatbot] = useState(false);
   const musicAudioRef = useRef<HTMLAudioElement | null>(null);
   const triggerChatbot = useChatbot((state) => state.triggerChatbot);
   const requestChatbot = useChatbot((state) => state.requestChatbot);
@@ -136,17 +139,36 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     setIsTerminalMaximized(true);
   };
 
-  const handleSwitchToMusic = () => {
+  const startMusic = useCallback((stationIndex: number, launchedByChatbot: boolean) => {
     const audio = musicAudioRef.current;
-    if (!audio) return;
+    const station = RADIO_STATIONS[stationIndex];
+    if (!audio) return station;
+
     audio.volume = 0.72;
-    if (audio.src !== RADIO_STATIONS[0].streamUrl) {
-      audio.src = RADIO_STATIONS[0].streamUrl;
+    if (audio.src !== station.streamUrl) {
+      audio.src = station.streamUrl;
       audio.load();
     }
     audio.play().catch(() => undefined);
+    setMusicStationIndex(stationIndex);
+    setMusicLaunchedByChatbot(launchedByChatbot);
     setMode("music");
+    return station;
+  }, []);
+
+  const handleSwitchToMusic = () => {
+    startMusic(0, false);
   };
+
+  const handleChatbotMusicRequest = useCallback((_kind: MusicRequestKind): RadioStation => {
+    const stationIndex = pickRandomStationIndex();
+    const station = startMusic(stationIndex, true);
+    setIsExpanded(false);
+    setSkipTerminalIntroOnce(false);
+    closeChat();
+    clearTrigger();
+    return station;
+  }, [clearTrigger, closeChat, startMusic]);
 
   const handleExitMusic = () => {
     const audio = musicAudioRef.current;
@@ -291,7 +313,11 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
   // Terminal content based on current mode
   const terminalContent = isExpanded
-    ? <TerminalChatbot onExit={handleExitChatbot} onMessageSent={handleChatbotMessageSent} />
+    ? <TerminalChatbot
+        onExit={handleExitChatbot}
+        onMessageSent={handleChatbotMessageSent}
+        onPlayMusic={handleChatbotMusicRequest}
+      />
     : mode === "game-menu"
     ? <GameMenu onSelectGame={handleSelectGame} onExit={handleExitGame} />
     : mode === "snake"
@@ -303,7 +329,12 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     : mode === "intro-reel"
     ? <IntroReel onExit={handleExitIntroReel} />
     : mode === "music"
-    ? <MusicPlayer audio={musicAudioRef.current!} onExit={handleExitMusic} />
+    ? <MusicPlayer
+        audio={musicAudioRef.current!}
+        initialStationIndex={musicStationIndex}
+        launchedByChatbot={musicLaunchedByChatbot}
+        onExit={handleExitMusic}
+      />
     : mode === "editor"
     ? <div className="scrollbar-none h-full overflow-auto p-3">
         <Code

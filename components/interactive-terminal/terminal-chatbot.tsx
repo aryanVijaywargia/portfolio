@@ -2,19 +2,27 @@
 import { FC, useState, useRef, useEffect, KeyboardEvent } from "react";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { motion, AnimatePresence } from "framer-motion";
+import { getMusicRequestKind } from "lib/music/radio-stations";
+import type { MusicRequestKind, RadioStation } from "lib/music/radio-stations";
 
 const QUICK_ACTIONS = [
   { label: "about", message: "Who is Aryan?" },
   { label: "projects", message: "Tell me about Aryan's projects" },
+  { label: "music", message: "Spin up one of Aryan's favorite coding tunes" },
   { label: "contact", message: "How can I contact Aryan?" },
 ];
 
 type TerminalChatbotProps = {
   onExit: () => void;
   onMessageSent?: (message: string) => void;
+  onPlayMusic: (kind: MusicRequestKind) => RadioStation;
 };
 
-export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSent }) => {
+export const TerminalChatbot: FC<TerminalChatbotProps> = ({
+  onExit,
+  onMessageSent,
+  onPlayMusic,
+}) => {
   const [input, setInput] = useState("");
   const messages = useChatbot((state) => state.messages);
   const isLoading = useChatbot((state) => state.isLoading);
@@ -54,6 +62,17 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({ onExit, onMessageSen
     addMessage({ role: "user", content: content.trim() });
     onMessageSent?.(content.trim());
     setInput("");
+
+    const musicRequestKind = getMusicRequestKind(content);
+    if (musicRequestKind) {
+      const station = onPlayMusic(musicRequestKind);
+      addMessage({
+        role: "assistant",
+        content: `*perks ears* Tuning the terminal to ${station.name}. Woof! 🎵`,
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
