@@ -275,33 +275,36 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
 
   return (
     <section
-      className="flex h-full min-h-0 flex-col bg-[#05080d] font-mono text-[11px] text-slate-300"
+      className="flex h-full min-h-0 flex-col bg-white font-mono text-[11px] text-[#383a42] transition-colors duration-200 dark:bg-[#05080d] dark:text-slate-300"
       data-radio-status={status}
       data-stream={audio.src || RADIO_STATIONS[activeIndex].streamUrl}
       onClick={() => inputRef.current?.focus({ preventScroll: true })}
     >
       <div ref={outputRef} className="scrollbar-none min-h-0 flex-1 overflow-y-auto px-3 py-2">
-        <p className="text-slate-500">visitor@aryancodes.com:~$ radio</p>
+        <p className="text-slate-500 dark:text-slate-500">visitor@aryancodes.com:~$ radio</p>
         {logs.map((line) => (
           <p
             key={line.id}
             className={
               line.tone === "success"
-                ? "text-emerald-400"
+                ? "text-emerald-600 dark:text-emerald-400"
                 : line.tone === "warning"
-                ? "text-amber-300"
+                ? "text-amber-600 dark:text-amber-300"
                 : line.tone === "error"
-                ? "text-rose-400"
+                ? "text-rose-600 dark:text-rose-400"
                 : line.tone === "muted"
-                ? "text-slate-600"
-                : "text-slate-300"
+                ? "text-slate-400 dark:text-slate-600"
+                : "text-slate-700 dark:text-slate-300"
             }
           >
             {line.text}
           </p>
         ))}
 
-        <div className="my-2 border-y border-dashed border-slate-800 py-1" role="listbox">
+        <div
+          className="my-2 border-y border-dashed border-slate-200 py-1 dark:border-slate-800"
+          role="listbox"
+        >
           {RADIO_STATIONS.map((station, index) => {
             const isSelected = selectedIndex === index;
             const isActive = activeIndex === index;
@@ -317,13 +320,17 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
                   inputRef.current?.focus({ preventScroll: true });
                 }}
                 className={`block w-full truncate text-left leading-5 ${
-                  isSelected ? "text-cyan-300" : "text-slate-500 hover:text-slate-300"
+                  isSelected
+                    ? "text-cyan-700 dark:text-cyan-300"
+                    : "text-slate-500 hover:text-slate-800 dark:text-slate-500 dark:hover:text-slate-300"
                 }`}
               >
                 <span className="inline-block w-4">{isSelected ? ">" : " "}</span>
                 <span className="inline-block w-6">{String(index + 1).padStart(2, "0")}</span>
-                <span className={isActive ? "text-white" : undefined}>{station.name}</span>
-                <span className="hidden text-slate-700 sm:inline">
+                <span className={isActive ? "text-slate-950 dark:text-white" : undefined}>
+                  {station.name}
+                </span>
+                <span className="hidden text-slate-400 dark:text-slate-700 sm:inline">
                   {" "}
                   :: {station.artists} :: {station.previewSource} preview
                 </span>
@@ -332,18 +339,24 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
           })}
         </div>
 
-        <p className={isPlaying ? "text-emerald-400" : "text-amber-300"}>
+        <p
+          className={
+            isPlaying
+              ? "text-emerald-600 dark:text-emerald-400"
+              : "text-amber-600 dark:text-amber-300"
+          }
+        >
           [{statusText[status]}] {isPlaying ? "▂▄▆█▆▄▂▄▆" : "─────────"}{" "}
           {RADIO_STATIONS[activeIndex].name}
-          <span className="text-slate-700"> :: vol {volume}%</span>
+          <span className="text-slate-400 dark:text-slate-700"> :: vol {volume}%</span>
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="flex shrink-0 items-center border-t border-slate-800 px-3 py-2"
+        className="flex shrink-0 items-center border-t border-slate-200 px-3 py-2 dark:border-slate-800"
       >
-        <label htmlFor="radio-command" className="shrink-0 text-emerald-400">
+        <label htmlFor="radio-command" className="shrink-0 text-[#0d7377] dark:text-emerald-400">
           radio@aryancodes:~$
         </label>
         <input
@@ -352,7 +365,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
           value={input}
           onChange={(event) => setInput(event.target.value)}
           onKeyDown={handleKeyDown}
-          className="ml-2 min-w-0 flex-1 border-0 bg-transparent p-0 text-[16px] text-slate-200 caret-cyan-300 outline-none placeholder:text-slate-800 sm:text-[11px]"
+          className="ml-2 min-w-0 flex-1 border-0 bg-transparent p-0 text-[16px] text-[#383a42] caret-cyan-700 outline-none placeholder:text-slate-300 dark:text-slate-200 dark:caret-cyan-300 dark:placeholder:text-slate-800 sm:text-[11px]"
           placeholder="help"
           autoComplete="off"
           spellCheck={false}
@@ -360,7 +373,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
         />
       </form>
 
-      <footer className="shrink-0 truncate px-3 pb-2 text-[9px] text-slate-700">
+      <footer className="shrink-0 truncate px-3 pb-2 text-[9px] text-slate-400 dark:text-slate-700">
         ↑↓ select · ↵ play/pause · next · stop · q exit · public previews auto-advance
       </footer>
     </section>
