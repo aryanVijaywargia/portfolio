@@ -54,6 +54,7 @@ export const Terminal: FC<TerminalProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const chatbotTimeoutIds = useRef<NodeJS.Timeout[]>([]);
+  const lineTimeoutIds = useRef<Set<NodeJS.Timeout>>(new Set());
   const startupRenderedRef = useRef(false);
 
   // Replay intro when red button is clicked
@@ -118,9 +119,13 @@ export const Terminal: FC<TerminalProps> = ({
 
   // Cleanup chatbot timeouts on unmount
   useEffect(() => {
+    const pendingLineTimeouts = lineTimeoutIds.current;
+
     return () => {
       chatbotTimeoutIds.current.forEach((id) => clearTimeout(id));
       chatbotTimeoutIds.current = [];
+      pendingLineTimeouts.forEach((id) => clearTimeout(id));
+      pendingLineTimeouts.clear();
     };
   }, []);
 
@@ -221,6 +226,7 @@ export const Terminal: FC<TerminalProps> = ({
   const addLine = (text: string, className?: string, delay = 0): NodeJS.Timeout => {
     const timeoutId = setTimeout(
       () => {
+        lineTimeoutIds.current.delete(timeoutId);
         setLineIdCounter((prev) => {
           const newId = prev + 1;
           setOutputLines((lines) => [...lines, { id: newId, text, className }]);
@@ -229,6 +235,7 @@ export const Terminal: FC<TerminalProps> = ({
       },
       delay
     );
+    lineTimeoutIds.current.add(timeoutId);
     return timeoutId;
   };
 
@@ -248,6 +255,8 @@ export const Terminal: FC<TerminalProps> = ({
   };
 
   const clearTerminal = () => {
+    lineTimeoutIds.current.forEach((id) => clearTimeout(id));
+    lineTimeoutIds.current.clear();
     setOutputLines([]);
   };
 
@@ -258,6 +267,13 @@ export const Terminal: FC<TerminalProps> = ({
     if (cmd.trim() && !isPasswordMode) {
       setCommandHistory((prev) => [...prev, cmd]);
       setHistoryIndex(-1);
+    }
+
+    // Clear before scheduling the command echo so `clear` disappears too.
+    if (!isPasswordMode && normalizedCmd === "clear") {
+      onValidCommand?.(normalizedCmd);
+      clearTerminal();
+      return;
     }
 
     // Echo the command line, masking password input
@@ -383,15 +399,7 @@ export const Terminal: FC<TerminalProps> = ({
           return;
 
         case "music":
-          addLine("", undefined, 0);
-          addLine("Tuning into Reddit's coding frequency...", "info", 80);
-          addLine("[##########] playlist ready", "info", 360);
-          setTimeout(
-            () => {
-              onSwitchToMusic();
-            },
-            520
-          );
+          onSwitchToMusic();
           return;
 
         case "game":

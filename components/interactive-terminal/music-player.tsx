@@ -1,76 +1,84 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { FALLBACK_TRACKS, MusicTrack } from "lib/music/reddit-playlist";
+import { ChangeEvent, FC, useCallback, useEffect, useRef, useState } from "react";
+import { RADIO_STATIONS } from "lib/music/radio-stations";
 
 type MusicPlayerProps = {
+  audio: HTMLAudioElement;
   onExit: () => void;
 };
 
-type PlaylistResponse = {
-  tracks: MusicTrack[];
-  source: "reddit-live" | "reddit-curated";
-};
+type PlaybackStatus = "connecting" | "playing" | "paused" | "blocked" | "error";
 
-const clampIndex = (index: number, length: number) => (index + length) % length;
+const wrapIndex = (index: number) => (index + RADIO_STATIONS.length) % RADIO_STATIONS.length;
 
-export const MusicPlayer: FC<MusicPlayerProps> = ({ onExit }) => {
-  const [tracks, setTracks] = useState(FALLBACK_TRACKS);
+export const MusicPlayer: FC<MusicPlayerProps> = ({ audio, onExit }) => {
+  const stationRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [playRequest, setPlayRequest] = useState(0);
-  const [source, setSource] = useState<PlaylistResponse["source"]>("reddit-curated");
-  const [isRefreshing, setIsRefreshing] = useState(true);
-  const trackRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const [status, setStatus] = useState<PlaybackStatus>("connecting");
+  const [volume, setVolume] = useState(0.72);
+
+  const playStation = useCallback((index: number) => {
+    const nextIndex = wrapIndex(index);
+    const nextStation = RADIO_STATIONS[nextIndex];
+    setSelectedIndex(nextIndex);
+    setActiveIndex(nextIndex);
+    setStatus("connecting");
+
+    if (audio.src !== nextStation.streamUrl) {
+      audio.src = nextStation.streamUrl;
+      audio.load();
+    }
+
+    audio.play().catch(() => setStatus("blocked"));
+  }, [audio]);
+
+  const togglePlayback = useCallback(() => {
+    if (audio.paused) {
+      setStatus("connecting");
+      audio.play().catch(() => setStatus("blocked"));
+    } else {
+      audio.pause();
+    }
+  }, [audio]);
 
   useEffect(() => {
-    const controller = new AbortController();
+    const handlePlaying = () => setStatus("playing");
+    const handlePause = () => setStatus("paused");
+    const handleWaiting = () => setStatus("connecting");
+    const handleError = () => setStatus("error");
 
-    fetch("/api/music", { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error("Playlist request failed");
-        return response.json() as Promise<PlaylistResponse>;
-      })
-      .then((playlist) => {
-        if (!playlist.tracks.length) return;
-        setTracks(playlist.tracks);
-        setSource(playlist.source);
-        setSelectedIndex(0);
-        setActiveIndex(0);
-      })
-      .catch(() => undefined)
-      .finally(() => setIsRefreshing(false));
+    audio.addEventListener("playing", handlePlaying);
+    audio.addEventListener("pause", handlePause);
+    audio.addEventListener("waiting", handleWaiting);
+    audio.addEventListener("error", handleError);
+    setStatus(audio.paused ? "blocked" : "playing");
 
-    return () => controller.abort();
-  }, []);
+    return () => {
+      audio.removeEventListener("playing", handlePlaying);
+      audio.removeEventListener("pause", handlePause);
+      audio.removeEventListener("waiting", handleWaiting);
+      audio.removeEventListener("error", handleError);
+    };
+  }, [audio]);
 
   useEffect(() => {
-    trackRefs.current[selectedIndex]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    stationRefs.current[selectedIndex]?.scrollIntoView({ block: "nearest" });
   }, [selectedIndex]);
-
-  const playTrack = useCallback((index: number) => {
-    setSelectedIndex(index);
-    setActiveIndex(index);
-    setPlayRequest((request) => request + 1);
-  }, []);
-
-  const moveSelection = useCallback((direction: number) => {
-    setSelectedIndex((index) => clampIndex(index + direction, tracks.length));
-  }, [tracks.length]);
-
-  const skipTrack = useCallback((direction: number) => {
-    playTrack(clampIndex(activeIndex + direction, tracks.length));
-  }, [activeIndex, playTrack, tracks.length]);
 
   useEffect(() => {
     const handleKeyDown = (event: globalThis.KeyboardEvent) => {
       if (event.key === "ArrowUp" || event.key.toLowerCase() === "k") {
         event.preventDefault();
-        moveSelection(-1);
+        setSelectedIndex((index) => wrapIndex(index - 1));
       } else if (event.key === "ArrowDown" || event.key.toLowerCase() === "j") {
         event.preventDefault();
-        moveSelection(1);
+        setSelectedIndex((index) => wrapIndex(index + 1));
       } else if (event.key === "Enter") {
         event.preventDefault();
-        playTrack(selectedIndex);
+        playStation(selectedIndex);
+      } else if (event.key === " ") {
+        event.preventDefault();
+        togglePlayback();
       } else if (event.key === "Escape" || event.key.toLowerCase() === "q") {
         event.preventDefault();
         onExit();
@@ -79,165 +87,171 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({ onExit }) => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [moveSelection, onExit, playTrack, selectedIndex]);
+  }, [onExit, playStation, selectedIndex, togglePlayback]);
 
-  const activeTrack = tracks[activeIndex];
-  const embedUrl = `https://www.youtube-nocookie.com/embed/${activeTrack.youtubeId}?autoplay=${
-    playRequest > 0 ? "1" : "0"
-  }&rel=0&modestbranding=1`;
-  const youtubeMusicUrl = `https://music.youtube.com/watch?v=${activeTrack.youtubeId}`;
+  const handleVolumeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const nextVolume = Number(event.target.value);
+    setVolume(nextVolume);
+    audio.volume = nextVolume;
+  };
+
+  const activeStation = RADIO_STATIONS[activeIndex];
+  const isPlaying = status === "playing";
+  const statusLabel =
+    status === "connecting"
+      ? "buffering"
+      : status === "blocked"
+      ? "press play"
+      : status === "error"
+      ? "stream offline"
+      : status;
 
   return (
-    <section className="flex h-full min-h-0 flex-col bg-[#071018] font-mono text-slate-200">
-      <header className="flex shrink-0 items-center justify-between border-b border-cyan-300/10 px-4 py-3">
+    <section
+      className="flex h-full min-h-0 flex-col bg-[#071018] font-mono text-slate-200"
+      data-playback={status}
+      data-stream={activeStation.streamUrl}
+    >
+      <header className="flex shrink-0 items-center justify-between border-b border-cyan-300/10 px-3 py-2">
         <div className="min-w-0">
-          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-cyan-300">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-300" />
-            coding frequency
-          </div>
-          <p className="mt-1 truncate text-xs text-slate-500">
-            top Reddit picks · streamed free through YouTube
+          <p className="truncate text-xs text-cyan-300">$ radio --reddit-picks</p>
+          <p className="mt-0.5 truncate text-[10px] text-slate-600">
+            Reddit-picked focus stations · direct commercial-free streams
           </p>
         </div>
-        <span className="ml-3 shrink-0 rounded-full border border-slate-700 px-2 py-1 text-[10px] text-slate-400">
-          {isRefreshing ? "syncing…" : source === "reddit-live" ? "reddit live" : "reddit mix"}
+        <span className="ml-3 flex shrink-0 items-center gap-1.5 text-[10px] uppercase tracking-wider text-slate-500">
+          <span
+            className={`h-1.5 w-1.5 rounded-full ${
+              isPlaying ? "animate-pulse bg-cyan-300" : "bg-amber-300"
+            }`}
+          />
+          {statusLabel}
         </span>
       </header>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 overflow-y-auto md:grid-cols-[minmax(0,0.9fr)_minmax(18rem,1.1fr)] md:overflow-hidden">
-        <div className="flex min-h-0 flex-col border-b border-slate-800 p-4 md:border-b-0 md:border-r">
-          <div
-            className="relative shrink-0 overflow-hidden rounded-md border border-cyan-300/20 bg-black bg-cover bg-center shadow-[0_0_45px_-18px_rgba(34,211,238,0.65)]"
-            style={{
-              aspectRatio: "16 / 9",
-              backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.2), rgba(2, 6, 23, 0.72)), url(https://i.ytimg.com/vi/${activeTrack.youtubeId}/hqdefault.jpg)`,
-            }}
-          >
-            {playRequest > 0
-              ? <iframe
-                  key={`${activeTrack.youtubeId}-${playRequest}`}
-                  className="absolute inset-0 h-full w-full"
-                  src={embedUrl}
-                  title={`Playing ${activeTrack.title}`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-              : <button
-                  type="button"
-                  onClick={() => playTrack(activeIndex)}
-                  className="absolute inset-0 flex w-full items-center justify-center bg-black/10 text-white transition hover:bg-black/25"
-                  aria-label="Play current track"
-                >
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/30 bg-black/65 pl-1 text-xl shadow-xl backdrop-blur-sm transition-transform hover:scale-105">
-                    ▶
-                  </span>
-                </button>}
+      <div className="grid min-h-0 flex-1 grid-cols-1 overflow-y-auto sm:grid-cols-[minmax(0,0.85fr)_minmax(17rem,1.15fr)] sm:overflow-hidden">
+        <div className="flex min-h-[9.5rem] flex-col border-b border-slate-800 p-3 sm:min-h-0 sm:border-b-0 sm:border-r">
+          <p className="text-[9px] uppercase tracking-[0.2em] text-cyan-400/70">now streaming</p>
+          <h2 className="mt-1 text-base font-semibold leading-tight text-white">
+            {activeStation.name}
+          </h2>
+          <p className="mt-1 text-[10px] text-slate-500">{activeStation.vibe}</p>
+
+          <div className="my-auto flex h-12 items-center gap-1" aria-hidden="true">
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((bar) => (
+              <span
+                key={bar}
+                className={`w-1 rounded-full bg-cyan-300/80 ${
+                  isPlaying ? "animate-pulse" : "opacity-40"
+                }`}
+                style={{
+                  animationDelay: `${bar * -0.11}s`,
+                  height: isPlaying ? `${28 + ((bar * 23) % 62)}%` : "8%",
+                }}
+              />
+            ))}
           </div>
 
-          <div className="mt-4 min-w-0">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-cyan-400/70">now loaded</p>
-            <h2 className="mt-1 line-clamp-2 text-sm font-semibold leading-snug text-white">
-              {activeTrack.title}
-            </h2>
-            <div className="mt-2 flex items-center gap-2 text-[11px] text-slate-500">
-              <a
-                href={activeTrack.redditUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="truncate transition-colors hover:text-orange-300"
-              >
-                r/{activeTrack.subreddit} · {activeTrack.score} karma ↗
-              </a>
-            </div>
-          </div>
-
-          <div className="mt-auto flex items-center gap-2 pt-4">
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => skipTrack(-1)}
-              className="rounded border border-slate-700 px-3 py-2 text-xs text-slate-300 transition hover:border-cyan-300/60 hover:text-cyan-200"
-              aria-label="Previous track"
+              onClick={() => playStation(activeIndex - 1)}
+              className="rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-400 transition hover:border-cyan-300/60 hover:text-cyan-200"
+              aria-label="Previous station"
             >
               ◀
             </button>
             <button
               type="button"
-              onClick={() => playTrack(activeIndex)}
-              className="flex-1 rounded bg-cyan-300 px-3 py-2 text-xs font-bold text-slate-950 transition hover:bg-cyan-200"
+              onClick={togglePlayback}
+              className="flex-1 rounded bg-cyan-300 px-3 py-1.5 text-xs font-bold text-slate-950 transition hover:bg-cyan-200"
             >
-              {playRequest > 0 ? "RESTART TRACK" : "PLAY TRACK"}
+              {isPlaying ? "PAUSE" : "PLAY"}
             </button>
             <button
               type="button"
-              onClick={() => skipTrack(1)}
-              className="rounded border border-slate-700 px-3 py-2 text-xs text-slate-300 transition hover:border-cyan-300/60 hover:text-cyan-200"
-              aria-label="Next track"
+              onClick={() => playStation(activeIndex + 1)}
+              className="rounded border border-slate-700 px-2.5 py-1.5 text-xs text-slate-400 transition hover:border-cyan-300/60 hover:text-cyan-200"
+              aria-label="Next station"
             >
               ▶
             </button>
           </div>
-          <a
-            href={youtubeMusicUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-2 text-center text-[10px] text-slate-500 transition hover:text-cyan-300"
-          >
-            open in YouTube Music ↗
-          </a>
+
+          <label className="mt-2 flex items-center gap-2 text-[9px] uppercase tracking-wider text-slate-600">
+            vol
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={volume}
+              onChange={handleVolumeChange}
+              className="h-1 flex-1 cursor-pointer accent-cyan-300"
+              aria-label="Volume"
+            />
+            {Math.round(volume * 100)}
+          </label>
         </div>
 
-        <div className="flex min-h-[15rem] flex-col p-4 md:min-h-0">
-          <div className="mb-3 flex shrink-0 items-center justify-between text-[10px] uppercase tracking-[0.18em] text-slate-500">
-            <span>playlist / top while-coding</span>
-            <span>{tracks.length} tracks</span>
+        <div className="flex min-h-[11rem] flex-col p-3 sm:min-h-0">
+          <div className="mb-2 flex shrink-0 items-center justify-between text-[9px] uppercase tracking-[0.16em] text-slate-600">
+            <span>stations / coding radio</span>
+            <span>{RADIO_STATIONS.length} live</span>
           </div>
 
-          <div className="scrollbar-none min-h-0 flex-1 overflow-y-auto pr-1" role="listbox">
-            {tracks.map((track, index) => {
+          <div className="scrollbar-none min-h-0 flex-1 overflow-y-auto" role="listbox">
+            {RADIO_STATIONS.map((station, index) => {
               const isSelected = selectedIndex === index;
               const isActive = activeIndex === index;
 
               return (
                 <button
-                  key={track.id}
+                  key={station.id}
                   ref={(element) => {
-                    trackRefs.current[index] = element;
+                    stationRefs.current[index] = element;
                   }}
                   type="button"
                   role="option"
                   aria-selected={isSelected}
                   onFocus={() => setSelectedIndex(index)}
-                  onClick={() => playTrack(index)}
-                  className={`group mb-1 grid w-full grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-2 rounded px-2 py-2.5 text-left transition-all ${
+                  onClick={() => playStation(index)}
+                  className={`mb-1 grid w-full grid-cols-[1.5rem_minmax(0,1fr)] gap-2 rounded px-2 py-1.5 text-left transition ${
                     isSelected
                       ? "bg-cyan-300/10 text-white shadow-[inset_2px_0_0_#67e8f9]"
                       : "text-slate-400 hover:bg-white/[0.04] hover:text-slate-200"
                   }`}
                 >
-                  <span className={`text-xs ${isSelected ? "text-cyan-300" : "text-slate-600"}`}>
-                    {isActive ? "▶" : String(index + 1).padStart(2, "0")}
+                  <span
+                    className={`pt-0.5 text-[10px] ${
+                      isSelected ? "text-cyan-300" : "text-slate-700"
+                    }`}
+                  >
+                    {isActive && isPlaying ? "▶" : String(index + 1).padStart(2, "0")}
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-xs">{track.title}</span>
-                    <span className="mt-0.5 block truncate text-[10px] text-slate-600">
-                      r/{track.subreddit}
+                    <span className="block truncate text-[11px] font-semibold">{station.name}</span>
+                    <span className="mt-0.5 block truncate text-[9px] text-slate-600">
+                      {station.description}
                     </span>
                   </span>
-                  <span className="text-[10px] tabular-nums text-slate-600">▲ {track.score}</span>
                 </button>
               );
             })}
           </div>
 
-          <footer className="mt-3 flex shrink-0 flex-wrap gap-x-4 gap-y-1 border-t border-slate-800 pt-3 text-[10px] text-slate-600">
+          <footer className="mt-2 flex shrink-0 flex-wrap gap-x-3 border-t border-slate-800 pt-2 text-[9px] text-slate-700">
             <span>
-              <b className="text-slate-300">↑↓ / jk</b> browse
+              <b className="text-slate-400">↑↓</b> browse
             </span>
             <span>
-              <b className="text-slate-300">enter</b> play
+              <b className="text-slate-400">enter</b> tune
             </span>
             <span>
-              <b className="text-slate-300">esc / q</b> close
+              <b className="text-slate-400">space</b> play/pause
+            </span>
+            <span>
+              <b className="text-slate-400">q</b> back
             </span>
           </footer>
         </div>

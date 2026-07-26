@@ -1,5 +1,5 @@
 import { useAchievementActions } from "components/achievements";
-import { FC, useState, useEffect, useCallback } from "react";
+import { FC, useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
@@ -9,6 +9,7 @@ import { CopyButton } from "components/copy-button";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
 import type { CodeGroupProps } from "components/typography/code";
+import { RADIO_STATIONS } from "lib/music/radio-stations";
 
 const SnakeGame = dynamic(() => import("./snake-game").then((mod) => mod.SnakeGame), {
   ssr: false,
@@ -54,6 +55,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const [replayIntroKey, setReplayIntroKey] = useState(0);
   const [skipTerminalIntroOnce, setSkipTerminalIntroOnce] = useState(false);
   const [editorCode, setEditorCode] = useState<string | string[] | null>(code ?? null);
+  const musicAudioRef = useRef<HTMLAudioElement | null>(null);
   const triggerChatbot = useChatbot((state) => state.triggerChatbot);
   const requestChatbot = useChatbot((state) => state.requestChatbot);
   const clearTrigger = useChatbot((state) => state.clearTrigger);
@@ -135,8 +137,26 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   };
 
   const handleSwitchToMusic = () => {
+    const audio = musicAudioRef.current;
+    if (!audio) return;
+    audio.volume = 0.72;
+    if (audio.src !== RADIO_STATIONS[0].streamUrl) {
+      audio.src = RADIO_STATIONS[0].streamUrl;
+      audio.load();
+    }
+    audio.play().catch(() => undefined);
     setMode("music");
-    setIsTerminalMaximized(true);
+  };
+
+  const handleExitMusic = () => {
+    const audio = musicAudioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load();
+    }
+    setSkipTerminalIntroOnce(true);
+    setMode("terminal");
   };
 
   const handleExitGame = () => {
@@ -224,7 +244,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     : mode === "intro-reel"
     ? "whois.mp4 - Terminal"
     : mode === "music"
-    ? "♫ coding-frequency — YouTube"
+    ? "♫ coding-radio — zsh"
     : mode === "editor"
     ? "/index.tsx"
     : "aryan@macbook - zsh";
@@ -249,6 +269,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? handleExitIntroReel
     : isTerminalMaximized
     ? handleMinimizeTerminal
+    : mode === "music"
+    ? handleExitMusic
     : mode === "editor"
     ? handleSwitchToTerminal
     : mode === "terminal"
@@ -281,7 +303,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     : mode === "intro-reel"
     ? <IntroReel onExit={handleExitIntroReel} />
     : mode === "music"
-    ? <MusicPlayer onExit={handleMinimizeTerminal} />
+    ? <MusicPlayer audio={musicAudioRef.current!} onExit={handleExitMusic} />
     : mode === "editor"
     ? <div className="scrollbar-none h-full overflow-auto p-3">
         <Code
@@ -344,9 +366,9 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           </button>
           {/* Yellow - Minimize */}
           <button
-            onClick={isModal ? handleClose : undefined}
+            onClick={isModal || mode === "music" ? handleClose : undefined}
             className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e] ${
-              isModal ? "cursor-pointer" : ""
+              isModal || mode === "music" ? "cursor-pointer" : ""
             }`}
             aria-label="Minimize"
           >
@@ -361,14 +383,25 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           {/* Green - Maximize/Zoom */}
           <button
             onClick={
-              isModal
+              mode === "music"
+                ? undefined
+                : isModal
                 ? handleClose
                 : mode === "editor"
                 ? handleSwitchToTerminal
                 : handleMaximizeTerminal
             }
-            className="traffic-light group flex h-3 w-3 cursor-pointer items-center justify-center rounded-full bg-[#28c840]"
-            aria-label={isModal ? "Exit fullscreen" : "Fullscreen"}
+            disabled={mode === "music"}
+            className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#28c840] ${
+              mode === "music" ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+            }`}
+            aria-label={
+              mode === "music"
+                ? "Music player stays inline"
+                : isModal
+                ? "Exit fullscreen"
+                : "Fullscreen"
+            }
           >
             <svg
               className="h-2 w-2 text-[#006500] opacity-0 group-hover:opacity-100"
@@ -398,6 +431,17 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           >
             <span aria-hidden="true">←</span>
             <span>back</span>
+          </button>
+        )}
+
+        {!isModal && mode === "music" && (
+          <button
+            onClick={handleExitMusic}
+            className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
+            aria-label="Back to terminal"
+          >
+            <span aria-hidden="true">←</span>
+            <span>terminal</span>
           </button>
         )}
 
@@ -477,6 +521,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
   return (
     <LayoutGroup>
+      <audio ref={musicAudioRef} className="hidden" preload="none" aria-hidden="true" />
       {!isModal && terminalWindow}
       {isModal &&
         typeof document !== "undefined" &&

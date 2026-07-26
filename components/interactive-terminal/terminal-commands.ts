@@ -29,7 +29,7 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: '<span class="command">code</span>           View the code editor' },
     { text: '<span class="command">secret</span>         Find the hidden command' },
     { text: '<span class="command">chatbot</span>        Launch Byte, the AI companion' },
-    { text: '<span class="command">music</span>          Play Reddit\'s coding soundtrack' },
+    { text: '<span class="command">music</span>          Start the inline coding radio' },
     { text: '<span class="command">clear</span>          Clear terminal' },
     { text: '<span class="command">help</span>           Show this help message' },
     { text: "" },
