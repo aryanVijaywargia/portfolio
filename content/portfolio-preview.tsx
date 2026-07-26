@@ -1,4 +1,4 @@
 export const PORTFOLIO = {
-  pre: "Portfolio",
+  pre: "Projects",
   heading: "Checkout my work.",
 };

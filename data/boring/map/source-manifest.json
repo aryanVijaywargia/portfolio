@@ -1,0 +1,33 @@
+{
+  "fetchedAt": "2026-07-13T12:27:46.632Z",
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "bbox": [
+    23.2,
+    77.35,
+    23.3,
+    77.47
+  ],
+  "queries": [
+    "[out:json][timeout:120];\n  (\n    way[\"highway\"~\"^(motorway|trunk|primary|secondary|tertiary)$\"](23.2,77.35,23.3,77.47);\n    way[\"railway\"=\"rail\"](23.2,77.35,23.3,77.47);\n  );\n  out body center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.2,77.35,23.225,77.38);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.2,77.38,23.225,77.41);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.2,77.41,23.225,77.44);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.2,77.44,23.225,77.47);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.225,77.35,23.25,77.38);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.225,77.38,23.25,77.41);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.225,77.41,23.25,77.44);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.225,77.44,23.25,77.47);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.25,77.35,23.275,77.38);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.25,77.38,23.275,77.41);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.25,77.41,23.275,77.44);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.25,77.44,23.275,77.47);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.275,77.35,23.3,77.38);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.275,77.38,23.3,77.41);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.275,77.41,23.3,77.44);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  way[\"highway\"~\"^(residential|service)$\"](23.275,77.44,23.3,77.47);\n  out tags center geom qt;",
+    "[out:json][timeout:120];\n  (\n    way[\"natural\"=\"water\"](23.2,77.35,23.3,77.47);\n    relation[\"natural\"=\"water\"](23.2,77.35,23.3,77.47);\n    way[\"waterway\"=\"riverbank\"](23.2,77.35,23.3,77.47);\n    way[\"leisure\"~\"^(park|nature_reserve|garden)$\"](23.2,77.35,23.3,77.47);\n    relation[\"leisure\"~\"^(park|nature_reserve|garden)$\"](23.2,77.35,23.3,77.47);\n    way[\"landuse\"~\"^(forest|grass|recreation_ground|meadow)$\"](23.2,77.35,23.3,77.47);\n    relation[\"landuse\"~\"^(forest|grass|recreation_ground|meadow)$\"](23.2,77.35,23.3,77.47);\n  );\n  out body center geom qt;",
+    "[out:json][timeout:120];\n  nwr[\"name\"~\"upper lake|bhojtal|bada talab|bada talaab|lower lake|chhota talab|chhota talaab|kamla park|taj-ul-masajid|taj ul masajid|tajul masajid|gohar mahal|gauhar mahal|chowk bazaar|chowk market|moti masjid|bharat bhavan|tribal museum|jansangrahalaya|manav sangrahalaya|museum of man|rashtriya manav|van vihar|new market|tt nagar|birla mandir|lakshmi narayan temple|laxmi narayan temple|shaurya smarak|rani kamlapati|habibganj railway station|habibganj station|db city mall|d b city mall\",i](23.2,77.35,23.3,77.47);\n  out tags center geom qt;"
+  ],
+  "sha256": "beeefcf5eaeda5b458eb94271a2ccd8f4e458950fb834be065f46dbdb59962e0",
+  "snapshot": "data/boring/map/bhopal-central.osm.json"
+}

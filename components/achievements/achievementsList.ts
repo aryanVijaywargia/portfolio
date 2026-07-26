@@ -30,13 +30,6 @@ const ACHIEVEMENTS_MAP = {
     category: "explorer",
     hidden: true,
   },
-  GIT_ARCHAEOLOGIST: {
-    title: "Git Archaeologist",
-    description: "Inspected four work-history chapters.",
-    hint: "The experience log opens up if you keep digging.",
-    category: "explorer",
-    hidden: true,
-  },
   SNAKE_CHARMER: {
     title: "Snake Charmer",
     description: "Reached 30 points in Snake.",
@@ -51,10 +44,10 @@ const ACHIEVEMENTS_MAP = {
     category: "games",
     hidden: true,
   },
-  ROAD_WARRIOR: {
-    title: "Road Warrior",
-    description: "Scored 300+ in Turbo Racer.",
-    hint: "The arcade has a need for speed. Stay on the road long enough.",
+  LOCKBREAKER: {
+    title: "Lockbreaker",
+    description: "Cleared Contra and broke Rick's first rescue lock.",
+    hint: "Morty has a jungle mission waiting inside the terminal arcade.",
     category: "games",
     hidden: true,
   },
@@ -79,6 +72,20 @@ const ACHIEVEMENTS_MAP = {
     category: "hidden",
     hidden: true,
   },
+  SHAME: {
+    title: "SHAME",
+    description: "You tried to cheat at the most important quiz in the world!",
+    hint: "Some people answer the quiz. Some people try to scroll away.",
+    category: "hidden",
+    hidden: true,
+  },
+  BOOOO: {
+    title: "BOOOO!",
+    description: "At least you admitted you're a cheater...",
+    hint: "Persistence is admirable. Surrendering after getting caught twice is also a choice.",
+    category: "hidden",
+    hidden: true,
+  },
   POP_QUIZ_SURVIVOR: {
     title: "Pop Quiz Survivor",
     description: "Completed the portfolio quiz without rage-quitting.",
@@ -88,7 +95,7 @@ const ACHIEVEMENTS_MAP = {
   },
   BYTE_APPROVED: {
     title: "Byte Approved",
-    description: "Scored a perfect 7/7 on the portfolio quiz.",
+    description: "Scored a perfect 5/5 on the portfolio quiz.",
     hint: "Byte only respects perfection. Answer every question correctly.",
     category: "hidden",
     hidden: true,
@@ -103,13 +110,14 @@ export type AchievementId = keyof typeof ACHIEVEMENTS;
 export const ACHIEVEMENT_ORDER = [
   "BEHIND_THE_PIXELS",
   "TIMELINE_TRAVELER",
-  "GIT_ARCHAEOLOGIST",
   "SNAKE_CHARMER",
   "ESCAPE_ARTIST",
-  "ROAD_WARRIOR",
+  "LOCKBREAKER",
   "HACKER",
   "SOURCE_DIVER",
   "ROOT_ACCESS",
+  "SHAME",
+  "BOOOO",
   "POP_QUIZ_SURVIVOR",
   "BYTE_APPROVED",
 ] as AchievementId[];

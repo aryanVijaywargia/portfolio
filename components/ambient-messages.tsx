@@ -54,13 +54,13 @@ const SECTION_MESSAGES: readonly AmbientSection[] = [
     surprise: "send the bat signal",
   },
   {
-    selector: "#achievements",
+    selector: "#quiz",
     messages: [
-      "self-awarded, fully unverified",
-      "this section is mostly here for the lore",
-      "no recruiter has ever asked about these",
+      "the answers were all in the scroll",
+      "this is open-book, technically",
+      "byte is keeping score",
     ],
-    surprise: "click if you have found them all",
+    surprise: "perfect scores unlock bragging rights",
   },
 ];
 

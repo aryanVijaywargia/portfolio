@@ -26,10 +26,15 @@ export const COMMANDS: Record<string, CommandOutput[]> = {
     { text: '<span class="command">whoami</span>         Who are you?' },
     { text: '<span class="command">contact</span>        Show business card' },
     { text: '<span class="command">skills</span>         List the tech stack' },
+    { text: '<span class="command">experience</span>     Show the work history' },
+    { text: '<span class="command">achievements</span>   Check achievement progress' },
     { text: '<span class="command">code</span>           View the code editor' },
     { text: '<span class="command">secret</span>         Find the hidden command' },
     { text: '<span class="command">chatbot</span>        Launch Byte, the AI companion' },
     { text: '<span class="command">radio</span>          Play the EDM playlist first 10' },
+    {
+      text: '<a href="/boring" class="terminal-launch-command">boring</a>         Start the 3D portfolio mission',
+    },
     { text: '<span class="command">clear</span>          Clear terminal' },
     { text: '<span class="command">help</span>           Show this help message' },
     { text: "" },
@@ -221,6 +226,9 @@ export const STARTUP_BANNER: CommandOutput[] = [
   {
     text: '<span class="inherit">Type <span class="command">help</span> for available commands.</span>',
   },
+  {
+    text: '<span class="cmt">Or take the scenic route:</span> <a href="/boring" class="terminal-launch-command">launch /boring ↗</a>',
+  },
   { text: "" },
 ];
 
@@ -236,15 +244,19 @@ export const SPECIAL_COMMANDS = [
   "sudo",
   "chatbot",
   "radio",
+  "achievements",
   "game",
   "email",
+  "boring",
 ];
 
 // Commands surfaced by tab completion and typo suggestions. Hidden commands
 // (sudo, email) stay out so the easter eggs remain easter eggs.
 export const AUTOCOMPLETE_COMMANDS = [
+  "achievements",
   "chatbot",
   "radio",
+  "boring",
   "clear",
   "code",
   "contact",
