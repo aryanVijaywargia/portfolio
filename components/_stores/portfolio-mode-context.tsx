@@ -39,11 +39,6 @@ export const PortfolioModeProvider: FC<PropsWithChildren> = ({ children }) => {
       if (stored === "batman") {
         setMode("batman");
         document.documentElement.setAttribute("data-portfolio-mode", "batman");
-      } else if (stored === "boring") {
-        // Boring mode moved to the dedicated /boring route. Clear the legacy value so an
-        // existing profile can never be trapped in the old root-page mode switch.
-        sessionStorage.removeItem(STORAGE_KEY);
-        document.documentElement.removeAttribute("data-portfolio-mode");
       }
     } catch {
       // sessionStorage unavailable
