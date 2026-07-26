@@ -52,7 +52,17 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({
     const handlePlaying = () => setStatus("playing");
     const handlePause = () => setStatus("paused");
     const handleWaiting = () => setStatus("connecting");
-    const handleError = () => setStatus("error");
+    const handleError = () => {
+      const station = RADIO_STATIONS[activeIndex];
+      if (audio.src !== station.fallbackStreamUrl) {
+        setStatus("connecting");
+        audio.src = station.fallbackStreamUrl;
+        audio.load();
+        audio.play().catch(() => setStatus("error"));
+        return;
+      }
+      setStatus("error");
+    };
 
     audio.addEventListener("playing", handlePlaying);
     audio.addEventListener("pause", handlePause);
@@ -66,7 +76,7 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({
       audio.removeEventListener("waiting", handleWaiting);
       audio.removeEventListener("error", handleError);
     };
-  }, [audio]);
+  }, [activeIndex, audio]);
 
   useEffect(() => {
     stationRefs.current[selectedIndex]?.scrollIntoView({ block: "nearest" });
@@ -117,7 +127,7 @@ export const MusicPlayer: FC<MusicPlayerProps> = ({
     <section
       className="flex h-full min-h-0 flex-col bg-[#071018] font-mono text-slate-200"
       data-playback={status}
-      data-stream={activeStation.streamUrl}
+      data-stream={audio.src || activeStation.streamUrl}
     >
       <header className="flex shrink-0 items-center justify-between border-b border-cyan-300/10 px-3 py-2">
         <div className="min-w-0">

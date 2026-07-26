@@ -30,6 +30,9 @@ const IntroReel = dynamic(() => import("./intro-reel").then((mod) => mod.IntroRe
 const MusicPlayer = dynamic(() => import("./music-player").then((mod) => mod.MusicPlayer), {
   ssr: false,
 });
+const TerminalRadio = dynamic(() => import("./terminal-radio").then((mod) => mod.TerminalRadio), {
+  ssr: false,
+});
 const Code = dynamic(() => import("components/typography/code").then((mod) => mod.Code), {
   ssr: false,
 });
@@ -50,6 +53,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     | "racer"
     | "intro-reel"
     | "music"
+    | "radio"
   >("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
@@ -139,25 +143,33 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     setIsTerminalMaximized(true);
   };
 
-  const startMusic = useCallback((stationIndex: number, launchedByChatbot: boolean) => {
-    const audio = musicAudioRef.current;
-    const station = RADIO_STATIONS[stationIndex];
-    if (!audio) return station;
+  const startMusic = useCallback(
+    (stationIndex: number, launchedByChatbot: boolean, targetMode: "music" | "radio" = "music") => {
+      const audio = musicAudioRef.current;
+      const station = RADIO_STATIONS[stationIndex];
+      if (!audio) return station;
 
-    audio.volume = 0.72;
-    if (audio.src !== station.streamUrl) {
-      audio.src = station.streamUrl;
-      audio.load();
-    }
-    audio.play().catch(() => undefined);
-    setMusicStationIndex(stationIndex);
-    setMusicLaunchedByChatbot(launchedByChatbot);
-    setMode("music");
-    return station;
-  }, []);
+      audio.volume = 0.72;
+      audio.muted = false;
+      if (audio.src !== station.streamUrl) {
+        audio.src = station.streamUrl;
+        audio.load();
+      }
+      audio.play().catch(() => undefined);
+      setMusicStationIndex(stationIndex);
+      setMusicLaunchedByChatbot(launchedByChatbot);
+      setMode(targetMode);
+      return station;
+    },
+    []
+  );
 
   const handleSwitchToMusic = () => {
     startMusic(0, false);
+  };
+
+  const handleSwitchToRadio = () => {
+    startMusic(0, false, "radio");
   };
 
   const handleChatbotMusicRequest = useCallback((_kind: MusicRequestKind): RadioStation => {
@@ -251,6 +263,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   );
 
   const isModal = isExpanded || isTerminalMaximized;
+  const isInlineAudioMode = mode === "music" || mode === "radio";
 
   // Determine terminal title
   const terminalTitle = isExpanded
@@ -267,6 +280,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? "whois.mp4 - Terminal"
     : mode === "music"
     ? "♫ coding-radio — zsh"
+    : mode === "radio"
+    ? "radio — zsh"
     : mode === "editor"
     ? "/index.tsx"
     : "aryan@macbook - zsh";
@@ -291,7 +306,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? handleExitIntroReel
     : isTerminalMaximized
     ? handleMinimizeTerminal
-    : mode === "music"
+    : isInlineAudioMode
     ? handleExitMusic
     : mode === "editor"
     ? handleSwitchToTerminal
@@ -335,6 +350,12 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         launchedByChatbot={musicLaunchedByChatbot}
         onExit={handleExitMusic}
       />
+    : mode === "radio"
+    ? <TerminalRadio
+        audio={musicAudioRef.current!}
+        initialStationIndex={musicStationIndex}
+        onExit={handleExitMusic}
+      />
     : mode === "editor"
     ? <div className="scrollbar-none h-full overflow-auto p-3">
         <Code
@@ -349,6 +370,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         onSwitchToGameMenu={handleSwitchToGame}
         onSwitchToIntroReel={handleSwitchToIntroReel}
         onSwitchToMusic={handleSwitchToMusic}
+        onSwitchToRadio={handleSwitchToRadio}
         triggerChatbot={triggerChatbot}
         onTriggerHandled={clearTrigger}
         onValidCommand={handleValidCommand}
@@ -397,9 +419,9 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           </button>
           {/* Yellow - Minimize */}
           <button
-            onClick={isModal || mode === "music" ? handleClose : undefined}
+            onClick={isModal || isInlineAudioMode ? handleClose : undefined}
             className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e] ${
-              isModal || mode === "music" ? "cursor-pointer" : ""
+              isModal || isInlineAudioMode ? "cursor-pointer" : ""
             }`}
             aria-label="Minimize"
           >
@@ -414,7 +436,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           {/* Green - Maximize/Zoom */}
           <button
             onClick={
-              mode === "music"
+              isInlineAudioMode
                 ? undefined
                 : isModal
                 ? handleClose
@@ -422,13 +444,13 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
                 ? handleSwitchToTerminal
                 : handleMaximizeTerminal
             }
-            disabled={mode === "music"}
+            disabled={isInlineAudioMode}
             className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#28c840] ${
-              mode === "music" ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+              isInlineAudioMode ? "cursor-not-allowed opacity-50" : "cursor-pointer"
             }`}
             aria-label={
-              mode === "music"
-                ? "Music player stays inline"
+              isInlineAudioMode
+                ? "Audio player stays inline"
                 : isModal
                 ? "Exit fullscreen"
                 : "Fullscreen"
@@ -465,7 +487,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           </button>
         )}
 
-        {!isModal && mode === "music" && (
+        {!isModal && isInlineAudioMode && (
           <button
             onClick={handleExitMusic}
             className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"

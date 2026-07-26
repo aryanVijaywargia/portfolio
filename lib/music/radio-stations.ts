@@ -3,6 +3,7 @@ export type RadioStation = {
   name: string;
   description: string;
   streamUrl: string;
+  fallbackStreamUrl: string;
   vibe: string;
 };
 
@@ -16,35 +17,40 @@ export const RADIO_STATIONS: RadioStation[] = [
     id: "groove-salad",
     name: "Groove Salad",
     description: "Ambient and downtempo beats for long focus sessions.",
-    streamUrl: "https://ice.somafm.com/groovesalad",
+    streamUrl: "https://ice5.somafm.com/groovesalad-128-mp3",
+    fallbackStreamUrl: "https://ice2.somafm.com/groovesalad-128-mp3",
     vibe: "chill / focus",
   },
   {
     id: "def-con",
     name: "DEF CON Radio",
     description: "Dark electronics and hacker-conference energy.",
-    streamUrl: "https://ice.somafm.com/defcon",
+    streamUrl: "https://ice5.somafm.com/defcon-128-mp3",
+    fallbackStreamUrl: "https://ice2.somafm.com/defcon-128-mp3",
     vibe: "hacking / electronic",
   },
   {
     id: "drone-zone",
     name: "Drone Zone",
     description: "Atmospheric textures with almost no rhythmic distraction.",
-    streamUrl: "https://ice.somafm.com/dronezone",
+    streamUrl: "https://ice5.somafm.com/dronezone-128-mp3",
+    fallbackStreamUrl: "https://ice2.somafm.com/dronezone-128-mp3",
     vibe: "deep work / ambient",
   },
   {
     id: "deep-space-one",
     name: "Deep Space One",
     description: "Experimental space music for quiet problem solving.",
-    streamUrl: "https://ice.somafm.com/deepspaceone",
+    streamUrl: "https://ice5.somafm.com/deepspaceone-128-mp3",
+    fallbackStreamUrl: "https://ice2.somafm.com/deepspaceone-128-mp3",
     vibe: "space / minimal",
   },
   {
     id: "space-station",
     name: "Space Station Soma",
     description: "Mid-tempo electronica that stays out of the way.",
-    streamUrl: "https://ice.somafm.com/spacestation",
+    streamUrl: "https://ice5.somafm.com/spacestation-128-mp3",
+    fallbackStreamUrl: "https://ice2.somafm.com/spacestation-128-mp3",
     vibe: "flow / electronica",
   },
 ];

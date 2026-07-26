@@ -5,15 +5,17 @@ import { getMusicRequestKind, pickRandomStationIndex, RADIO_STATIONS } from "./r
 test("coding radio stations use unique direct HTTPS streams", () => {
   assert.ok(RADIO_STATIONS.length >= 4);
   assert.equal(new Set(RADIO_STATIONS.map(({ id }) => id)).size, RADIO_STATIONS.length);
-  assert.equal(
-    new Set(RADIO_STATIONS.map(({ streamUrl }) => streamUrl)).size,
-    RADIO_STATIONS.length
-  );
+  const allStreamUrls = RADIO_STATIONS.flatMap(({ streamUrl, fallbackStreamUrl }) => [
+    streamUrl,
+    fallbackStreamUrl,
+  ]);
+  assert.equal(new Set(allStreamUrls).size, RADIO_STATIONS.length * 2);
 
-  RADIO_STATIONS.forEach(({ streamUrl }) => {
+  allStreamUrls.forEach((streamUrl) => {
     const url = new URL(streamUrl);
     assert.equal(url.protocol, "https:");
-    assert.equal(url.hostname, "ice.somafm.com");
+    assert.match(url.hostname, /^ice[25]\.somafm\.com$/);
+    assert.match(url.pathname, /-128-mp3$/);
   });
 });
 
