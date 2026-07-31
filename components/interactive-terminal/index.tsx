@@ -444,18 +444,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
                 Shared Notes
               </span>
             </div>
-
-            <div className="z-10 ml-auto flex items-center gap-1.5 text-[#706f6a] dark:text-[#aaa9a5]">
-              <span className="notes-toolbar-icon" aria-hidden="true">
-                ⌗
-              </span>
-              <span className="notes-toolbar-icon text-[14px]" aria-hidden="true">
-                ↗
-              </span>
-              <span className="notes-toolbar-icon text-[15px]" aria-hidden="true">
-                ⋯
-              </span>
-            </div>
           </motion.header>
         : /* macOS Window Title Bar */
           <motion.header
@@ -655,20 +643,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
           background: rgba(45, 45, 47, 0.96);
         }
 
-        .notes-toolbar-icon {
-          display: grid;
-          height: 1.65rem;
-          width: 1.65rem;
-          place-items: center;
-          border-radius: 0.4rem;
-          background: rgba(255, 255, 255, 0.42);
-          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.07);
-        }
-
-        :global(.dark) .notes-toolbar-icon {
-          background: rgba(255, 255, 255, 0.07);
-          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
-        }
       `}</style>
     </motion.figure>
   );
