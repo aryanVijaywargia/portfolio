@@ -1,5 +1,5 @@
 import { useAchievementActions } from "components/achievements";
-import { ArrowRightIcon, MoonIcon, StarIcon, SunIcon } from "@heroicons/react/24/solid";
+import { MoonIcon, StarIcon, SunIcon } from "@heroicons/react/24/solid";
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
 import { Link } from "components/link";
 import { InteractiveTerminal } from "components/interactive-terminal";
@@ -122,10 +122,9 @@ export const Hero: FC = () => {
             {HERO.cta2
               ? <Link
                   href={HERO.cta2.href}
-                  className="group relative inline-flex min-h-[44px] items-center justify-center gap-2 whitespace-nowrap px-1 py-2.5 text-sm font-semibold tracking-tight text-sky-600 transition-colors after:absolute a:bottom-1 a:left-1 a:right-1 a:h-px a:origin-left a:scale-x-0 a:bg-sky-500 a:transition-transform group-hfa:a:scale-x-100 d:text-sky-400"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-slate-300/70 bg-white/70 px-10 py-2.5 text-sm font-medium tracking-tight text-gray-600 backdrop-blur transition-all hfa:border-gray-900/40 hfa:text-gray-900 d:border-slate-400/20 d:bg-slate-900/60 d:text-slate-200 d:hfa:border-slate-300/40 d:hfa:bg-slate-900/80 d:hfa:text-slate-50 md:px-12"
                 >
                   {HERO.cta2.name}
-                  <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hfa:translate-x-1" />
                 </Link>
               : null}
           </footer>

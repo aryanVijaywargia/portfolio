@@ -88,7 +88,6 @@ export const Header: FC = ({}) => {
   }, [isMinimal]);
 
   if (isMinimal) {
-    const isBlog = router.pathname.startsWith("/blog");
     const isResume = router.pathname === "/resume";
 
     return (
@@ -99,17 +98,6 @@ export const Header: FC = ({}) => {
             {HEADER.logo.title}
           </Link>
           <nav className="ml-auto flex items-center gap-5 text-sm font-medium text-gray-500 d:text-gray-400 sm:gap-7">
-            <Link
-              href="/blog"
-              aria-current={isBlog ? "page" : undefined}
-              className={`relative inline-flex min-h-[44px] items-center py-2 transition-colors hfa:text-sky-600 d:hfa:text-sky-400 ${
-                isBlog
-                  ? "text-gray-900 after:absolute a:inset-x-0 a:-bottom-0.5 a:h-px a:bg-sky-500 d:text-white"
-                  : ""
-              }`}
-            >
-              Writing
-            </Link>
             <Link
               href="/resume"
               aria-current={isResume ? "page" : undefined}
