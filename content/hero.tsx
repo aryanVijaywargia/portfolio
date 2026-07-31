@@ -60,8 +60,5 @@ export const HERO = {
     href: "/resume",
     name: "Resume",
   },
-  cta2: {
-    href: "/blog",
-    name: "Read the blog",
-  },
+  cta2: null,
 };

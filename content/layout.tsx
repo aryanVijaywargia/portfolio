@@ -5,7 +5,6 @@ import {
   BriefcaseIcon,
   CodeBracketIcon,
   EnvelopeIcon,
-  BookOpenIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/solid";
 import { FC } from "react";
@@ -52,13 +51,6 @@ export const HEADER = {
       alt: "Work I've done.",
       desktop: true,
       Icon: CodeBracketIcon,
-    },
-    {
-      href: "/blog",
-      title: "Writing",
-      alt: "Notes from the workbench.",
-      desktop: false,
-      Icon: BookOpenIcon,
     },
     {
       href: "/#contact",
