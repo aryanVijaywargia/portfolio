@@ -60,8 +60,8 @@ export const BatmanHeader: FC = () => {
         <button
           onClick={deactivateBatman}
           className="group flex items-center gap-2 transition-all"
-          title="Exit Batman Mode"
-          aria-label="Exit Batman Mode"
+          title="Back to the main portfolio"
+          aria-label="Back to the main portfolio"
         >
           <svg
             width="28"
