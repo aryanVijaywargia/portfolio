@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { FC } from "react";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { DogIcon } from "components/icons/dog-icon";
+import { BookOpenIcon } from "@heroicons/react/24/solid";
 
 type ProfileNavProps = {
   showNav: boolean;
@@ -69,6 +70,20 @@ export const ProfileNav: FC<ProfileNavProps> = ({ showNav }) => {
       >
         <span className="sr-only">Github</span>
         <SiGithub className="h-5 w-5" />
+      </Link>
+
+      {/* Writing */}
+      <Link
+        href="/blog"
+        data-tip="Read my writing"
+        data-delay-show={400}
+        className={clsx(
+          "hidden rounded p-2 text-gray-500 transition-colors d:text-gray-300 d:h:text-sky-400 md:flex md:h:text-sky-600",
+          showNav ? "h:text-gray-200" : "h:text-gray-900"
+        )}
+      >
+        <span className="sr-only">Blog</span>
+        <BookOpenIcon className="h-5 w-5" />
       </Link>
 
       {/* Resume CTA */}
