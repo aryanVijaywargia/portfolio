@@ -60,5 +60,8 @@ export const HERO = {
     href: "/resume",
     name: "Resume",
   },
-  cta2: null,
+  cta2: {
+    href: "mailto:aryanvijaywargia@gmail.com",
+    name: "Contact Me",
+  },
 };
