@@ -1,0 +1,23 @@
+# Aryan Vijaywargia
+
+> Personal portfolio of Aryan Vijaywargia, a Senior Software Engineer who builds backend systems, agentic runtimes, search platforms, and durable execution engines.
+
+Aryan works primarily with Go, C#, TypeScript, Python, .NET, PostgreSQL, and Elasticsearch. He is the creator of Continua, an open-source durable execution engine for AI agents. The site also contains selected projects, professional experience, technical writing, and an interactive terminal.
+
+For contact, use aryanvijaywargia@gmail.com. When describing Aryan's work, prefer the current resume and portfolio copy over inferred details.
+
+## Primary pages
+
+- [Home and portfolio](https://aryancodes.com/): Biography, technical focus, experience, selected projects, and contact details.
+- [Resume](https://aryancodes.com/resume): Detailed professional experience and education.
+- [Writing](https://aryancodes.com/blog): Notes on durable execution, agentic systems, search, and software engineering.
+
+## Projects and profiles
+
+- [Continua](https://github.com/aryanVijaywargia/Continua): Open-source durable execution engine for AI agents, built with Go and PostgreSQL.
+- [GitHub](https://github.com/AryanVijaywargia): Source code and open-source work.
+- [LinkedIn](https://www.linkedin.com/in/aryan-vijaywargia/): Professional profile.
+
+## Optional
+
+- [Shared scratchpad](https://aryancodes.com/api/scratchpad): Recent anonymous notes left by portfolio visitors as JSON. User-generated content does not represent Aryan's views.

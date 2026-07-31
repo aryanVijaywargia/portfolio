@@ -1,3 +1,4 @@
+import { Link } from "components/link";
 import { FC } from "react";
 
 export const BatmanFooter: FC = () => {
@@ -12,7 +13,11 @@ export const BatmanFooter: FC = () => {
             aryanvijaywargia@gmail.com
           </p>
           <p className="text-sm" style={{ color: "var(--bat-fg-dim)" }}>
-            &copy; {new Date().getFullYear()} Aryan Vijaywargia. All rights reserved.
+            <Link href="/llms.txt" className="underline underline-offset-4">
+              llms.txt
+            </Link>
+            <span aria-hidden="true"> · </span>
+            &copy; {new Date().getFullYear()} Aryan Vijaywargia.
           </p>
         </div>
 

@@ -33,6 +33,10 @@ const IntroReel = dynamic(() => import("./intro-reel").then((mod) => mod.IntroRe
 const TerminalRadio = dynamic(() => import("./terminal-radio").then((mod) => mod.TerminalRadio), {
   ssr: false,
 });
+const TerminalScratchpad = dynamic(
+  () => import("./terminal-scratchpad").then((mod) => mod.TerminalScratchpad),
+  { ssr: false }
+);
 const Code = dynamic(() => import("components/typography/code").then((mod) => mod.Code), {
   ssr: false,
 });
@@ -54,6 +58,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     | "contra"
     | "intro-reel"
     | "radio"
+    | "scratchpad"
   >("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
@@ -161,6 +166,11 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
   const handleSwitchToRadio = () => {
     startRadio(0);
+  };
+
+  const handleSwitchToScratchpad = () => {
+    setMode("scratchpad");
+    setIsTerminalMaximized(true);
   };
 
   const handleChatbotMusicRequest = useCallback((_kind: MusicRequestKind): RadioStation => {
@@ -279,6 +289,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? "whois.mp4 - Terminal"
     : mode === "radio"
     ? "radio — zsh"
+    : mode === "scratchpad"
+    ? "Shared Notes"
     : mode === "editor"
     ? "/index.tsx"
     : "aryan@macbook - zsh";
@@ -305,7 +317,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? handleMinimizeTerminal
     : isInlineAudioMode
     ? handleExitRadio
-    : mode === "editor"
+    : mode === "editor" || mode === "scratchpad"
     ? handleSwitchToTerminal
     : mode === "terminal"
     ? handleReplayIntro
@@ -319,6 +331,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? "h-[min(80svh,42rem)] w-[calc(100vw-2rem)] max-w-2xl sm:w-[90vw]"
     : mode === "intro-reel" && isTerminalMaximized
     ? "h-[min(86svh,48rem)] w-[calc(100vw-2rem)] max-w-5xl sm:w-[94vw]"
+    : mode === "scratchpad" && isTerminalMaximized
+    ? "h-[min(88svh,50rem)] w-[calc(100vw-1rem)] max-w-4xl sm:w-[94vw]"
     : isTerminalMaximized
     ? "h-[min(80svh,42rem)] w-[calc(100vw-2rem)] max-w-3xl sm:w-[90vw]"
     : "h-[22rem] w-full sm:h-[24rem] lg:h-[27rem]";
@@ -348,6 +362,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         initialStationIndex={musicStationIndex}
         onExit={handleExitRadio}
       />
+    : mode === "scratchpad"
+    ? <TerminalScratchpad />
     : mode === "editor"
     ? <div className="scrollbar-none h-full overflow-auto p-3">
         <Code
@@ -362,6 +378,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         onSwitchToGameMenu={handleSwitchToGame}
         onSwitchToIntroReel={handleSwitchToIntroReel}
         onSwitchToRadio={handleSwitchToRadio}
+        onSwitchToScratchpad={handleSwitchToScratchpad}
         triggerChatbot={triggerChatbot}
         onTriggerHandled={clearTrigger}
         onValidCommand={handleValidCommand}
@@ -378,149 +395,214 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
       layout
       layoutId="terminal-window"
       transition={layoutTransition}
-      className={`terminal-window relative flex min-h-0 flex-col overflow-hidden rounded-lg shadow-2xl ${
+      className={`terminal-window relative flex min-h-0 flex-col overflow-hidden shadow-2xl ${
         isModal ? "pointer-events-auto" : ""
+      } ${
+        mode === "scratchpad"
+          ? "notes-window rounded-xl border border-black/15 dark:border-white/15"
+          : "rounded-lg"
       } ${windowSizeClass}`}
       onClick={isModal ? (e) => e.stopPropagation() : undefined}
     >
-      {/* macOS Window Title Bar */}
-      <motion.header
-        layout="position"
-        className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#1e293b]/60 dark:bg-[#0f172a]/90"
-      >
-        {/* Traffic Light Buttons */}
-        <div className="flex items-center gap-2">
-          {/* Red - Close */}
-          <button
-            onClick={handleClose}
-            className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f57] ${
-              handleClose ? "cursor-pointer" : ""
-            }`}
-            aria-label="Close"
+      {mode === "scratchpad"
+        ? <motion.header
+            layout="position"
+            className="notes-titlebar relative flex h-11 shrink-0 items-center border-b border-black/10 px-3 dark:border-white/10"
           >
-            {handleClose && (
-              <svg
-                className="h-2 w-2 text-[#4a0002] opacity-0 group-hover:opacity-100"
-                viewBox="0 0 12 12"
-                fill="currentColor"
+            <div className="z-10 flex items-center gap-2">
+              <button
+                onClick={handleClose}
+                className="traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f57]"
+                aria-label="Close notes"
               >
-                <path d="M6 4.586L9.293 1.293a1 1 0 111.414 1.414L7.414 6l3.293 3.293a1 1 0 01-1.414 1.414L6 7.414l-3.293 3.293a1 1 0 01-1.414-1.414L4.586 6 1.293 2.707a1 1 0 011.414-1.414L6 4.586z" />
-              </svg>
+                <svg
+                  className="h-2 w-2 text-[#4a0002] opacity-0 group-hover:opacity-100"
+                  viewBox="0 0 12 12"
+                  fill="currentColor"
+                >
+                  <path d="M6 4.586L9.293 1.293a1 1 0 111.414 1.414L7.414 6l3.293 3.293a1 1 0 01-1.414 1.414L6 7.414l-3.293 3.293a1 1 0 01-1.414-1.414L4.586 6 1.293 2.707a1 1 0 011.414-1.414L6 4.586z" />
+                </svg>
+              </button>
+              <button
+                onClick={handleClose}
+                className="traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e]"
+                aria-label="Minimize notes"
+              >
+                <span className="h-px w-2 bg-[#985700] opacity-0 group-hover:opacity-100" />
+              </button>
+              <button
+                onClick={handleClose}
+                className="traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#28c840]"
+                aria-label="Restore notes"
+              >
+                <span className="h-1.5 w-1.5 border border-[#006500] opacity-0 group-hover:opacity-100" />
+              </button>
+            </div>
+
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <span className="select-none text-[12px] font-semibold text-[#454545] dark:text-[#d4d4d4]">
+                Shared Notes
+              </span>
+            </div>
+
+            <div className="z-10 ml-auto flex items-center gap-1.5 text-[#706f6a] dark:text-[#aaa9a5]">
+              <span className="notes-toolbar-icon" aria-hidden="true">
+                ⌗
+              </span>
+              <span className="notes-toolbar-icon text-[14px]" aria-hidden="true">
+                ↗
+              </span>
+              <span className="notes-toolbar-icon text-[15px]" aria-hidden="true">
+                ⋯
+              </span>
+            </div>
+          </motion.header>
+        : /* macOS Window Title Bar */
+          <motion.header
+            layout="position"
+            className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#1e293b]/60 dark:bg-[#0f172a]/90"
+          >
+            {/* Traffic Light Buttons */}
+            <div className="flex items-center gap-2">
+              {/* Red - Close */}
+              <button
+                onClick={handleClose}
+                className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f57] ${
+                  handleClose ? "cursor-pointer" : ""
+                }`}
+                aria-label="Close"
+              >
+                {handleClose && (
+                  <svg
+                    className="h-2 w-2 text-[#4a0002] opacity-0 group-hover:opacity-100"
+                    viewBox="0 0 12 12"
+                    fill="currentColor"
+                  >
+                    <path d="M6 4.586L9.293 1.293a1 1 0 111.414 1.414L7.414 6l3.293 3.293a1 1 0 01-1.414 1.414L6 7.414l-3.293 3.293a1 1 0 01-1.414-1.414L4.586 6 1.293 2.707a1 1 0 011.414-1.414L6 4.586z" />
+                  </svg>
+                )}
+              </button>
+              {/* Yellow - Minimize */}
+              <button
+                onClick={isModal || isInlineAudioMode ? handleClose : undefined}
+                className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e] ${
+                  isModal || isInlineAudioMode ? "cursor-pointer" : ""
+                }`}
+                aria-label="Minimize"
+              >
+                <svg
+                  className="h-2 w-2 text-[#985700] opacity-0 group-hover:opacity-100"
+                  viewBox="0 0 12 12"
+                  fill="currentColor"
+                >
+                  <rect x="1" y="5.5" width="10" height="1" />
+                </svg>
+              </button>
+              {/* Green - Maximize/Zoom */}
+              <button
+                onClick={
+                  isInlineAudioMode
+                    ? undefined
+                    : isModal
+                    ? handleClose
+                    : mode === "editor"
+                    ? handleSwitchToTerminal
+                    : handleMaximizeTerminal
+                }
+                disabled={isInlineAudioMode}
+                className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#28c840] ${
+                  isInlineAudioMode ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+                }`}
+                aria-label={
+                  isInlineAudioMode
+                    ? "Audio player stays inline"
+                    : isModal
+                    ? "Exit fullscreen"
+                    : "Fullscreen"
+                }
+              >
+                <svg
+                  className="h-2 w-2 text-[#006500] opacity-0 group-hover:opacity-100"
+                  viewBox="0 0 12 12"
+                  fill="currentColor"
+                >
+                  <path d="M5 1H1v4h1V2.707l3.146 3.147.708-.708L2.707 2H5V1zm6 5h-1v2.293L6.854 5.146l-.708.708L9.293 9H7v1h4V6z" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Tabs - decorative, both themes */}
+            {!isModal && mode === "terminal" && (
+              <div className="ml-3 flex items-center gap-1">
+                <span className="rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 [background:rgba(6,182,212,0.12)] dark:text-[#67e8f9]">
+                  ~/aryan
+                </span>
+              </div>
             )}
-          </button>
-          {/* Yellow - Minimize */}
-          <button
-            onClick={isModal || isInlineAudioMode ? handleClose : undefined}
-            className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e] ${
-              isModal || isInlineAudioMode ? "cursor-pointer" : ""
-            }`}
-            aria-label="Minimize"
-          >
-            <svg
-              className="h-2 w-2 text-[#985700] opacity-0 group-hover:opacity-100"
-              viewBox="0 0 12 12"
-              fill="currentColor"
+
+            {/* Explicit back affordance in editor mode */}
+            {!isModal && mode === "editor" && (
+              <button
+                onClick={handleSwitchToTerminal}
+                className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
+                aria-label="Back to terminal"
+              >
+                <span aria-hidden="true">←</span>
+                <span>back</span>
+              </button>
+            )}
+
+            {!isModal && isInlineAudioMode && (
+              <button
+                onClick={handleExitRadio}
+                className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
+                aria-label="Back to terminal"
+              >
+                <span aria-hidden="true">←</span>
+                <span>terminal</span>
+              </button>
+            )}
+
+            {/* Window Title */}
+            <div
+              className={`flex-1 text-center ${handleTitleClick ? "cursor-pointer" : ""}`}
+              onClick={handleTitleClick}
+              title={handleTitleClick ? "Launch Byte" : undefined}
             >
-              <rect x="1" y="5.5" width="10" height="1" />
-            </svg>
-          </button>
-          {/* Green - Maximize/Zoom */}
-          <button
-            onClick={
-              isInlineAudioMode
-                ? undefined
-                : isModal
-                ? handleClose
-                : mode === "editor"
-                ? handleSwitchToTerminal
-                : handleMaximizeTerminal
-            }
-            disabled={isInlineAudioMode}
-            className={`traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#28c840] ${
-              isInlineAudioMode ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-            }`}
-            aria-label={
-              isInlineAudioMode
-                ? "Audio player stays inline"
-                : isModal
-                ? "Exit fullscreen"
-                : "Fullscreen"
-            }
-          >
-            <svg
-              className="h-2 w-2 text-[#006500] opacity-0 group-hover:opacity-100"
-              viewBox="0 0 12 12"
-              fill="currentColor"
-            >
-              <path d="M5 1H1v4h1V2.707l3.146 3.147.708-.708L2.707 2H5V1zm6 5h-1v2.293L6.854 5.146l-.708.708L9.293 9H7v1h4V6z" />
-            </svg>
-          </button>
-        </div>
+              <span className="select-none text-xs font-medium text-[#6b6b6b] dark:text-[#9d9d9d]">
+                {terminalTitle}
+              </span>
+            </div>
 
-        {/* Tabs - decorative, both themes */}
-        {!isModal && mode === "terminal" && (
-          <div className="ml-3 flex items-center gap-1">
-            <span className="rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 [background:rgba(6,182,212,0.12)] dark:text-[#67e8f9]">
-              ~/aryan
-            </span>
-          </div>
-        )}
-
-        {/* Explicit back affordance in editor mode */}
-        {!isModal && mode === "editor" && (
-          <button
-            onClick={handleSwitchToTerminal}
-            className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
-            aria-label="Back to terminal"
-          >
-            <span aria-hidden="true">←</span>
-            <span>back</span>
-          </button>
-        )}
-
-        {!isModal && isInlineAudioMode && (
-          <button
-            onClick={handleExitRadio}
-            className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
-            aria-label="Back to terminal"
-          >
-            <span aria-hidden="true">←</span>
-            <span>terminal</span>
-          </button>
-        )}
-
-        {/* Window Title */}
-        <div
-          className={`flex-1 text-center ${handleTitleClick ? "cursor-pointer" : ""}`}
-          onClick={handleTitleClick}
-          title={handleTitleClick ? "Launch Byte" : undefined}
-        >
-          <span className="select-none text-xs font-medium text-[#6b6b6b] dark:text-[#9d9d9d]">
-            {terminalTitle}
-          </span>
-        </div>
-
-        {/* Right side - Copy button for editor mode */}
-        <div className="flex w-14 justify-end">
-          {!isModal && mode === "editor" && (
-            <CopyButton
-              content={Array.isArray(editorCode) ? editorCode.join("\n") : editorCode ?? ""}
-              className="text-gray-400 hover:text-white"
-            />
-          )}
-        </div>
-      </motion.header>
+            {/* Right side - Copy button for editor mode */}
+            <div className="flex w-14 justify-end">
+              {!isModal && mode === "editor" && (
+                <CopyButton
+                  content={Array.isArray(editorCode) ? editorCode.join("\n") : editorCode ?? ""}
+                  className="text-gray-400 hover:text-white"
+                />
+              )}
+            </div>
+          </motion.header>}
 
       {/* Content */}
-      <main className="terminal-content relative min-h-0 flex-1 overflow-hidden bg-white dark:bg-[#060810] dark:bg-gradient-to-b dark:from-[#0a0e1a] dark:to-[#060810]">
+      <main
+        className={`terminal-content relative min-h-0 flex-1 overflow-hidden ${
+          mode === "scratchpad"
+            ? "bg-[#f4f3ef] dark:bg-[#1c1c1e]"
+            : "bg-white dark:bg-[#060810] dark:bg-gradient-to-b dark:from-[#0a0e1a] dark:to-[#060810]"
+        }`}
+      >
         {/* cyan radial tint at top (dark mode only) */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 hidden dark:block"
-          style={{
-            background: "radial-gradient(ellipse at top, rgba(6,182,212,0.08), transparent 60%)",
-          }}
-        />
+        {mode !== "scratchpad" && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 hidden dark:block"
+            style={{
+              background: "radial-gradient(ellipse at top, rgba(6,182,212,0.08), transparent 60%)",
+            }}
+          />
+        )}
         <div className="relative h-full">{terminalContent}</div>
       </main>
 
@@ -557,6 +639,35 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
 
         .terminal-window:not(:hover) .traffic-light {
           filter: saturate(0.8);
+        }
+
+        .notes-window {
+          box-shadow: 0 26px 75px -22px rgba(0, 0, 0, 0.52), 0 8px 24px -12px rgba(0, 0, 0, 0.3);
+        }
+
+        .notes-titlebar {
+          background: rgba(236, 235, 231, 0.96);
+          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, sans-serif;
+          backdrop-filter: blur(18px);
+        }
+
+        :global(.dark) .notes-titlebar {
+          background: rgba(45, 45, 47, 0.96);
+        }
+
+        .notes-toolbar-icon {
+          display: grid;
+          height: 1.65rem;
+          width: 1.65rem;
+          place-items: center;
+          border-radius: 0.4rem;
+          background: rgba(255, 255, 255, 0.42);
+          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.07);
+        }
+
+        :global(.dark) .notes-toolbar-icon {
+          background: rgba(255, 255, 255, 0.07);
+          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
         }
       `}</style>
     </motion.figure>

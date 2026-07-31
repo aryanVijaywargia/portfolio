@@ -86,6 +86,7 @@ type TerminalProps = {
   onSwitchToGameMenu: () => void;
   onSwitchToIntroReel: () => void;
   onSwitchToRadio: () => void;
+  onSwitchToScratchpad: () => void;
   triggerChatbot?: boolean;
   onTriggerHandled?: () => void;
   onValidCommand?: (command: string) => void;
@@ -103,6 +104,7 @@ export const Terminal: FC<TerminalProps> = ({
   onSwitchToGameMenu,
   onSwitchToIntroReel,
   onSwitchToRadio,
+  onSwitchToScratchpad,
   triggerChatbot,
   onTriggerHandled,
   onValidCommand,
@@ -492,6 +494,17 @@ export const Terminal: FC<TerminalProps> = ({
 
         case "radio":
           onSwitchToRadio();
+          return;
+
+        case "scratchpad":
+          addLine("", undefined, 0);
+          addLine("Opening shared scratchpad.txt…", "info", 80);
+          setTimeout(
+            () => {
+              onSwitchToScratchpad();
+            },
+            280
+          );
           return;
 
         case "game":
