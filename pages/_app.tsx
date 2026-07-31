@@ -38,8 +38,8 @@ const Loaders: FC<PropsWithChildren> = ({ children }) => {
 
 const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component }) => {
   const router = useRouter();
-  const { mode, showTransition } = usePortfolioMode();
-  const isBatman = mode === "batman";
+  const { showTransition } = usePortfolioMode();
+  const isBatman = router.pathname === "/batman";
   const canonicalPath = router.asPath.split(/[?#]/)[0] || "/";
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
   }, []);
 
   return (
-    <>
+    <div data-portfolio-mode={isBatman ? "batman" : undefined}>
       <DefaultSeo
         {...SEO}
         canonical={`${SEO.url}${canonicalPath}`}
@@ -71,11 +71,11 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
         <Component {...pageProps} />
       </main>
       {isBatman ? <BatmanFooter /> : <Footer />}
-      {router.pathname === "/" ? <MobileExperienceNotice /> : null}
+      {router.pathname === "/" || isBatman ? <MobileExperienceNotice /> : null}
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
       {!isBatman && router.pathname === "/" ? <AmbientMessages /> : null}
-    </>
+    </div>
   );
 };
 

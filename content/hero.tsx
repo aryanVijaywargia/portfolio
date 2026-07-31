@@ -61,7 +61,7 @@ export const HERO = {
     name: "Resume",
   },
   cta2: {
-    href: "mailto:aryanvijaywargia@gmail.com",
-    name: "Contact Me",
+    href: "/blog",
+    name: "Read the blog",
   },
 };

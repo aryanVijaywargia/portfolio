@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 type PortfolioMode = "default" | "batman";
@@ -18,13 +19,14 @@ const PortfolioModeContext = createContext<PortfolioModeContextValue>({
   dismissTransition: () => {},
 });
 
-const STORAGE_KEY = "portfolio-mode";
+const RETURN_PATH_KEY = "batman-return-path";
 const MODE_SWAP_DELAY_MS = 120;
 
 export const PortfolioModeProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [mode, setMode] = useState<PortfolioMode>("default");
+  const router = useRouter();
   const [showTransition, setShowTransition] = useState(false);
   const modeSwapTimeoutRef = useRef<number | null>(null);
+  const mode: PortfolioMode = router.pathname === "/batman" ? "batman" : "default";
 
   const clearModeSwapTimeout = useCallback(() => {
     if (modeSwapTimeoutRef.current === null) return;
@@ -32,18 +34,18 @@ export const PortfolioModeProvider: FC<PropsWithChildren> = ({ children }) => {
     modeSwapTimeoutRef.current = null;
   }, []);
 
-  // Restore from sessionStorage on mount
   useEffect(() => {
-    try {
-      const stored = sessionStorage.getItem(STORAGE_KEY);
-      if (stored === "batman") {
-        setMode("batman");
-        document.documentElement.setAttribute("data-portfolio-mode", "batman");
+    if (mode === "batman") {
+      document.documentElement.setAttribute("data-portfolio-mode", "batman");
+    } else {
+      document.documentElement.removeAttribute("data-portfolio-mode");
+      try {
+        sessionStorage.removeItem(RETURN_PATH_KEY);
+      } catch {
+        // sessionStorage unavailable
       }
-    } catch {
-      // sessionStorage unavailable
     }
-  }, []);
+  }, [mode]);
 
   useEffect(() => {
     return () => {
@@ -51,42 +53,45 @@ export const PortfolioModeProvider: FC<PropsWithChildren> = ({ children }) => {
     };
   }, [clearModeSwapTimeout]);
 
-  const enterBatmanMode = useCallback(() => {
-    setMode("batman");
-    window.scrollTo(0, 0);
-    document.documentElement.setAttribute("data-portfolio-mode", "batman");
-    try {
-      sessionStorage.setItem(STORAGE_KEY, "batman");
-    } catch {
-      // sessionStorage unavailable
-    }
-  }, []);
-
   const activateBatman = useCallback(() => {
     clearModeSwapTimeout();
     setShowTransition(true);
+
+    try {
+      sessionStorage.setItem(RETURN_PATH_KEY, router.asPath);
+    } catch {
+      // sessionStorage unavailable
+    }
+
     modeSwapTimeoutRef.current = window.setTimeout(
       () => {
         modeSwapTimeoutRef.current = null;
-        enterBatmanMode();
+        void router.push("/batman");
       },
       MODE_SWAP_DELAY_MS
     );
-  }, [clearModeSwapTimeout, enterBatmanMode]);
+  }, [clearModeSwapTimeout, router]);
 
   const deactivateBatman = useCallback(() => {
     clearModeSwapTimeout();
     setShowTransition(false);
     document.documentElement.removeAttribute("data-portfolio-mode");
+
+    let returnPath: string | null = null;
     try {
-      sessionStorage.removeItem(STORAGE_KEY);
+      returnPath = sessionStorage.getItem(RETURN_PATH_KEY);
+      sessionStorage.removeItem(RETURN_PATH_KEY);
     } catch {
       // sessionStorage unavailable
     }
-    // Reset position before returning to the default portfolio.
-    window.scrollTo(0, 0);
-    setMode("default");
-  }, [clearModeSwapTimeout]);
+
+    if (returnPath) {
+      router.back();
+      return;
+    }
+
+    void router.replace("/");
+  }, [clearModeSwapTimeout, router]);
 
   const dismissTransition = useCallback(() => {
     setShowTransition(false);
