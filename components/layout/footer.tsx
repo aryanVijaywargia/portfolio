@@ -22,7 +22,15 @@ export const Footer: FC<FooterProps> = ({}) => {
         </div>
         <div className="mt-8 md:order-1 md:mt-0">
           <small className="block text-center text-sm text-gray-400 d:text-gray-600">
-            &copy; {new Date().getFullYear()} Aryan Vijaywargia, All rights reserved.
+            Human? Machine? Curious either way.{" "}
+            <Link
+              href="/llms.txt"
+              className="underline decoration-dotted underline-offset-4 transition-colors hover:text-cyan-600 d:hover:text-cyan-400"
+            >
+              llms.txt
+            </Link>
+            <span aria-hidden="true"> · </span>
+            &copy; {new Date().getFullYear()} Aryan Vijaywargia.
           </small>
         </div>
       </div>
