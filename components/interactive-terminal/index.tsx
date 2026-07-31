@@ -21,9 +21,6 @@ const DungeonGame = dynamic(() => import("./dungeon-game").then((mod) => mod.Dun
 const RacerGame = dynamic(() => import("./racer-game").then((mod) => mod.RacerGame), {
   ssr: false,
 });
-const ContraGame = dynamic(() => import("./contra-game").then((mod) => mod.ContraGame), {
-  ssr: false,
-});
 const GameMenu = dynamic(() => import("./game-menu").then((mod) => mod.GameMenu), {
   ssr: false,
 });
@@ -55,7 +52,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     | "snake"
     | "dungeon"
     | "racer"
-    | "contra"
     | "intro-reel"
     | "radio"
     | "scratchpad"
@@ -201,9 +197,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   };
 
   const handleSelectGame = (gameId: string) => {
-    if (gameId === "contra") {
-      setMode("contra");
-    } else if (gameId === "snake") {
+    if (gameId === "snake") {
       setMode("snake");
     } else if (gameId === "dungeon") {
       setMode("dungeon");
@@ -248,10 +242,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     () => trackAchievementEvent({ type: "dungeon:escaped" }),
     [trackAchievementEvent]
   );
-  const handleContraComplete = useCallback(
-    () => trackAchievementEvent({ type: "contra:completed" }),
-    [trackAchievementEvent]
-  );
   const handleValidCommand = useCallback(
     (command: string) => trackAchievementEvent({ type: "terminal:valid-command", command }),
     [trackAchievementEvent]
@@ -281,8 +271,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? "⚔️ Dungeon Quest - Terminal"
     : mode === "racer"
     ? "🏎️ Turbo Racer - Terminal"
-    : mode === "contra"
-    ? "🔫 Contra: Terminal Assault"
     : mode === "game-menu"
     ? "🎮 Games - Terminal"
     : mode === "intro-reel"
@@ -352,8 +340,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     ? <DungeonGame onGameEnd={handleExitToGameMenu} onEscape={handleDungeonEscape} />
     : mode === "racer"
     ? <RacerGame onGameEnd={handleExitToGameMenu} onScoreChange={handleRacerScoreChange} />
-    : mode === "contra"
-    ? <ContraGame onGameEnd={handleExitToGameMenu} onMissionComplete={handleContraComplete} />
     : mode === "intro-reel"
     ? <IntroReel onExit={handleExitIntroReel} />
     : mode === "radio"
