@@ -12,10 +12,30 @@ type OutputLine = {
 };
 
 const TROPHIES_PER_SHELF = 4;
+const TROPHY_PROGRESS_WIDTH = 24;
+
+const buildTrophyAscii = (isUnlocked: boolean) => {
+  const mark = isUnlocked ? "*" : "?";
+  const stem = isUnlocked ? "||" : "::";
+
+  return [
+    "    .------.",
+    "  __|      |__",
+    `(   |  ${mark}   |   )`,
+    " \\  |____|  /",
+    "     \\____/",
+    `       ${stem}`,
+    `     __${stem}__`,
+    "    |______|",
+  ].join("\n");
+};
 
 const buildAchievementShelfMarkup = (unlockedIds: AchievementId[]) => {
   const unlockedSet = new Set(unlockedIds);
   const progress = Math.round((unlockedIds.length / ACHIEVEMENT_ORDER.length) * 100);
+  const progressFilled = Math.round(
+    (unlockedIds.length / ACHIEVEMENT_ORDER.length) * TROPHY_PROGRESS_WIDTH
+  );
   const shelves: AchievementId[][] = [];
 
   for (let index = 0; index < ACHIEVEMENT_ORDER.length; index += TROPHIES_PER_SHELF) {
@@ -39,21 +59,26 @@ const buildAchievementShelfMarkup = (unlockedIds: AchievementId[]) => {
               aria-label="${escapeHtml(`${label}. ${detail}`)}"
               title="${escapeHtml(detail)}"
             >
-              <span class="achievement-cup" aria-hidden="true">
-                <span class="achievement-cup-bowl">${isUnlocked ? "★" : "?"}</span>
-                <span class="achievement-cup-stem"></span>
-                <span class="achievement-cup-base"></span>
-              </span>
+              <pre class="achievement-ascii-cup" aria-hidden="true">${escapeHtml(
+                buildTrophyAscii(isUnlocked)
+              )}</pre>
               <span class="achievement-trophy-label">${escapeHtml(label)}</span>
             </div>`;
         })
         .join("");
 
-      return `<div class="achievement-shelf-row"><div class="achievement-trophies">${trophies}</div><div class="achievement-shelf-plank" aria-hidden="true"></div></div>`;
+      return `<div class="achievement-shelf-row"><div class="achievement-trophies">${trophies}</div><pre class="achievement-shelf-plank" aria-hidden="true">+${"-".repeat(
+        130
+      )}+</pre></div>`;
     })
     .join("");
 
   const lockedCount = ACHIEVEMENT_ORDER.length - unlockedIds.length;
+  const unlockedCountLabel = String(unlockedIds.length).padStart(2, "0");
+  const achievementTotal = ACHIEVEMENT_ORDER.length;
+  const progressFillLabel = "#".repeat(progressFilled);
+  const progressTrackLabel = ".".repeat(TROPHY_PROGRESS_WIDTH - progressFilled);
+  const progressValueLabel = String(progress).padStart(3, " ");
 
   return `
     <section class="achievement-case" aria-label="Achievement trophy case">
@@ -62,12 +87,10 @@ const buildAchievementShelfMarkup = (unlockedIds: AchievementId[]) => {
           <span class="achievement-case-kicker">ACHIEVEMENT ARCHIVE</span>
           <strong class="achievement-case-title">Trophy case</strong>
         </div>
-        <span class="achievement-case-count">${unlockedIds.length}<small> / ${
-    ACHIEVEMENT_ORDER.length
-  }</small></span>
+        <span class="achievement-case-count">[${unlockedCountLabel}/${achievementTotal}]</span>
       </div>
       <div class="achievement-progress" aria-label="${progress}% complete">
-        <span class="achievement-progress-fill" style="width: ${progress}%"></span>
+        <span aria-hidden="true">[</span><span class="achievement-progress-fill">${progressFillLabel}</span><span class="achievement-progress-track">${progressTrackLabel}</span><span aria-hidden="true">]</span><span class="achievement-progress-value">${progressValueLabel}%</span>
       </div>
       <div class="achievement-shelves">${shelfMarkup}</div>
       <p class="achievement-case-note">${
@@ -738,36 +761,47 @@ export const Terminal: FC<TerminalProps> = ({
         }
 
         .terminal-line :global(.achievement-case) {
+          position: relative;
           width: min(100%, 760px);
           margin: 0.5rem 0 1rem;
           overflow: hidden;
-          border: 1px solid rgba(71, 85, 105, 0.28);
-          border-radius: 14px;
-          background:
-            radial-gradient(circle at 82% 5%, rgba(56, 189, 248, 0.1), transparent 32%),
-            linear-gradient(145deg, rgba(248, 250, 252, 0.96), rgba(226, 232, 240, 0.78));
+          border: 1px solid rgba(8, 145, 178, 0.3);
+          border-radius: 4px;
+          background-color: rgba(241, 245, 249, 0.9);
+          background-image: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 3px,
+            rgba(14, 116, 144, 0.025) 3px,
+            rgba(14, 116, 144, 0.025) 4px
+          );
           box-shadow:
-            0 18px 45px rgba(15, 23, 42, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.9);
-          padding: 1rem 1rem 0.8rem;
+            0 16px 38px rgba(15, 23, 42, 0.1),
+            inset 3px 0 0 rgba(6, 182, 212, 0.5);
+          padding: 0.9rem 1rem 0.75rem;
         }
 
         :global(.dark) .terminal-line :global(.achievement-case) {
-          border-color: rgba(71, 85, 105, 0.44);
-          background:
-            radial-gradient(circle at 82% 5%, rgba(14, 165, 233, 0.12), transparent 34%),
-            linear-gradient(145deg, rgba(8, 17, 32, 0.98), rgba(13, 24, 42, 0.94));
+          border-color: rgba(34, 211, 238, 0.26);
+          background-color: rgba(5, 13, 27, 0.94);
+          background-image: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 3px,
+            rgba(103, 232, 249, 0.025) 3px,
+            rgba(103, 232, 249, 0.025) 4px
+          );
           box-shadow:
-            0 18px 52px rgba(0, 0, 0, 0.3),
-            inset 0 1px 0 rgba(148, 163, 184, 0.08);
+            0 18px 48px rgba(0, 0, 0, 0.28),
+            inset 3px 0 0 rgba(34, 211, 238, 0.5);
         }
 
         .terminal-line :global(.achievement-case-header) {
           display: flex;
-          align-items: flex-end;
+          align-items: center;
           justify-content: space-between;
           gap: 1rem;
-          padding: 0.05rem 0.15rem 0.7rem;
+          padding: 0 0.2rem 0.55rem;
         }
 
         .terminal-line :global(.achievement-case-kicker),
@@ -776,11 +810,16 @@ export const Terminal: FC<TerminalProps> = ({
         }
 
         .terminal-line :global(.achievement-case-kicker) {
-          margin-bottom: 0.16rem;
-          color: #0284c7;
-          font-size: 0.58rem;
+          margin-bottom: 0.2rem;
+          color: #0e7490;
+          font-size: 0.56rem;
           font-weight: 700;
-          letter-spacing: 0.18em;
+          letter-spacing: 0.16em;
+        }
+
+        .terminal-line :global(.achievement-case-kicker::before) {
+          content: "// ";
+          opacity: 0.58;
         }
 
         :global(.dark) .terminal-line :global(.achievement-case-kicker) {
@@ -788,10 +827,11 @@ export const Terminal: FC<TerminalProps> = ({
         }
 
         .terminal-line :global(.achievement-case-title) {
-          color: #0f172a;
-          font-size: clamp(1rem, 2.5vw, 1.35rem);
+          color: #172033;
+          font-size: clamp(0.9rem, 2.4vw, 1.18rem);
           line-height: 1;
-          letter-spacing: -0.035em;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
         }
 
         :global(.dark) .terminal-line :global(.achievement-case-title) {
@@ -799,54 +839,74 @@ export const Terminal: FC<TerminalProps> = ({
         }
 
         .terminal-line :global(.achievement-case-count) {
-          color: #0f172a;
-          font-size: 1.3rem;
+          color: #0e7490;
+          font-size: 0.76rem;
           font-weight: 700;
           line-height: 1;
+          letter-spacing: 0.08em;
         }
 
         :global(.dark) .terminal-line :global(.achievement-case-count) {
-          color: #f8fafc;
-        }
-
-        .terminal-line :global(.achievement-case-count small) {
-          color: #64748b;
-          font-size: 0.68rem;
-          font-weight: 600;
+          color: #67e8f9;
         }
 
         .terminal-line :global(.achievement-progress) {
-          height: 3px;
-          overflow: hidden;
-          border-radius: 999px;
-          background: rgba(100, 116, 139, 0.2);
+          display: flex;
+          align-items: center;
+          gap: 0;
+          padding: 0 0.2rem 0.55rem;
+          color: #64748b;
+          font-size: 0.62rem;
+          font-weight: 700;
+          line-height: 1;
+          letter-spacing: 0.03em;
         }
 
         .terminal-line :global(.achievement-progress-fill) {
-          display: block;
-          height: 100%;
-          border-radius: inherit;
-          background: linear-gradient(90deg, #22d3ee, #3b82f6);
-          box-shadow: 0 0 12px rgba(34, 211, 238, 0.55);
+          color: #0891b2;
+          text-shadow: 0 0 7px rgba(6, 182, 212, 0.36);
+        }
+
+        :global(.dark) .terminal-line :global(.achievement-progress-fill) {
+          color: #67e8f9;
+          text-shadow: 0 0 8px rgba(34, 211, 238, 0.48);
+        }
+
+        .terminal-line :global(.achievement-progress-track) {
+          color: rgba(100, 116, 139, 0.45);
+        }
+
+        .terminal-line :global(.achievement-progress-value) {
+          margin-left: 0.55rem;
+          color: #64748b;
         }
 
         .terminal-line :global(.achievement-shelves) {
           display: grid;
-          gap: 0.5rem;
-          padding-top: 0.6rem;
+          gap: 0.38rem;
         }
 
         .terminal-line :global(.achievement-shelf-row) {
           position: relative;
-          padding: 0.2rem 0.35rem 0;
+          min-width: 0;
+          padding: 0.12rem 0.2rem 0;
+          animation: achievement-shelf-boot 320ms ease-out both;
+        }
+
+        .terminal-line :global(.achievement-shelf-row:nth-child(2)) {
+          animation-delay: 70ms;
+        }
+
+        .terminal-line :global(.achievement-shelf-row:nth-child(3)) {
+          animation-delay: 140ms;
         }
 
         .terminal-line :global(.achievement-trophies) {
           display: grid;
           grid-template-columns: repeat(4, minmax(0, 1fr));
           align-items: end;
-          min-height: 62px;
-          gap: 0.35rem;
+          min-height: 84px;
+          gap: 0.25rem;
         }
 
         .terminal-line :global(.achievement-trophy) {
@@ -856,16 +916,17 @@ export const Terminal: FC<TerminalProps> = ({
           flex-direction: column;
           align-items: center;
           justify-content: flex-end;
-          gap: 0.22rem;
+          gap: 0.18rem;
           color: var(--trophy-color);
           transition:
             transform 180ms ease,
+            opacity 180ms ease,
             filter 180ms ease;
         }
 
         .terminal-line :global(.achievement-trophy.is-unlocked:hover) {
           transform: translateY(-2px);
-          filter: brightness(1.12);
+          filter: brightness(1.15);
         }
 
         .terminal-line :global(.achievement-trophy--hero) {
@@ -898,89 +959,41 @@ export const Terminal: FC<TerminalProps> = ({
 
         .terminal-line :global(.achievement-trophy.is-locked) {
           --trophy-color: #64748b;
-          opacity: 0.43;
+          opacity: 0.38;
           filter: grayscale(1);
         }
 
-        .terminal-line :global(.achievement-cup) {
-          position: relative;
-          display: block;
-          width: 36px;
-          height: 39px;
-          filter: drop-shadow(0 0 7px var(--trophy-color));
+        .terminal-line :global(.achievement-trophy.is-locked:hover) {
+          opacity: 0.64;
         }
 
-        .terminal-line :global(.achievement-trophy.is-locked .achievement-cup) {
-          filter: none;
+        .terminal-line :global(.achievement-ascii-cup) {
+          margin: 0;
+          color: var(--trophy-color);
+          font: inherit;
+          font-size: clamp(0.4rem, 1.35vw, 0.56rem);
+          font-weight: 700;
+          line-height: 0.9;
+          letter-spacing: 0;
+          text-align: left;
+          text-shadow: 0 0 8px color-mix(in srgb, var(--trophy-color) 52%, transparent);
+          white-space: pre;
         }
 
-        .terminal-line :global(.achievement-cup-bowl) {
-          position: absolute;
-          top: 1px;
-          left: 6px;
-          z-index: 1;
-          display: flex;
-          width: 24px;
-          height: 19px;
-          align-items: center;
-          justify-content: center;
-          border-radius: 3px 3px 11px 11px;
-          background: var(--trophy-color);
-          color: #07111f;
-          font-size: 9px;
-          font-weight: 900;
-          line-height: 1;
+        .terminal-line :global(.achievement-trophy.is-unlocked .achievement-ascii-cup) {
+          animation: achievement-phosphor 3.2s ease-in-out infinite;
         }
 
-        .terminal-line :global(.achievement-cup-bowl::before),
-        .terminal-line :global(.achievement-cup-bowl::after) {
-          position: absolute;
-          top: 2px;
-          width: 8px;
-          height: 10px;
-          border: 3px solid var(--trophy-color);
-          content: "";
-        }
-
-        .terminal-line :global(.achievement-cup-bowl::before) {
-          right: calc(100% - 2px);
-          border-right: 0;
-          border-radius: 7px 0 0 7px;
-        }
-
-        .terminal-line :global(.achievement-cup-bowl::after) {
-          left: calc(100% - 2px);
-          border-left: 0;
-          border-radius: 0 7px 7px 0;
-        }
-
-        .terminal-line :global(.achievement-cup-stem) {
-          position: absolute;
-          top: 18px;
-          left: 16px;
-          width: 4px;
-          height: 12px;
-          border-radius: 0 0 3px 3px;
-          background: var(--trophy-color);
-        }
-
-        .terminal-line :global(.achievement-cup-base) {
-          position: absolute;
-          bottom: 4px;
-          left: 10px;
-          width: 16px;
-          height: 5px;
-          border-radius: 3px 3px 1px 1px;
-          background: var(--trophy-color);
-          box-shadow: 0 3px 0 -1px var(--trophy-color);
+        .terminal-line :global(.achievement-trophy.is-locked .achievement-ascii-cup) {
+          text-shadow: none;
         }
 
         .terminal-line :global(.achievement-trophy-label) {
           width: 100%;
           overflow: hidden;
-          color: #475569;
+          color: #334155;
           font-size: 0.58rem;
-          font-weight: 650;
+          font-weight: 700;
           line-height: 1.15;
           text-align: center;
           text-overflow: ellipsis;
@@ -992,43 +1005,62 @@ export const Terminal: FC<TerminalProps> = ({
         }
 
         .terminal-line :global(.achievement-shelf-plank) {
-          position: relative;
-          height: 7px;
-          margin-top: 0.22rem;
-          border: 1px solid rgba(51, 65, 85, 0.34);
-          border-radius: 2px;
-          background: linear-gradient(180deg, #94a3b8 0%, #64748b 46%, #334155 100%);
-          box-shadow:
-            0 6px 12px rgba(15, 23, 42, 0.2),
-            inset 0 1px rgba(255, 255, 255, 0.35);
+          width: 100%;
+          margin: 0.1rem 0 0;
+          overflow: hidden;
+          color: rgba(14, 116, 144, 0.62);
+          font: inherit;
+          font-size: 0.58rem;
+          line-height: 1;
+          text-shadow: 0 0 7px rgba(6, 182, 212, 0.2);
+          white-space: pre;
         }
 
-        .terminal-line :global(.achievement-shelf-plank::after) {
-          position: absolute;
-          right: 7%;
-          bottom: -5px;
-          left: 7%;
-          height: 4px;
-          border-radius: 0 0 4px 4px;
-          background: rgba(30, 41, 59, 0.72);
-          content: "";
+        :global(.dark) .terminal-line :global(.achievement-shelf-plank) {
+          color: rgba(103, 232, 249, 0.48);
         }
 
         .terminal-line :global(.achievement-case-note) {
-          margin: 0.75rem 0.15rem 0;
-          color: #64748b;
+          margin: 0.62rem 0.2rem 0;
+          color: #52637a;
           font-size: 0.66rem;
           line-height: 1.35;
+        }
+
+        .terminal-line :global(.achievement-case-note::before) {
+          color: #0891b2;
+          content: "> ";
         }
 
         :global(.dark) .terminal-line :global(.achievement-case-note) {
           color: #94a3b8;
         }
 
+        @keyframes achievement-shelf-boot {
+          from {
+            opacity: 0;
+            transform: translateY(4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes achievement-phosphor {
+          0%,
+          100% {
+            opacity: 0.9;
+          }
+          50% {
+            opacity: 1;
+            filter: brightness(1.12);
+          }
+        }
+
         @media (max-width: 520px) {
           .terminal-line :global(.achievement-case) {
-            border-radius: 10px;
-            padding: 0.8rem 0.6rem 0.7rem;
+            padding: 0.72rem 0.5rem 0.62rem;
           }
 
           .terminal-line :global(.achievement-shelf-row) {
@@ -1036,17 +1068,27 @@ export const Terminal: FC<TerminalProps> = ({
           }
 
           .terminal-line :global(.achievement-trophies) {
-            min-height: 57px;
+            min-height: 71px;
             gap: 0.12rem;
           }
 
-          .terminal-line :global(.achievement-cup) {
-            transform: scale(0.9);
-            transform-origin: bottom center;
+          .terminal-line :global(.achievement-ascii-cup) {
+            font-size: clamp(0.32rem, 1.55vw, 0.43rem);
           }
 
           .terminal-line :global(.achievement-trophy-label) {
             font-size: 0.5rem;
+          }
+
+          .terminal-line :global(.achievement-shelf-plank) {
+            font-size: 0.48rem;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .terminal-line :global(.achievement-shelf-row),
+          .terminal-line :global(.achievement-trophy.is-unlocked .achievement-ascii-cup) {
+            animation: none;
           }
         }
 
