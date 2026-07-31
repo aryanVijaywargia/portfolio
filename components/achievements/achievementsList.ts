@@ -44,13 +44,6 @@ const ACHIEVEMENTS_MAP = {
     category: "games",
     hidden: true,
   },
-  LOCKBREAKER: {
-    title: "Lockbreaker",
-    description: "Cleared Contra and broke Rick's first rescue lock.",
-    hint: "Morty has a jungle mission waiting inside the terminal arcade.",
-    category: "games",
-    hidden: true,
-  },
   HACKER: {
     title: "Hacker",
     description: "Opened the browser console and peeked behind the curtain.",
@@ -112,7 +105,6 @@ export const ACHIEVEMENT_ORDER = [
   "TIMELINE_TRAVELER",
   "SNAKE_CHARMER",
   "ESCAPE_ARTIST",
-  "LOCKBREAKER",
   "HACKER",
   "SOURCE_DIVER",
   "ROOT_ACCESS",

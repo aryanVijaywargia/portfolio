@@ -9,7 +9,6 @@ const QUICK_ACTIONS = [
   { label: "about", message: "Who is Aryan?" },
   { label: "projects", message: "Tell me about Aryan's projects" },
   { label: "music", message: "Spin up one of Aryan's favorite coding tunes" },
-  { label: "contact", message: "How can I contact Aryan?" },
 ];
 
 type TerminalChatbotProps = {

@@ -35,7 +35,6 @@ type AchievementEvent =
   | { type: "snake:score"; score: number }
   | { type: "racer:score"; score: number }
   | { type: "dungeon:escaped" }
-  | { type: "contra:completed" }
   | { type: "quiz:scroll-cheat" }
   | { type: "quiz:confessed-cheat" }
   | { type: "quiz:completed" }
@@ -57,7 +56,6 @@ type AchievementProgress = {
   snakeBestScore: number;
   racerBestScore: number;
   dungeonEscaped: boolean;
-  contraCompleted: boolean;
   wowClicked: boolean;
   sourceDiverOpened: boolean;
   secretDiscovered: boolean;
@@ -101,7 +99,6 @@ const DEFAULT_PROGRESS: AchievementProgress = {
   snakeBestScore: 0,
   racerBestScore: 0,
   dungeonEscaped: false,
-  contraCompleted: false,
   wowClicked: false,
   sourceDiverOpened: false,
   secretDiscovered: false,
@@ -138,7 +135,6 @@ const getAchievementIdsToUnlock = (progress: AchievementProgress) => {
   if (progress.timelineYearsViewed.length >= 5) nextUnlocks.push("TIMELINE_TRAVELER");
   if (progress.snakeBestScore >= 30) nextUnlocks.push("SNAKE_CHARMER");
   if (progress.dungeonEscaped) nextUnlocks.push("ESCAPE_ARTIST");
-  if (progress.contraCompleted) nextUnlocks.push("LOCKBREAKER");
   if (progress.devtoolsOpened) nextUnlocks.push("HACKER");
   if (progress.sourceDiverOpened) nextUnlocks.push("SOURCE_DIVER");
   if (progress.secretDiscovered && progress.rootAccessGranted) nextUnlocks.push("ROOT_ACCESS");
@@ -211,9 +207,6 @@ const applyAchievementEvent = (
     case "dungeon:escaped":
       next.dungeonEscaped = true;
       break;
-    case "contra:completed":
-      next.contraCompleted = true;
-      break;
     case "quiz:scroll-cheat":
       next.quizScrollCheated = true;
       break;
@@ -240,7 +233,6 @@ const ACHIEVEMENT_ICONS: Record<AchievementId, React.ComponentType<{ className?:
   TIMELINE_TRAVELER: ClockIcon,
   SNAKE_CHARMER: FireIcon,
   ESCAPE_ARTIST: KeyIcon,
-  LOCKBREAKER: ShieldCheckIcon,
   HACKER: CommandLineIcon,
   SOURCE_DIVER: EyeIcon,
   ROOT_ACCESS: ShieldCheckIcon,
