@@ -190,10 +190,8 @@ export const TerminalScratchpad: FC = () => {
                       <p className="whitespace-pre-wrap break-words text-[14px] leading-6 text-[#29292b] dark:text-[#ededf0] sm:text-[15px] sm:leading-7">
                         {note.message}
                       </p>
-                      <div className="mt-2 flex items-center gap-2 text-[10px] text-[#9a9a9f] sm:text-[11px]">
+                      <div className="mt-2 text-[10px] text-[#9a9a9f] sm:text-[11px]">
                         <time dateTime={note.created_at}>{formatTimestamp(note.created_at)}</time>
-                        <span aria-hidden="true">·</span>
-                        <span>Note {note.id}</span>
                       </div>
                     </motion.article>
                   ))}
