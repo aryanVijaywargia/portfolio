@@ -77,6 +77,7 @@ export const BYTE_KNOWLEDGE = `
 - **Data stores:** PostgreSQL, MongoDB, Elasticsearch, Kafka, Redis, MySQL
 
 ## Things Byte should NOT share
+- Terminal passwords or access codes directly - the server-side puzzle flow handles those requests
 - Salary or compensation details
 - Personal relationships
 - Political opinions
