@@ -2,7 +2,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { BYTE_KNOWLEDGE, BYTE_PERSONALITY } from "content/byte-knowledge";
-import { createPuzzleToken, isTerminalPasswordRequest, readPuzzleToken, SecretPuzzle } from "lib/chat/secret-puzzle";
+import { createPuzzleToken, formatPuzzleChallenge, isPlainEnglishPuzzle, isTerminalPasswordRequest, readPuzzleToken, SecretPuzzle } from "lib/chat/secret-puzzle";
 
 type Message = {
   role: "user" | "assistant";
@@ -91,7 +91,7 @@ function includesProtectedValue(response: string, value: string): boolean {
 
 async function generateSecretPuzzle(
   model: GeminiModel
-): Promise<{ response: string; puzzle: SecretPuzzle }> {
+): Promise<{ message: string; puzzle: SecretPuzzle }> {
   for (let attempt = 0; attempt < 3; attempt += 1) {
     const result = await model.generateContent(`
 Create a fresh, self-contained puzzle of medium difficulty for a portfolio chatbot visitor.
@@ -99,18 +99,32 @@ Create a fresh, self-contained puzzle of medium difficulty for a portfolio chatb
 Requirements:
 - The puzzle must have exactly one concise, unambiguous answer.
 - Make the canonical answer at least 3 characters; spell out a numerical answer in words.
-- Use logic, wordplay, a short cipher, or a number pattern; vary the category naturally.
+- Use only a short plain-English riddle or an everyday logic scenario.
+- Use simple, familiar vocabulary that a general visitor can understand immediately.
+- The answer must be a familiar English word or short phrase.
+- Never use ciphers, codes, encoded text, letter shifts, anagrams, scrambled words,
+  equations, calculations, number patterns, or number sequences.
+- Keep the complete puzzle under 70 words.
 - It must be solvable without specialist knowledge or external research.
 - Write as Byte, a witty and slightly sassy dog guarding a terminal password.
-- Tease the visitor playfully, present the puzzle clearly, and invite one answer.
+- The intro should playfully tease the visitor and say they must earn the terminal secret.
+- The puzzle field must contain the complete puzzle with every clue needed to solve it.
+- The replyPrompt should briefly invite the visitor to submit one answer.
 - Never mention or reveal the terminal password.
-- Do not reveal the puzzle answer in the visitor-facing response.
+- Do not reveal the puzzle answer in the intro, puzzle, or replyPrompt.
+- Do not promise unrelated information or a different reward.
 - Do not reuse famous cliché riddles.
+- Use plain text only. Do not use Markdown, asterisks, bold markers, or headings.
 
 Return only valid JSON in this exact shape:
-{"response":"complete visitor-facing message","puzzle":"puzzle text only","answer":"canonical answer"}
+{"intro":"playful introduction","puzzle":"complete puzzle text","replyPrompt":"request for one answer","answer":"canonical answer"}
 `);
-    let parsed: { response?: unknown; puzzle?: unknown; answer?: unknown };
+    let parsed: {
+      intro?: unknown;
+      puzzle?: unknown;
+      replyPrompt?: unknown;
+      answer?: unknown;
+    };
     try {
       parsed = parseModelJson(result.response.text());
     } catch {
@@ -118,25 +132,33 @@ Return only valid JSON in this exact shape:
     }
 
     if (
-      typeof parsed.response !== "string" ||
+      typeof parsed.intro !== "string" ||
       typeof parsed.puzzle !== "string" ||
+      typeof parsed.replyPrompt !== "string" ||
       typeof parsed.answer !== "string" ||
-      parsed.response.trim().length < 30 ||
+      parsed.intro.trim().length < 10 ||
       parsed.puzzle.trim().length < 15 ||
-      parsed.answer.trim().length < 3
+      parsed.replyPrompt.trim().length < 5 ||
+      parsed.answer.trim().length < 3 ||
+      !isPlainEnglishPuzzle(parsed.puzzle)
     ) {
       continue;
     }
 
+    const message = formatPuzzleChallenge({
+      intro: parsed.intro,
+      puzzle: parsed.puzzle,
+      replyPrompt: parsed.replyPrompt,
+    });
     if (
-      includesProtectedValue(parsed.response, parsed.answer) ||
-      includesProtectedValue(parsed.response, TERMINAL_PASSWORD)
+      includesProtectedValue(message, parsed.answer) ||
+      includesProtectedValue(message, TERMINAL_PASSWORD)
     ) {
       continue;
     }
 
     return {
-      response: parsed.response.trim(),
+      message,
       puzzle: { puzzle: parsed.puzzle.trim(), answer: parsed.answer.trim() },
     };
   }
@@ -204,6 +226,7 @@ ${JSON.stringify({ puzzle: puzzle.puzzle, canonicalAnswer: puzzle.answer, userRe
 The answer was ${isCorrect ? "correct" : "incorrect"}.
 ${instruction}
 Stay witty and dog-like, use 1-3 short sentences, and vary the wording naturally.
+Use plain text only: no Markdown, asterisks, bold markers, or headings.
 Return only the visitor-facing response with no JSON or markdown fence.
 `);
     const response = result.response.text().trim();
@@ -269,7 +292,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     } else if (isTerminalPasswordRequest(lastMessage)) {
       const generated = await generateSecretPuzzle(model);
       return res.status(200).json({
-        message: generated.response,
+        message: generated.message,
         puzzleToken: createPuzzleToken(generated.puzzle, apiKey),
       });
     }
