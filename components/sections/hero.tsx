@@ -51,7 +51,7 @@ export const Hero: FC = () => {
       <div className="absolute right-4 top-4 z-50 flex items-center gap-3 md:right-8 md:top-6">
         <Link
           target="_blank"
-          href="https://github.com/AryanVijaywargia"
+          href="https://github.com/aryanVijaywargia/portfolio"
           className="group flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/60 bg-white/70 bg-clip-padding text-sm font-medium text-gray-600 backdrop-blur transition-all hfa:border-yellow-500/40 hfa:bg-yellow-500 hfa:text-white d:border-slate-400/15 d:bg-slate-900/60 d:text-slate-200 d:hfa:bg-yellow-500/90"
           data-tip="Star on GitHub"
         >

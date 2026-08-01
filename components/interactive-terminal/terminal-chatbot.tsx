@@ -23,6 +23,7 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({
   onPlayMusic,
 }) => {
   const [input, setInput] = useState("");
+  const [puzzleToken, setPuzzleToken] = useState<string | null>(null);
   const messages = useChatbot((state) => state.messages);
   const isLoading = useChatbot((state) => state.isLoading);
   const addMessage = useChatbot((state) => state.addMessage);
@@ -46,6 +47,7 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({
     if (!content.trim() || isLoading) return;
 
     if (content.trim().toLowerCase() === "exit") {
+      setPuzzleToken(null);
       addMessage({ role: "user", content: "exit" });
       addMessage({ role: "assistant", content: "Woof! Goodbye! *curls up to sleep* 💤" });
       setTimeout(
@@ -83,10 +85,14 @@ export const TerminalChatbot: FC<TerminalChatbotProps> = ({
             role: m.role,
             content: m.content,
           })),
+          ...(puzzleToken ? { puzzleToken } : {}),
         }),
       });
 
       const data = await response.json();
+      if (Object.prototype.hasOwnProperty.call(data, "puzzleToken")) {
+        setPuzzleToken(typeof data.puzzleToken === "string" ? data.puzzleToken : null);
+      }
       if (data.error) {
         addMessage({ role: "assistant", content: data.error });
       } else {
