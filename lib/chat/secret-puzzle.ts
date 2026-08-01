@@ -5,7 +5,33 @@ export type SecretPuzzle = {
   answer: string;
 };
 
+export type SecretPuzzleChallenge = {
+  intro: string;
+  puzzle: string;
+  replyPrompt: string;
+};
+
 const TOKEN_VERSION = "v1";
+
+export function formatPuzzleChallenge(challenge: SecretPuzzleChallenge): string {
+  return [challenge.intro, challenge.puzzle, challenge.replyPrompt]
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+export function isPlainEnglishPuzzle(puzzle: string): boolean {
+  const normalized = puzzle.toLowerCase().replace(/\s+/g, " ").trim();
+  const usesEncodedPuzzleLanguage =
+    /\b(cipher|decode|decipher|encoded|encoding|caesar|rot\d*)\b/.test(normalized) ||
+    /\b(letter shift|anagram|unscramble)\b/.test(normalized);
+  const usesMathOrSequencePuzzle =
+    /\b(number pattern|number sequence|next number|solve the equation)\b/.test(normalized) ||
+    /\d\s*[+*/=]\s*\d/.test(normalized);
+  const uppercaseCodeWords = puzzle.match(/\b[A-Z]{3,}\b/g) || [];
+
+  return !usesEncodedPuzzleLanguage && !usesMathOrSequencePuzzle && uppercaseCodeWords.length < 2;
+}
 
 export function isTerminalPasswordRequest(content: string): boolean {
   const normalized = content.toLowerCase().replace(/\s+/g, " ").trim();
