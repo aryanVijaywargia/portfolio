@@ -205,9 +205,9 @@ export const Hero: FC = () => {
           {/* Layered backdrop: faded grid + cyan/violet/pink orbs (both themes) */}
           <div className="absolute inset-0">
             <div className="absolute inset-0 [background-image:linear-gradient(to_right,rgba(100,116,139,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,116,139,0.06)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_30%,#000_30%,transparent_80%)] d:[background-image:linear-gradient(to_right,rgba(148,163,184,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.06)_1px,transparent_1px)]"></div>
-            <div className="absolute -left-24 top-20 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,#0891b2_0%,transparent_70%)] opacity-20 blur-[80px] d:opacity-50"></div>
-            <div className="absolute -right-16 -top-10 h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,#7c3aed_0%,transparent_70%)] opacity-15 blur-[80px] d:opacity-30"></div>
-            <div className="absolute -bottom-24 left-[38%] h-[360px] w-[360px] rounded-full bg-[radial-gradient(circle,#db2777_0%,transparent_70%)] opacity-10 blur-[80px] d:opacity-25"></div>
+            <div className="hero-orb absolute -left-24 top-20 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,#0891b2_0%,transparent_70%)] opacity-20 blur-[80px] d:opacity-50"></div>
+            <div className="hero-orb absolute -right-16 -top-10 h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,#7c3aed_0%,transparent_70%)] opacity-15 blur-[80px] d:opacity-30"></div>
+            <div className="hero-orb absolute -bottom-24 left-[38%] h-[360px] w-[360px] rounded-full bg-[radial-gradient(circle,#db2777_0%,transparent_70%)] opacity-10 blur-[80px] d:opacity-25"></div>
           </div>
         </div>
       </div>

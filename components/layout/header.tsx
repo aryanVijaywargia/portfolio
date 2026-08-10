@@ -15,6 +15,7 @@ export const Header: FC = ({}) => {
   const frameRef = useRef<number | null>(null);
   const metricsRef = useRef({ heroHeight: 0, navbarHeight: 80 });
   const lastVisibleRef = useRef(false);
+  const lastStyleRef = useRef({ opacity: Number.NaN, translateY: Number.NaN });
 
   useEffect(() => {
     if (isMinimal) return;
@@ -41,8 +42,14 @@ export const Header: FC = ({}) => {
       const fadeDistance = heroHeight * 0.3;
       const nextOpacity = calculatedTop >= fadeDistance ? 0 : 1 - calculatedTop / fadeDistance;
 
-      header.style.setProperty("--header-translate-y", `${calculatedTop}px`);
-      header.style.setProperty("--header-opacity", `${nextOpacity}`);
+      if (calculatedTop !== lastStyleRef.current.translateY) {
+        header.style.setProperty("--header-translate-y", `${calculatedTop}px`);
+        lastStyleRef.current.translateY = calculatedTop;
+      }
+      if (nextOpacity !== lastStyleRef.current.opacity) {
+        header.style.setProperty("--header-opacity", `${nextOpacity}`);
+        lastStyleRef.current.opacity = nextOpacity;
+      }
 
       const nextVisible = nextOpacity > 0;
       if (nextVisible !== lastVisibleRef.current) {
@@ -53,6 +60,12 @@ export const Header: FC = ({}) => {
 
     const scheduleUpdate = () => {
       if (frameRef.current !== null) return;
+
+      // Once the header is pinned, scrolling farther down cannot change its
+      // visual state. Skip style work until the user crosses back into the hero.
+      const { heroHeight, navbarHeight } = metricsRef.current;
+      if (lastVisibleRef.current && window.scrollY >= heroHeight - navbarHeight) return;
+
       frameRef.current = window.requestAnimationFrame(updateHeader);
     };
 
@@ -119,7 +132,7 @@ export const Header: FC = ({}) => {
     <>
       <header
         ref={headerRef}
-        className={`fixed inset-x-0 z-50 h-20 w-full border-b border-gray-800/10 bg-white/50 backdrop-blur d:border-gray-100/10 d:bg-gray-900/40 print:hidden ${
+        className={`portfolio-header fixed inset-x-0 z-50 h-20 w-full border-b border-gray-800/10 bg-white/50 backdrop-blur d:border-gray-100/10 d:bg-gray-900/40 print:hidden ${
           isVisible ? "pointer-events-auto" : "pointer-events-none invisible"
         }`}
         style={{

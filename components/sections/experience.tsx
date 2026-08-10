@@ -616,11 +616,11 @@ export const Experience = () => {
         initial={{ opacity: 0, y: 18 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
         transition={{ duration: 0.45, ease: "easeOut" }}
-        className="mx-auto w-full"
+        className="mobile-static-reveal mx-auto w-full"
       >
         <ExperienceHeader />
 
-        <div className="relative overflow-hidden rounded-2xl border bg-[var(--experience-card)] p-5 shadow-[var(--experience-shadow)] backdrop-blur [border-color:var(--experience-border)] md:p-6">
+        <div className="experience-card relative overflow-hidden rounded-2xl border bg-[var(--experience-card)] p-5 shadow-[var(--experience-shadow)] backdrop-blur [border-color:var(--experience-border)] md:p-6">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_10%_0%,var(--experience-glow),transparent_60%)]"
