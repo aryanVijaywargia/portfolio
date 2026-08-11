@@ -69,7 +69,7 @@ export const ScrollGallery: FC<
     <>
       <div className="relative">
         <main
-          className="sm:scrollbar-none group relative flex snap-x snap-mandatory scroll-pl-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] gap-8 overflow-x-auto px-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] py-12 [--slider-padding:2rem]"
+          className="sm:scrollbar-none group relative flex snap-x snap-mandatory scroll-pl-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] gap-3 overflow-x-auto px-[max(var(--slider-padding),calc((100%-72rem)/2+var(--slider-padding)))] py-12 [--slider-padding:1rem] sm:gap-8 sm:[--slider-padding:2rem]"
           ref={scrollContainerRef}
         >
           {children}
