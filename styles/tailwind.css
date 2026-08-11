@@ -6,6 +6,84 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Soft radial glows avoid the large blurred layers that are expensive on
+   mobile, without collapsing into hard-edged circles when blur is disabled. */
+.quiz-orb {
+  --quiz-orb-color: 34 211 238;
+  background: radial-gradient(
+    circle at center,
+    rgb(var(--quiz-orb-color) / 0.18) 0%,
+    rgb(var(--quiz-orb-color) / 0.09) 38%,
+    transparent 72%
+  );
+}
+
+.quiz-orb--violet {
+  --quiz-orb-color: 139 92 246;
+}
+
+.dark .quiz-orb {
+  background: radial-gradient(
+    circle at center,
+    rgb(var(--quiz-orb-color) / 0.14) 0%,
+    rgb(var(--quiz-orb-color) / 0.07) 38%,
+    transparent 72%
+  );
+}
+
+/* Mobile scroll path: keep the page visually rich without making every
+   off-screen section participate in paint and layout on every frame. */
+@media screen and (max-width: 767px) {
+  @supports (content-visibility: auto) {
+    #about,
+    #timeline,
+    #experience,
+    #portfolio,
+    #contact,
+    #quiz {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 900px;
+    }
+
+    #experience,
+    #contact {
+      contain-intrinsic-size: auto 1500px;
+    }
+  }
+
+  /* Entry reveals looked like missing content during a fast swipe. */
+  .mobile-static-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  /* Fixed and full-width backdrop filters are costly during touch scrolling. */
+  .portfolio-header,
+  .experience-card {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .portfolio-header {
+    background-color: rgb(var(--color-bg-dark)) !important;
+  }
+
+  html:not(.dark) .portfolio-header {
+    background-color: rgb(var(--color-bg)) !important;
+  }
+
+  /* Five filtered photo layers were forcing expensive per-pixel work while
+     the About stack crossed the viewport. */
+  .about-stack-image {
+    filter: none !important;
+  }
+
+  .hero-orb {
+    filter: none !important;
+  }
+}
+
 @page {
   size: A4 portrait;
   margin: 10mm 10mm 6mm 10mm;

@@ -41,7 +41,7 @@ export const PortfolioPreview: FC<PortfolioPreviewProps> = ({}) => {
   return (
     <section
       id="portfolio"
-      className="portfolio-preview min-h-[100svh] pt-24 pb-16 spacing-4 md:pt-28 md:pb-24"
+      className="portfolio-preview min-h-[100svh] scroll-mt-20 pt-24 pb-16 spacing-4 md:scroll-mt-24 md:pt-28 md:pb-24"
     >
       <header className="mx-auto grid w-full max-w-6xl px-4 md:px-8">
         <div className="heading-pre">{PORTFOLIO.pre}</div>

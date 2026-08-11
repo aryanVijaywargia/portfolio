@@ -160,8 +160,8 @@ export const Quiz: FC = () => {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 opacity-70 d:opacity-100"
       >
-        <div className="absolute left-[8%] top-[18%] h-64 w-64 rounded-full bg-cyan-300/20 blur-[90px] d:bg-cyan-500/10" />
-        <div className="absolute bottom-[12%] right-[6%] h-72 w-72 rounded-full bg-violet-300/20 blur-[100px] d:bg-violet-500/10" />
+        <div className="quiz-orb quiz-orb--cyan absolute left-[4%] top-[12%] h-52 w-52 sm:left-[8%] sm:top-[18%] sm:h-60 sm:w-60 md:h-72 md:w-72" />
+        <div className="quiz-orb quiz-orb--violet absolute bottom-[16%] right-[-6%] h-52 w-52 sm:bottom-[12%] sm:right-[6%] sm:h-60 sm:w-60 md:h-72 md:w-72" />
         <div className="absolute inset-0 [background-image:linear-gradient(to_right,rgba(100,116,139,0.055)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,116,139,0.055)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:radial-gradient(ellipse_70%_65%_at_50%_50%,#000_25%,transparent_82%)]" />
       </div>
 
@@ -175,7 +175,7 @@ export const Quiz: FC = () => {
               viewport={{ once: true, amount: 0.35 }}
               exit={{ opacity: 0, y: -18 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full"
+              className="mobile-static-reveal w-full"
             >
               <p className="heading-pre">Final checkpoint</p>
               <p className="font-mono text-sm text-cyan-700 d:text-cyan-300">The</p>

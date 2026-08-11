@@ -239,6 +239,7 @@ const ContactInfoPanel: FC = () => {
               clipPath: { duration: durations[i], delay: delays[i], ease: "linear" },
               opacity: { duration: 0.01, delay: delays[i] },
             }}
+            className="mobile-static-reveal"
           >
             <JsonLine num={i + 1}>{line.content}</JsonLine>
           </motion.div>
@@ -562,12 +563,12 @@ export const Contact: FC = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1fr)] lg:gap-8"
+          className="mobile-static-reveal grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1fr)] lg:gap-8"
         >
-          <motion.div variants={leftPanelVariants} className="flex">
+          <motion.div variants={leftPanelVariants} className="mobile-static-reveal flex">
             <ContactInfoPanel />
           </motion.div>
-          <motion.div variants={rightPanelVariants} className="flex">
+          <motion.div variants={rightPanelVariants} className="mobile-static-reveal flex">
             <SendMessagePanel />
           </motion.div>
         </motion.div>

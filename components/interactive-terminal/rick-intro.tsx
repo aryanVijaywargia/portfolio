@@ -53,6 +53,7 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
   const [allDone, setAllDone] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const completedRef = useRef(false);
+  const [isInView, setIsInView] = useState(true);
 
   const handleComplete = useCallback(() => {
     if (completedRef.current) return;
@@ -77,6 +78,21 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
     return () => document.removeEventListener("keydown", handler);
   }, [handleComplete]);
 
+  // Avoid frequent React updates and forced terminal scrolling after the user
+  // has moved on to the rest of the page. The intro resumes where it stopped
+  // if the terminal comes back into view.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry?.isIntersecting ?? false),
+      { rootMargin: "160px 0px", threshold: 0.01 }
+    );
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
   // Typewriter effect for current line
   useEffect(() => {
     if (currentLineIndex >= INTRO_LINES.length) {
@@ -84,9 +100,10 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
       return;
     }
 
+    if (!isInView) return;
+
     const currentLine = INTRO_LINES[currentLineIndex];
-    let charIndex = 0;
-    setDisplayedText("");
+    let charIndex = displayedText.length;
 
     const interval = setInterval(
       () => {
@@ -99,6 +116,7 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
           setTimeout(
             () => {
               setCompletedLines((prev) => [...prev, currentLine]);
+              setDisplayedText("");
               setCurrentLineIndex((prev) => prev + 1);
             },
             1200
@@ -109,7 +127,10 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
     );
 
     return () => clearInterval(interval);
-  }, [currentLineIndex]);
+    // displayedText is deliberately read only when the effect starts so an
+    // interval tick does not recreate the interval on every character.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentLineIndex, isInView]);
 
   // Keep the intro output pinned inside the terminal without moving the page.
   useEffect(() => {

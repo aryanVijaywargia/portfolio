@@ -113,7 +113,7 @@ export const About: FC<AboutProps> = (props) => {
                 preload={index === 0}
                 priority={index === 0}
                 loading={index === 0 ? "eager" : "lazy"}
-                className="absolute left-0 top-0 rounded-xl border-2 border-gray-50/80 object-cover !opacity-0 shadow-lg shadow-gray-700/5 transition-all duration-300 group-focus-visible:border-sky-500 d:border-gray-600/80"
+                className="about-stack-image absolute left-0 top-0 rounded-xl border-2 border-gray-50/80 object-cover !opacity-0 shadow-lg shadow-gray-700/5 transition-all duration-300 group-focus-visible:border-sky-500 d:border-gray-600/80"
                 data-about-image-index={index}
                 onLoadingComplete={() =>
                   document
