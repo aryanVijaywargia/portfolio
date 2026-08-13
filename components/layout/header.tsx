@@ -61,10 +61,13 @@ export const Header: FC = ({}) => {
     const scheduleUpdate = () => {
       if (frameRef.current !== null) return;
 
-      // Once the header is pinned, scrolling farther down cannot change its
-      // visual state. Skip style work until the user crosses back into the hero.
+      // Only skip work after the header has actually reached its pinned state.
+      // A fast scroll or hash jump can cross the pin threshold while the last
+      // rendered frame is still partially translated; skipping that frame
+      // leaves the navbar floating over the section content on large screens.
       const { heroHeight, navbarHeight } = metricsRef.current;
-      if (lastVisibleRef.current && window.scrollY >= heroHeight - navbarHeight) return;
+      const isPinned = lastStyleRef.current.translateY === 0 && lastStyleRef.current.opacity === 1;
+      if (isPinned && window.scrollY >= heroHeight - navbarHeight) return;
 
       frameRef.current = window.requestAnimationFrame(updateHeader);
     };
