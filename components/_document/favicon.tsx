@@ -18,10 +18,11 @@ export const Favicon: FC = ({}) => {
       <link href="/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png" />
       <link href="/favicon/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png" />
       <link href="/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png" />
+      <link href="/favicon/favicon.svg" rel="icon" type="image/svg+xml" />
       <link href="/favicon/manifest.json" rel="manifest" />
-      <meta content="#ffffff" name="msapplication-TileColor" />
-      <meta content="/ms-icon-144x144.png" name="msapplication-TileImage" />
-      <meta content="#ffffff" name="theme-color" />
+      <meta content="#080d19" name="msapplication-TileColor" />
+      <meta content="/favicon/ms-icon-144x144.png" name="msapplication-TileImage" />
+      <meta content="#080d19" name="theme-color" />
       <meta content="width=device-width, initial-scale=1" name="viewport" />
     </>
   );
