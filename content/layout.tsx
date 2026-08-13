@@ -1,4 +1,3 @@
-import AryanLogo from "public/logo.svg";
 import {
   HomeIcon,
   UserIcon,
@@ -18,11 +17,6 @@ type NavItem = {
 };
 
 export const HEADER = {
-  logo: {
-    href: "/",
-    title: <AryanLogo />,
-    alt: "Aryan Vijaywargia Logo",
-  },
   nav: [
     {
       href: "/",
