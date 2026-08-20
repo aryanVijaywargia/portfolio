@@ -51,8 +51,13 @@ const ProjectCard: FC<{ project: Project; onOpen: () => void }> = ({ project, on
       style={hueVars(hue)}
       className={clsx(
         "group/card relative flex w-full flex-col overflow-hidden rounded-[var(--v2-radius-md)]",
-        "border border-[rgb(var(--hue)/0.3)] bg-[rgb(var(--v2-surface))]",
-        // The hue reads as light coming off the card rather than a flat tint.
+        "border border-[rgb(var(--hue)/0.3)] border-t-[3px] border-t-[rgb(var(--hue))]",
+        // The body carries its hue as a wash that fades out down the card, over
+        // the surface rather than instead of it — a flat panel left the colour
+        // living only in the cover art, so the card read as generic below it.
+        "bg-[rgb(var(--v2-surface))]",
+        "bg-[linear-gradient(165deg,rgb(var(--hue)/0.13),rgb(var(--hue)/0.03)_62%,transparent)]",
+        // The hue also reads as light coming off the card.
         "shadow-[0_0_70px_-30px_rgb(var(--hue)/0.75),0_18px_34px_-26px_rgba(0,0,0,0.8)]",
         "transition-[border-color,box-shadow] duration-300",
         "hover:border-[rgb(var(--hue)/0.55)]",
