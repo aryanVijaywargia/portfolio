@@ -163,17 +163,25 @@ export const V2Hero: FC<V2HeroProps> = ({ initialScratchpadNotes }) => {
               {V2_HERO.strapline}
             </div>
 
-            {/* Hairline grid: 1px gaps over a line-coloured backing plate. */}
-            <div className="my-7 grid grid-cols-2 gap-px border border-[rgb(var(--v2-line))] bg-[rgb(var(--v2-line))] v2sm:grid-cols-4">
-              {V2_HERO.stack.map((tech) => (
-                <span
-                  key={tech}
-                  className="bg-[rgb(var(--v2-surface))] px-3 py-[11px] font-[family-name:var(--v2-font-mono)] text-[11.5px] text-[rgb(var(--v2-fg-2))]"
+            {/* The marks are single-path glyphs painting in `currentColor`, so
+                the row reads as one monochrome set at rest and each one takes
+                its own brand colour only under the pointer. Scrolls sideways
+                rather than wrapping: four names on one line is the shape, and a
+                second line would push the terminal down the phone. */}
+            <ul className="v2-scrollbar-none -mx-[var(--v2-gutter)] my-7 flex items-center gap-5 overflow-x-auto px-[var(--v2-gutter)] pb-1 v2sm:mx-0 v2sm:gap-7 v2sm:px-0">
+              {V2_HERO.stack.map(({ name, brand, Icon }) => (
+                <li
+                  key={name}
+                  style={{ "--tech-brand": brand } as never}
+                  className="group flex shrink-0 items-center gap-2.5 text-[rgb(var(--v2-fg-3))] transition-colors hover:text-[rgb(var(--v2-fg))]"
                 >
-                  {tech}
-                </span>
+                  <Icon className="h-[22px] w-[22px] shrink-0 transition-colors group-hover:text-[var(--tech-brand)]" />
+                  <span className="font-[family-name:var(--v2-font-mono)] text-[12.5px] font-medium">
+                    {name}
+                  </span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           {/* Terminal column. On small screens this sits directly under the
