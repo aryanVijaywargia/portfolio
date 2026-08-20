@@ -30,7 +30,7 @@ const CAPTION_CLASS =
  */
 const CYCLE_CLASS =
   "inline cursor-pointer border-0 border-b-2 border-dashed border-[rgb(var(--v2-line-2))] " +
-  "bg-transparent p-0 text-left font-bold text-[rgb(var(--v2-accent))] " +
+  "bg-transparent p-0 pb-[3px] text-left font-bold text-[rgb(var(--v2-accent))] " +
   "[font-size:inherit] [letter-spacing:inherit]";
 
 const cycle = (length: number) => (current: number) => (current + 1) % length;
@@ -60,8 +60,12 @@ export const V2ContactComposer: FC<{ className?: string }> = ({ className }) => 
   }, [action.line, intent.label, intent.subject]);
 
   return (
-    <div className={clsx("flex flex-col", className)}>
-      <p className="m-0 mb-[26px] text-[26px] font-medium leading-[1.45] tracking-[-0.025em] text-[rgb(var(--v2-fg-3))] [text-wrap:pretty]">
+    /* Padding, not margin: the heading's own 28px bottom margin is adjacent to
+       this box in normal flow, and two margins collapse to the larger of the
+       pair — so a margin here would vanish rather than put the heading's gap on
+       the same 32px step as everything below it. */
+    <div className={clsx("flex flex-col pt-1", className)}>
+      <p className="m-0 mb-8 text-[26px] font-medium leading-[1.6] tracking-[-0.025em] text-[rgb(var(--v2-fg-3))] [text-wrap:pretty]">
         {V2_CONTACT_COMPOSER.lead}{" "}
         <button
           type="button"
@@ -83,14 +87,14 @@ export const V2ContactComposer: FC<{ className?: string }> = ({ className }) => 
         .
       </p>
 
-      <div className="mb-3 flex items-center gap-[9px]">
+      <div className="mb-4 flex items-center gap-[9px]">
         <span className={CAPTION_CLASS}>{V2_CONTACT_COMPOSER.hint}</span>
         <span aria-hidden="true" className={RULE_CLASS} />
       </div>
 
       <a
         href={mailto}
-        className="mb-3 flex min-h-[60px] items-center justify-between gap-3 rounded-[var(--v2-radius-sm)] bg-[rgb(var(--v2-accent))] px-[18px] text-[rgb(var(--v2-btn-fg))]"
+        className="mb-4 flex min-h-[66px] items-center justify-between gap-3 rounded-[var(--v2-radius-sm)] bg-[rgb(var(--v2-accent))] px-5 text-[rgb(var(--v2-btn-fg))]"
       >
         <span className="flex flex-col gap-0.5">
           <span className="font-[family-name:var(--v2-font-mono)] text-[9.5px] uppercase tracking-[0.16em] opacity-70">
@@ -107,28 +111,28 @@ export const V2ContactComposer: FC<{ className?: string }> = ({ className }) => 
 
       {/* What the mail app will be handed, so tapping the button is not a
           jump into the dark. */}
-      <div className="mb-[26px] border-l-2 border-[rgb(var(--v2-line-2))] py-0.5 pl-3">
-        <span className="block font-[family-name:var(--v2-font-mono)] text-[10.5px] leading-[1.65] text-[rgb(var(--v2-fg-4))]">
+      <div className="mb-8 border-l-2 border-[rgb(var(--v2-line-2))] py-1 pl-3.5">
+        <span className="block font-[family-name:var(--v2-font-mono)] text-[10.5px] leading-[1.8] text-[rgb(var(--v2-fg-4))]">
           subject: {intent.subject}
         </span>
-        <span className="block font-[family-name:var(--v2-font-mono)] text-[10.5px] leading-[1.65] text-[rgb(var(--v2-fg-4))]">
+        <span className="block font-[family-name:var(--v2-font-mono)] text-[10.5px] leading-[1.8] text-[rgb(var(--v2-fg-4))]">
           to: {EMAIL}
         </span>
       </div>
 
-      <div className="mb-3 flex items-baseline gap-2">
+      <div className="mb-4 flex items-baseline gap-2">
         <span className={CAPTION_CLASS}>{V2_CONTACT_COMPOSER.socialsLabel}</span>
         <span aria-hidden="true" className={RULE_CLASS} />
       </div>
 
-      <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+      <div className="flex flex-wrap gap-x-6 gap-y-1.5">
         {SOCIALS.map(({ label, href }) => (
           <a
             key={label}
             href={href}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex min-h-[44px] items-center gap-1.5 font-[family-name:var(--v2-font-mono)] text-[12.5px] text-[rgb(var(--v2-fg-2))]"
+            className="inline-flex min-h-[44px] items-center gap-1.5 font-[family-name:var(--v2-font-mono)] text-[13px] text-[rgb(var(--v2-fg-2))]"
           >
             {label}
             <span aria-hidden="true" className="text-[rgb(var(--v2-fg-4))]">
