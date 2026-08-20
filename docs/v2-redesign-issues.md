@@ -710,3 +710,35 @@ adjacent to the composer in normal flow, so a margin here collapses into it —
 The empty space under the block is not the composer's: `V2Section` is
 `min-h-[100svh]` with `justify-center`, so a short section sits centred in the
 viewport. Every section behaves that way.
+
+## Scrolling during the Rick intro (67)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 67 | Scrolling up while the intro types produced an aggressive jitter | done | The intro pinned itself to the bottom on every character. It now pins only while the reader is already at the bottom. |
+
+Not the page: `window.scrollY` stayed 0 throughout. The panel has its own
+scroller, and the typing effect ran `wrapper.scrollTop = wrapper.scrollHeight`
+on every state change — one per character, every 30ms. A wheel-up moved the
+inner scroller and the next character put it straight back, so the wheel never
+reached the page either.
+
+Measured, scrolling the inner box 120px up mid-type:
+
+| | before | after |
+|---|--------|-------|
+| position after 40ms | snapped to the bottom (8 → 129) | held |
+| samples over 700ms | pinned at 129, every one | held at the set position |
+
+The pin is kept, conditionally: an `onScroll` handler sets a `pinned` ref from
+the distance to the bottom, with a 24px threshold — enough to absorb sub-pixel
+rounding and the growth of the line still being typed. Verified all three
+paths: at the bottom the view still follows new lines (77 → 105 → 128), a
+scroll up holds, and returning to the bottom re-follows.
+
+Note: this file is shared with `/`, so the same jitter was there. Verified fixed
+on both routes.
+
+Note: `terminal.tsx` carries the same pattern on `outputLines`. It fires per
+command rather than per character, so it does not fight a scroll the same way;
+left alone.
