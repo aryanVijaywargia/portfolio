@@ -14,16 +14,16 @@ export type GitHubStats = {
 const GITHUB_USER = "AryanVijaywargia";
 
 /**
- * "230+" / "1.9K+" — always rounded down, so the figure never overstates.
+ * "230+" / "1.5K+" — always rounded down, so the figure never overstates.
  *
- * Thousands keep one decimal. A flat "1K+" reads the same from 1,000 all the
- * way to 1,999, which is what made the number look hand-written and stale even
- * though it was live.
+ * Thousands step in halves: 1K, 1.5K, 2K. Finer than that (1.1K, 1.2K) reads
+ * as a measurement rather than a milestone, and coarser leaves the same "1K+"
+ * on screen for a thousand commits.
  */
 export const formatCount = (value: number): string => {
   if (value >= 1000) {
-    const tenths = Math.floor(value / 100) / 10;
-    return `${Number.isInteger(tenths) ? tenths : tenths.toFixed(1)}K+`;
+    const halves = Math.floor(value / 500) / 2;
+    return `${Number.isInteger(halves) ? halves : halves.toFixed(1)}K+`;
   }
   if (value >= 100) return `${Math.floor(value / 10) * 10}+`;
   return `${Math.floor(value / 5) * 5}+`;
