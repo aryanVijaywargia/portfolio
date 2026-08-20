@@ -708,6 +708,11 @@ export const Terminal: FC<TerminalProps> = ({
         ))}
 
         {/* Input Line - inline with output */}
+        {/* min-w-0 on the input, because a flex item defaults to min-width:auto —
+            an <input> refuses to shrink past its intrinsic size, so on a phone
+            the prompt plus the field overflowed the window. With the field
+            focused the browser then scrolled the container sideways, dragging
+            the start of every line off the left edge. */}
         <div className="terminal-input-line flex items-center font-mono">
           <span className="prompt select-none whitespace-nowrap text-[#0d7377] dark:text-[#4EC9B0]">
             {TERMINAL_CONFIG.prompt}
@@ -718,7 +723,7 @@ export const Terminal: FC<TerminalProps> = ({
             value={currentInput}
             onChange={(e) => setCurrentInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="terminal-input ml-1 flex-1 border-none bg-transparent text-[#383a42] outline-none dark:text-[#D4D4D4]"
+            className="terminal-input ml-1 min-w-0 flex-1 border-none bg-transparent text-[#383a42] outline-none dark:text-[#D4D4D4]"
             autoFocus
             spellCheck={false}
             autoComplete="off"

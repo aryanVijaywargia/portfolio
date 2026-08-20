@@ -1301,3 +1301,90 @@ html
   .achievement-trophy.is-locked {
   --trophy-color: rgb(var(--v2-fg-4));
 }
+
+/* ---------- shared chrome on themed pages ---------- */
+
+/* The v1 monogram's crossbar is drawn from --brand-accent, defaulting to the
+   v1 cyan. Repointing it here recolours the mark on any page carrying the v2
+   markers without touching the home route. */
+[data-v2] {
+  --brand-accent: rgb(var(--v2-accent));
+}
+
+/* The ambient "surprise" line shimmers through a hardcoded cyan/blue/violet
+   ramp. Doubling the attribute clears styled-jsx's two-class selector, and the
+   background shorthand has to come before background-size, which it resets. */
+[data-v2][data-v2] .ambient-surprise__shimmer {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--v2-accent) / 0.7) 0%,
+    rgb(var(--v2-accent)) 25%,
+    rgb(var(--v2-hue-sage)) 50%,
+    rgb(var(--v2-accent)) 75%,
+    rgb(var(--v2-accent) / 0.7) 100%
+  );
+  background-size: 200% 100%;
+  filter: drop-shadow(0 0 6px rgb(var(--v2-accent) / 0.3));
+}
+
+/* The dark-mode forms of the same families.
+ *
+ * `d:` is this project's dark variant, so `d:bg-sky-900/60` never matched the
+ * anchored probes above and the resume's active filter chip stayed sky blue
+ * once the page was in dark mode. Only the plain `d:` prefix is matched —
+ * never `d:hf:` or `d:hover:`, which apply on interaction; painting those at
+ * rest would light every chip up at once.
+ *
+ * The attribute is doubled because the utility these override is itself
+ * `.dark .d\:bg-sky-900\/60` — two classes — and Tailwind's utilities are
+ * emitted after this sheet, so an equal-specificity rule loses on order.
+ */
+[data-v2][data-v2] [class^="d:text-sky-"],
+[data-v2][data-v2] [class*=" d:text-sky-"],
+[data-v2][data-v2] [class^="d:text-cyan-"],
+[data-v2][data-v2] [class*=" d:text-cyan-"],
+[data-v2][data-v2] [class^="d:text-blue-"],
+[data-v2][data-v2] [class*=" d:text-blue-"] {
+  color: rgb(var(--v2-accent));
+}
+
+[data-v2][data-v2] [class^="d:bg-sky-"],
+[data-v2][data-v2] [class*=" d:bg-sky-"],
+[data-v2][data-v2] [class^="d:bg-cyan-"],
+[data-v2][data-v2] [class*=" d:bg-cyan-"],
+[data-v2][data-v2] [class^="d:bg-blue-"],
+[data-v2][data-v2] [class*=" d:bg-blue-"] {
+  background-color: rgb(var(--v2-accent) / 0.18);
+  color: rgb(var(--v2-fg));
+}
+
+[data-v2][data-v2] [class^="d:border-sky-"],
+[data-v2][data-v2] [class*=" d:border-sky-"],
+[data-v2][data-v2] [class^="d:border-cyan-"],
+[data-v2][data-v2] [class*=" d:border-cyan-"],
+[data-v2][data-v2] [class^="d:border-blue-"],
+[data-v2][data-v2] [class*=" d:border-blue-"] {
+  border-color: rgb(var(--v2-accent) / 0.5);
+}
+
+/* The resume's mobile pull-up footer.
+ *
+ * Its panel is painted from --resume-footer-bg, which the component sets to
+ * gray-50 — near-white in both modes, so on a dark page the whole bar reads as
+ * a light slab across the bottom. The tab button and the hairlines that draw
+ * its notch have the same problem. The element selector outranks the arbitrary
+ * property utility that sets the variable; the home route keeps its own value.
+ */
+[data-v2] footer {
+  --resume-footer-bg: rgb(var(--v2-surface));
+}
+
+[data-v2] footer > button {
+  border-color: rgb(var(--v2-line-2));
+  background-color: rgb(var(--v2-surface));
+  color: rgb(var(--v2-fg-2));
+}
+
+[data-v2] footer > div > div {
+  border-color: rgb(var(--v2-line-2));
+}

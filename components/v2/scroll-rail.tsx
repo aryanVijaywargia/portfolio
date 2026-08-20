@@ -36,7 +36,7 @@ export const V2ScrollRail: FC<PropsWithChildren<V2ScrollRailProps>> = ({
   children,
 }) => {
   const railRef = useRef<HTMLDivElement>(null);
-  const [nav, setNav] = useState({ stepping: false, prev: false, next: false });
+  const [nav, setNav] = useState({ prev: false, next: false });
   const busyRef = useRef(false);
 
   const step = useCallback((direction: -1 | 1) => {
@@ -57,13 +57,7 @@ export const V2ScrollRail: FC<PropsWithChildren<V2ScrollRailProps>> = ({
 
     const update = () => {
       const max = Math.max(rail.scrollWidth - rail.clientWidth, 0);
-      setNav({
-        // A rail that cannot move by half a card has nothing to step to, so it
-        // gets no controls — sub-pixel overflow should not draw furniture.
-        stepping: max > itemWidth / 2,
-        prev: rail.scrollLeft > 1,
-        next: max - rail.scrollLeft > 1,
-      });
+      setNav({ prev: rail.scrollLeft > 1, next: max - rail.scrollLeft > 1 });
     };
 
     update();
@@ -73,7 +67,7 @@ export const V2ScrollRail: FC<PropsWithChildren<V2ScrollRailProps>> = ({
       rail.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
     };
-  }, [resetKey, itemWidth]);
+  }, [resetKey]);
 
   // A filter change leaves the reader looking at wherever the old set ended.
   useEffect(() => {
@@ -100,30 +94,19 @@ export const V2ScrollRail: FC<PropsWithChildren<V2ScrollRailProps>> = ({
         {children}
       </div>
 
-      {/* Only drawn once there is somewhere to go: with a short set the rail
-          fits and a row of dead arrows would just be furniture. */}
-      {nav.stepping
-        ? <div className="mt-4 hidden items-center justify-between v2md:flex">
-            <button
-              type="button"
-              className={ARROW_CLASS}
-              onClick={() => step(-1)}
-              disabled={!nav.prev}
-            >
-              <ArrowLongLeftIcon className="h-4 w-4" aria-hidden="true" />
-              prev
-            </button>
-            <button
-              type="button"
-              className={ARROW_CLASS}
-              onClick={() => step(1)}
-              disabled={!nav.next}
-            >
-              next
-              <ArrowLongRightIcon className="h-4 w-4" aria-hidden="true" />
-            </button>
-          </div>
-        : null}
+      {/* Always drawn on wide screens and disabled at the ends — the v1
+          gallery keeps them visible whether or not the current set
+          overflows, so the control never disappears on the reader. */}
+      <div className="mt-4 hidden items-center justify-between v2md:flex">
+        <button type="button" className={ARROW_CLASS} onClick={() => step(-1)} disabled={!nav.prev}>
+          <ArrowLongLeftIcon className="h-4 w-4" aria-hidden="true" />
+          prev
+        </button>
+        <button type="button" className={ARROW_CLASS} onClick={() => step(1)} disabled={!nav.next}>
+          next
+          <ArrowLongRightIcon className="h-4 w-4" aria-hidden="true" />
+        </button>
+      </div>
     </div>
   );
 };

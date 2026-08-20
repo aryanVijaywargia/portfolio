@@ -125,6 +125,22 @@ const carriesText = (el: Element) =>
     (node) => node.nodeType === Node.TEXT_NODE && (node.nodeValue ?? "").trim().length > 0
   );
 
+/**
+ * Where the words actually are.
+ *
+ * A heading or paragraph is a block: its box spans the whole column even when
+ * the text stops a third of the way across, so the box is a poor blocker in
+ * both directions. It reserves empty space to the right of the last glyph, and
+ * — because a full-width block trips the wrapper-width test below — it used to
+ * be dropped entirely, which is how a message ended up printed across "About
+ * Me". Line boxes block the glyphs and nothing else.
+ */
+const textLineRects = (el: Element): DOMRect[] => {
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  return Array.from(range.getClientRects()).filter((rect) => rect.width > 1 && rect.height > 1);
+};
+
 const PADDING_PX = 12;
 const MAX_POSITION_ATTEMPTS = 40;
 const FONT_PX = 18;
@@ -168,14 +184,21 @@ const collectBlockerRects = (sectionEl: HTMLElement) => {
     const rect = el.getBoundingClientRect();
     if (rect.width < MIN_BLOCKER_PX || rect.height < MIN_BLOCKER_PX) return;
     if (rect.bottom < 0 || rect.top > viewportHeight) return;
-    if (rect.width > viewportWidth * WRAPPER_WIDTH_RATIO) return;
     if (el.closest(AMBIENT_OWN)) return;
 
     const style = window.getComputedStyle(el);
     if (style.visibility === "hidden" || style.display === "none" || style.opacity === "0") return;
-    if (!paintsSomething(el, style) && !carriesText(el)) return;
 
-    rects.push(rect);
+    // A painted box is blocked whole. Anything spanning nearly the viewport is
+    // scaffolding rather than content, and falls through to its own text — a
+    // full-width panel should not veto the entire band, but the words inside
+    // it still have to be avoided.
+    if (paintsSomething(el, style) && rect.width <= viewportWidth * WRAPPER_WIDTH_RATIO) {
+      rects.push(rect);
+      return;
+    }
+
+    if (carriesText(el)) rects.push(...textLineRects(el));
   });
 
   return rects;

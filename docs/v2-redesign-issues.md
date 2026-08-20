@@ -339,3 +339,35 @@ Note: `:hover` cannot be exercised by dispatching synthetic mouse events from
 page script — it needs `Input.dispatchMouseEvent` through CDP. A JS-dispatched
 `mouseover` leaves the computed style untouched and reads as "hover does
 nothing".
+
+## Trophy case, shared chrome and the project rail (46–52)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 46 | The trophy case kept its v1 navy/cyan panel and every trophy read the same grey | done | A blanket `.terminal-line * { color: inherit }` of mine outranked the per-category colours. The case is restyled from v2 tokens with the full `.terminal-line .achievement-case` prefix, and categories take the earth ramp. |
+| 47 | Terminal text was pushed off the left edge on a phone | done | `min-w-0` on the input. A flex item defaults to `min-width: auto` and an `<input>` will not shrink past its intrinsic size, so prompt + field overflowed; with the field focused the browser scrolled the container sideways. |
+| 48 | Ambient asides still landed on section headings | done | Text is now blocked by its **line boxes**, not its element box. A heading's box spans the column, which both reserved empty space and — being full width — tripped the wrapper-width test, so it was dropped as scaffolding. |
+| 49 | The "surprise" line shimmered cyan/blue/violet | done | Repointed to the accent with one hue for movement. |
+| 50 | The monogram's crossbar stayed cyan on themed shared pages | done | `header.brand` draws it from `--brand-accent`, defaulting to the v1 cyan; `[data-v2]` repoints it. `/` unchanged. |
+| 51 | Resume filter chips stayed blue in dark mode; the mobile footer was a light slab | done | The `d:` dark variant never matched the anchored family probes, and the footer's `--resume-footer-bg` resolves to gray-50 in both modes. Both repointed under `[data-v2]`. |
+| 52 | Project cards needed the reference treatment, and the rail lost its arrows | done | Deeper cover well with a softer corner, title clamped to two lines and summary to three so every card is the same shape; prev/next always drawn on wide screens and disabled at the ends, as the v1 gallery does. |
+
+Verification:
+
+- Trophy case: panel, kicker, title, count, progress, plank and note all on v2
+  tokens in both variants and both modes; categories paint sage / clay / teal /
+  accent with locked trophies on `--v2-fg-4`. `/` still reports the cyan panel.
+- Terminal: wrapper `scrollWidth` 486 → 348 at 390, first line's left edge
+  −105 → 33. Same fix confirmed on `/` (486 → 358, −100 → 28).
+- Ambient: zero glyph or painted-box overlaps at 820, 900 and 1440 across
+  repeated placements. Measuring the *element* box instead reports false
+  overlaps — the empty half of a heading's box counts as a hit.
+- Brand: `rgb(217,242,75)` on `/resume?theme=signal`, `rgb(6,182,212)` on both
+  `/resume` and `/`.
+- Resume chips in dark: `rgba(12,74,110,0.6)` → `rgba(142,208,138,0.18)`.
+  Footer panel `rgb(248,250,252)` → `rgb(17,17,20)`; `/` keeps the light value.
+- Rail: prev/next render at 1440 and are correctly disabled when the set fits.
+
+Note: Tailwind's utilities are emitted after this sheet, so an equal-specificity
+override loses on source order. `.dark .d\:bg-sky-900\/60` is two classes, which
+is why the `d:` remaps need the attribute doubled.
