@@ -645,3 +645,40 @@ said grey with `:hover` already true; a second read a moment later gave
 The row scrolls sideways instead of wrapping, breaking the gutter the way the
 project rail does: at 375 it is 379px inside a 375px box, scrolling within
 itself with no page-level overflow.
+
+## Contact on a phone: the sentence composer (65)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 65 | The two contact code windows collapse into a column of nested chrome on a phone | done | Below `v2sm` the section is the composer from the new reference; the windows return at 680px and up. |
+
+The composer is one sentence with two tappable words. The intent carries the
+mail's `subject` (it says what the mail is about), the action carries a `line`
+for the body (it says what should happen next), and both go into a `mailto:`
+that the subject/to block previews before the reader commits to opening a mail
+app.
+
+Reference numbers kept as authored: 26px sentence at 1.45 with -0.025em, a
+60px-minimum send button, 44px minimum on every social link. Colours are
+tokens, so the accent tracks the variant — measured `rgb(217 242 75)` on signal
+dark and `rgb(63 122 70)` on graphite light, with the CTA's text on
+`--v2-btn-fg` either way. The send button takes `--v2-radius-sm`, so it stays
+square on signal and rounds on graphite rather than being square in both.
+
+Verified at 375: composer `flex`, windows `display: none`, no page overflow,
+and cycling updates the sentence, the subject preview and the `mailto` together.
+At 800: composer `none`, windows `grid`, the form still mounted with its three
+fields.
+
+Note: what the reference drops on a phone, and what this keeps —
+
+| | reference | here |
+|---|---|---|
+| section eyebrow | its own `contact` rule | our `06 / CONTACT` header |
+| "Contact me" heading | absent | kept |
+| `open_to_work`, location | absent | absent below 680 (they live in the JSON window) |
+| the API contact form | absent | absent below 680 — **open question, see below** |
+
+The form is not reachable below 680 any more: the phone's send path is the mail
+app. That is what the reference shows, but it is a functional change rather
+than a visual one, so it is called out rather than assumed settled.
