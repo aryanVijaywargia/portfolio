@@ -832,3 +832,56 @@ Note: `document.hasFocus()` is false in the automation pane, and a document
 without focus fires no focus or blur events at all — `.focus()` and `.blur()`
 move `activeElement` silently. The focus wiring was verified by dispatching the
 `focusin`/`focusout` pair React actually delegates.
+
+## Timed test, visible caret, terminal styling (70)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 70 | Could not tell where you were in the text or what you had typed | done | Monkeytype's model: a sliding absolute caret, a much wider dim/bright gap, and 24px type. |
+| 70 | Wanted a monkeytype-style timer instead of a fixed passage | done | 15/30/60s countdown over a chained passage stream; the clock ends the run, not the text. |
+| 70 | Wanted the whole thing to read as terminal | done | Countdown plus an ASCII progress bar, and results as label/value rows on a character grid. |
+
+Read off monkeytype.com rather than guessed at:
+
+| | monkeytype | here |
+|---|-----------|------|
+| caret | absolute, 3px wide, 1.2x font height, `transition: all` | absolute, 3px, 30px tall, `left`/`top` over 90ms |
+| font size | 32px | 24px — the panel is narrower than a full page |
+| untyped / typed | `#646669` / `#d1d0c5` | `#5C5F66` / `#E8E8E3` |
+| visible text | `#wordsWrapper` 156px, clipped, 40px line-height | 132px, clipped, 44px line-height, 3 lines |
+
+The old caret was a 2px left border on the character it preceded, blinking
+`step-start` — half the time it was not on screen at all, and it never moved
+between frames, so at speed there was nothing to track. It is now its own
+element, positioned from a measured character box and animated between
+positions, and it only blinks after a second of no typing.
+
+Position comes from measurement, size and vertical placement from the line grid:
+
+| | value |
+|---|-------|
+| caret top, lines 0-4 | 7, 51, 95, 139, 183 — exactly `line * 44 + 7` |
+| caret height | 30px at every position |
+| scroll offset at those lines | 0, 0, -44, -88, -132 |
+
+Measuring the glyph box for height gave 18px before the monospace face resolved
+and 28px after, so the caret changed height on the first keystroke. Only `left`
+and the line index are measured now; height and vertical inset are constants.
+
+The window scrolls a line at a time and keeps the caret on the second of three
+visible lines, so there is always a line of context behind and a line of runway
+ahead.
+
+Timed mode needs text that cannot run out, so passages are chained into a stream
+sized for 260 wpm — far past anyone reading this — for the chosen duration. A
+30s test renders about 800 character spans; measured 0-0.3ms per keystroke, so
+no windowing was needed.
+
+Verified a 15s run end to end: countdown 15 down to 1, the run ended on the
+clock at 15.1s wall with 245 of 796 characters typed, and scored 100.0%
+accuracy at 95% consistency with `best <- new` shown only after a previous best
+existed.
+
+Note: the duration buttons carry `z-20`. The capture field covers the panel at
+`z-10` so a click anywhere restores focus, and anything meant to stay clickable
+has to sit above it.
