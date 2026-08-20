@@ -388,3 +388,39 @@ Verification (both variants):
 
 The three that still wrap are the longest descriptions — 47 characters or more —
 which would need a smaller size than is worth reading. `/` is unchanged at 16px.
+
+## Card body tint (54)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 54 | Card bodies were flat, so each project's colour lived only in its cover art | done | The body carries its hue as a 165° wash fading out down the card, over the surface, with the reference's 3px hue rule along the top edge. |
+
+Taken from the design reference's own card rule:
+`border-top: 3px solid rgb(hue)` and
+`linear-gradient(165deg, rgba(hue,0.13), rgba(hue,0.03) 62%, transparent)`.
+
+Verified in both variants, light and dark: the wash reads as a tint over the
+surface rather than replacing it, and the three cards stay equal height (478px)
+with title clamped to 2 lines and summary to 3.
+
+### Still different from the reference — content, not styling
+
+The reference HTML carries different project data from `content/projects`:
+
+| | reference | shipped |
+|---|---|---|
+| Precursor tech | Python, TensorFlow, **ISRO-NESAC** | Python, TensorFlow |
+| Forex tech | Python, TensorFlow, **CNN-LSTM** | Python, TensorFlow |
+| Forex CTA | **View on DagsHub** | View repository |
+| Precursor title | Earthquake Precursor Detection | Earthquake Precursor Detection **- ISRO-NESAC** |
+
+`content/projects` is the source for the home route as well, so changing any of
+it would change `/`. Left alone pending a decision — the alternative is a
+v2-only copy override, which reintroduces the duplication the content layer was
+built to avoid.
+
+Note: the reference also draws its cover art full-bleed at 118px with
+`grayscale(1)` and `mix-blend-mode: luminosity`, and puts tech and year together
+as one mono line in the footer instead of chips. Both were deliberately changed
+earlier — the grayscale threw away the artwork's own colour — and the shipped
+form has been reviewed since, so they were not reverted.
