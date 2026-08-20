@@ -193,9 +193,16 @@ export const STARTUP_BANNER: CommandOutput[] = [
   { text: "" },
 ];
 
-export const DESKTOP_GAME_HELP: CommandOutput = {
-  text: '<span class="command">game</span>           Open the games menu',
-};
+/**
+ * Commands that need a real keyboard and room to show a board, so they are only
+ * offered where there is one. Listed together because they share that gate.
+ */
+export const DESKTOP_HELP: CommandOutput[] = [
+  { text: '<span class="command">game</span>           Open the games menu' },
+  { text: '<span class="command">typetest</span>       Take a typing test, get your WPM' },
+];
+
+export const DESKTOP_COMMANDS = ["game", "typetest"];
 
 export const SPECIAL_COMMANDS = [
   "whois",
@@ -208,6 +215,7 @@ export const SPECIAL_COMMANDS = [
   "scratchpad",
   "achievements",
   "game",
+  "typetest",
   "email",
 ];
 
