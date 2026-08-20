@@ -32,6 +32,12 @@ const RICK_ASCII = `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣤⣾⣿⣿⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠛⠛⠻⠿⠿⠛⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`;
 
+/**
+ * How close to the bottom still counts as "following along". Below this the
+ * typing keeps dragging the view down; above it, the reader is in charge.
+ */
+const PIN_THRESHOLD_PX = 24;
+
 const INTRO_LINES = [
   "MORTY!!!",
   "You're not gonna believe this, Morty...",
@@ -53,6 +59,8 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
   const [allDone, setAllDone] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const completedRef = useRef(false);
+  /** Whether new output should drag the view down with it. */
+  const pinnedRef = useRef(true);
   const [isInView, setIsInView] = useState(true);
 
   const handleComplete = useCallback(() => {
@@ -132,15 +140,35 @@ export const RickIntro: FC<RickIntroProps> = ({ onComplete }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentLineIndex, isInView]);
 
-  // Keep the intro output pinned inside the terminal without moving the page.
+  // Keep the intro output pinned inside the terminal without moving the page —
+  // but only while the reader is already at the bottom. Pinning on every
+  // character regardless meant a scroll up inside the terminal was undone
+  // 30ms later, over and over, which reads as the panel fighting the wheel.
   useEffect(() => {
     const wrapper = containerRef.current;
-    if (!wrapper) return;
+    if (!wrapper || !pinnedRef.current) return;
     wrapper.scrollTop = wrapper.scrollHeight;
   }, [displayedText, completedLines, allDone]);
 
+  /**
+   * Re-pins once the reader returns to the bottom, and lets go the moment they
+   * leave it. The threshold absorbs sub-pixel rounding and the growth of the
+   * line still being typed, so simply watching the wheel is not enough.
+   */
+  const handleScroll = useCallback(() => {
+    const wrapper = containerRef.current;
+    if (!wrapper) return;
+    const distanceFromBottom = wrapper.scrollHeight - wrapper.scrollTop - wrapper.clientHeight;
+    pinnedRef.current = distanceFromBottom <= PIN_THRESHOLD_PX;
+  }, []);
+
   return (
-    <div ref={containerRef} className="rick-intro-wrapper" onClick={handleComplete}>
+    <div
+      ref={containerRef}
+      className="rick-intro-wrapper"
+      onClick={handleComplete}
+      onScroll={handleScroll}
+    >
       <div className="rick-intro-content">
         <pre className="rick-ascii">{RICK_ASCII}</pre>
 
