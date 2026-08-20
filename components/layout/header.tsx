@@ -1,5 +1,6 @@
 import { Link } from "components/link";
 import { DesktopNav } from "components/layout/header.desktop-nav";
+import { HeaderBrand } from "components/layout/header.brand";
 import { MobileNav } from "components/layout/header.mobile-nav";
 import { ProfileNav } from "components/layout/header.settings";
 import { HEADER } from "content/layout";
@@ -111,7 +112,7 @@ export const Header: FC = ({}) => {
         <div className="mx-auto flex h-full max-w-6xl items-center px-4 md:px-8">
           <Link href="/" className="z-10 w-min" data-tip="Back to home" data-delay-show={500}>
             <span className="sr-only">Back to home</span>
-            {HEADER.logo.title}
+            <HeaderBrand />
           </Link>
           <nav className="ml-auto flex items-center gap-5 text-sm font-medium text-gray-500 d:text-gray-400 sm:gap-7">
             <Link
@@ -152,8 +153,8 @@ export const Header: FC = ({}) => {
             data-tip="Hi, I'm Aryan. Welcome to my site."
             data-delay-show={2000}
           >
-            <span className="sr-only">Aryan's Logo</span>
-            {HEADER.logo.title}
+            <span className="sr-only">Aryan Vijaywargia — home</span>
+            <HeaderBrand />
           </Link>
           <DesktopNav />
           <ProfileNav showNav={showNav} />

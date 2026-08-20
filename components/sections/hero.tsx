@@ -10,8 +10,13 @@ import { FC, useEffect, useState } from "react";
 import { useChatbot } from "components/_stores/chatbot-store";
 import { DogIcon } from "components/icons/dog-icon";
 import { AnimatedRoleHeading } from "components/animated-role-heading";
+import type { ScratchpadNote } from "lib/scratchpad";
 
-export const Hero: FC = () => {
+type HeroProps = {
+  initialScratchpadNotes: ScratchpadNote[] | null;
+};
+
+export const Hero: FC<HeroProps> = ({ initialScratchpadNotes }) => {
   const { theme, setTheme } = useTheme();
   const [themeMounted, setThemeMounted] = useState(false);
   const requestChatbot = useChatbot((state) => state.requestChatbot);
@@ -132,7 +137,7 @@ export const Hero: FC = () => {
         <section className="relative md:h-[30rem]">
           <div className="relative flex h-full w-full min-w-0 flex-col gap-4 sm:min-w-[42rem] sm:pr-4 lg:absolute lg:-left-4 lg:top-28 lg:mr-4 lg:min-w-[34rem] lg:pr-8">
             <div id="terminal-section" className="relative flex h-full flex-col">
-              <InteractiveTerminal language="tsx" />
+              <InteractiveTerminal language="tsx" initialScratchpadNotes={initialScratchpadNotes} />
               <div className="absolute -bottom-5 -right-5 -z-10 h-[calc(100%+1.25rem)] w-[calc(100%+1.25rem)] rounded-lg border border-gray-400/20 bg-gray-100/70 [mask-image:linear-gradient(-30deg,#fff_16.35%,rgb(255_255_255_/_0%)_61.66%)] d:border-gray-700/20 d:bg-gray-900/40"></div>
             </div>
             {/* Identity rail: outlined chips with leading colored dot - both themes */}
