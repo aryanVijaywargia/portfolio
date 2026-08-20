@@ -23,7 +23,14 @@ export const HeaderBrand: FC = () => {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <path d="M15.1 25.7h13.8" stroke="rgb(6 182 212)" strokeWidth="2.4" strokeLinecap="round" />
+        {/* The crossbar colour comes from a variable so a themed page can repoint
+          it; the fallback is the v1 cyan, so the home route is unchanged. */}
+        <path
+          d="M15.1 25.7h13.8"
+          stroke="var(--brand-accent, rgb(6 182 212))"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+        />
       </svg>
     </span>
   );
