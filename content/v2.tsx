@@ -110,7 +110,6 @@ export const V2_SECTION_HEADINGS = {
 };
 
 export const V2_ABOUT = {
-  shuffleHint: "click to shuffle",
   /**
    * Description length control. `short` is the small-screen form: the v1 site
    * collapses the three words to single letters there rather than spending a
