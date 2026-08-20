@@ -511,3 +511,37 @@ are correctly disabled there. Narrow to 1024 to see the enabled state.
 Note: `getComputedStyle` read the dark colour on a light page again — the
 `content-visibility` trap. A real theme toggle plus a repaint reads correctly;
 the token itself (`--v2-fg-4`) had already flipped.
+
+## The experience timeline, against the render (59)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 59a | Rows were spread evenly down the plot instead of a fixed pitch | done | `top = 6 + index * 46`, the scheme both the reference script and the v1 timeline use. Slack now sits under the oldest row. |
+| 59b | Inactive bars were hollow outlines | done | Each carries its own colour at 0.2 alpha, so a row reads as a block rather than an empty box. |
+| 59c | "Omdena × EnergyHub" was cut to an ellipsis | done | Label column 108 → 144, plot offset 116 → 152. |
+| 59d | The plot was always cut on the right | done | The 700px floor never fit the ~570px column, so "now" and the end of the current role sat behind a hidden scrollbar. Floor is now 520. |
+| 59e | `'26` printed on top of `now` | done | A year label inside the right-end zone `now` occupies is dropped; its gridline stays. |
+
+Measured after, at 1512 (Chrome, both variants):
+
+| | before | after |
+|---|--------|-------|
+| row tops | 12 / 65 / 119 / 173 / 226 | 6 / 52 / 98 / 144 / 190 |
+| inactive bar fill | `rgba(0,0,0,0)` | `rgb(var(--v2-co-n) / 0.2)` |
+| clipped row labels | 1 of 5 | 0 of 5 |
+| hidden plot | 134px | 3px (the `now` dot's overhang) |
+
+Note on where the render's numbers come from: the reference HTML sets `gap = 46`
+in `wireExperience`, and its own company data stops at "Omdena". Ours reads
+"Omdena × EnergyHub", so the design's 116px gutter is too narrow for our
+content — the column is sized to the longest label we actually carry, not to
+the design's constant.
+
+Note: the current role's bar label still ends in an ellipsis. The design's
+arithmetic assumes a ~700px timeline column; the real one is 570 at every
+desktop width, because `--v2-max-w` caps the page and the detail panel takes
+its `minmax(340px,0.95fr)`. At 570 the bar is 176px against 199px of text, and
+that holds at the design's own 116px gutter too (171px) — so this is the
+column, not the label width. Fixing it properly means widening the timeline
+column against the design's grid; the full text is on the bar's `title`, in the
+row list, and in the panel.
