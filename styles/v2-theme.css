@@ -1410,3 +1410,36 @@ html
     font-size: min(13px, 3.2vw);
   }
 }
+
+/* ---------- project card lean ---------- */
+/*
+   Cards rest at a slight angle and straighten when the reader points at one,
+   which is what gives the rail its "stack of things set down" feel rather than
+   a row of panels. The lean per card comes in as --card-tilt.
+
+   The rotation lives on the rail item, not the card, so the card keeps its own
+   hover transition for border and shadow. transform-origin sits at the bottom
+   so a card pivots on the shelf instead of about its middle.
+*/
+
+[data-v2] .v2-project-card {
+  transform: rotate(var(--card-tilt, 0deg));
+  transform-origin: 50% 100%;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+[data-v2] .v2-project-card:hover,
+[data-v2] .v2-project-card:focus-within {
+  transform: rotate(0deg) translateY(-4px);
+}
+
+/* Readers who ask for less motion get the straight version and no travel. */
+@media (prefers-reduced-motion: reduce) {
+  [data-v2] .v2-project-card,
+  [data-v2] .v2-project-card:hover,
+  [data-v2] .v2-project-card:focus-within {
+    transform: none;
+    transition: none;
+  }
+}

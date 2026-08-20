@@ -1,11 +1,12 @@
 import clsx from "clsx";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useRef, useState } from "react";
 import { PROJECTS } from "content/projects";
 import { V2_PROJECT_FALLBACK_HUE, V2_PROJECT_HUES, V2_SECTION_HEADINGS } from "content/v2";
 import { Image } from "components/image";
 import { useAchievementActions } from "components/achievements";
 import { V2Heading, V2Section, V2SectionHeader, hueVars } from "components/v2/primitives";
-import { V2ScrollRail } from "components/v2/scroll-rail";
+import { V2ScrollRail, V2ScrollRailControls } from "components/v2/scroll-rail";
+import { useScrollRail } from "components/v2/use-scroll-rail";
 
 const ALL = "All Projects";
 
@@ -19,6 +20,14 @@ const ALL = "All Projects";
  */
 const CARD_WIDTH = 330;
 const CARD_GAP = 20;
+
+/**
+ * Resting lean per card, cycled down the rail.
+ *
+ * Uneven on purpose — an even alternation reads as a pattern rather than as a
+ * stack of things someone set down. Pointing at a card straightens it.
+ */
+const TILTS = [-1.1, 0.7, -0.5, 1.2] as const;
 
 type Project = typeof PROJECTS[number];
 
@@ -166,6 +175,7 @@ const ProjectCard: FC<{ project: Project; onOpen: () => void }> = ({ project, on
 export const V2Projects: FC = () => {
   const { trackAchievementEvent } = useAchievementActions();
   const [filter, setFilter] = useState<string>(ALL);
+  const railRef = useRef<HTMLDivElement>(null);
 
   const filters = useMemo(() => [ALL, ...new Set(PROJECTS.flatMap((project) => project.type))], []);
 
@@ -184,11 +194,25 @@ export const V2Projects: FC = () => {
     [trackAchievementEvent]
   );
 
+  const { canStepBack, canStepForward, step } = useScrollRail(railRef, {
+    itemWidth: CARD_WIDTH,
+    gapWidth: CARD_GAP,
+    resetKey: filter,
+  });
+
   return (
     <V2Section id="portfolio" label="Projects">
       <V2SectionHeader section="portfolio" />
 
-      <V2Heading className="mb-5">{V2_SECTION_HEADINGS.portfolio}</V2Heading>
+      <div className="mb-5 flex items-end justify-between gap-6">
+        <V2Heading>{V2_SECTION_HEADINGS.portfolio}</V2Heading>
+        <V2ScrollRailControls
+          canStepBack={canStepBack}
+          canStepForward={canStepForward}
+          onStep={step}
+          label="Projects"
+        />
+      </div>
 
       {/* Filters read as a control on the list below, so they sit under the
           heading rather than competing with the eyebrow rule above it. */}
@@ -216,11 +240,12 @@ export const V2Projects: FC = () => {
         </div>
       </div>
 
-      <V2ScrollRail itemWidth={CARD_WIDTH} gapWidth={CARD_GAP} resetKey={filter} label="Projects">
-        {visible.map((project) => (
+      <V2ScrollRail ref={railRef} label="Projects">
+        {visible.map((project, index) => (
           <div
             key={project.name}
-            className="flex w-[82vw] max-w-[330px] shrink-0 snap-start v2sm:w-[330px] v2sm:max-w-none"
+            style={{ "--card-tilt": `${TILTS[index % TILTS.length]}deg` } as never}
+            className="v2-project-card flex w-[82vw] max-w-[330px] shrink-0 snap-start v2sm:w-[330px] v2sm:max-w-none"
           >
             <ProjectCard project={project} onOpen={handleOpen} />
           </div>
