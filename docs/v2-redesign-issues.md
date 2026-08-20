@@ -885,3 +885,61 @@ existed.
 Note: the duration buttons carry `z-20`. The capture field covers the panel at
 `z-10` so a click anywhere restores focus, and anything meant to stay clickable
 has to sit above it.
+
+## Typing test dead in production (71)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 71 | No caret and no characters registering on the deployed site, while dev was fine | done | The production minifier reordered the word-offset loop. Offsets now come from the regex engine, so there is no order to reorder. |
+
+Source, which is correct - the object captures `start`, then `start` advances:
+
+```js
+let start = 0;
+return stream.match(/\S+\s*/g).map((text) => {
+  const word = { text, start };
+  start += text.length;
+  return word;
+});
+```
+
+What SWC emitted into the production chunk:
+
+```js
+var t = 0;
+return (...).map(function(e) {
+  return t += e.length, { text: e, start: t };
+});
+```
+
+The comma expression advances the total *before* the object literal reads it, so
+every word reports a start one word-length too far. Checked against the same
+input:
+
+| | word starts |
+|---|-------------|
+| source | 0, 4, 9, 16, 18 |
+| minified | 4, 9, 16, 18, 22 |
+
+Index 0 is then never rendered, so `index === typed.length` is never true at 0:
+no span gets `data-caret`, the caret element never renders, and every
+character's state is offset by a whole word - which is why nothing appeared to
+register on typing.
+
+The fix drops the accumulator. `matchAll` reports each match's `.index`
+directly, so nothing depends on statement order and there is nothing to fold.
+Verified in the rebuilt chunk: `{ text: e[0], start: e.index ?? 0 }`.
+
+Note: this only ever appeared in a production build. Dev ran the unminified
+source and was correct throughout, which is why every check passed locally.
+`next build` was only ever run for compile errors - the built output was never
+served and exercised. A `portfolio-prod` entry now sits in `.claude/launch.json`
+(`next start` on 3001) so the real artifact can be driven - that directory is
+gitignored, so it is a local aid rather than something the repo carries.
+
+Note: the earlier verification also leaned on synthetic `KeyboardEvent`
+dispatch. Confirming this fix used real key events, which surfaced separately
+that the automation `type` action sends `beforeinput`/`input` with no `keydown`
+at all - it uses `insertText`, so it cannot exercise a keydown-driven widget.
+Real presses of `S`, `e`, `z` against "Search" gave correct, correct, wrong,
+with the caret at 43px and accuracy 67%.
