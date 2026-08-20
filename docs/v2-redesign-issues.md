@@ -452,3 +452,26 @@ Verified (both variants, 390 / 768 / 1440):
 Note: the design reference HTML has no tilt at all — it is a plain three-column
 grid. The lean comes from the later renders, so the reference is not the
 authority on this one.
+
+## Step labels and the resume's first heading (56–57)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 56 | The step controls lost their words when they became icon boxes | done | "prev" and "next" are back on the buttons, still beside the heading. |
+| 57 | The resume's first heading sat under the fixed header | done | The content had `py-16` — 64px of top padding under an 80px fixed header. Now `pt-28`. |
+
+Issue 57 was not a scroll problem. Measured at `scrollY: 0`, the very top of the
+page: "Intro" started at y=68 with the header's bottom edge at y=80, so its top
+12px were behind the bar before the reader touched anything.
+
+| | before | after |
+|---|---|---|
+| themed, 1440 | −12px (hidden) | **+36px clear** |
+| plain, 1440 | −13px | +36px |
+| themed, 390 | −12px | +35px |
+
+Present on plain `/resume` too, so it is a long-standing page bug rather than
+something the skin introduced; fixed at the source, which fixes both.
+
+Note: `pages/resume.tsx:125` reports a pre-existing type error on a `description`
+property. It predates this work and is untouched.
