@@ -64,10 +64,10 @@ const ProjectCard: FC<{ project: Project; onOpen: () => void }> = ({ project, on
           pushed them through grayscale and luminosity blending, which threw all
           of that away. */}
       {featuredImage
-        ? <div className="p-3 pb-0">
+        ? <div className="p-4 pb-0">
             {/* `isolate` keeps the blend inside the cover: without it the
                 overlay would mix with the page behind the card. */}
-            <div className="relative isolate overflow-hidden rounded-[var(--v2-radius-sm)] border border-[rgb(var(--hue)/0.28)]">
+            <div className="relative isolate overflow-hidden rounded-[var(--v2-radius-md)] border border-[rgb(var(--hue)/0.28)]">
               <Image
                 src={featuredImage}
                 alt={project.name}
@@ -97,7 +97,7 @@ const ProjectCard: FC<{ project: Project; onOpen: () => void }> = ({ project, on
           {project.type.join(" · ")}
         </span>
 
-        <h3 className="text-[22px] font-bold leading-[1.15] tracking-[-0.028em] text-[rgb(var(--v2-fg))]">
+        <h3 className="line-clamp-2 text-[22px] font-bold leading-[1.15] tracking-[-0.028em] text-[rgb(var(--v2-fg))]">
           {project.name}
         </h3>
 
@@ -112,7 +112,7 @@ const ProjectCard: FC<{ project: Project; onOpen: () => void }> = ({ project, on
           ))}
         </div>
 
-        <p className="m-0 text-[14px] leading-[1.62] text-[rgb(var(--v2-fg-3))]">
+        <p className="m-0 line-clamp-3 text-[14px] leading-[1.62] text-[rgb(var(--v2-fg-3))]">
           {project.description}
         </p>
 
