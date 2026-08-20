@@ -94,6 +94,47 @@ export const V2_HERO = {
   },
 };
 
+/**
+ * The phone contact composer.
+ *
+ * Two lists the reader taps through to build one sentence; the sentence
+ * becomes the subject and body of a mail. `subject` rides on the intent
+ * because that is the half that says what the mail is about, and `line` on the
+ * action because that is the half that says what should happen next.
+ */
+export const V2_CONTACT_COMPOSER = {
+  lead: "Aryan, I want to",
+  joiner: "\u2014 so",
+  hint: "tap the words to change them",
+  sendEyebrow: "send as mail",
+  sendLabel: "Open my mail app",
+  socialsLabel: "or find me at",
+  intents: [
+    { label: "hire you", subject: "Hiring you \u2014 let's talk" },
+    { label: "build something with you", subject: "Building something together" },
+    { label: "pick your brain", subject: "One question for you" },
+    { label: "waste your time politely", subject: "No agenda, just hi" },
+  ],
+  actions: [
+    {
+      label: "send me a calendar link",
+      line: "Send me a calendar link and I'll take the worst slot on it.",
+    },
+    {
+      label: "just reply to this",
+      line: "A reply right here is plenty \u2014 no meeting required.",
+    },
+    {
+      label: "point me at your r\u00e9sum\u00e9",
+      line: "Point me at your r\u00e9sum\u00e9 and I'll do the reading.",
+    },
+    {
+      label: "say hi back and we'll wing it",
+      line: "Say hi back and we'll figure out the rest live.",
+    },
+  ],
+} as const;
+
 /** Identity chips on the "also:" rail beneath the terminal. */
 export const V2_IDENTITY_CHIPS = [
   { label: "Traveler", hue: "brass" },
