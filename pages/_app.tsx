@@ -7,6 +7,7 @@ import { Footer } from "components/layout/footer";
 import { Header } from "components/layout/header";
 import { MobileExperienceNotice } from "components/layout/mobile-experience-notice";
 import { BatTransition } from "components/batman/bat-transition";
+import { isV2Route } from "components/v2/routes";
 import { SEO } from "content/seo";
 import dynamic from "next/dynamic";
 import { DefaultSeo } from "next-seo";
@@ -40,7 +41,37 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
   const router = useRouter();
   const { showTransition } = usePortfolioMode();
   const isBatman = router.pathname === "/batman";
+  // The v2 routes render their own header, footer and ambient chrome.
+  const isV2 = isV2Route(router.pathname);
   const canonicalPath = router.asPath.split(/[?#]/)[0] || "/";
+
+  // Pages outside the portfolio — the resume, for one — are shared with "/",
+  // so they cannot carry a skin of their own. A `?theme=` on the link opts them
+  // in, which keeps the unadorned URL identical to production.
+  const requestedTheme = typeof router.query.theme === "string" ? router.query.theme : undefined;
+  const v2Variant =
+    requestedTheme === "signal" || requestedTheme === "graphite" ? requestedTheme : undefined;
+
+  // <body> paints the canvas behind the page and is an ancestor of the marker
+  // below, so the skin has to be mirrored up for it to take. The portfolio
+  // routes do this themselves; this covers the shared pages.
+  useEffect(() => {
+    const root = document.documentElement;
+    const { body } = document;
+    if (!v2Variant) return undefined;
+
+    root.setAttribute("data-v2", "");
+    root.setAttribute("data-v2-variant", v2Variant);
+    body.setAttribute("data-v2", "");
+    body.setAttribute("data-v2-variant", v2Variant);
+
+    return () => {
+      [root, body].forEach((el) => {
+        el.removeAttribute("data-v2");
+        el.removeAttribute("data-v2-variant");
+      });
+    };
+  }, [v2Variant]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -57,7 +88,11 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
   }, []);
 
   return (
-    <div data-portfolio-mode={isBatman ? "batman" : undefined}>
+    <div
+      data-portfolio-mode={isBatman ? "batman" : undefined}
+      data-v2={v2Variant ? "" : undefined}
+      data-v2-variant={v2Variant}
+    >
       <DefaultSeo
         {...SEO}
         canonical={`${SEO.url}${canonicalPath}`}
@@ -66,15 +101,15 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
         description={SEO.description}
         openGraph={SEO.openGraph}
       />
-      {isBatman ? <BatmanHeader /> : <Header />}
+      {isV2 ? null : isBatman ? <BatmanHeader /> : <Header />}
       <main className="relative z-10 min-h-screen print:!mx-auto print:!w-[1024px]">
         <Component {...pageProps} />
       </main>
-      {isBatman ? <BatmanFooter /> : <Footer />}
-      {router.pathname === "/" || isBatman ? <MobileExperienceNotice /> : null}
+      {isV2 ? null : isBatman ? <BatmanFooter /> : <Footer />}
+      {!isV2 && (router.pathname === "/" || isBatman) ? <MobileExperienceNotice /> : null}
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
-      {!isBatman && router.pathname === "/" ? <AmbientMessages /> : null}
+      {!isV2 && !isBatman && router.pathname === "/" ? <AmbientMessages /> : null}
     </div>
   );
 };

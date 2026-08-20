@@ -3,13 +3,13 @@ import { CheckIcon, ArrowRightIcon, ArrowPathIcon } from "@heroicons/react/24/ou
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, FormEvent, useEffect, useRef, useState } from "react";
 
-type QuizQuestion = {
+export type QuizQuestion = {
   prompt: string;
   answers: readonly string[];
   correctAnswer: number | "any";
 };
 
-const QUIZ_QUESTIONS: readonly QuizQuestion[] = [
+export const QUIZ_QUESTIONS: readonly QuizQuestion[] = [
   {
     prompt: "What is inevitable?",
     answers: [

@@ -1,8 +1,15 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "pages/api/**/*.js": {
       "memory": 1024,
       "maxDuration": 10
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/supabase-keepalive",
+      "schedule": "0 6 * * *"
+    }
+  ]
 }

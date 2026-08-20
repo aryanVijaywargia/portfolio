@@ -1,13 +1,16 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { FC, FormEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
-
-type ScratchpadNote = {
-  id: number;
-  message: string;
-  created_at: string;
-};
+import type { ScratchpadNote } from "lib/scratchpad";
+import { FC, FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 
 const MAX_NOTE_LENGTH = 280;
+
+type TerminalScratchpadProps = {
+  isLoading: boolean;
+  loadError: string;
+  notes: ScratchpadNote[];
+  onNoteCreated: (note: ScratchpadNote) => void;
+  onRefresh: () => void | Promise<void>;
+};
 
 const formatTimestamp = (value: string) => {
   const date = new Date(value);
@@ -22,49 +25,29 @@ const formatTimestamp = (value: string) => {
   }).format(date);
 };
 
-export const TerminalScratchpad: FC = () => {
-  const [notes, setNotes] = useState<ScratchpadNote[]>([]);
+export const TerminalScratchpad: FC<TerminalScratchpadProps> = ({
+  isLoading,
+  loadError,
+  notes,
+  onNoteCreated,
+  onRefresh,
+}) => {
   const [message, setMessage] = useState("");
   const [website, setWebsite] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
+  const [submissionError, setSubmissionError] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const loadNotes = useCallback(async (signal?: AbortSignal) => {
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const response = await fetch("/api/scratchpad", { signal });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data?.error || "Could not open the shared file.");
-      setNotes(Array.isArray(data.notes) ? data.notes : []);
-    } catch (loadError) {
-      if ((loadError as Error).name !== "AbortError") {
-        setError((loadError as Error).message || "Could not open the shared file.");
-      }
-    } finally {
-      if (!signal?.aborted) setIsLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
-    const controller = new AbortController();
-    loadNotes(controller.signal);
-    return () => controller.abort();
-  }, [loadNotes]);
-
-  useEffect(() => {
-    if (!isLoading) inputRef.current?.focus({ preventScroll: true });
-  }, [isLoading]);
+    if (!isLoading || notes.length > 0) inputRef.current?.focus({ preventScroll: true });
+  }, [isLoading, notes.length]);
 
   const submitNote = async () => {
     const trimmedMessage = message.trim();
     if (!trimmedMessage || isSubmitting) return;
 
-    setError("");
+    setSubmissionError("");
     setConfirmation("");
     setIsSubmitting(true);
 
@@ -77,13 +60,13 @@ export const TerminalScratchpad: FC = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data?.error || "Your note could not be saved.");
 
-      setNotes((currentNotes) => [data.note, ...currentNotes].slice(0, 50));
+      onNoteCreated(data.note as ScratchpadNote);
       setMessage("");
       setWebsite("");
       setConfirmation("Added to Shared Notes");
       window.setTimeout(() => setConfirmation(""), 2600);
     } catch (submitError) {
-      setError((submitError as Error).message || "Your note could not be saved.");
+      setSubmissionError((submitError as Error).message || "Your note could not be saved.");
     } finally {
       setIsSubmitting(false);
       inputRef.current?.focus({ preventScroll: true });
@@ -101,6 +84,8 @@ export const TerminalScratchpad: FC = () => {
       submitNote();
     }
   };
+
+  const error = submissionError || loadError;
 
   return (
     <section className="notes-app flex h-full min-h-0 text-[#1d1d1f] dark:text-[#f5f5f7]">
@@ -129,7 +114,7 @@ export const TerminalScratchpad: FC = () => {
 
         <button
           type="button"
-          onClick={() => loadNotes()}
+          onClick={() => onRefresh()}
           disabled={isLoading}
           className="mt-auto flex items-center gap-2 rounded-lg px-3 py-2 text-left text-[12px] text-[#6e6e73] transition-colors hover:bg-black/5 disabled:cursor-wait disabled:opacity-50 dark:text-[#a1a1a6] dark:hover:bg-white/5"
         >
@@ -145,7 +130,7 @@ export const TerminalScratchpad: FC = () => {
           </span>
           <button
             type="button"
-            onClick={() => loadNotes()}
+            onClick={() => onRefresh()}
             disabled={isLoading}
             className="grid h-7 w-7 place-items-center rounded-full text-[15px] text-[#8c6500] disabled:opacity-50 dark:text-[#ffcc00]"
             aria-label="Refresh notes"
@@ -166,7 +151,7 @@ export const TerminalScratchpad: FC = () => {
               </p>
             </header>
 
-            {isLoading
+            {isLoading && notes.length === 0
               ? <div className="flex items-center justify-center py-16 text-[13px] text-[#8e8e93]">
                   <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-[#e5a700] dark:bg-[#ffcc00]" />
                   Syncing shared notes…
@@ -285,7 +270,8 @@ export const TerminalScratchpad: FC = () => {
       <style jsx>{`
         .notes-app {
           background: #f4f3ef;
-          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, system-ui, sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, system-ui,
+            sans-serif;
         }
 
         :global(.dark) .notes-app {

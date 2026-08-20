@@ -84,20 +84,46 @@ const SURPRISE_HOLD_MS = 9000;
 // "Components" = visually contained UI blocks: cards, panels, terminals,
 // nav/footer. We don't treat raw text (h1, p) as a blocker - those are content,
 // and the message can fall in the gaps between glyphs without reading as overlap.
-const BLOCKER_SELECTORS = [
-  "header",
-  "footer",
-  "main img",
-  "main button",
-  '[class*="terminal-window"]',
-  '[class*="rounded-xl"]',
-  '[class*="rounded-2xl"]',
-  '[class*="rounded-3xl"]',
-  '[class*="rounded-[18px]"]',
-  '[class*="rounded-[24px]"]',
-  ".ambient-message",
-  ".ambient-surprise",
-].join(", ");
+/*
+ * What counts as occupied space.
+ *
+ * This used to be a list of class-name probes ("rounded-xl", "terminal-window",
+ * ...), which went stale the moment a section was restyled — the v2 cards use
+ * token-driven radii and matched none of them, so messages landed straight on
+ * top of them. Deciding from computed style instead means a redesign cannot
+ * quietly break it.
+ *
+ * An element occupies space if it paints something (a fill, a border, a shadow,
+ * or it is media) or if it carries text of its own. Layout wrappers are skipped
+ * by width: anything spanning nearly the viewport is scaffolding, not content,
+ * and treating it as a blocker would leave nowhere to put anything.
+ */
+const WRAPPER_WIDTH_RATIO = 0.92;
+const MIN_BLOCKER_PX = 8;
+
+const AMBIENT_OWN = ".ambient-message, .ambient-surprise";
+
+const isTransparent = (color: string) =>
+  !color || color === "transparent" || /rgba\(.*,\s*0\s*\)$/.test(color);
+
+const paintsSomething = (el: Element, style: CSSStyleDeclaration) => {
+  if (/^(IMG|SVG|CANVAS|VIDEO|PICTURE|IFRAME)$/.test(el.tagName)) return true;
+  if (!isTransparent(style.backgroundColor)) return true;
+  if (style.backgroundImage !== "none") return true;
+  if (style.boxShadow !== "none") return true;
+  return (
+    parseFloat(style.borderTopWidth) > 0 ||
+    parseFloat(style.borderRightWidth) > 0 ||
+    parseFloat(style.borderBottomWidth) > 0 ||
+    parseFloat(style.borderLeftWidth) > 0
+  );
+};
+
+/** Direct text only, so a wrapper of element children is not itself a blocker. */
+const carriesText = (el: Element) =>
+  Array.from(el.childNodes).some(
+    (node) => node.nodeType === Node.TEXT_NODE && (node.nodeValue ?? "").trim().length > 0
+  );
 
 const PADDING_PX = 12;
 const MAX_POSITION_ATTEMPTS = 40;
@@ -130,10 +156,30 @@ const estimateMessageBox = (text: string) => ({
   height: LINE_HEIGHT_PX + 6,
 });
 
-const collectBlockerRects = () =>
-  Array.from(document.querySelectorAll(BLOCKER_SELECTORS))
-    .map((el) => el.getBoundingClientRect())
-    .filter((r) => r.width > 8 && r.height > 8);
+const collectBlockerRects = (sectionEl: HTMLElement) => {
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const rects: DOMRect[] = [];
+
+  // Scoped to the section the message will sit in: that is the only band it can
+  // be placed in, and walking the whole page would mean a getComputedStyle call
+  // per element for thousands of elements.
+  sectionEl.querySelectorAll<HTMLElement>("*").forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    if (rect.width < MIN_BLOCKER_PX || rect.height < MIN_BLOCKER_PX) return;
+    if (rect.bottom < 0 || rect.top > viewportHeight) return;
+    if (rect.width > viewportWidth * WRAPPER_WIDTH_RATIO) return;
+    if (el.closest(AMBIENT_OWN)) return;
+
+    const style = window.getComputedStyle(el);
+    if (style.visibility === "hidden" || style.display === "none" || style.opacity === "0") return;
+    if (!paintsSomething(el, style) && !carriesText(el)) return;
+
+    rects.push(rect);
+  });
+
+  return rects;
+};
 
 const getActiveSection = () => {
   if (typeof window === "undefined") return null;
@@ -172,7 +218,7 @@ const findCleanPosition = (text: string, section: AmbientSection) => {
   const sectionEl = document.querySelector<HTMLElement>(section.selector);
   if (!sectionEl) return null;
 
-  const blockers = collectBlockerRects();
+  const blockers = collectBlockerRects(sectionEl);
   const { width: w, height: h } = estimateMessageBox(text);
   const ih = window.innerHeight;
   const iw = window.innerWidth;
@@ -219,9 +265,10 @@ const findCleanPosition = (text: string, section: AmbientSection) => {
     }
   }
 
-  const fallbackLeft = fallbackLefts[0] ?? 8;
-  const fallbackTop = fallbackTops[0] ?? topMin;
-  return toDocumentPosition(fallbackLeft, fallbackTop);
+  // Nothing clean anywhere in this band. Returning null makes the caller wait
+  // and try again, which is the whole point — the previous code fell back to
+  // placing the message regardless, right on top of whatever was there.
+  return null;
 };
 
 export const AmbientMessages: FC = () => {

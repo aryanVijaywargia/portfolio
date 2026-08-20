@@ -11,6 +11,15 @@ import { usePortfolioMode } from "components/_stores/portfolio-mode-context";
 import type { CodeGroupProps } from "components/typography/code";
 import { pickRandomStationIndex, RADIO_STATIONS } from "lib/music/radio-stations";
 import type { MusicRequestKind, RadioStation } from "lib/music/radio-stations";
+import type { ScratchpadNote } from "lib/scratchpad";
+
+/**
+ * Opening level for the radio, as a fraction of system volume.
+ *
+ * A third is audible on speakers without being punishing on headphones; the
+ * `volume <0-100>` command inside the radio overrides it at any time.
+ */
+const RADIO_DEFAULT_VOLUME = 0.35;
 
 const SnakeGame = dynamic(() => import("./snake-game").then((mod) => mod.SnakeGame), {
   ssr: false,
@@ -40,10 +49,20 @@ const Code = dynamic(() => import("components/typography/code").then((mod) => mo
 
 type InteractiveTerminalProps = {
   code?: string | string[];
+  initialScratchpadNotes: ScratchpadNote[] | null;
   language: CodeGroupProps["language"];
 };
 
-export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, language }) => {
+type ScratchpadLoadOptions = {
+  quiet?: boolean;
+  signal?: AbortSignal;
+};
+
+export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
+  code,
+  initialScratchpadNotes,
+  language,
+}) => {
   const [mode, setMode] = useState<
     | "terminal"
     | "editor"
@@ -62,13 +81,58 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
   const [skipTerminalIntroOnce, setSkipTerminalIntroOnce] = useState(false);
   const [editorCode, setEditorCode] = useState<string | string[] | null>(code ?? null);
   const [musicStationIndex, setMusicStationIndex] = useState(0);
+  const [scratchpadNotes, setScratchpadNotes] = useState<ScratchpadNote[]>(
+    initialScratchpadNotes ?? []
+  );
+  const [isScratchpadLoading, setIsScratchpadLoading] = useState(initialScratchpadNotes === null);
+  const [scratchpadLoadError, setScratchpadLoadError] = useState("");
   const musicAudioRef = useRef<HTMLAudioElement | null>(null);
+  /** Set once, so re-entering the radio does not undo the listener's volume. */
+  const radioVolumeInitialisedRef = useRef(false);
   const triggerChatbot = useChatbot((state) => state.triggerChatbot);
   const requestChatbot = useChatbot((state) => state.requestChatbot);
   const clearTrigger = useChatbot((state) => state.clearTrigger);
   const closeChat = useChatbot((state) => state.closeChat);
   const { trackAchievementEvent } = useAchievementActions();
   const { activateBatman } = usePortfolioMode();
+
+  const loadScratchpadNotes = useCallback(
+    async ({ quiet = false, signal }: ScratchpadLoadOptions = {}) => {
+      if (!quiet) {
+        setScratchpadLoadError("");
+        setIsScratchpadLoading(true);
+      }
+
+      try {
+        const response = await fetch("/api/scratchpad", { signal });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data?.error || "Could not open the shared file.");
+
+        setScratchpadNotes(Array.isArray(data.notes) ? data.notes : []);
+        setScratchpadLoadError("");
+      } catch (loadError) {
+        if ((loadError as Error).name !== "AbortError" && !quiet) {
+          setScratchpadLoadError((loadError as Error).message || "Could not open the shared file.");
+        }
+      } finally {
+        if (!quiet && !signal?.aborted) setIsScratchpadLoading(false);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    loadScratchpadNotes({
+      quiet: initialScratchpadNotes !== null,
+      signal: controller.signal,
+    });
+    return () => controller.abort();
+  }, [initialScratchpadNotes, loadScratchpadNotes]);
+
+  const handleScratchpadNoteCreated = useCallback((note: ScratchpadNote) => {
+    setScratchpadNotes((currentNotes) => [note, ...currentNotes].slice(0, 50));
+  }, []);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -148,7 +212,14 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
     const station = RADIO_STATIONS[stationIndex];
     if (!audio) return station;
 
-    audio.volume = 1;
+    // Only the first entry sets a level. It used to be pinned to 1 on every
+    // entry, so a live stream opened at full system output with no warning —
+    // painful on headphones. Later entries leave whatever `volume <0-100>`
+    // was last set to, so the listener's choice is not overridden.
+    if (!radioVolumeInitialisedRef.current) {
+      audio.volume = RADIO_DEFAULT_VOLUME;
+      radioVolumeInitialisedRef.current = true;
+    }
     audio.muted = false;
     if (audio.src !== station.streamUrl) {
       audio.src = station.streamUrl;
@@ -363,7 +434,13 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         onExit={handleExitRadio}
       />
     : mode === "scratchpad"
-    ? <TerminalScratchpad />
+    ? <TerminalScratchpad
+        notes={scratchpadNotes}
+        isLoading={isScratchpadLoading}
+        loadError={scratchpadLoadError}
+        onRefresh={loadScratchpadNotes}
+        onNoteCreated={handleScratchpadNoteCreated}
+      />
     : mode === "editor"
     ? <div className="scrollbar-none h-full overflow-auto p-3">
         <Code
@@ -664,7 +741,6 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({ code, langua
         :global(.dark) .notes-titlebar {
           background: rgba(24, 24, 27, 0.96);
         }
-
       `}</style>
     </motion.figure>
   );
