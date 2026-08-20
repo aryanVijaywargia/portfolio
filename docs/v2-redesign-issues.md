@@ -609,3 +609,39 @@ missed. Longhands only when overriding a rule that relies on any other
 Checked the other `background:` overrides in the v2 layer (terminal chrome,
 traffic lights, scrollbars, the page ground): none of those targets use
 `background-clip: text`, so this was the only one affected.
+
+## The hero stack, as marks rather than a table (64)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 64 | The hero listed the stack as a bordered four-cell grid | done | Replaced with the v1 shape: mark plus name in a row, monochrome at rest, each mark taking its brand colour on hover. |
+
+No logos were fetched. The marks are the same `@react-icons/all-files/si/*`
+glyphs the v1 hero already uses — single-path SVGs that paint in
+`currentColor`, so they are "masked" by construction: one `color` drives the
+whole row, and no network request, remote asset or CSP exception is involved.
+
+Both designs now read the same list. `V2_HERO.stack` points at `HERO.tech`
+rather than repeating four strings, so the two heroes cannot drift apart. Each
+entry gained a `brand` hex from simple-icons — the same source as the glyphs —
+which the v1 row ignores; v1 stays monochrome on hover as before, verified
+unchanged.
+
+| state | mark | label |
+|---|------|-------|
+| rest | `--v2-fg-3` | `--v2-fg-3` |
+| hover | `var(--tech-brand)` | `--v2-fg` |
+
+The brand hex rides on the `li` as `--tech-brand`, so one utility
+(`group-hover:text-[var(--tech-brand)]`) serves all four rather than a class
+per language.
+
+Note: reading the hovered colour immediately after the pointer lands returns
+the *pre-transition* value — `transition-colors` is still running, and
+`getComputedStyle` reports the animated value, not the target. The first read
+said grey with `:hover` already true; a second read a moment later gave
+`rgb(0 173 216)`. Measure hover states after the transition, not during.
+
+The row scrolls sideways instead of wrapping, breaking the gutter the way the
+project rail does: at 375 it is 379px inside a 375px box, scrolling within
+itself with no page-level overflow.
