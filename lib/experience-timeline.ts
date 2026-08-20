@@ -47,14 +47,25 @@ export const DEFAULT_COMPANY_ID = COMPANIES_BY_RECENCY[0]?.id ?? "";
 
 type YearMarker = { year: number; left: number; showLabel: boolean };
 
-/** Vertical year gridlines; labels are thinned to every other year. */
+/**
+ * How much of the right end belongs to the "now" marker, as a percentage of
+ * the plot. A year label inside it would print on top of the word.
+ */
+const NOW_LABEL_ZONE = 8;
+
+/**
+ * Vertical year gridlines; labels are thinned to every other year, and dropped
+ * where "now" already sits. The line itself is always drawn — it is the axis
+ * that has to stay even, not the labels.
+ */
 export const buildYearMarkers = (): YearMarker[] => {
   const first = new Date(`${EXPERIENCE_JOURNEY.timelineStart}T00:00:00`).getUTCFullYear();
   const last = new Date(`${EXPERIENCE_JOURNEY.timelineEnd}T00:00:00`).getUTCFullYear();
 
   return Array.from({ length: last - first + 1 }, (_, index) => {
     const year = first + index;
-    return { year, left: percentFor(`${year}-01-01`), showLabel: year % 2 === 0 };
+    const left = percentFor(`${year}-01-01`);
+    return { year, left, showLabel: year % 2 === 0 && left <= 100 - NOW_LABEL_ZONE };
   }).filter((marker) => marker.left >= 0 && marker.left <= 100);
 };
 
