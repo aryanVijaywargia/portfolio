@@ -12,10 +12,13 @@ const MS_PER_MINUTE = 60_000;
 
 export type TypingPassage = {
   id: string;
-  /** A short label for the passage, shown while typing. */
-  title: string;
   text: string;
 };
+
+/** Test lengths, in seconds. */
+export const TYPING_DURATIONS = [15, 30, 60] as const;
+
+export type TypingDuration = typeof TYPING_DURATIONS[number];
 
 /**
  * Medium-to-hard passages: mixed case, punctuation, digits and apostrophes,
@@ -28,35 +31,30 @@ export type TypingPassage = {
 export const TYPING_PASSAGES: TypingPassage[] = [
   {
     id: "durability",
-    title: "durability",
     text:
       "A durable execution engine does not remember what happened; it remembers what was decided. " +
       "Replay the log, skip the effects you already applied, and the crash you feared becomes a pause you slept through.",
   },
   {
     id: "tail-latency",
-    title: "tail latency",
     text:
       "Latency is a distribution, not a number. The p50 flatters you, the p99 tells the truth, " +
       "and the p99.9 is where your users live when the cache goes cold. Measure the tail, or the tail will measure you.",
   },
   {
     id: "search",
-    title: "search",
     text:
       "Search is mostly a spelling problem. Users type 'kubernets', 'postgress', and 'recieve', " +
       "then blame the index when nothing comes back. A good analyzer forgives them quietly, and logs what it forgave.",
   },
   {
     id: "deletes",
-    title: "deletes",
     text:
       "The best deploy I ever shipped removed 1,400 lines and added none. Nobody noticed on Monday, " +
       "the graphs got boring by Wednesday, and by Friday the on-call phone had finally stopped ringing at 3 a.m.",
   },
   {
     id: "consensus",
-    title: "consensus",
     text:
       "Every distributed system is a disagreement about what time it is. Clocks drift, packets arrive " +
       "out of order, and two nodes will swear they were both the leader. You pick which lie you can live with.",
@@ -148,11 +146,41 @@ export const scoreRun = ({
 };
 
 /**
- * A passage other than the one just typed, so retrying is a fresh test rather
- * than a memory exercise.
+ * A passage other than the one just used, so the text does not repeat itself
+ * back to back.
  */
-export const pickPassage = (excludeId?: string): TypingPassage => {
+const pickPassage = (excludeId?: string): TypingPassage => {
   const pool = TYPING_PASSAGES.filter((passage) => passage.id !== excludeId);
   const candidates = pool.length > 0 ? pool : TYPING_PASSAGES;
   return candidates[Math.floor(Math.random() * candidates.length)];
+};
+
+/**
+ * Faster than anyone reading this will type. Used only to size the stream, and
+ * generous on purpose: a timed test that runs out of words mid-run is a far
+ * worse failure than a few hundred characters nobody reaches.
+ */
+const CEILING_WPM = 260;
+
+/**
+ * Enough text that the clock always runs out first.
+ *
+ * A timed test cannot be one fixed passage - it has to keep going until the
+ * timer stops it - so passages are chained into a stream long enough to outlast
+ * the duration at a pace no one will hit.
+ */
+export const buildTypingStream = (durationSeconds: number): string => {
+  const charsNeeded = (CEILING_WPM * CHARS_PER_WORD * durationSeconds) / 60;
+  const parts: string[] = [];
+  let length = 0;
+  let previousId: string | undefined;
+
+  while (length < charsNeeded) {
+    const passage = pickPassage(previousId);
+    previousId = passage.id;
+    parts.push(passage.text);
+    length += passage.text.length + 1;
+  }
+
+  return parts.join(" ");
 };

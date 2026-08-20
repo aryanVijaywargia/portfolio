@@ -1,7 +1,49 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
-import { countCorrect, pickPassage, scoreRun, wpmOf, type TypingPassage, type TypingScore } from "lib/typing-test";
+import { FC, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
+import { buildTypingStream, countCorrect, scoreRun, TYPING_DURATIONS, wpmOf, type TypingDuration, type TypingScore } from "lib/typing-test";
 
 const BEST_WPM_STORAGE_KEY = "typingTestBestWpm";
+
+const DEFAULT_DURATION: TypingDuration = 30;
+
+/**
+ * Type and line geometry, fixed rather than responsive.
+ *
+ * The test only runs on a real keyboard at >=1024px, so the panel is always the
+ * maximised terminal, and pinning the numbers makes every piece of layout maths
+ * below - which line the caret is on, how far to scroll - exact instead of
+ * measured.
+ */
+const FONT_SIZE = 24;
+const LINE_HEIGHT = 44;
+const VISIBLE_LINES = 3;
+
+/**
+ * The caret is sized and placed off the line grid, not off the character it
+ * sits before. A glyph's measured box changes with the font that happens to be
+ * resolved at that moment - it measured 18px before the monospace face settled
+ * and 28px after - which showed up as a caret that changed height on the first
+ * keystroke.
+ */
+const CARET_HEIGHT = 30;
+const CARET_TOP_INSET = (LINE_HEIGHT - CARET_HEIGHT) / 2;
+
+/** Drives the countdown and the per-second consistency samples. */
+const TICK_MS = 100;
+
+/** The caret holds still while typing and only blinks once the reader stops. */
+const IDLE_AFTER_MS = 1000;
+
+const PROGRESS_CELLS = 28;
+
+/**
+ * The passage is dim until it is typed, then bright. The gap between the two is
+ * what tells the reader where they are, so it is deliberately wide.
+ */
+const CHAR_PENDING = "text-[#5C5F66]";
+const CHAR_CORRECT = "text-[#E8E8E3]";
+const CHAR_WRONG = "text-[#F48771] underline decoration-[#F48771] decoration-2 underline-offset-4";
+
+const ACCENT = "#4EC9B0";
 
 /**
  * Reading the best score can throw in private-browsing modes, and a throw here
@@ -32,40 +74,38 @@ type Outcome = {
   isNewBest: boolean;
 };
 
+type CaretBox = { left: number; line: number };
+
 type TypingTestProps = {
   onExit: () => void;
 };
 
 const KEY_HINT_CLASS = "text-[#D4D4D4]";
 
-/**
- * The caret is its own zero-width element rather than a left border on the
- * character it sits before: `animate-blink` fades opacity, so riding on the
- * character would blink the letter out along with the caret.
- */
-const Caret: FC = () => (
-  <span aria-hidden="true" className="relative inline-block w-0 align-baseline">
-    <span className="animate-blink absolute -left-px bottom-[-0.2em] top-[-0.05em] border-l-2 border-[#4EC9B0]" />
-  </span>
-);
+const CAPTION_CLASS = "text-[10px] uppercase tracking-[0.18em] text-[#6B6E75]";
 
-const Stat: FC<{ label: string; value: string; muted?: boolean }> = ({ label, value, muted }) => (
-  <div>
-    <div className="text-[11px] uppercase tracking-[0.1em] text-gray-500">{label}</div>
-    <div className={`mt-1 text-lg ${muted ? "text-gray-400" : "text-[#D4D4D4]"}`}>{value}</div>
+/** A label-and-value row, aligned on a character grid the way a shell would. */
+const OutputRow: FC<{ label: string; children: ReactNode }> = ({ label, children }) => (
+  <div className="leading-[1.9]">
+    <span className="inline-block w-[13ch] text-[#6B6E75]">{label}</span>
+    <span className="text-[#E8E8E3]">{children}</span>
   </div>
 );
 
 export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
-  const [passage, setPassage] = useState<TypingPassage>(() => pickPassage());
+  const [duration, setDuration] = useState<TypingDuration>(DEFAULT_DURATION);
+  const [stream, setStream] = useState(() => buildTypingStream(DEFAULT_DURATION));
   const [typed, setTyped] = useState("");
   const [elapsedMs, setElapsedMs] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
+  const [caret, setCaret] = useState<CaretBox | null>(null);
+  const [isIdle, setIsIdle] = useState(true);
+  const [isFocused, setIsFocused] = useState(true);
 
   // The key handler is registered once, so everything it reads lives in a ref.
-  // Re-registering on every keystroke would be a listener swap per character.
-  const passageRef = useRef(passage);
+  const streamRef = useRef(stream);
+  const durationRef = useRef<TypingDuration>(duration);
   const typedRef = useRef("");
   const startedAtRef = useRef<number | null>(null);
   const isFinishedRef = useRef(false);
@@ -75,7 +115,7 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
   const lastSampledLengthRef = useRef(0);
   const bestWpmRef = useRef<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isFocused, setIsFocused] = useState(true);
+  const wordsRef = useRef<HTMLDivElement>(null);
 
   const focusInput = useCallback(() => {
     inputRef.current?.focus({ preventScroll: true });
@@ -87,9 +127,11 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
     bestWpmRef.current = readBestWpm();
   }, []);
 
-  const restart = useCallback(() => {
-    const next = pickPassage(passageRef.current.id);
-    passageRef.current = next;
+  const restart = useCallback((nextDuration: TypingDuration = durationRef.current) => {
+    const nextStream = buildTypingStream(nextDuration);
+
+    durationRef.current = nextDuration;
+    streamRef.current = nextStream;
     typedRef.current = "";
     startedAtRef.current = null;
     isFinishedRef.current = false;
@@ -98,7 +140,8 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
     perSecondCharsRef.current = [];
     lastSampledLengthRef.current = 0;
 
-    setPassage(next);
+    setDuration(nextDuration);
+    setStream(nextStream);
     setTyped("");
     setElapsedMs(0);
     setIsRunning(false);
@@ -108,12 +151,12 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
 
   const finish = useCallback(() => {
     const startedAt = startedAtRef.current;
-    if (startedAt === null) return;
+    if (startedAt === null || isFinishedRef.current) return;
 
     isFinishedRef.current = true;
     const runElapsedMs = Date.now() - startedAt;
     const score = scoreRun({
-      target: passageRef.current.text,
+      target: streamRef.current,
       typed: typedRef.current,
       elapsedMs: runElapsedMs,
       keystrokes: keystrokesRef.current,
@@ -165,13 +208,14 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
       setIsRunning(true);
     }
 
-    const target = passageRef.current.text;
+    const target = streamRef.current;
     keystrokesRef.current += 1;
     if (event.key !== target[typedRef.current.length]) keystrokeErrorsRef.current += 1;
 
     typedRef.current += event.key;
     setTyped(typedRef.current);
 
+    // Only a safety net: the clock is what normally ends a timed run.
     if (typedRef.current.length >= target.length) finish();
   }, [finish, restart]);
 
@@ -193,23 +237,43 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
     return () => window.removeEventListener("keydown", handleEscape, true);
   }, [onExit]);
 
-  // One second-long tick drives both the clock and the consistency samples, so
-  // the two can never disagree about how long the run has been going.
+  // One tick drives the countdown and the consistency samples, so the two can
+  // never disagree about how long the run has been going.
   useEffect(() => {
     if (!isRunning) return undefined;
 
     const intervalId = window.setInterval(
       () => {
-        const typedLength = typedRef.current.length;
-        perSecondCharsRef.current.push(typedLength - lastSampledLengthRef.current);
-        lastSampledLengthRef.current = typedLength;
-        setElapsedMs(Date.now() - (startedAtRef.current ?? Date.now()));
+        const startedAt = startedAtRef.current;
+        if (startedAt === null) return;
+
+        const elapsed = Date.now() - startedAt;
+        setElapsedMs(elapsed);
+
+        // Catches up whole seconds one at a time, so a throttled tab records the
+        // idle seconds it missed rather than folding them into one huge sample.
+        const wholeSeconds = Math.floor(elapsed / 1000);
+        while (perSecondCharsRef.current.length < wholeSeconds) {
+          const typedLength = typedRef.current.length;
+          perSecondCharsRef.current.push(typedLength - lastSampledLengthRef.current);
+          lastSampledLengthRef.current = typedLength;
+        }
+
+        if (elapsed >= durationRef.current * 1000) finish();
       },
-      1000
+      TICK_MS
     );
 
     return () => window.clearInterval(intervalId);
-  }, [isRunning]);
+  }, [finish, isRunning]);
+
+  // The caret blinks only once the reader has stopped; while typing it holds
+  // still, so it reads as a position rather than as a flashing distraction.
+  useEffect(() => {
+    setIsIdle(false);
+    const timeoutId = window.setTimeout(() => setIsIdle(true), IDLE_AFTER_MS);
+    return () => window.clearTimeout(timeoutId);
+  }, [typed]);
 
   /**
    * Words with their trailing space kept attached, each laid out as one block,
@@ -217,16 +281,47 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
    */
   const words = useMemo(() => {
     let start = 0;
-    return (passage.text.match(/\S+\s*/g) ?? []).map((text) => {
+    return (stream.match(/\S+\s*/g) ?? []).map((text) => {
       const word = { text, start };
       start += text.length;
       return word;
     });
-  }, [passage.text]);
+  }, [stream]);
 
-  const correctSoFar = countCorrect(passage.text, typed);
+  // Measured rather than computed: where a character lands depends on where the
+  // line broke, which only layout knows.
+  useLayoutEffect(() => {
+    const container = wordsRef.current;
+    const target = container?.querySelector<HTMLElement>("[data-caret]");
+    if (!container || !target) return;
+
+    const containerBox = container.getBoundingClientRect();
+    const targetBox = target.getBoundingClientRect();
+    setCaret({
+      left: targetBox.left - containerBox.left,
+      // Which line the character landed on. Rounding is safe: a glyph sits
+      // roughly centred in its line box, nowhere near the next line's grid slot.
+      line: Math.round((targetBox.top - containerBox.top) / LINE_HEIGHT),
+    });
+  }, [typed, stream]);
+
+  // Keep the caret on the second of the three visible lines once it gets there,
+  // so there is always a line of context behind and a line of runway ahead.
+  const lineOffset = caret ? Math.max(0, (caret.line - 1) * LINE_HEIGHT) : 0;
+
+  const correctSoFar = countCorrect(stream, typed);
   const liveWpm = elapsedMs >= 1000 ? wpmOf(correctSoFar, elapsedMs) : null;
-  const progress = Math.round((typed.length / passage.text.length) * 100);
+  const liveAccuracy =
+    keystrokesRef.current === 0
+      ? 100
+      : ((keystrokesRef.current - keystrokeErrorsRef.current) / keystrokesRef.current) * 100;
+
+  const remainingSeconds = outcome ? 0 : Math.max(0, Math.ceil(duration - elapsedMs / 1000));
+  const filledCells = Math.round(
+    (Math.min(elapsedMs / 1000, duration) / duration) * PROGRESS_CELLS
+  );
+
+  const status = outcome ? "done" : isRunning ? "typing" : "ready";
 
   return (
     <div className="relative flex h-full flex-col overflow-y-auto bg-[#1e1e1e] p-4 font-mono text-sm text-[#D4D4D4] dark:bg-transparent">
@@ -253,89 +348,161 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
         spellCheck={false}
         className="absolute inset-0 z-10 h-full w-full cursor-default bg-transparent p-0 opacity-0 outline-none"
       />
+
       <div className="flex items-baseline justify-between gap-4">
-        <span className="text-cyan-400">$ ./typetest --passage {passage.title}</span>
-        <span className="text-xs text-gray-500">
-          {outcome ? "done" : isRunning ? `${progress}%` : "ready"}
-        </span>
+        <span className="text-[#4EC9B0]">$ ./typetest --time {duration}</span>
+        <span className="text-xs text-[#6B6E75]">{status}</span>
       </div>
 
-      {outcome
-        ? <div className="mt-6 flex flex-1 flex-col justify-center">
-            <div className="flex items-end gap-10">
-              <div>
-                <div className="text-[11px] uppercase tracking-[0.1em] text-gray-500">wpm</div>
-                <div className="text-5xl font-bold leading-none text-[#4EC9B0]">
-                  {outcome.score.wpm}
+      <div className="flex flex-1 flex-col justify-center">
+        {/* Kept in the layout while running so the passage never shifts under
+            the reader mid-word. */}
+        <div className={`flex items-center gap-2 ${isRunning ? "invisible" : ""}`}>
+          <span className={CAPTION_CLASS}>time</span>
+          {TYPING_DURATIONS.map((option) => (
+            <button
+              key={option}
+              type="button"
+              // Above the capture field, which covers everything else.
+              className={`relative z-20 px-1 text-xs ${
+                option === duration ? "text-[#4EC9B0]" : "text-[#6B6E75] hover:text-[#D4D4D4]"
+              }`}
+              onClick={() => restart(option)}
+            >
+              {option === duration ? `[${option}]` : ` ${option} `}
+            </button>
+          ))}
+        </div>
+
+        {outcome
+          ? <div className="mt-6">
+              <div className="flex items-end gap-10">
+                <div>
+                  <div className={CAPTION_CLASS}>wpm</div>
+                  <div className="text-[52px] font-bold leading-none text-[#4EC9B0]">
+                    {outcome.score.wpm}
+                  </div>
+                </div>
+                <div className="pb-1">
+                  <div className={CAPTION_CLASS}>accuracy</div>
+                  <div className="text-[30px] font-bold leading-none text-[#E8E8E3]">
+                    {outcome.score.accuracy.toFixed(1)}%
+                  </div>
                 </div>
               </div>
-              <div className="pb-1">
-                <div className="text-[11px] uppercase tracking-[0.1em] text-gray-500">accuracy</div>
-                <div className="text-3xl font-bold leading-none text-[#D4D4D4]">
-                  {outcome.score.accuracy.toFixed(1)}%
-                </div>
+
+              <div className="mt-7 text-[13px]">
+                <OutputRow label="raw">{outcome.score.rawWpm} wpm</OutputRow>
+                <OutputRow label="consistency">{Math.round(outcome.score.consistency)}%</OutputRow>
+                <OutputRow label="time">{duration}s</OutputRow>
+                <OutputRow label="characters">
+                  {outcome.score.correctChars} correct
+                  <span className="text-[#6B6E75]"> / </span>
+                  {outcome.score.incorrectChars} wrong
+                </OutputRow>
+                <OutputRow label="best">
+                  {outcome.best} wpm
+                  {outcome.isNewBest && <span className="text-[#4EC9B0]"> {"<-"} new</span>}
+                </OutputRow>
               </div>
-            </div>
 
-            <div className="mt-6 grid max-w-lg grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
-              <Stat label="raw" value={`${outcome.score.rawWpm}`} muted />
-              <Stat label="consistency" value={`${Math.round(outcome.score.consistency)}%`} muted />
-              <Stat label="time" value={`${outcome.score.seconds.toFixed(1)}s`} muted />
-              <Stat
-                label="chars"
-                value={`${outcome.score.correctChars}/${passage.text.length}`}
-                muted
-              />
-            </div>
-
-            <div className="mt-6 text-xs text-gray-500">
-              {outcome.score.incorrectChars === 0
-                ? "Clean run - not a character out of place."
-                : `${outcome.score.incorrectChars} character${
-                    outcome.score.incorrectChars === 1 ? "" : "s"
-                  } left wrong.`}{" "}
-              {outcome.isNewBest
-                ? <span className="text-[#4EC9B0]">New personal best.</span>
-                : <span>Personal best: {outcome.best} wpm.</span>}
-            </div>
-          </div>
-        : <div className="mt-6 flex flex-1 flex-col justify-center">
-            <p className="max-w-3xl select-none whitespace-pre-wrap text-base leading-[1.9] sm:text-lg">
-              {words.map((word) => (
-                <span key={word.start} className="inline-block whitespace-pre">
-                  {[...word.text].map((char, offset) => {
-                    const index = word.start + offset;
-                    const state =
-                      index >= typed.length
-                        ? "text-gray-600"
-                        : typed[index] === char
-                        ? "text-[#D4D4D4]"
-                        : "text-[#F48771] underline decoration-[#F48771]";
-
-                    return (
-                      <span key={index} className={state}>
-                        {index === typed.length && <Caret />}
-                        {char}
-                      </span>
-                    );
-                  })}
+              <div className="mt-6 text-[13px] text-[#4EC9B0]">
+                ${" "}
+                <span aria-hidden="true" className="animate-blink">
+                  &#9608;
                 </span>
-              ))}
-            </p>
-
-            <div className="mt-8 flex gap-8">
-              <Stat label="wpm" value={liveWpm === null ? "--" : `${liveWpm}`} />
-              <Stat label="elapsed" value={`${Math.floor(elapsedMs / 1000)}s`} muted />
-              <Stat
-                label="errors"
-                value={`${typed.length - correctSoFar}`}
-                muted={typed.length === correctSoFar}
-              />
+              </div>
             </div>
-          </div>}
+          : <>
+              <div className="mt-5 flex items-center gap-4">
+                <span
+                  className="w-[3ch] text-[40px] font-bold leading-none text-[#4EC9B0]"
+                  aria-label={`${remainingSeconds} seconds left`}
+                >
+                  {remainingSeconds}
+                </span>
+                <span className="text-[13px] tracking-[0.1em]">
+                  <span className="text-[#6B6E75]">[</span>
+                  <span className="text-[#4EC9B0]">{"#".repeat(filledCells)}</span>
+                  <span className="text-[#3A3D42]">{".".repeat(PROGRESS_CELLS - filledCells)}</span>
+                  <span className="text-[#6B6E75]">]</span>
+                </span>
+              </div>
 
-      <div className="mt-6 border-t border-gray-700 pt-3">
-        <div className="flex flex-wrap gap-4 text-xs text-gray-500">
+              {/* Three lines, clipped, scrolling up a line at a time - the whole
+                stream is rendered, and only the window onto it moves. */}
+              <div
+                className="relative mt-6 overflow-hidden"
+                style={{ height: LINE_HEIGHT * VISIBLE_LINES }}
+              >
+                <div
+                  ref={wordsRef}
+                  className="absolute inset-x-0 top-0 select-none transition-transform duration-150 ease-out"
+                  style={{
+                    transform: `translateY(${-lineOffset}px)`,
+                    fontSize: FONT_SIZE,
+                    lineHeight: `${LINE_HEIGHT}px`,
+                  }}
+                >
+                  {caret && (
+                    <span
+                      aria-hidden="true"
+                      className={`absolute w-[3px] rounded-full ${isIdle ? "animate-pulse" : ""}`}
+                      style={{
+                        left: caret.left,
+                        top: caret.line * LINE_HEIGHT + CARET_TOP_INSET,
+                        height: CARET_HEIGHT,
+                        backgroundColor: ACCENT,
+                        // Slides between characters rather than jumping, which is
+                        // what makes it readable as a position at speed.
+                        transition: "left 90ms linear, top 90ms linear",
+                      }}
+                    />
+                  )}
+
+                  {words.map((word) => (
+                    <span key={word.start} className="inline-block whitespace-pre">
+                      {[...word.text].map((char, offset) => {
+                        const index = word.start + offset;
+                        const state =
+                          index >= typed.length
+                            ? CHAR_PENDING
+                            : typed[index] === char
+                            ? CHAR_CORRECT
+                            : CHAR_WRONG;
+
+                        return (
+                          <span
+                            key={index}
+                            className={state}
+                            {...(index === typed.length ? { "data-caret": "true" } : {})}
+                          >
+                            {char}
+                          </span>
+                        );
+                      })}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-6 flex gap-8 text-[13px]">
+                <span>
+                  <span className={CAPTION_CLASS}>wpm </span>
+                  <span className="text-[#E8E8E3]">{liveWpm === null ? "--" : liveWpm}</span>
+                </span>
+                <span>
+                  <span className={CAPTION_CLASS}>acc </span>
+                  <span className="text-[#E8E8E3]">
+                    {isRunning ? `${Math.round(liveAccuracy)}%` : "--"}
+                  </span>
+                </span>
+              </div>
+            </>}
+      </div>
+
+      <div className="mt-6 border-t border-[#2F3237] pt-3">
+        <div className="flex flex-wrap gap-4 text-xs text-[#6B6E75]">
           {!isFocused
             ? <span className="text-[#F48771]">Click here to focus</span>
             : !outcome && !isRunning && <span>Start typing to begin the clock</span>}
@@ -345,7 +512,7 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
             </span>
           )}
           <span>
-            <span className={KEY_HINT_CLASS}>Tab</span> New passage
+            <span className={KEY_HINT_CLASS}>Tab</span> Restart
           </span>
           <span>
             <span className={KEY_HINT_CLASS}>Ctrl/Opt+Backspace</span> Delete word
