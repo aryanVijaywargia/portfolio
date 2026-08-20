@@ -28,6 +28,10 @@ module.exports = {
     extend: {
       screens: {
         xs: { max: "639px" },
+        // v2 design breakpoints (pages/signal, pages/graphite)
+        v2sm: "680px",
+        v2md: "1000px",
+        v2lg: "1100px",
       },
       keyframes: {
         slide: {
