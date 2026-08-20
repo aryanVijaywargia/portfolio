@@ -16,11 +16,38 @@ const KIND_LABELS: Record<ExperienceKind, string> = {
 
 const YEAR_MARKERS = buildYearMarkers();
 
-const GANTT_HEIGHT = 300;
 const AXIS_HEIGHT = 32;
 const BAR_HEIGHT = 30;
-const LABEL_WIDTH = 108;
-const PLOT_OFFSET = 116;
+
+/**
+ * Distance between one row's top and the next.
+ *
+ * A fixed pitch anchored near the top, rather than the rows spread down the
+ * plot: the design leaves the slack under the oldest row, and the rhythm has
+ * to stay put as rows are added instead of tightening on every new one. Same
+ * scheme the v1 timeline uses.
+ */
+const ROW_PITCH = 46;
+const FIRST_ROW_TOP = 6;
+
+/**
+ * Room for the row labels, and where the plot starts.
+ *
+ * Wider than the design's 116 because the design's own data stops at
+ * "Omdena"; ours reads "Omdena × EnergyHub", which the narrower gutter cut to
+ * an ellipsis. The column is sized to the longest label the content actually
+ * carries.
+ */
+const LABEL_WIDTH = 144;
+const PLOT_OFFSET = 152;
+
+const trackTop = (index: number) => FIRST_ROW_TOP + index * ROW_PITCH;
+
+/** Tall enough for every row plus the axis, never shorter than the design. */
+const GANTT_HEIGHT = Math.max(
+  300,
+  trackTop(COMPANIES_BY_RECENCY.length - 1) + BAR_HEIGHT + AXIS_HEIGHT + 24
+);
 
 /**
  * Colour for a company row, keyed by its position in the recency ordering.
@@ -31,11 +58,11 @@ const companyColor = (index: number) => `rgb(var(--v2-co-${Math.min(index, 4)}))
 const companyColorSoft = (index: number, alpha: number) =>
   `rgb(var(--v2-co-${Math.min(index, 4)}) / ${alpha})`;
 
-const trackTop = (index: number, count: number) => {
-  const usable = GANTT_HEIGHT - AXIS_HEIGHT;
-  const rowHeight = usable / Math.max(count, 1);
-  return index * rowHeight + (rowHeight - BAR_HEIGHT) / 2;
-};
+/**
+ * Fill for a bar that is not the selected one. Enough of its own colour to
+ * read as that row's block at a glance, rather than an empty outline.
+ */
+const INACTIVE_BAR_ALPHA = 0.2;
 
 /* ---------- achievement card ---------- */
 
@@ -206,15 +233,13 @@ export const V2Experience: FC = () => {
     else if (overshootLeft > 0) strip.scrollTo({ left: tab.offsetLeft - margin });
   }, [selectedId]);
 
-  const count = COMPANIES_BY_RECENCY.length;
-
   return (
     <V2Section id="experience" label="Experience">
       <V2SectionHeader section="experience" />
       <V2Heading className="mb-8">{V2_SECTION_HEADINGS.experience}</V2Heading>
 
       <div className="rounded-[var(--v2-radius-md)] border border-[rgb(var(--v2-line))] bg-[rgb(var(--v2-surface))]">
-        {/* The Gantt needs ~700px before its bars are readable, so below v2lg
+        {/* The Gantt needs ~520px before its bars are readable, so below v2lg
             the whole timeline column is replaced by a strip of company tabs —
             same selection, a shape that survives a phone. */}
         <div
@@ -258,7 +283,13 @@ export const V2Experience: FC = () => {
             </span>
 
             <div className="v2-scrollbar-none overflow-x-auto pb-3.5">
-              <div className="relative min-w-[700px]" style={{ height: GANTT_HEIGHT }}>
+              {/* The design carries a 700px floor here, but the column it
+                  sits in is only ~570px at every desktop width — so the plot
+                  was always cut on the right, hiding "now" and the end of the
+                  current role behind a scrollbar that is deliberately
+                  invisible. The floor is the width below which the bars stop
+                  being readable, not the width the design was drawn at. */}
+              <div className="relative min-w-[520px]" style={{ height: GANTT_HEIGHT }}>
                 {/* Row labels, aligned to the bar tracks. */}
                 {COMPANIES_BY_RECENCY.map((company, index) => (
                   <span
@@ -272,7 +303,7 @@ export const V2Experience: FC = () => {
                       width: LABEL_WIDTH,
                       height: BAR_HEIGHT,
                       lineHeight: `${BAR_HEIGHT}px`,
-                      top: trackTop(index, count),
+                      top: trackTop(index),
                     }}
                   >
                     {company.timeline.rowLabel}
@@ -323,15 +354,21 @@ export const V2Experience: FC = () => {
                         type="button"
                         onClick={() => handleSelect(company.id)}
                         aria-pressed={isActive}
+                        // The plot is narrower than the design's, so a long
+                        // bar label ends in an ellipsis; the full text is here
+                        // on hover, in the row list below, and in the panel.
+                        title={`${company.company} · ${company.timeline.barLabel}`}
                         className="absolute flex items-center overflow-hidden rounded-[var(--v2-radius-sm)] border px-2.5 text-left text-xs font-semibold transition-all duration-200"
                         style={{
                           left: `${left}%`,
                           width: `${width}%`,
                           minWidth: 28,
                           height: BAR_HEIGHT,
-                          top: trackTop(index, count),
+                          top: trackTop(index),
                           borderColor: companyColor(index),
-                          background: isActive ? companyColor(index) : "transparent",
+                          background: isActive
+                            ? companyColor(index)
+                            : companyColorSoft(index, INACTIVE_BAR_ALPHA),
                           color: isActive ? "rgb(var(--v2-btn-fg))" : "rgb(var(--v2-fg))",
                           zIndex: isActive ? 2 : 1,
                         }}
