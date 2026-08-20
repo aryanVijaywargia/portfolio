@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import { buildTypingStream, countCorrect, scoreRun, TYPING_DURATIONS, wpmOf, type TypingDuration, type TypingScore } from "lib/typing-test";
+import { TERMINAL_CONFIG } from "./terminal-commands";
 
 const BEST_WPM_STORAGE_KEY = "typingTestBestWpm";
 
@@ -10,30 +11,25 @@ const DEFAULT_DURATION: TypingDuration = 30;
  *
  * The test only runs on a real keyboard at >=1024px, so the panel is always the
  * maximised terminal, and pinning the numbers makes every piece of layout maths
- * below - which line the caret is on, how far to scroll - exact instead of
+ * below - which line the cursor is on, how far to scroll - exact instead of
  * measured.
  */
-const FONT_SIZE = 24;
-const LINE_HEIGHT = 44;
+const FONT_SIZE = 20;
+const LINE_HEIGHT = 34;
 const VISIBLE_LINES = 3;
 
 /**
- * The caret is sized and placed off the line grid, not off the character it
- * sits before. A glyph's measured box changes with the font that happens to be
- * resolved at that moment - it measured 18px before the monospace face settled
- * and 28px after - which showed up as a caret that changed height on the first
- * keystroke.
+ * A terminal cursor is a filled cell, not a hairline. It sits behind the
+ * character and the character inverts on top of it, which is both what a shell
+ * looks like and the most visible position marker available.
  */
-const CARET_HEIGHT = 30;
-const CARET_TOP_INSET = (LINE_HEIGHT - CARET_HEIGHT) / 2;
+const CURSOR_HEIGHT = 26;
+const CURSOR_TOP_INSET = (LINE_HEIGHT - CURSOR_HEIGHT) / 2;
 
 /** Drives the countdown and the per-second consistency samples. */
 const TICK_MS = 100;
 
-/** The caret holds still while typing and only blinks once the reader stops. */
-const IDLE_AFTER_MS = 1000;
-
-const PROGRESS_CELLS = 28;
+const PROGRESS_CELLS = 30;
 
 /**
  * The passage is dim until it is typed, then bright. The gap between the two is
@@ -42,8 +38,36 @@ const PROGRESS_CELLS = 28;
 const CHAR_PENDING = "text-[#5C5F66]";
 const CHAR_CORRECT = "text-[#E8E8E3]";
 const CHAR_WRONG = "text-[#F48771] underline decoration-[#F48771] decoration-2 underline-offset-4";
+/** Sits on the cursor block, so it is dark against the accent in either theme. */
+const CHAR_UNDER_CURSOR = "relative z-10 text-[#0E1B18]";
 
 const ACCENT = "#4EC9B0";
+const RULE = "border-[#2A2D33]";
+const DIM = "text-[#6B6E75]";
+
+/** A 3x5 block font, for printing the final score the way a CLI would. */
+const BLOCK_DIGITS: Record<string, string[]> = {
+  "0": ["███", "█ █", "█ █", "█ █", "███"],
+  "1": [" █ ", "██ ", " █ ", " █ ", "███"],
+  "2": ["███", "  █", "███", "█  ", "███"],
+  "3": ["███", "  █", "███", "  █", "███"],
+  "4": ["█ █", "█ █", "███", "  █", "  █"],
+  "5": ["███", "█  ", "███", "  █", "███"],
+  "6": ["███", "█  ", "███", "█ █", "███"],
+  "7": ["███", "  █", "  █", "  █", "  █"],
+  "8": ["███", "█ █", "███", "█ █", "███"],
+  "9": ["███", "█ █", "███", "  █", "███"],
+};
+
+const BLOCK_ROWS = 5;
+
+const printBlockNumber = (value: number): string =>
+  Array.from({ length: BLOCK_ROWS }, (_, row) =>
+    String(value)
+      .split("")
+      .map((digit) => BLOCK_DIGITS[digit]?.[row] ?? "   ")
+      .join(" ")
+  ).join("\n");
 
 /**
  * Reading the best score can throw in private-browsing modes, and a throw here
@@ -74,22 +98,25 @@ type Outcome = {
   isNewBest: boolean;
 };
 
-type CaretBox = { left: number; line: number };
+type CursorBox = { left: number; line: number; width: number };
 
 type TypingTestProps = {
   onExit: () => void;
 };
 
-const KEY_HINT_CLASS = "text-[#D4D4D4]";
-
-const CAPTION_CLASS = "text-[10px] uppercase tracking-[0.18em] text-[#6B6E75]";
-
 /** A label-and-value row, aligned on a character grid the way a shell would. */
 const OutputRow: FC<{ label: string; children: ReactNode }> = ({ label, children }) => (
   <div className="leading-[1.9]">
-    <span className="inline-block w-[13ch] text-[#6B6E75]">{label}</span>
+    <span className={`inline-block w-[14ch] ${DIM}`}>{label}</span>
     <span className="text-[#E8E8E3]">{children}</span>
   </div>
+);
+
+const StatusKey: FC<{ combo: string; children: ReactNode }> = ({ combo, children }) => (
+  <span>
+    <span className="text-[#E8E8E3]">{combo}</span>
+    <span className={DIM}> {children}</span>
+  </span>
 );
 
 export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
@@ -99,9 +126,10 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
   const [elapsedMs, setElapsedMs] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
-  const [caret, setCaret] = useState<CaretBox | null>(null);
-  const [isIdle, setIsIdle] = useState(true);
+  const [cursor, setCursor] = useState<CursorBox | null>(null);
   const [isFocused, setIsFocused] = useState(true);
+  /** Bumped once webfonts settle, to re-measure against the real metrics. */
+  const [fontTick, setFontTick] = useState(0);
 
   // The key handler is registered once, so everything it reads lives in a ref.
   const streamRef = useRef(stream);
@@ -125,6 +153,16 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
 
   useEffect(() => {
     bestWpmRef.current = readBestWpm();
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    document.fonts?.ready.then(() => {
+      if (!cancelled) setFontTick((tick) => tick + 1);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const restart = useCallback((nextDuration: TypingDuration = durationRef.current) => {
@@ -201,6 +239,18 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
     // Arrows, function keys and the like all report multi-character names.
     if (event.key.length !== 1) return;
 
+    // Digits pick the length, but only before the clock starts - once a run is
+    // under way they are just characters. No passage begins with a digit, so
+    // nothing typeable is lost.
+    if (startedAtRef.current === null) {
+      const chosen = TYPING_DURATIONS[Number.parseInt(event.key, 10) - 1];
+      if (chosen) {
+        event.preventDefault();
+        restart(chosen);
+        return;
+      }
+    }
+
     event.preventDefault();
 
     if (startedAtRef.current === null) {
@@ -267,18 +317,6 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
     return () => window.clearInterval(intervalId);
   }, [finish, isRunning]);
 
-  // The caret blinks only once the reader has stopped; while typing it holds
-  // still, so it reads as a position rather than as a flashing distraction.
-  useEffect(() => {
-    setIsIdle(false);
-    const timeoutId = window.setTimeout(() => setIsIdle(true), IDLE_AFTER_MS);
-    return () => window.clearTimeout(timeoutId);
-  }, [typed]);
-
-  /**
-   * Words with their trailing space kept attached, each laid out as one block,
-   * so a line only ever breaks between words and never inside one.
-   */
   const words = useMemo(
     () =>
       // `start` comes from the regex engine rather than a running total. The
@@ -302,17 +340,18 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
 
     const containerBox = container.getBoundingClientRect();
     const targetBox = target.getBoundingClientRect();
-    setCaret({
+    setCursor({
       left: targetBox.left - containerBox.left,
       // Which line the character landed on. Rounding is safe: a glyph sits
       // roughly centred in its line box, nowhere near the next line's grid slot.
       line: Math.round((targetBox.top - containerBox.top) / LINE_HEIGHT),
+      width: targetBox.width,
     });
-  }, [typed, stream]);
+  }, [typed, stream, fontTick]);
 
-  // Keep the caret on the second of the three visible lines once it gets there,
+  // Keep the cursor on the second of the three visible lines once it gets there,
   // so there is always a line of context behind and a line of runway ahead.
-  const lineOffset = caret ? Math.max(0, (caret.line - 1) * LINE_HEIGHT) : 0;
+  const lineOffset = cursor ? Math.max(0, (cursor.line - 1) * LINE_HEIGHT) : 0;
 
   const correctSoFar = countCorrect(stream, typed);
   const liveWpm = elapsedMs >= 1000 ? wpmOf(correctSoFar, elapsedMs) : null;
@@ -326,10 +365,8 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
     (Math.min(elapsedMs / 1000, duration) / duration) * PROGRESS_CELLS
   );
 
-  const status = outcome ? "done" : isRunning ? "typing" : "ready";
-
   return (
-    <div className="relative flex h-full flex-col overflow-y-auto bg-[#1e1e1e] p-4 font-mono text-sm text-[#D4D4D4] dark:bg-transparent">
+    <div className="relative flex h-full flex-col overflow-y-auto bg-[#1e1e1e] p-4 font-mono text-[13px] text-[#D4D4D4] dark:bg-transparent">
       {/* Keystrokes are read off a real focused field rather than off `window`.
           A page with nothing focused looks idle to the browser and to keyboard
           extensions - Vimium treats it as normal mode and eats `j`, `f`, `d`
@@ -354,55 +391,51 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
         className="absolute inset-0 z-10 h-full w-full cursor-default bg-transparent p-0 opacity-0 outline-none"
       />
 
-      <div className="flex items-baseline justify-between gap-4">
-        <span className="text-[#4EC9B0]">$ ./typetest --time {duration}</span>
-        <span className="text-xs text-[#6B6E75]">{status}</span>
+      {/* The command that started this, echoed exactly as the shell prints it. */}
+      <div>
+        <span className="text-[#4EC9B0]">{TERMINAL_CONFIG.prompt}</span>{" "}
+        <span className="text-[#D4D4D4]">typetest --time {duration}</span>
       </div>
 
-      <div className="flex flex-1 flex-col justify-center">
-        {/* Kept in the layout while running so the passage never shifts under
-            the reader mid-word. */}
-        <div className={`flex items-center gap-2 ${isRunning ? "invisible" : ""}`}>
-          <span className={CAPTION_CLASS}>time</span>
-          {TYPING_DURATIONS.map((option) => (
+      <div className="mt-4 flex-1">
+        {/* Kept in the layout while running so nothing shifts mid-word. */}
+        <div className={`flex items-center gap-3 ${isRunning ? "invisible" : ""}`}>
+          <span className={DIM}>length</span>
+          {TYPING_DURATIONS.map((option, index) => (
             <button
               key={option}
               type="button"
               // Above the capture field, which covers everything else.
-              className={`relative z-20 px-1 text-xs ${
-                option === duration ? "text-[#4EC9B0]" : "text-[#6B6E75] hover:text-[#D4D4D4]"
+              className={`relative z-20 ${
+                option === duration ? "text-[#4EC9B0]" : `${DIM} hover:text-[#D4D4D4]`
               }`}
               onClick={() => restart(option)}
             >
-              {option === duration ? `[${option}]` : ` ${option} `}
+              {option === duration ? `[${option}s]` : ` ${option}s `}
             </button>
           ))}
+          <span className={`${DIM} ml-2`}>press 1-{TYPING_DURATIONS.length}</span>
         </div>
 
         {outcome
-          ? <div className="mt-6">
-              <div className="flex items-end gap-10">
+          ? <div className="mt-5">
+              <div className="flex items-center gap-5">
+                <pre aria-hidden="true" className="text-[13px] leading-[13px] text-[#4EC9B0]">
+                  {printBlockNumber(outcome.score.wpm)}
+                </pre>
                 <div>
-                  <div className={CAPTION_CLASS}>wpm</div>
-                  <div className="text-[52px] font-bold leading-none text-[#4EC9B0]">
-                    {outcome.score.wpm}
-                  </div>
-                </div>
-                <div className="pb-1">
-                  <div className={CAPTION_CLASS}>accuracy</div>
-                  <div className="text-[30px] font-bold leading-none text-[#E8E8E3]">
-                    {outcome.score.accuracy.toFixed(1)}%
-                  </div>
+                  <div className="text-[#E8E8E3]">{outcome.score.wpm} wpm</div>
+                  <div className={DIM}>{outcome.score.accuracy.toFixed(1)}% accuracy</div>
                 </div>
               </div>
 
-              <div className="mt-7 text-[13px]">
+              <div className="mt-5">
                 <OutputRow label="raw">{outcome.score.rawWpm} wpm</OutputRow>
                 <OutputRow label="consistency">{Math.round(outcome.score.consistency)}%</OutputRow>
                 <OutputRow label="time">{duration}s</OutputRow>
                 <OutputRow label="characters">
                   {outcome.score.correctChars} correct
-                  <span className="text-[#6B6E75]"> / </span>
+                  <span className={DIM}> / </span>
                   {outcome.score.incorrectChars} wrong
                 </OutputRow>
                 <OutputRow label="best">
@@ -411,33 +444,24 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
                 </OutputRow>
               </div>
 
-              <div className="mt-6 text-[13px] text-[#4EC9B0]">
-                ${" "}
-                <span aria-hidden="true" className="animate-blink">
+              {/* A fresh prompt, the way a finished program leaves one. */}
+              <div className="mt-5">
+                <span className="text-[#4EC9B0]">{TERMINAL_CONFIG.prompt}</span>{" "}
+                <span aria-hidden="true" className="animate-blink text-[#D4D4D4]">
                   &#9608;
                 </span>
               </div>
             </div>
           : <>
-              <div className="mt-5 flex items-center gap-4">
-                <span
-                  className="w-[3ch] text-[40px] font-bold leading-none text-[#4EC9B0]"
-                  aria-label={`${remainingSeconds} seconds left`}
-                >
-                  {remainingSeconds}
-                </span>
-                <span className="text-[13px] tracking-[0.1em]">
-                  <span className="text-[#6B6E75]">[</span>
-                  <span className="text-[#4EC9B0]">{"#".repeat(filledCells)}</span>
-                  <span className="text-[#3A3D42]">{".".repeat(PROGRESS_CELLS - filledCells)}</span>
-                  <span className="text-[#6B6E75]">]</span>
-                </span>
-              </div>
+              <div className={`mt-4 border-t ${RULE}`} />
 
               {/* Three lines, clipped, scrolling up a line at a time - the whole
                 stream is rendered, and only the window onto it moves. */}
               <div
-                className="relative mt-6 overflow-hidden"
+                // Exactly three lines tall, with no padding: the box is the
+                // clip region, so padding here would reveal the next line
+                // rather than leave a margin. Breathing room goes outside it.
+                className="relative my-4 overflow-hidden"
                 style={{ height: LINE_HEIGHT * VISIBLE_LINES }}
               >
                 <div
@@ -449,17 +473,18 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
                     lineHeight: `${LINE_HEIGHT}px`,
                   }}
                 >
-                  {caret && (
+                  {cursor && (
                     <span
                       aria-hidden="true"
-                      className={`absolute w-[3px] rounded-full ${isIdle ? "animate-pulse" : ""}`}
+                      className="absolute z-0"
                       style={{
-                        left: caret.left,
-                        top: caret.line * LINE_HEIGHT + CARET_TOP_INSET,
-                        height: CARET_HEIGHT,
+                        left: cursor.left,
+                        top: cursor.line * LINE_HEIGHT + CURSOR_TOP_INSET,
+                        width: cursor.width,
+                        height: CURSOR_HEIGHT,
                         backgroundColor: ACCENT,
-                        // Slides between characters rather than jumping, which is
-                        // what makes it readable as a position at speed.
+                        // Slides between cells rather than jumping, which is what
+                        // makes it readable as a position at speed.
                         transition: "left 90ms linear, top 90ms linear",
                       }}
                     />
@@ -469,18 +494,20 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
                     <span key={word.start} className="inline-block whitespace-pre">
                       {[...word.text].map((char, offset) => {
                         const index = word.start + offset;
-                        const state =
-                          index >= typed.length
-                            ? CHAR_PENDING
-                            : typed[index] === char
-                            ? CHAR_CORRECT
-                            : CHAR_WRONG;
+                        const isCursor = index === typed.length;
+                        const state = isCursor
+                          ? CHAR_UNDER_CURSOR
+                          : index > typed.length
+                          ? CHAR_PENDING
+                          : typed[index] === char
+                          ? CHAR_CORRECT
+                          : CHAR_WRONG;
 
                         return (
                           <span
                             key={index}
                             className={state}
-                            {...(index === typed.length ? { "data-caret": "true" } : {})}
+                            {...(isCursor ? { "data-caret": "true" } : {})}
                           >
                             {char}
                           </span>
@@ -491,13 +518,22 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
                 </div>
               </div>
 
-              <div className="mt-6 flex gap-8 text-[13px]">
+              <div className={`border-t ${RULE}`} />
+
+              <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-1">
+                <span className="text-[#4EC9B0]">{String(remainingSeconds).padStart(2, "0")}s</span>
                 <span>
-                  <span className={CAPTION_CLASS}>wpm </span>
+                  <span className={DIM}>[</span>
+                  <span className="text-[#4EC9B0]">{"#".repeat(filledCells)}</span>
+                  <span className="text-[#3A3D42]">{".".repeat(PROGRESS_CELLS - filledCells)}</span>
+                  <span className={DIM}>]</span>
+                </span>
+                <span>
+                  <span className={DIM}>wpm </span>
                   <span className="text-[#E8E8E3]">{liveWpm === null ? "--" : liveWpm}</span>
                 </span>
                 <span>
-                  <span className={CAPTION_CLASS}>acc </span>
+                  <span className={DIM}>acc </span>
                   <span className="text-[#E8E8E3]">
                     {isRunning ? `${Math.round(liveAccuracy)}%` : "--"}
                   </span>
@@ -506,26 +542,15 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
             </>}
       </div>
 
-      <div className="mt-6 border-t border-[#2F3237] pt-3">
-        <div className="flex flex-wrap gap-4 text-xs text-[#6B6E75]">
-          {!isFocused
-            ? <span className="text-[#F48771]">Click here to focus</span>
-            : !outcome && !isRunning && <span>Start typing to begin the clock</span>}
-          {outcome && (
-            <span>
-              <span className={KEY_HINT_CLASS}>Enter</span> Again
-            </span>
-          )}
-          <span>
-            <span className={KEY_HINT_CLASS}>Tab</span> Restart
-          </span>
-          <span>
-            <span className={KEY_HINT_CLASS}>Ctrl/Opt+Backspace</span> Delete word
-          </span>
-          <span>
-            <span className={KEY_HINT_CLASS}>Esc</span> Back to shell
-          </span>
-        </div>
+      {/* A status line, the way a full-screen terminal program keeps one. */}
+      <div className="-mx-4 -mb-4 mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 bg-[#2A2D33] px-4 py-2 text-[11px]">
+        {!isFocused
+          ? <span className="text-[#F48771]">click to focus</span>
+          : !outcome && !isRunning && <span className={DIM}>start typing to begin</span>}
+        {outcome && <StatusKey combo="enter">again</StatusKey>}
+        <StatusKey combo="tab">restart</StatusKey>
+        <StatusKey combo="ctrl+bksp">delete word</StatusKey>
+        <StatusKey combo="esc">quit</StatusKey>
       </div>
     </div>
   );
