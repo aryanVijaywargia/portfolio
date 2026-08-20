@@ -4,6 +4,7 @@ import { SOCIAL_ACCOUNTS } from "content/social-accounts";
 import { V2_SECTION_HEADINGS } from "content/v2";
 import { contactSchema, ContactStatus } from "lib/contact-schema";
 import { V2Heading, V2Section, V2SectionHeader } from "components/v2/primitives";
+import { V2ContactComposer } from "components/v2/sections/contact.composer";
 
 /** Editor-chrome text. Looks like a source comment; it is copy. */
 const IDLE_COMMENT = "// Waiting for connection...";
@@ -308,7 +309,13 @@ export const V2Contact: FC = () => (
     <V2SectionHeader section="contact" />
     <V2Heading className="mb-7">{V2_SECTION_HEADINGS.contact}</V2Heading>
 
-    <div className="grid grid-cols-1 items-stretch gap-6 v2md:grid-cols-[minmax(0,0.88fr)_minmax(0,1fr)]">
+    {/* Below v2sm the two windows stack into a tall column of nested chrome
+        — title bars, line numbers and a form, all inside boxes, at 375px wide.
+        The phone gets the composer instead; the windows return with the room
+        to hold them. */}
+    <V2ContactComposer className="v2sm:hidden" />
+
+    <div className="hidden grid-cols-1 items-stretch gap-6 v2sm:grid v2md:grid-cols-[minmax(0,0.88fr)_minmax(0,1fr)]">
       <ContactInfo />
       <ContactForm />
     </div>
