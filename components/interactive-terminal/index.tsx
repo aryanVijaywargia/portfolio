@@ -291,6 +291,20 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
     setIsTerminalMaximized(false);
   };
 
+  useEffect(() => {
+    if (mode !== "scratchpad" || !isTerminalMaximized) return undefined;
+
+    const handleEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setSkipTerminalIntroOnce(true);
+      setMode("terminal");
+      setIsTerminalMaximized(false);
+    };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [isTerminalMaximized, mode]);
+
   const handleExitIntroReel = () => {
     setSkipTerminalIntroOnce(true);
     setMode("terminal");
@@ -470,42 +484,64 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
       {mode === "scratchpad"
         ? <motion.header
             layout="position"
-            className="notes-titlebar relative flex h-11 shrink-0 items-center border-b border-black/10 px-3 dark:border-white/10"
+            className="notes-titlebar flex h-12 shrink-0 items-center justify-between gap-3 border-b border-black/10 px-3 dark:border-white/10 sm:px-4"
           >
-            <div className="z-10 flex items-center gap-2">
-              <button
-                onClick={handleClose}
-                className="traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f57]"
-                aria-label="Close notes"
+            <div className="flex min-w-0 items-center gap-2.5">
+              <span
+                aria-hidden="true"
+                className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[#ffcc00]/15 text-[#9a7100] dark:text-[#ffcc00]"
               >
                 <svg
-                  className="h-2 w-2 text-[#4a0002] opacity-0 group-hover:opacity-100"
-                  viewBox="0 0 12 12"
-                  fill="currentColor"
+                  className="h-4 w-4"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
                 >
-                  <path d="M6 4.586L9.293 1.293a1 1 0 111.414 1.414L7.414 6l3.293 3.293a1 1 0 01-1.414 1.414L6 7.414l-3.293 3.293a1 1 0 01-1.414-1.414L4.586 6 1.293 2.707a1 1 0 011.414-1.414L6 4.586z" />
+                  <path d="M6.25 5.75h7.5M6.25 9.75h7.5M6.25 13.75h4.5" />
                 </svg>
-              </button>
-              <button
-                onClick={handleClose}
-                className="traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#febc2e]"
-                aria-label="Minimize notes"
-              >
-                <span className="h-px w-2 bg-[#985700] opacity-0 group-hover:opacity-100" />
-              </button>
-              <button
-                onClick={handleClose}
-                className="traffic-light group flex h-3 w-3 items-center justify-center rounded-full bg-[#28c840]"
-                aria-label="Restore notes"
-              >
-                <span className="h-1.5 w-1.5 border border-[#006500] opacity-0 group-hover:opacity-100" />
-              </button>
+              </span>
+
+              <div className="min-w-0 leading-tight">
+                <p className="truncate text-[12px] font-semibold text-[#303034] dark:text-[#f2f2f4]">
+                  Shared Notes
+                </p>
+                <p className="hidden text-[10px] text-[#7c7c81] dark:text-[#8f8f95] sm:block">
+                  Public board · anonymous
+                </p>
+              </div>
             </div>
 
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <span className="select-none text-[12px] font-semibold text-[#454545] dark:text-[#d4d4d4]">
-                Shared Notes
+            <div className="flex shrink-0 items-center gap-2">
+              <span className="hidden items-center gap-1.5 text-[10px] font-medium text-[#7c7c81] dark:text-[#929298] md:flex">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#d89b00] dark:bg-[#ffcc00]" />
+                Live
               </span>
+
+              <button
+                type="button"
+                onClick={handleMinimizeTerminal}
+                className="group inline-flex h-8 items-center gap-1.5 rounded-lg border border-black/10 bg-white/55 px-2.5 text-[11px] font-medium text-[#515156] shadow-sm transition-colors hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d89b00]/60 dark:border-white/10 dark:bg-white/[0.06] dark:text-[#d5d5d8] dark:hover:bg-white/[0.1]"
+                aria-label="Back to terminal"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M6.5 3.5 2 8l4.5 4.5M2.5 8H14" />
+                </svg>
+                <span>Terminal</span>
+                <kbd className="ml-0.5 hidden rounded border border-black/10 bg-black/[0.04] px-1 py-0.5 font-sans text-[9px] font-normal text-[#85858a] dark:border-white/10 dark:bg-white/[0.05] dark:text-[#8f8f95] sm:inline">
+                  Esc
+                </kbd>
+              </button>
             </div>
           </motion.header>
         : /* macOS Window Title Bar */
@@ -703,7 +739,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
         }
 
         :global(.dark) .notes-titlebar {
-          background: rgba(45, 45, 47, 0.96);
+          background: rgba(24, 24, 27, 0.96);
         }
       `}</style>
     </motion.figure>
