@@ -545,3 +545,37 @@ that holds at the design's own 116px gutter too (171px) — so this is the
 column, not the label width. Fixing it properly means widening the timeline
 column against the design's grid; the full text is on the bar's `title`, in the
 row list, and in the panel.
+
+## About stack and the commit counter (60–62)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 60 | "click to shuffle" sat under the photo stack | done | Removed, along with its string in `content/v2`. |
+| 61 | The photos underneath read as grey slivers, not a stack | done | Every print carries a mount and a shadow, and the deck sits on a blank card leaning the other way — the treatment v1 uses. |
+| 62 | Commit count stepped in tenths ("1.1K+") | done | Thousands now step in halves: 1K, 1.5K, 2K. |
+
+What v1 does that v2 was missing:
+
+| | v1 | v2 before | v2 now |
+|---|-----|-----------|--------|
+| frame | `border-2`, gray-50/80 light, slate-600/80 dark | 1px `--v2-line-2` | `border-2`, `--v2-photo-frame` |
+| shadow | `shadow-lg` | none | soft two-layer drop |
+| bottom of the deck | `-rotate-6` gray card | none | `-rotate-6`, frame colour |
+| corner radius | `rounded-xl` | variant radius | variant radius (kept — signal is square by design) |
+
+`--v2-photo-frame` is defined per *mode*, not per variant: white at 0.22 on
+dark, white at 0.92 on light. A mount is a mount in either palette and only its
+lightness has to flip, so two rules cover all four combinations.
+
+The backdrop card is `z-index: 0`, not negative. The images stack above it at
+`length - index`; a negative index would drop it behind the section's own
+background, which is the same trap the image z-indices already carry a note
+about.
+
+`formatCount` steps: 1085 → "1K+", 1499 → "1K+", 1500 → "1.5K+", 2000 → "2K+",
+12300 → "12K+". Still floored, so the figure never overstates.
+
+Note: `getComputedStyle` reported the dark frame colour on a light page again —
+the `content-visibility` trap. Reading the custom property off the element that
+carries `data-v2` gives the true value; note that element is `body` on
+`/signal` and a wrapper `div` on `/graphite`.
