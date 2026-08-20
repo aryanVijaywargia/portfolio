@@ -943,3 +943,50 @@ that the automation `type` action sends `beforeinput`/`input` with no `keydown`
 at all - it uses `insertText`, so it cannot exercise a keydown-driven widget.
 Real presses of `S`, `e`, `z` against "Search" gave correct, correct, wrong,
 with the caret at 43px and accuracy 67%.
+
+## Typing test read as a web app, not a terminal (72)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 72 | The test looked like a separate app dropped into the window | done | Rebuilt the presentation as a program printing into the shell: echoed prompt, block cursor, character-grid output, status line. |
+
+What was giving it away, and what replaced it:
+
+| app tell | terminal instead |
+|----------|------------------|
+| 52px and 40px display numbers | everything at 13px, score printed in a 3x5 block font |
+| duration row as buttons with hover chrome | `length  15s  [30s]  60s`, plus `1`-`3` |
+| no sign of where the command came from | the shell's own prompt echoed: `visitor@aryancodes.com:~$ typetest --time 30` |
+| vertically centred, generous whitespace | output starts at the top, status line pinned at the bottom |
+| rounded sliding hairline caret | a filled cell with the character inverted on top of it |
+| footer of key hints | an inverse status bar, the way a full-screen TUI keeps one |
+
+The cursor is now a terminal cell: accent block behind the character, the
+character itself forced dark and lifted with `relative z-10` so it inverts on
+top. That is both what a shell looks like and more visible than the hairline it
+replaces, so it keeps solving the original "cannot see where I am". It no longer
+blinks - fading the block would leave a dark character on a dark panel, and a
+steady block is the more legible default anyway.
+
+Type dropped from 24px to 20px, line height 34px, since the block cursor carries
+the visibility that the larger type was compensating for.
+
+Digits pick the length, but only before the clock starts; after that they are
+just characters. No passage begins with a digit, so nothing typeable is lost.
+The flag in the echoed command line updates with the choice, which is where a
+reader would look to confirm it took.
+
+Note: the three-line window had its clip region padded (`py-3` on the box with
+`height: 3 * LINE_HEIGHT + 24`). Padding on a clip box does not leave a margin -
+it reveals the next line. A fourth line was showing through the bottom 12px. The
+box is now exactly `3 * LINE_HEIGHT` with the breathing room outside it.
+
+Note: `getBoundingClientRect` on the panel reports scaled values while the
+terminal's open/resize spring is still running, and the tab's zoom scales them
+again - 102px of computed height measured 66. Layout assertions here have to
+come from `getComputedStyle`, not from rects.
+
+Note: the status bar says `ctrl+bksp`, not `^w`. Ctrl+W is the readline idiom
+and was the first label written, but Chrome reserves it for closing the tab on
+Windows and Linux and will not let a page prevent it, so the binding cannot be
+taken and the label would have been a lie.
