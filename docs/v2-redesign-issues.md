@@ -424,3 +424,31 @@ Note: the reference also draws its cover art full-bleed at 118px with
 as one mono line in the footer instead of chips. Both were deliberately changed
 earlier — the grayscale threw away the artwork's own colour — and the shipped
 form has been reviewed since, so they were not reverted.
+
+## Card lean and the step controls (55)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 55 | Cards sat square and the step controls were text under the rail | done | Cards rest at an uneven lean and straighten under the pointer; the controls moved up beside the heading as square icon buttons. |
+
+The lean cycles `[-1.1, 0.7, -0.5, 1.2]` degrees rather than alternating evenly —
+an even alternation reads as a pattern instead of a stack of things set down.
+The rotation is on the rail item, not the card, so the card keeps its own hover
+transition for border and shadow, and `transform-origin: 50% 100%` makes a card
+pivot on the shelf rather than about its middle.
+
+Rail state moved to `components/v2/use-scroll-rail.ts`, because the controls no
+longer sit next to the track and both need the same state.
+
+Verified (both variants, 390 / 768 / 1440):
+
+- Rest tilts read back `-1.1 / 0.7 / -0.5`; hovering the middle card gives
+  `-1.1 / 0 / -0.5` with a −4px lift, and leaving restores `0.7`.
+- Controls: two 36×36 buttons on the heading's row, disabled when the set fits.
+- Rotation is not clipped: rail vertical overflow 0, with 5px above and 21px
+  below the leaning corners at every width. No page-level horizontal overflow.
+- `prefers-reduced-motion` drops both the lean and the travel.
+
+Note: the design reference HTML has no tilt at all — it is a plain three-column
+grid. The lean comes from the later renders, so the reference is not the
+authority on this one.
