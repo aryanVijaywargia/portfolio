@@ -682,3 +682,31 @@ Note: what the reference drops on a phone, and what this keeps —
 The form is not reachable below 680 any more: the phone's send path is the mail
 app. That is what the reference shows, but it is a functional change rather
 than a visual one, so it is called out rather than assumed settled.
+
+## Composer spacing (66)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 66 | The composer read cramped — the dashed underlines crowded the line below and the blocks sat too close | done | One 16px step, doubled to 32 between groups, and more leading in the sentence. |
+
+| | before | after |
+|---|--------|-------|
+| sentence leading | 1.45 (37.7px) | 1.6 (41.6px) |
+| heading → sentence | 28 | 32 |
+| sentence → hint | 26 | 32 |
+| hint → send | 12 | 16 |
+| send → subject block | 12 | 16 |
+| subject block → socials label | 26 | 32 |
+| socials label → links | 12 | 16 |
+
+Also: the cycling words carry 3px of bottom padding so the dashed rule sits off
+the glyphs; the send button is 66px tall with 20px sides; the subject preview
+runs at 1.8 leading; the social links are 13px, 24px apart.
+
+Note: the heading gap is `pt`, not `mt`. The heading's own 28px bottom margin is
+adjacent to the composer in normal flow, so a margin here collapses into it —
+`mt-1` measured 28px, unchanged. Padding does not collapse, and measured 32.
+
+The empty space under the block is not the composer's: `V2Section` is
+`min-h-[100svh]` with `justify-center`, so a short section sits centred in the
+viewport. Every section behaves that way.
