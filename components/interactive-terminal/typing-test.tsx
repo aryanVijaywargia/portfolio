@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { countCorrect, pickPassage, scoreRun, wpmOf, type TypingPassage, type TypingScore } from "lib/typing-test";
 
 const BEST_WPM_STORAGE_KEY = "typingTestBestWpm";
@@ -74,6 +74,14 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
   const perSecondCharsRef = useRef<number[]>([]);
   const lastSampledLengthRef = useRef(0);
   const bestWpmRef = useRef<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isFocused, setIsFocused] = useState(true);
+
+  const focusInput = useCallback(() => {
+    inputRef.current?.focus({ preventScroll: true });
+  }, []);
+
+  useEffect(focusInput, [focusInput]);
 
   useEffect(() => {
     bestWpmRef.current = readBestWpm();
@@ -95,7 +103,8 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
     setElapsedMs(0);
     setIsRunning(false);
     setOutcome(null);
-  }, []);
+    focusInput();
+  }, [focusInput]);
 
   const finish = useCallback(() => {
     const startedAt = startedAtRef.current;
@@ -124,13 +133,7 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
     setOutcome({ score, best: bestWpmRef.current ?? score.wpm, isNewBest });
   }, []);
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      onExit();
-      return;
-    }
-
+  const handleKeyDown = useCallback((event: ReactKeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Tab" || (isFinishedRef.current && event.key === "Enter")) {
       event.preventDefault();
       restart();
@@ -170,12 +173,25 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
     setTyped(typedRef.current);
 
     if (typedRef.current.length >= target.length) finish();
-  }, [finish, onExit, restart]);
+  }, [finish, restart]);
 
+  // Escape stays on the window rather than the field: it is the way out, and it
+  // has to work even when focus has wandered somewhere else on the page.
+  //
+  // Capture phase, because the capture path starts at the window: this runs
+  // before any document-level handler, including a keyboard extension binding
+  // Escape to leave its own insert mode. Inside a typing test, leaving the test
+  // is what Escape should do.
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      onExit();
+    };
+
+    window.addEventListener("keydown", handleEscape, true);
+    return () => window.removeEventListener("keydown", handleEscape, true);
+  }, [onExit]);
 
   // One second-long tick drives both the clock and the consistency samples, so
   // the two can never disagree about how long the run has been going.
@@ -213,7 +229,30 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
   const progress = Math.round((typed.length / passage.text.length) * 100);
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto bg-[#1e1e1e] p-4 font-mono text-sm text-[#D4D4D4] dark:bg-transparent">
+    <div className="relative flex h-full flex-col overflow-y-auto bg-[#1e1e1e] p-4 font-mono text-sm text-[#D4D4D4] dark:bg-transparent">
+      {/* Keystrokes are read off a real focused field rather than off `window`.
+          A page with nothing focused looks idle to the browser and to keyboard
+          extensions - Vimium treats it as normal mode and eats `j`, `f`, `d`
+          before the page sees them. Focus inside an editable field is the
+          signal that the reader is typing, which is why the shell's own input
+          has never had this problem. The field covers the panel so a click
+          anywhere puts focus back, and stays invisible because every character
+          key is handled and prevented rather than inserted. */}
+      <input
+        ref={inputRef}
+        type="text"
+        value=""
+        onChange={() => undefined}
+        onKeyDown={handleKeyDown}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        aria-label="Type the passage"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        className="absolute inset-0 z-10 h-full w-full cursor-default bg-transparent p-0 opacity-0 outline-none"
+      />
       <div className="flex items-baseline justify-between gap-4">
         <span className="text-cyan-400">$ ./typetest --passage {passage.title}</span>
         <span className="text-xs text-gray-500">
@@ -297,7 +336,9 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
 
       <div className="mt-6 border-t border-gray-700 pt-3">
         <div className="flex flex-wrap gap-4 text-xs text-gray-500">
-          {!outcome && !isRunning && <span>Start typing to begin the clock</span>}
+          {!isFocused
+            ? <span className="text-[#F48771]">Click here to focus</span>
+            : !outcome && !isRunning && <span>Start typing to begin the clock</span>}
           {outcome && (
             <span>
               <span className={KEY_HINT_CLASS}>Enter</span> Again
