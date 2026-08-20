@@ -742,3 +742,52 @@ on both routes.
 Note: `terminal.tsx` carries the same pattern on `outputLines`. It fires per
 command rather than per character, so it does not fight a scroll the same way;
 left alone.
+
+## Typing test in the terminal (68)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 68 | No typing test in the terminal | done | New `typetest` command: a monkeytype-style run over one medium-to-hard passage, scored on wpm, accuracy, raw, consistency. |
+
+Scoring lives in `lib/typing-test.ts`, rendering in
+`components/interactive-terminal/typing-test.tsx`, so the arithmetic that
+produces a wpm figure can be read without wading through spans.
+
+The metrics, and what each one is actually measuring:
+
+| metric | definition | why |
+|--------|------------|-----|
+| wpm | correct characters / 5 / minutes | the number people mean by "my wpm" |
+| raw | every character typed / 5 / minutes | the gap to wpm is what the mistakes cost |
+| accuracy | keystrokes right first time / all keystrokes | counts mistakes that were corrected, so backspacing is not free |
+| consistency | 1 − (stddev / mean) of the per-second pace | a coefficient of variation, so a fast typist is not punished for larger absolute swings |
+
+Gated behind the same media query as `game`
+(`min-width: 1024px and hover: hover and pointer: fine`) — a typing test on a
+soft keyboard measures the keyboard, not the typist. Below the gate `typetest`
+reports "command not found" and is absent from `help`, exactly as `game` does.
+`DESKTOP_GAME_HELP` became `DESKTOP_HELP` + `DESKTOP_COMMANDS` so the two share
+one gate rather than two.
+
+Note: passages must be ASCII. An em dash or a curly quote cannot be typed on a
+standard keyboard, so one in a passage would stall the run on that character
+forever.
+
+Note: the caret is its own zero-width absolutely-positioned element, not a left
+border on the character it precedes. `animate-blink` animates `opacity`, so the
+first version blinked the letter out along with the caret — the passage read
+" very distributed system" with the E missing every other half-second.
+
+Words are rendered as `inline-block` spans with their trailing space attached,
+so a line only ever breaks between words.
+
+Verified: 40 correct / 2 wrong / 156 pending spans with exactly one caret;
+Backspace 42 → 41, Ctrl+Backspace 41 → 30, Alt+Backspace 30 → 28; a clean run
+scored 198/198 chars at 100.0% accuracy and 99% consistency; Tab draws a
+different passage and resets, Enter re-runs, Esc returns to the shell; the best
+wpm persisted to localStorage and the "new personal best" line appeared only
+after a previous best was beaten.
+
+Note: per-keystroke cost measured 0–0.3ms, so re-rendering the passage on every
+character is not a problem. An apparent 740ms/char during testing was the
+automation pane throttling `setTimeout` in a background tab, not the component.
