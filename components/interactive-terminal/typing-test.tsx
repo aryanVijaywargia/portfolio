@@ -340,12 +340,21 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
 
     const containerBox = container.getBoundingClientRect();
     const targetBox = target.getBoundingClientRect();
+
+    // Rects come back multiplied by any transform on an ancestor, and the
+    // terminal opens on a spring that scales the whole panel. Measured during
+    // that animation a 12.05px cell reads as 8.14px, and the cursor keeps the
+    // wrong width until the next keystroke re-measures. Comparing the
+    // container's rect against its layout width recovers the scale, so the
+    // numbers below are in layout units whenever they are taken.
+    const scale = containerBox.width / (container.offsetWidth || containerBox.width) || 1;
+
     setCursor({
-      left: targetBox.left - containerBox.left,
+      left: (targetBox.left - containerBox.left) / scale,
       // Which line the character landed on. Rounding is safe: a glyph sits
       // roughly centred in its line box, nowhere near the next line's grid slot.
-      line: Math.round((targetBox.top - containerBox.top) / LINE_HEIGHT),
-      width: targetBox.width,
+      line: Math.round((targetBox.top - containerBox.top) / scale / LINE_HEIGHT),
+      width: targetBox.width / scale,
     });
   }, [typed, stream, fontTick]);
 
