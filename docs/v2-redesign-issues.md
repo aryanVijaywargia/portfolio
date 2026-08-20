@@ -791,3 +791,44 @@ after a previous best was beaten.
 Note: per-keystroke cost measured 0–0.3ms, so re-rendering the passage on every
 character is not a problem. An apparent 740ms/char during testing was the
 automation pane throttling `setTimeout` in a background tab, not the component.
+
+## Vimium hijacking keys in the typing test (69)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 69 | Vimium activated while typing in `typetest`, but never in the shell | done | Keystrokes now come off a real focused input instead of a `window` listener. |
+
+The test read keys with `window.addEventListener("keydown")` and nothing on the
+page was focused. To the browser — and to any keyboard extension — that page
+looks idle, so Vimium stayed in normal mode and claimed `j`, `f`, `d`, `/` and
+the rest before the page ever saw them. `preventDefault` cannot help: the
+extension listens at document capture, upstream of the page.
+
+The shell was never affected because it has always had a real `<input>` focused,
+which is exactly the signal an extension uses to switch to insert mode. The test
+now does the same: an editable `<input type="text">` covering the panel,
+transparent, focused on mount and after every restart. It stays empty because
+every character key is handled and prevented rather than inserted, so nothing is
+ever typed into it.
+
+| | before | after |
+|---|--------|-------|
+| `document.activeElement` while typing | `body` | `input[type=text]`, not readonly, not disabled |
+| extension mode | normal — keys hijacked | insert — keys pass through |
+
+Not `readOnly`: a read-only field reads as non-editable to some extensions,
+which would put us straight back in normal mode.
+
+Escape stays on the window, and in the **capture** phase. The capture path
+starts at the window, so it runs before any document-level handler — including
+Vimium's own Escape binding for leaving insert mode. Inside a typing test,
+Escape should leave the test. Verified against a handler that calls
+`stopImmediatePropagation` at document capture: the test still exits.
+
+A "Click here to focus" hint replaces the start hint whenever the field loses
+focus, so a stray click outside never looks like a broken test.
+
+Note: `document.hasFocus()` is false in the automation pane, and a document
+without focus fires no focus or blur events at all — `.focus()` and `.blur()`
+move `activeElement` silently. The focus wiring was verified by dispatching the
+`focusin`/`focusout` pair React actually delegates.
