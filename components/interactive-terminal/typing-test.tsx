@@ -279,14 +279,19 @@ export const TypingTest: FC<TypingTestProps> = ({ onExit }) => {
    * Words with their trailing space kept attached, each laid out as one block,
    * so a line only ever breaks between words and never inside one.
    */
-  const words = useMemo(() => {
-    let start = 0;
-    return (stream.match(/\S+\s*/g) ?? []).map((text) => {
-      const word = { text, start };
-      start += text.length;
-      return word;
-    });
-  }, [stream]);
+  const words = useMemo(
+    () =>
+      // `start` comes from the regex engine rather than a running total. The
+      // obvious version - capture the offset, then advance it - was folded by
+      // the production minifier into `total += text.length, { text, start: total }`,
+      // which advances first and reports every word one word-length too far.
+      // Nothing here depends on statement order, so there is nothing to fold.
+      [...stream.matchAll(/\S+\s*/g)].map((match) => ({
+        text: match[0],
+        start: match.index ?? 0,
+      })),
+    [stream]
+  );
 
   // Measured rather than computed: where a character lands depends on where the
   // line broke, which only layout knows.
