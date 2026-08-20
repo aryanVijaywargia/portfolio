@@ -475,3 +475,39 @@ something the skin introduced; fixed at the source, which fixes both.
 
 Note: `pages/resume.tsx:125` reports a pre-existing type error on a `description`
 property. It predates this work and is untouched.
+
+## Step controls drawn the way v1 draws them (58)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 58 | The step controls were boxed chips beside the heading, not v1's bare prev/next | done | Rebuilt to match `components/scroll-gallery.tsx`: borderless, lowercase, 14px, long arrows, sitting at either end below the rail. |
+
+What v1 does, and what the v2 controls now do:
+
+| | v1 gallery | v2 rail (now) |
+|---|---|---|
+| chrome | none — text and arrow | none |
+| case / size | lowercase, `text-sm` | lowercase, 14px |
+| arrow | `ArrowLong*` at `h-5 w-5` | same |
+| place | `absolute bottom-0`, `left-10` / `right-10` | `absolute bottom-0`, `left-0` / `right-0` |
+| below md | hidden | hidden below `v2md` |
+
+`left-0` rather than v1's `left-10` because the v2 rail breaks its own gutter
+(`-mx-[var(--v2-gutter)]` with the padding added back), so the wrapper's edges
+already sit on the content column — the first card's left edge and the last
+card's right edge.
+
+Colours come from the theme tokens, not v1's fixed grays: `--v2-fg-4` enabled,
+the same at 40% disabled. Measured `rgb(138 138 128)` on signal dark and
+`rgb(102 102 110)` on graphite light, so both modes track.
+
+The rail's bottom padding is the controls' room — `pb-14` from `v2md`, staying
+at `pb-6` below it where the controls are not drawn, so the mobile rail gains no
+dead space. Verified: 24px at 390, controls `display: none`.
+
+Note: with three projects the rail does not overflow at 1440, so both controls
+are correctly disabled there. Narrow to 1024 to see the enabled state.
+
+Note: `getComputedStyle` read the dark colour on a light page again — the
+`content-visibility` trap. A real theme toggle plus a repaint reads correctly;
+the token itself (`--v2-fg-4`) had already flipped.
