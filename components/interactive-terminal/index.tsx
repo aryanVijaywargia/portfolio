@@ -43,6 +43,9 @@ const TerminalScratchpad = dynamic(
   () => import("./terminal-scratchpad").then((mod) => mod.TerminalScratchpad),
   { ssr: false }
 );
+const TypingTest = dynamic(() => import("./typing-test").then((mod) => mod.TypingTest), {
+  ssr: false,
+});
 const Code = dynamic(() => import("components/typography/code").then((mod) => mod.Code), {
   ssr: false,
 });
@@ -74,6 +77,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
     | "intro-reel"
     | "radio"
     | "scratchpad"
+    | "typing-test"
   >("terminal");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isTerminalMaximized, setIsTerminalMaximized] = useState(false);
@@ -240,6 +244,11 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
     setIsTerminalMaximized(true);
   };
 
+  const handleSwitchToTypingTest = () => {
+    setMode("typing-test");
+    setIsTerminalMaximized(true);
+  };
+
   const handleChatbotMusicRequest = useCallback((_kind: MusicRequestKind): RadioStation => {
     const stationIndex = pickRandomStationIndex();
     const station = startRadio(stationIndex);
@@ -364,6 +373,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
     ? "radio — zsh"
     : mode === "scratchpad"
     ? "Shared Notes"
+    : mode === "typing-test"
+    ? "typetest - zsh"
     : mode === "editor"
     ? "/index.tsx"
     : "aryan@macbook - zsh";
@@ -441,6 +452,8 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
         onRefresh={loadScratchpadNotes}
         onNoteCreated={handleScratchpadNoteCreated}
       />
+    : mode === "typing-test"
+    ? <TypingTest onExit={handleMinimizeTerminal} />
     : mode === "editor"
     ? <div className="scrollbar-none h-full overflow-auto p-3">
         <Code
@@ -456,6 +469,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
         onSwitchToIntroReel={handleSwitchToIntroReel}
         onSwitchToRadio={handleSwitchToRadio}
         onSwitchToScratchpad={handleSwitchToScratchpad}
+        onSwitchToTypingTest={handleSwitchToTypingTest}
         triggerChatbot={triggerChatbot}
         onTriggerHandled={clearTrigger}
         onValidCommand={handleValidCommand}

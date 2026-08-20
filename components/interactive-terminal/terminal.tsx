@@ -2,7 +2,7 @@ import { FC, useState, useRef, useEffect, KeyboardEvent, MouseEvent as ReactMous
 import { useAchievements } from "components/achievements";
 import { ACHIEVEMENTS, ACHIEVEMENT_ORDER } from "components/achievements/achievementsList";
 import type { AchievementId } from "components/achievements/achievementsList";
-import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, DESKTOP_GAME_HELP, STARTUP_BANNER, AUTOCOMPLETE_COMMANDS, escapeHtml, getCommandOutput, getCommandSuggestion, isSpecialCommand, CommandOutput } from "./terminal-commands";
+import { TERMINAL_CONFIG, COMMANDS, SOCIAL_LINKS, DESKTOP_HELP, DESKTOP_COMMANDS, STARTUP_BANNER, AUTOCOMPLETE_COMMANDS, escapeHtml, getCommandOutput, getCommandSuggestion, isSpecialCommand, CommandOutput } from "./terminal-commands";
 import { RickIntro } from "./rick-intro";
 
 type OutputLine = {
@@ -110,6 +110,7 @@ type TerminalProps = {
   onSwitchToIntroReel: () => void;
   onSwitchToRadio: () => void;
   onSwitchToScratchpad: () => void;
+  onSwitchToTypingTest: () => void;
   triggerChatbot?: boolean;
   onTriggerHandled?: () => void;
   onValidCommand?: (command: string) => void;
@@ -128,6 +129,7 @@ export const Terminal: FC<TerminalProps> = ({
   onSwitchToIntroReel,
   onSwitchToRadio,
   onSwitchToScratchpad,
+  onSwitchToTypingTest,
   triggerChatbot,
   onTriggerHandled,
   onValidCommand,
@@ -189,14 +191,14 @@ export const Terminal: FC<TerminalProps> = ({
   const getHelpLines = useCallback(
     () => [
       ...COMMANDS.help.slice(0, -2),
-      ...(canPlayKeyboardGames ? [DESKTOP_GAME_HELP] : []),
+      ...(canPlayKeyboardGames ? DESKTOP_HELP : []),
       ...COMMANDS.help.slice(-2),
     ],
     [canPlayKeyboardGames]
   );
 
   const availableCommands = useMemo(
-    () => [...AUTOCOMPLETE_COMMANDS, ...(canPlayKeyboardGames ? ["game"] : [])].sort(),
+    () => [...AUTOCOMPLETE_COMMANDS, ...(canPlayKeyboardGames ? DESKTOP_COMMANDS : [])].sort(),
     [canPlayKeyboardGames]
   );
 
@@ -525,6 +527,26 @@ export const Terminal: FC<TerminalProps> = ({
           setTimeout(
             () => {
               onSwitchToScratchpad();
+            },
+            280
+          );
+          return;
+
+        case "typetest":
+          if (!canPlayKeyboardGames) {
+            addLine(
+              `Command not found: ${escapeHtml(cmd)}. Type 'help' for available commands.`,
+              "error",
+              80
+            );
+            return;
+          }
+
+          addLine("", undefined, 0);
+          addLine("Loading typetest...", "info", 80);
+          setTimeout(
+            () => {
+              onSwitchToTypingTest();
             },
             280
           );

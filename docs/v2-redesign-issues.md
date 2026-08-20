@@ -742,3 +742,146 @@ on both routes.
 Note: `terminal.tsx` carries the same pattern on `outputLines`. It fires per
 command rather than per character, so it does not fight a scroll the same way;
 left alone.
+
+## Typing test in the terminal (68)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 68 | No typing test in the terminal | done | New `typetest` command: a monkeytype-style run over one medium-to-hard passage, scored on wpm, accuracy, raw, consistency. |
+
+Scoring lives in `lib/typing-test.ts`, rendering in
+`components/interactive-terminal/typing-test.tsx`, so the arithmetic that
+produces a wpm figure can be read without wading through spans.
+
+The metrics, and what each one is actually measuring:
+
+| metric | definition | why |
+|--------|------------|-----|
+| wpm | correct characters / 5 / minutes | the number people mean by "my wpm" |
+| raw | every character typed / 5 / minutes | the gap to wpm is what the mistakes cost |
+| accuracy | keystrokes right first time / all keystrokes | counts mistakes that were corrected, so backspacing is not free |
+| consistency | 1 − (stddev / mean) of the per-second pace | a coefficient of variation, so a fast typist is not punished for larger absolute swings |
+
+Gated behind the same media query as `game`
+(`min-width: 1024px and hover: hover and pointer: fine`) — a typing test on a
+soft keyboard measures the keyboard, not the typist. Below the gate `typetest`
+reports "command not found" and is absent from `help`, exactly as `game` does.
+`DESKTOP_GAME_HELP` became `DESKTOP_HELP` + `DESKTOP_COMMANDS` so the two share
+one gate rather than two.
+
+Note: passages must be ASCII. An em dash or a curly quote cannot be typed on a
+standard keyboard, so one in a passage would stall the run on that character
+forever.
+
+Note: the caret is its own zero-width absolutely-positioned element, not a left
+border on the character it precedes. `animate-blink` animates `opacity`, so the
+first version blinked the letter out along with the caret — the passage read
+" very distributed system" with the E missing every other half-second.
+
+Words are rendered as `inline-block` spans with their trailing space attached,
+so a line only ever breaks between words.
+
+Verified: 40 correct / 2 wrong / 156 pending spans with exactly one caret;
+Backspace 42 → 41, Ctrl+Backspace 41 → 30, Alt+Backspace 30 → 28; a clean run
+scored 198/198 chars at 100.0% accuracy and 99% consistency; Tab draws a
+different passage and resets, Enter re-runs, Esc returns to the shell; the best
+wpm persisted to localStorage and the "new personal best" line appeared only
+after a previous best was beaten.
+
+Note: per-keystroke cost measured 0–0.3ms, so re-rendering the passage on every
+character is not a problem. An apparent 740ms/char during testing was the
+automation pane throttling `setTimeout` in a background tab, not the component.
+
+## Vimium hijacking keys in the typing test (69)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 69 | Vimium activated while typing in `typetest`, but never in the shell | done | Keystrokes now come off a real focused input instead of a `window` listener. |
+
+The test read keys with `window.addEventListener("keydown")` and nothing on the
+page was focused. To the browser — and to any keyboard extension — that page
+looks idle, so Vimium stayed in normal mode and claimed `j`, `f`, `d`, `/` and
+the rest before the page ever saw them. `preventDefault` cannot help: the
+extension listens at document capture, upstream of the page.
+
+The shell was never affected because it has always had a real `<input>` focused,
+which is exactly the signal an extension uses to switch to insert mode. The test
+now does the same: an editable `<input type="text">` covering the panel,
+transparent, focused on mount and after every restart. It stays empty because
+every character key is handled and prevented rather than inserted, so nothing is
+ever typed into it.
+
+| | before | after |
+|---|--------|-------|
+| `document.activeElement` while typing | `body` | `input[type=text]`, not readonly, not disabled |
+| extension mode | normal — keys hijacked | insert — keys pass through |
+
+Not `readOnly`: a read-only field reads as non-editable to some extensions,
+which would put us straight back in normal mode.
+
+Escape stays on the window, and in the **capture** phase. The capture path
+starts at the window, so it runs before any document-level handler — including
+Vimium's own Escape binding for leaving insert mode. Inside a typing test,
+Escape should leave the test. Verified against a handler that calls
+`stopImmediatePropagation` at document capture: the test still exits.
+
+A "Click here to focus" hint replaces the start hint whenever the field loses
+focus, so a stray click outside never looks like a broken test.
+
+Note: `document.hasFocus()` is false in the automation pane, and a document
+without focus fires no focus or blur events at all — `.focus()` and `.blur()`
+move `activeElement` silently. The focus wiring was verified by dispatching the
+`focusin`/`focusout` pair React actually delegates.
+
+## Timed test, visible caret, terminal styling (70)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 70 | Could not tell where you were in the text or what you had typed | done | Monkeytype's model: a sliding absolute caret, a much wider dim/bright gap, and 24px type. |
+| 70 | Wanted a monkeytype-style timer instead of a fixed passage | done | 15/30/60s countdown over a chained passage stream; the clock ends the run, not the text. |
+| 70 | Wanted the whole thing to read as terminal | done | Countdown plus an ASCII progress bar, and results as label/value rows on a character grid. |
+
+Read off monkeytype.com rather than guessed at:
+
+| | monkeytype | here |
+|---|-----------|------|
+| caret | absolute, 3px wide, 1.2x font height, `transition: all` | absolute, 3px, 30px tall, `left`/`top` over 90ms |
+| font size | 32px | 24px — the panel is narrower than a full page |
+| untyped / typed | `#646669` / `#d1d0c5` | `#5C5F66` / `#E8E8E3` |
+| visible text | `#wordsWrapper` 156px, clipped, 40px line-height | 132px, clipped, 44px line-height, 3 lines |
+
+The old caret was a 2px left border on the character it preceded, blinking
+`step-start` — half the time it was not on screen at all, and it never moved
+between frames, so at speed there was nothing to track. It is now its own
+element, positioned from a measured character box and animated between
+positions, and it only blinks after a second of no typing.
+
+Position comes from measurement, size and vertical placement from the line grid:
+
+| | value |
+|---|-------|
+| caret top, lines 0-4 | 7, 51, 95, 139, 183 — exactly `line * 44 + 7` |
+| caret height | 30px at every position |
+| scroll offset at those lines | 0, 0, -44, -88, -132 |
+
+Measuring the glyph box for height gave 18px before the monospace face resolved
+and 28px after, so the caret changed height on the first keystroke. Only `left`
+and the line index are measured now; height and vertical inset are constants.
+
+The window scrolls a line at a time and keeps the caret on the second of three
+visible lines, so there is always a line of context behind and a line of runway
+ahead.
+
+Timed mode needs text that cannot run out, so passages are chained into a stream
+sized for 260 wpm — far past anyone reading this — for the chosen duration. A
+30s test renders about 800 character spans; measured 0-0.3ms per keystroke, so
+no windowing was needed.
+
+Verified a 15s run end to end: countdown 15 down to 1, the run ended on the
+clock at 15.1s wall with 245 of 796 characters typed, and scored 100.0%
+accuracy at 95% consistency with `best <- new` shown only after a previous best
+existed.
+
+Note: the duration buttons carry `z-20`. The capture field covers the panel at
+`z-10` so a click anywhere restores focus, and anything meant to stay clickable
+has to sit above it.
