@@ -1388,3 +1388,25 @@ html
 [data-v2] footer > div > div {
   border-color: rgb(var(--v2-line-2));
 }
+
+/* ---------- terminal type on small screens ---------- */
+/*
+   The terminal body is 16px below Tailwind's `sm` and 13px above it, so on a
+   phone the type is *larger* than on a desktop and every line wraps: the
+   welcome line broke across two rows and the help table's descriptions wrapped
+   under their commands. 13px matches the desktop scale and fits the welcome
+   line on one row at 390px.
+
+   Bounded at 639px, where the component's own `sm:text-[13px]` takes over, so
+   the two rules never both apply.
+*/
+
+@media screen and (max-width: 639px) {
+  [data-v2][data-v2] .terminal-wrapper .terminal-content {
+    /* 13px still wrapped the 42-character welcome line at 390 and below, so
+       the size tracks the viewport until it reaches the desktop 13px. 3.2vw
+       is what keeps that line — and the prompt under it — on one row from
+       360px up, which is the proportion the terminal has on a laptop. */
+    font-size: min(13px, 3.2vw);
+  }
+}

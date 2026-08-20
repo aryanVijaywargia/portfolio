@@ -371,3 +371,20 @@ Verification:
 Note: Tailwind's utilities are emitted after this sheet, so an equal-specificity
 override loses on source order. `.dark .d\:bg-sky-900\/60` is two classes, which
 is why the `d:` remaps need the attribute doubled.
+
+## Terminal type on small screens (53)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 53 | Terminal type was larger on a phone than on a desktop, so every line wrapped | done | The component sets 16px below Tailwind's `sm` and 13px above it. Under v2, small screens now use `min(13px, 3.2vw)`, bounded at 639px where the component's own rule takes over. |
+
+Verification (both variants):
+
+| width | font | welcome line | wrapped help rows |
+|---|---|---|---|
+| 360 | 11.5px | 1 row (was 2) | 3 (was 6) |
+| 390 | 12.5px | 1 row (was 2) | 3 (was 4) |
+| 430 | 13px | 1 row | 1 |
+
+The three that still wrap are the longest descriptions — 47 characters or more —
+which would need a smaller size than is worth reading. `/` is unchanged at 16px.
