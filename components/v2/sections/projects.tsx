@@ -204,14 +204,8 @@ export const V2Projects: FC = () => {
     <V2Section id="portfolio" label="Projects">
       <V2SectionHeader section="portfolio" />
 
-      <div className="mb-5 flex items-end justify-between gap-6">
+      <div className="mb-5">
         <V2Heading>{V2_SECTION_HEADINGS.portfolio}</V2Heading>
-        <V2ScrollRailControls
-          canStepBack={canStepBack}
-          canStepForward={canStepForward}
-          onStep={step}
-          label="Projects"
-        />
       </div>
 
       {/* Filters read as a control on the list below, so they sit under the
@@ -240,17 +234,28 @@ export const V2Projects: FC = () => {
         </div>
       </div>
 
-      <V2ScrollRail ref={railRef} label="Projects">
-        {visible.map((project, index) => (
-          <div
-            key={project.name}
-            style={{ "--card-tilt": `${TILTS[index % TILTS.length]}deg` } as never}
-            className="v2-project-card flex w-[82vw] max-w-[330px] shrink-0 snap-start v2sm:w-[330px] v2sm:max-w-none"
-          >
-            <ProjectCard project={project} onOpen={handleOpen} />
-          </div>
-        ))}
-      </V2ScrollRail>
+      {/* The step controls sit at either end below the rail, as they do on v1;
+          they are absolute, so this wrapper is what they are placed against. */}
+      <div className="relative">
+        <V2ScrollRail ref={railRef} label="Projects">
+          {visible.map((project, index) => (
+            <div
+              key={project.name}
+              style={{ "--card-tilt": `${TILTS[index % TILTS.length]}deg` } as never}
+              className="v2-project-card flex w-[82vw] max-w-[330px] shrink-0 snap-start v2sm:w-[330px] v2sm:max-w-none"
+            >
+              <ProjectCard project={project} onOpen={handleOpen} />
+            </div>
+          ))}
+        </V2ScrollRail>
+
+        <V2ScrollRailControls
+          canStepBack={canStepBack}
+          canStepForward={canStepForward}
+          onStep={step}
+          label="Projects"
+        />
+      </div>
     </V2Section>
   );
 };
