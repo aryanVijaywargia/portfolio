@@ -8,21 +8,29 @@ export const HERO = {
   pre: "Welcome to my site.",
   name: "Aryan Vijaywargia",
   roles: ["Backend", "Fullstack", "AI", ""] as const,
+  /* `brand` is each mark's own colour, from simple-icons. The glyphs are
+     single-path and paint in `currentColor`, so a row of them reads as one
+     monochrome set until something asks for the brand — which is what the v2
+     hero does on hover. Unused here; the v1 row stays monochrome throughout. */
   tech: [
     {
       name: "Go",
+      brand: "#00ADD8",
       Icon: ({ className }) => <SiGo className={className} />,
     },
     {
       name: "C#",
+      brand: "#239120",
       Icon: ({ className }) => <SiCsharp className={className} />,
     },
     {
       name: "TypeScript",
+      brand: "#3178C6",
       Icon: ({ className }) => <SiTypescript className={className} />,
     },
     {
       name: "Python",
+      brand: "#3776AB",
       Icon: ({ className }) => <SiPython className={className} />,
     },
   ] as const,
