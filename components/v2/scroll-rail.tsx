@@ -3,8 +3,9 @@ import { FC, ForwardedRef, forwardRef, PropsWithChildren } from "react";
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid";
 
 const CONTROL_CLASS =
-  "inline-flex h-9 w-9 items-center justify-center border bg-transparent transition-colors " +
+  "inline-flex h-9 items-center gap-2 border bg-transparent px-3 transition-colors " +
   "border-[rgb(var(--v2-line-2))] text-[rgb(var(--v2-fg-2))] rounded-[var(--v2-radius-sm)] " +
+  "font-[family-name:var(--v2-font-mono)] text-[11px] uppercase tracking-[0.14em] " +
   "hover:border-[rgb(var(--v2-accent))] hover:text-[rgb(var(--v2-accent))] " +
   "disabled:border-[rgb(var(--v2-line))] disabled:text-[rgb(var(--v2-fg-4))] disabled:opacity-45 " +
   "disabled:hover:border-[rgb(var(--v2-line))] disabled:hover:text-[rgb(var(--v2-fg-4))]";
@@ -29,6 +30,7 @@ export const V2ScrollRailControls: FC<{
       aria-label={`Previous ${label.toLowerCase()}`}
     >
       <ArrowLongLeftIcon className="h-4 w-4" aria-hidden="true" />
+      prev
     </button>
     <button
       type="button"
@@ -37,6 +39,7 @@ export const V2ScrollRailControls: FC<{
       disabled={!canStepForward}
       aria-label={`Next ${label.toLowerCase()}`}
     >
+      next
       <ArrowLongRightIcon className="h-4 w-4" aria-hidden="true" />
     </button>
   </div>
