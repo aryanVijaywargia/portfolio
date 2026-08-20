@@ -990,3 +990,12 @@ Note: the status bar says `ctrl+bksp`, not `^w`. Ctrl+W is the readline idiom
 and was the first label written, but Chrome reserves it for closing the tab on
 Windows and Linux and will not let a page prevent it, so the binding cannot be
 taken and the label would have been a lie.
+
+Note (72, follow-up): the cursor rendered about two thirds of a cell wide until
+the first keystroke. Rects come back multiplied by any ancestor transform, and
+the terminal opens on a spring that scales the whole panel — measured mid
+animation, a 12.05px cell reads as 8.14px, and nothing re-measured until `typed`
+changed. The measurement now recovers the scale by comparing the container's
+rect against its `offsetWidth` and divides it out, so every value is in layout
+units whenever it is taken. Sampled across the opening animation, scale ran
+0.692 → 1.004 while the stored cursor width stayed 12.05px at every frame.
