@@ -1,10 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
-type ScratchpadNote = {
-  id: number;
-  message: string;
-  created_at: string;
-};
+import { getSupabaseConfig, getSupabaseHeaders, readScratchpadNotes } from "lib/scratchpad";
+import type { ScratchpadNote } from "lib/scratchpad";
 
 type ScratchpadResponse =
   | { notes: ScratchpadNote[] }
@@ -15,14 +11,6 @@ const MAX_NOTE_LENGTH = 280;
 const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000;
 const RATE_LIMIT_MAX_WRITES = 3;
 const writeAttempts = new Map<string, number[]>();
-
-const getSupabaseConfig = () => {
-  const url = process.env.SUPABASE_URL?.replace(/\/$/, "");
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !serviceRoleKey) return null;
-  return { url, serviceRoleKey };
-};
 
 const getClientIp = (request: NextApiRequest) => {
   const forwardedFor = request.headers["x-forwarded-for"];
@@ -46,12 +34,6 @@ const hasRateLimitCapacity = (ip: string) => {
   return true;
 };
 
-const supabaseHeaders = (serviceRoleKey: string) => ({
-  apikey: serviceRoleKey,
-  Authorization: `Bearer ${serviceRoleKey}`,
-  "Content-Type": "application/json",
-});
-
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse<ScratchpadResponse>
@@ -65,16 +47,7 @@ export default async function handler(
 
   if (request.method === "GET") {
     try {
-      const databaseResponse = await fetch(
-        `${config.url}/rest/v1/scratchpad_notes?select=id,message,created_at&order=created_at.desc&limit=50`,
-        { headers: supabaseHeaders(config.serviceRoleKey) }
-      );
-
-      if (!databaseResponse.ok) {
-        throw new Error(`Supabase returned ${databaseResponse.status}`);
-      }
-
-      const notes = (await databaseResponse.json()) as ScratchpadNote[];
+      const notes = await readScratchpadNotes(config);
       response.setHeader("Cache-Control", "public, s-maxage=10, stale-while-revalidate=30");
       return response.status(200).json({ notes });
     } catch (error) {
@@ -107,7 +80,7 @@ export default async function handler(
       const databaseResponse = await fetch(`${config.url}/rest/v1/scratchpad_notes`, {
         method: "POST",
         headers: {
-          ...supabaseHeaders(config.serviceRoleKey),
+          ...getSupabaseHeaders(config.serviceRoleKey),
           Prefer: "return=representation",
         },
         body: JSON.stringify({ message }),
