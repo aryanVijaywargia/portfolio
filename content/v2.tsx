@@ -1,4 +1,5 @@
 import { BriefcaseIcon, CodeBracketIcon, DocumentTextIcon, EnvelopeIcon, HomeIcon, UserIcon } from "@heroicons/react/24/solid";
+import { HERO } from "content/hero";
 import type { V2Variant } from "components/v2/variant";
 
 /**
@@ -78,7 +79,9 @@ export const V2_HERO = {
   roles: ["Backend", "Fullstack", "AI", ""] as const,
   roleSuffix: "Engineer",
   strapline: "Senior SWE · GEP Worldwide · India",
-  stack: ["Go", "C#", "TypeScript", "Python"],
+  /* The same four the v1 hero shows, with their marks — one list, one order,
+     so the two designs cannot drift apart. */
+  stack: HERO.tech,
   terminal: {
     path: "~/aryan",
     title: "aryan@macbook — zsh",
