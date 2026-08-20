@@ -579,3 +579,33 @@ Note: `getComputedStyle` reported the dark frame colour on a light page again �
 the `content-visibility` trap. Reading the custom property off the element that
 carries `data-v2` gives the true value; note that element is `body` on
 `/signal` and a wrapper `div` on `/graphite`.
+
+## The shimmer line painted as a solid bar (63)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 63 | The ambient "surprise" line rendered as a solid accent bar with no text | done | The v2 override used the `background` shorthand, which also resets `background-clip`. Switched to `background-image`. |
+
+The line is painted through its own glyphs: styled-jsx sets `background-clip:
+text` with `-webkit-text-fill-color: transparent`. The v2 override
+(`[data-v2][data-v2] .ambient-surprise__shimmer`, 0,3,0) beat that rule's
+(0,2,0) and its `background` shorthand carried an implicit
+`background-clip: border-box` — so the gradient filled the whole box while the
+text stayed transparent inside it. A bar, not a line of text.
+
+Proved both directions in the browser with a probe carrying the same classes
+under the same host:
+
+| override | computed `background-clip` | renders as |
+|---|---|---|
+| `background:` shorthand | `border-box` | solid bar |
+| `background-image:` | `text` | gradient text |
+
+Note: the earlier comment on this rule already warned that the shorthand resets
+`background-size` — the same reset covers `background-clip`, and that half was
+missed. Longhands only when overriding a rule that relies on any other
+`background-*`.
+
+Checked the other `background:` overrides in the v2 layer (terminal chrome,
+traffic lights, scrollbars, the page ground): none of those targets use
+`background-clip: text`, so this was the only one affected.
