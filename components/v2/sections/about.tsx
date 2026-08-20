@@ -137,7 +137,15 @@ export const V2About: FC = () => {
                 preload={index === 0}
                 priority={index === 0}
                 loading={index === 0 ? "eager" : "lazy"}
-                className="absolute left-0 top-0 h-full w-full rounded-[var(--v2-radius-md)] border border-[rgb(var(--v2-line-2))] object-cover transition-all duration-300"
+                className={clsx(
+                  "absolute left-0 top-0 h-full w-full rounded-[var(--v2-radius-md)] object-cover",
+                  // The mount, and the shadow it casts on the print below it:
+                  // without both, the photos underneath read as slivers of
+                  // grey rather than as a stack. Same treatment as v1.
+                  "border-2 border-[rgb(var(--v2-photo-frame))]",
+                  "shadow-[0_10px_15px_-3px_rgb(0_0_0/0.18),0_4px_6px_-4px_rgb(0_0_0/0.16)]",
+                  "transition-all duration-300"
+                )}
                 style={{
                   transform:
                     focusIndex > index
@@ -154,9 +162,17 @@ export const V2About: FC = () => {
                 }}
               />
             ))}
-            <span className="absolute -bottom-6 left-3 font-[family-name:var(--v2-font-mono)] text-[10px] uppercase tracking-[0.16em] text-[rgb(var(--v2-fg-4))]">
-              {V2_ABOUT.shuffleHint}
-            </span>
+
+            {/* The bottom of the deck: a blank mount leaning the other way, so
+                the stack has an edge to sit on even when a photo above it is
+                nearly square to the frame. z-0 rather than negative — the
+                images stack above it, and a negative index would put it behind
+                the section's own background. */}
+            <span
+              aria-hidden="true"
+              style={{ zIndex: 0 }}
+              className="absolute inset-0 -rotate-6 rounded-[var(--v2-radius-md)] bg-[rgb(var(--v2-photo-frame))]"
+            />
           </button>
 
           <div className="flex flex-col gap-7">

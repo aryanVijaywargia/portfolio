@@ -234,6 +234,20 @@ html:not(.dark) [data-v2-variant="graphite"] {
   --v2-bg-blur: 243 242 239 / 0.75;
 }
 
+/* ---------- photo stack ---------- */
+/* The About deck is prints on a table: every photo carries a mount, and the
+   mount is what separates one from the next where they overlap. Defined per
+   mode rather than per variant — a frame is a frame in either palette, and
+   only its lightness has to flip. */
+
+html.dark [data-v2] {
+  --v2-photo-frame: 255 255 255 / 0.22;
+}
+
+html:not(.dark) [data-v2] {
+  --v2-photo-frame: 255 255 255 / 0.92;
+}
+
 /* ---------- hue text colours ---------- */
 /* The dark-mode chip/card text is a light tint of the hue; in light mode the
    same tint fails contrast, so each hue gets a darkened text colour. */
