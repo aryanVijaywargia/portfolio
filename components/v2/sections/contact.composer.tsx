@@ -13,7 +13,6 @@ const EMAIL = SOCIAL_ACCOUNTS.email.href.replace(/^mailto:/, "");
 const SOCIALS = [
   { label: "github", href: SOCIAL_ACCOUNTS.github.href },
   { label: "linkedin", href: SOCIAL_ACCOUNTS.linkedin.href },
-  { label: "x", href: SOCIAL_ACCOUNTS.twitter.href },
 ] as const;
 
 const RULE_CLASS = "h-px flex-1 bg-[rgb(var(--v2-line))]";

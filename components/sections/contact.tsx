@@ -153,17 +153,6 @@ const ContactInfoPanel: FC = () => {
           <JsonKey>linkedin</JsonKey>
           <span className="text-gray-700 d:text-slate-300">: </span>
           <JsonString href={socialLinks.linkedin}>{contactInfo.socials.linkedin}</JsonString>
-          <span className="text-gray-700 d:text-slate-300">,</span>
-        </span>
-      ),
-    },
-    {
-      chars: 13 + contactInfo.socials.twitter.length,
-      content: (
-        <span className="ml-8">
-          <JsonKey>twitter</JsonKey>
-          <span className="text-gray-700 d:text-slate-300">: </span>
-          <JsonString href={socialLinks.twitter}>{contactInfo.socials.twitter}</JsonString>
         </span>
       ),
     },

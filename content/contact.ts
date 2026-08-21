@@ -8,14 +8,12 @@ export const CONTACT = {
     socials: {
       github: "@aryanVijaywargia",
       linkedin: "@aryan-vijaywargia",
-      twitter: "@AryanVijaywargia",
     },
     location: "India",
   },
   socialLinks: {
     github: "https://github.com/aryanVijaywargia",
     linkedin: "https://www.linkedin.com/in/aryan-vijaywargia/",
-    twitter: "https://twitter.com/AryanVijaywargia",
   },
   footer: {
     name: "Aryan Vijaywargia",
