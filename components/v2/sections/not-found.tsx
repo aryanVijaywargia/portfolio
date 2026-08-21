@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FC } from "react";
 import { SOCIAL_ACCOUNTS } from "content/social-accounts";
 import { V2_NOT_FOUND } from "content/v2";
-import { V2NotFoundTerminal } from "components/v2/sections/not-found.terminal";
+import { V2NotFoundWire } from "components/v2/sections/not-found.wire";
 
 /* The headline is three stacked copies of "404": one legible glyph and two
    coloured ghosts that jump for a frame or two. They share a class so the
@@ -72,9 +72,6 @@ export const V2NotFound: FC = () => (
             {V2_NOT_FOUND.actions.home} <span aria-hidden="true">→</span>
           </a>
         </Link>
-        <Link href="/#portfolio">
-          <a className={BUTTON_SECONDARY}>{V2_NOT_FOUND.actions.projects}</a>
-        </Link>
         <a href={SOCIAL_ACCOUNTS.email.href} className={BUTTON_SECONDARY}>
           {V2_NOT_FOUND.actions.report}
         </a>
@@ -115,6 +112,6 @@ export const V2NotFound: FC = () => (
       </div>
     </section>
 
-    <V2NotFoundTerminal />
+    <V2NotFoundWire />
   </main>
 );

@@ -6,7 +6,6 @@ import { V2ThemeToggle } from "components/v2/theme-toggle";
 import { V2Footer } from "components/v2/sections/footer";
 import { V2NotFound } from "components/v2/sections/not-found";
 import { V2_NOT_FOUND } from "content/v2";
-import { SEO } from "content/seo";
 
 /**
  * The 404 page.
@@ -45,11 +44,11 @@ export const NotFoundV2: FC = () => {
       <header className="sticky top-0 z-20 border-b border-[rgb(var(--v2-line))] bg-[rgb(var(--v2-bg-blur))] backdrop-blur-lg">
         <div className="mx-auto flex max-w-[var(--v2-max-w)] items-center justify-between gap-3 px-[var(--v2-gutter)] py-3.5">
           <Link href="/">
-            <a className="group/brand flex items-center gap-2.5 text-[rgb(var(--v2-fg))]">
+            <a
+              className="group/brand flex items-center text-[rgb(var(--v2-fg))]"
+              aria-label="Back to home"
+            >
               <V2Brand className="h-[30px] w-[30px]" />
-              <span className="font-[family-name:var(--v2-font-mono)] text-[11.5px] tracking-[0.1em] text-[rgb(var(--v2-fg-3))]">
-                {SEO.url.replace(/^https?:\/\//, "")}
-              </span>
             </a>
           </Link>
           <V2ThemeToggle />
