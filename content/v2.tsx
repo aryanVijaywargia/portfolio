@@ -179,3 +179,38 @@ export const V2_PROJECT_HUES: Record<string, V2Hue> = {
 };
 
 export const V2_PROJECT_FALLBACK_HUE: V2Hue = "teal";
+
+/* -------------------------------------------------------------------------
+   404
+   ------------------------------------------------------------------------- */
+
+/**
+ * Copy for the not-found page.
+ *
+ * The terminal's command table lives with the component that runs it, since
+ * each entry is behaviour as much as text. What sits here is the prose and the
+ * route list, which are the parts worth editing without reading the logic.
+ */
+export const V2_NOT_FOUND = {
+  eyebrow: "status 404",
+  heading: "This route was never deployed.",
+  body: "Either I moved it, you typed it, or a crawler invented it. Nothing here is on fire — the rest of the site is fine.",
+  footerNote: "404 · nothing lost, nothing found",
+  suggestionsLabel: "did you mean",
+  suggestions: [
+    { path: "/#portfolio", label: "/projects", note: "Continua, precursor detection, forex NLP" },
+    { path: "/#experience", label: "/experience", note: "GEP, IHub-Data, Omdena, IMD" },
+    { path: "/#contact", label: "/contact", note: "Mail, GitHub, LinkedIn" },
+    {
+      path: "/llms.txt",
+      label: "/llms.txt",
+      note: "For the machines reading this",
+      external: true,
+    },
+  ],
+  actions: {
+    home: "Back to home",
+    projects: "See projects",
+    report: "Report a broken link",
+  },
+};
