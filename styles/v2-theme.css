@@ -65,6 +65,22 @@
   }
 }
 
+/* ---------- 404-only tokens ---------- */
+/* These belong to one page rather than the design at large, so they are
+   declared per skin instead of on the shared [data-v2] block: the 404's root
+   element carries data-v2 while the resolved skin sits on <html>, and a shared
+   default would beat the per-skin value it inherits from there. `base`
+   declares its own alongside its colours. */
+
+[data-v2-variant="signal"],
+[data-v2-variant="graphite"] {
+  /* Primary buttons are a flat token fill; `base` paints a gradient over it. */
+  --v2-btn-image: none;
+  /* Second glitch ghost on the 404, and the terminal's error red. */
+  --v2-glitch-2: 255 95 86;
+  --v2-term-err: 255 107 96;
+}
+
 /* ---------- variant: signal ---------- */
 /* Sharp corners (radius 0), lime accent, numbered filled eyebrows,
    larger and tighter display type. */
@@ -152,10 +168,59 @@
   }
 }
 
+/* ---------- variant: base ---------- */
+/* The v1 site's language: rounded corners, sky accent, a cyan-to-blue gradient
+   on the primary button. Used by the 404 when a visitor arrives from "/" or
+   types a bad URL directly, so the error page matches the site they were on. */
+
+[data-v2-variant="base"] {
+  --v2-radius-sm: 6px;
+  --v2-radius-md: 10px;
+
+  --v2-h1-size: 40px;
+  --v2-h1-tracking: -0.03em;
+  --v2-h2-size: 30px;
+  --v2-h2-tracking: -0.03em;
+
+  --v2-btn-py: 13px;
+  --v2-btn-px: 30px;
+  --v2-btn-weight: 500;
+  --v2-btn-tracking: -0.01em;
+
+  --v2-eyebrow-bg: transparent;
+  --v2-eyebrow-fg: rgb(var(--v2-accent));
+  --v2-eyebrow-pad: 0px;
+  --v2-eyebrow-weight: 600;
+  --v2-eyebrow-size: 11px;
+
+  --v2-hero-strapline: none;
+}
+
+@media (min-width: 680px) {
+  [data-v2-variant="base"] {
+    --v2-h1-size: 50px;
+    --v2-h2-size: 36px;
+  }
+}
+
+@media (min-width: 1000px) {
+  [data-v2-variant="base"] {
+    --v2-h1-size: 60px;
+    --v2-h1-tracking: -0.035em;
+    --v2-h2-size: 42px;
+    --v2-h2-tracking: -0.035em;
+  }
+}
+
+/* Colour blocks below list two selectors apiece. The portfolio routes put the
+   variant on a wrapper inside <html>; the 404 resolves its skin onto <html>
+   itself before first paint, where a descendant selector would never match. */
+
 /* ---------- colour: signal ---------- */
 /* Channel triplets (not hex) so components can use rgb(var(--token) / <alpha>)
    for translucent variations without a second token per opacity step. */
 
+html.dark[data-v2-variant="signal"],
 html.dark [data-v2-variant="signal"] {
   --v2-bg: 10 10 10;
   --v2-surface: 15 15 14;
@@ -175,6 +240,7 @@ html.dark [data-v2-variant="signal"] {
   --v2-bg-blur: 10 10 10 / 0.72;
 }
 
+html:not(.dark)[data-v2-variant="signal"],
 html:not(.dark) [data-v2-variant="signal"] {
   --v2-bg: 242 241 234;
   --v2-surface: 255 255 255;
@@ -196,6 +262,7 @@ html:not(.dark) [data-v2-variant="signal"] {
 
 /* ---------- colour: graphite ---------- */
 
+html.dark[data-v2-variant="graphite"],
 html.dark [data-v2-variant="graphite"] {
   --v2-bg: 14 14 16;
   --v2-surface: 17 17 20;
@@ -215,6 +282,7 @@ html.dark [data-v2-variant="graphite"] {
   --v2-bg-blur: 14 14 16 / 0.72;
 }
 
+html:not(.dark)[data-v2-variant="graphite"],
 html:not(.dark) [data-v2-variant="graphite"] {
   --v2-bg: 243 242 239;
   --v2-surface: 255 255 255;
@@ -232,6 +300,56 @@ html:not(.dark) [data-v2-variant="graphite"] {
   --v2-btn-fg: 243 242 239;
   --v2-shadow: 0 26px 50px -34px rgb(0 0 0 / 0.35);
   --v2-bg-blur: 243 242 239 / 0.75;
+}
+
+/* ---------- colour: base ---------- */
+/* Values lifted from the v1 palette in styles/tailwind.css so the 404 and the
+   site it belongs to resolve to the same greys and the same sky accent. */
+
+html.dark[data-v2-variant="base"],
+html.dark [data-v2-variant="base"] {
+  --v2-bg: 14 19 31;
+  --v2-surface: 25 34 46;
+  --v2-surface-2: 20 28 39;
+  --v2-term: 10 15 25;
+  --v2-fg: 248 250 252;
+  --v2-fg-2: 226 232 240;
+  --v2-fg-3: 148 163 184;
+  --v2-fg-4: 100 116 139;
+  --v2-line: 51 65 85;
+  --v2-line-2: 71 85 105;
+  --v2-accent: 56 189 248;
+  --v2-accent-soft: 56 189 248 / 0.14;
+  --v2-btn-bg: 14 165 233;
+  --v2-btn-fg: 255 255 255;
+  --v2-btn-image: linear-gradient(to bottom right, rgb(6 182 212), rgb(37 99 235));
+  --v2-glitch-2: 236 72 153;
+  --v2-term-err: 251 113 133;
+  --v2-shadow: 0 30px 60px -34px rgb(0 0 0 / 0.9);
+  --v2-bg-blur: 14 19 31 / 0.72;
+}
+
+html:not(.dark)[data-v2-variant="base"],
+html:not(.dark) [data-v2-variant="base"] {
+  --v2-bg: 255 255 255;
+  --v2-surface: 248 250 252;
+  --v2-surface-2: 241 245 249;
+  --v2-term: 248 250 252;
+  --v2-fg: 15 23 42;
+  --v2-fg-2: 51 65 85;
+  --v2-fg-3: 100 116 139;
+  --v2-fg-4: 100 116 139;
+  --v2-line: 226 232 240;
+  --v2-line-2: 203 213 225;
+  --v2-accent: 14 165 233;
+  --v2-accent-soft: 14 165 233 / 0.12;
+  --v2-btn-bg: 14 165 233;
+  --v2-btn-fg: 255 255 255;
+  --v2-btn-image: linear-gradient(to bottom right, rgb(6 182 212), rgb(37 99 235));
+  --v2-glitch-2: 236 72 153;
+  --v2-term-err: 225 29 72;
+  --v2-shadow: 0 26px 50px -34px rgb(15 23 42 / 0.3);
+  --v2-bg-blur: 255 255 255 / 0.75;
 }
 
 /* ---------- photo stack ---------- */
@@ -1459,4 +1577,64 @@ html
     transform: none;
     transition: none;
   }
+}
+
+/* The 404's headline is stacked three deep: a stable glyph plus two coloured
+   ghosts that sit at opacity 0 for most of the cycle and jump for a couple of
+   frames. `steps(1, end)` is what makes them snap rather than drift. */
+
+@keyframes v2-glitch-a {
+  0%,
+  92%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  93% {
+    transform: translate(-4px, 2px);
+    opacity: 0.9;
+  }
+  96% {
+    transform: translate(3px, -2px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes v2-glitch-b {
+  0%,
+  90%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  91% {
+    transform: translate(5px, -1px);
+    opacity: 0.75;
+  }
+  97% {
+    transform: translate(-3px, 3px);
+    opacity: 0.6;
+  }
+}
+
+/* Travels 20x its own height, so the band crosses the whole terminal. */
+@keyframes v2-scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(2000%);
+  }
+}
+
+.v2-animate-glitch-a {
+  animation: v2-glitch-a 4.2s steps(1, end) infinite;
+}
+
+.v2-animate-glitch-b {
+  animation: v2-glitch-b 5.7s steps(1, end) infinite;
+}
+
+.v2-animate-scan {
+  animation: v2-scan 7s linear infinite;
 }
