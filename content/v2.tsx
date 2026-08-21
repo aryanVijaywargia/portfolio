@@ -210,7 +210,6 @@ export const V2_NOT_FOUND = {
   ],
   actions: {
     home: "Back to home",
-    projects: "See projects",
     report: "Report a broken link",
   },
 };

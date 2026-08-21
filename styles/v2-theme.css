@@ -76,7 +76,7 @@
 [data-v2-variant="graphite"] {
   /* Primary buttons are a flat token fill; `base` paints a gradient over it. */
   --v2-btn-image: none;
-  /* Second glitch ghost on the 404, and the terminal's error red. */
+  /* Second glitch ghost on the 404, and its alert red (LIVE, BREAKING). */
   --v2-glitch-2: 255 95 86;
   --v2-term-err: 255 107 96;
 }
@@ -1637,4 +1637,51 @@ html
 
 .v2-animate-scan {
   animation: v2-scan 7s linear infinite;
+}
+
+/* The 404's wire ticker. The strip holds two copies of the bulletin list, so
+   translating it exactly -50% lands on the start of the second copy and the
+   loop is seamless. */
+@keyframes v2-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* The LIVE dot on the wire desk. */
+@keyframes v2-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.v2-animate-marquee {
+  animation: v2-marquee 26s linear infinite;
+}
+
+.v2-animate-pulse-dot {
+  animation: v2-pulse 1.4s ease-in-out infinite;
+}
+
+/* Wire bulletins fade in as they arrive. Declared as an animation rather than
+   a transition because the row is already at its final opacity on first paint —
+   there is no prior value for a transition to run from. */
+@keyframes v2-wire-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.v2-wire-row {
+  animation: v2-wire-in 0.45s ease both;
 }
