@@ -999,3 +999,43 @@ changed. The measurement now recovers the scale by comparing the container's
 rect against its `offsetWidth` and divides it out, so every value is in layout
 units whenever it is taken. Sampled across the opening animation, scale ran
 0.692 → 1.004 while the stored cursor width stayed 12.05px at every frame.
+
+## Terminal title bar collided with the tab chip on small screens (73)
+
+| # | Issue | Status | How it was settled |
+|---|-------|--------|--------------------|
+| 73 | The window title wrapped and spilled over the `~/aryan` chip on narrow screens | done | The title now truncates instead of wrapping, and the right-hand spacer gives room back on a phone. |
+
+The title bar is a fixed `h-8` row. The title sat in a `flex-1 text-center` box
+with no `min-w-0`, and a flex item will not shrink below its min-content width -
+the longest word, `aryan@macbook`, at 96.8px. Below that the text wrapped, and
+the extra lines had nowhere to go in a 32px bar, so they rendered over the chip.
+
+Measured by shrinking the terminal window:
+
+| window width | title height | bar height |
+|--------------|--------------|------------|
+| 348px | 14.5px (1 line) | 32px |
+| 330px and below | 38.5px (3 lines) | 32px |
+
+That put the break at roughly a 375px viewport - iPhone SE and anything
+narrower.
+
+Three changes:
+
+- `min-w-0` and `truncate` on the title box, so it clips with an ellipsis rather
+  than wrapping. `truncate` goes on the box, not the span: the span is inline
+  and inline boxes do not clip.
+- `shrink-0` on the traffic lights, the tab chip, and the two back buttons, so
+  the title is the only thing that gives.
+- The right-hand spacer, which only balances the centring, drops from `w-14` to
+  `w-8` below `sm`. That hands 24px back and is what keeps the full title on one
+  line at 375px rather than truncating it.
+
+After, at 375px on `/`, `/signal` and `/graphite`: bar 32px, one line, full
+`aryan@macbook - zsh`, no overlap. At a 320px viewport it truncates to
+`aryan@macb…`, still one line, still 32px.
+
+Note: measuring this needs the terminal scrolled into view first. The hero uses
+`content-visibility`, and every rect in a skipped subtree reads as 0 - the first
+sweep returned zeros for every element and looked like the bar had vanished.

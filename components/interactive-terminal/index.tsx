@@ -564,7 +564,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
             className="terminal-titlebar flex h-8 items-center rounded-t-lg border-b border-[#cccccc] bg-[#dddddd] px-3 dark:border-[#1e293b]/60 dark:bg-[#0f172a]/90"
           >
             {/* Traffic Light Buttons */}
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               {/* Red - Close */}
               <button
                 onClick={handleClose}
@@ -634,7 +634,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
 
             {/* Tabs - decorative, both themes */}
             {!isModal && mode === "terminal" && (
-              <div className="ml-3 flex items-center gap-1">
+              <div className="ml-3 flex shrink-0 items-center gap-1">
                 <span className="rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 [background:rgba(6,182,212,0.12)] dark:text-[#67e8f9]">
                   ~/aryan
                 </span>
@@ -645,7 +645,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
             {!isModal && mode === "editor" && (
               <button
                 onClick={handleSwitchToTerminal}
-                className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
+                className="ml-3 inline-flex shrink-0 items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
                 aria-label="Back to terminal"
               >
                 <span aria-hidden="true">←</span>
@@ -656,7 +656,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
             {!isModal && isInlineAudioMode && (
               <button
                 onClick={handleExitRadio}
-                className="ml-3 inline-flex items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
+                className="ml-3 inline-flex shrink-0 items-center gap-1 rounded px-2 py-0.5 font-mono text-[11px] text-cyan-700 transition-colors [background:rgba(6,182,212,0.12)] hover:text-cyan-900 dark:text-[#67e8f9] dark:hover:text-cyan-200"
                 aria-label="Back to terminal"
               >
                 <span aria-hidden="true">←</span>
@@ -665,8 +665,15 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
             )}
 
             {/* Window Title */}
+            {/* `min-w-0` so this can shrink past its longest word, and `truncate`
+                so it clips instead of wrapping. A flex item defaults to
+                min-content width, which left the title stuck at 96.8px in a
+                330px window - it wrapped to three lines and spilled out of the
+                fixed 32px bar, over the tab chip. */}
             <div
-              className={`flex-1 text-center ${handleTitleClick ? "cursor-pointer" : ""}`}
+              className={`min-w-0 flex-1 truncate text-center ${
+                handleTitleClick ? "cursor-pointer" : ""
+              }`}
               onClick={handleTitleClick}
               title={handleTitleClick ? "Launch Byte" : undefined}
             >
@@ -676,7 +683,7 @@ export const InteractiveTerminal: FC<InteractiveTerminalProps> = ({
             </div>
 
             {/* Right side - Copy button for editor mode */}
-            <div className="flex w-14 justify-end">
+            <div className="flex w-8 shrink-0 justify-end sm:w-14">
               {!isModal && mode === "editor" && (
                 <CopyButton
                   content={Array.isArray(editorCode) ? editorCode.join("\n") : editorCode ?? ""}
