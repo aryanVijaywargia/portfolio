@@ -1,6 +1,5 @@
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
 import { SiLinkedin } from "@react-icons/all-files/si/SiLinkedin";
-import { SiTwitter } from "@react-icons/all-files/si/SiTwitter";
 import { EnvelopeIcon } from "@heroicons/react/24/solid";
 
 export const SOCIAL_ACCOUNTS = {
@@ -10,11 +9,6 @@ export const SOCIAL_ACCOUNTS = {
     Icon: ({ className = "" }) => <SiGithub className={className} />,
   },
 
-  twitter: {
-    name: "Twitter",
-    href: "https://twitter.com/AryanVijaywargia",
-    Icon: ({ className = "" }) => <SiTwitter className={className} />,
-  },
   linkedin: {
     name: "LinkedIn",
     href: "https://www.linkedin.com/in/aryan-vijaywargia/",

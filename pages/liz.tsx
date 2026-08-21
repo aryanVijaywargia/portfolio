@@ -1,7 +1,6 @@
 import { EnvelopeIcon } from "@heroicons/react/24/solid";
 import { SiGithub } from "@react-icons/all-files/si/SiGithub";
 import { SiLinkedin } from "@react-icons/all-files/si/SiLinkedin";
-import { SiTwitter } from "@react-icons/all-files/si/SiTwitter";
 import { Image } from "components/image";
 import { Link } from "components/link";
 
@@ -546,15 +545,6 @@ export const Resume: FC = (props) => {
                     >
                       <span className="sr-only">Github</span>
                       <SiGithub className="h-4 w-4" />
-                    </Link>
-                    <Link
-                      href="https://twitter.com/FelixTellmann"
-                      target="_blank"
-                      data-tip="Twitter"
-                      className="rounded p-1 text-gray-400 transition-all duration-75 hf:bg-gray-100 hf:text-gray-700 d:text-gray-300 d:hf:bg-gray-800/80 d:hf:text-gray-200"
-                    >
-                      <span className="sr-only">Twitter</span>
-                      <SiTwitter className="h-4 w-4" />
                     </Link>
                     <Link
                       href="https://www.linkedin.com/in/felixtellmann"

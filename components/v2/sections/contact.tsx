@@ -106,26 +106,20 @@ const ContactInfo: FC = () => (
       <Key>linkedin</Key>
       <Punct>: </Punct>
       <ValueLink href={SOCIAL_ACCOUNTS.linkedin.href}>@aryan-vijaywargia</ValueLink>
-      <Punct>,</Punct>
     </Line>
-    <Line n={7} indent={28}>
-      <Key>twitter</Key>
-      <Punct>: </Punct>
-      <ValueLink href={SOCIAL_ACCOUNTS.twitter.href}>@AryanVijaywargia</ValueLink>
-    </Line>
-    <Line n={8} indent={14}>
+    <Line n={7} indent={14}>
       <Punct>{"},"}</Punct>
     </Line>
-    <Line n={9} indent={14}>
+    <Line n={8} indent={14}>
       <Key>location</Key>
       <Punct>: </Punct>
       <Value>India</Value>
     </Line>
-    <Line n={10}>
+    <Line n={9}>
       <Punct>{"}"}</Punct>
     </Line>
-    <Line n={11}>&nbsp;</Line>
-    <Line n={12}>
+    <Line n={10}>&nbsp;</Line>
+    <Line n={11}>
       <span className="italic text-[rgb(var(--v2-fg-4))]">{IDLE_COMMENT}</span>
     </Line>
     <div className="ml-[2.4rem] mt-1.5">
