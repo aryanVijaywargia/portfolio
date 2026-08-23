@@ -81,7 +81,10 @@ const AchievementCard: FC<{ achievement: ExperienceAchievement }> = ({ achieveme
   return (
     <article
       onClick={() => setExpanded((open) => !open)}
-      className="flex cursor-pointer flex-col gap-2.5 rounded-[var(--v2-radius-sm)] border border-[rgb(var(--v2-line))] bg-[rgb(var(--v2-bg))] p-4"
+      className={clsx(
+        "flex cursor-pointer flex-col gap-2.5 rounded-[var(--v2-radius-sm)] border border-[rgb(var(--v2-line))] bg-[rgb(var(--v2-bg))] p-4",
+        achievement.hidden && "hidden"
+      )}
     >
       <div className="flex items-baseline justify-between gap-2.5">
         <span className="font-[family-name:var(--v2-font-mono)] text-[9.5px] font-bold uppercase tracking-[0.12em] text-[rgb(var(--v2-fg-4))]">

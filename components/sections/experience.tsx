@@ -458,7 +458,8 @@ function RoleDetail({ company }: { company: ExperienceCompany }) {
                   }
                 }}
                 className={clsx(
-                  "group flex min-h-[166px] cursor-pointer flex-col gap-3 rounded-lg border bg-[var(--experience-panel)] px-4 py-4 transition-colors duration-150 hover:bg-[var(--experience-panel-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                  "group flex min-h-[166px] cursor-pointer flex-col gap-3 rounded-lg border bg-[var(--experience-panel)] px-4 py-4 transition-colors duration-150 hover:bg-[var(--experience-panel-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400",
+                  achievement.hidden && "hidden"
                 )}
                 style={{ borderColor: "var(--experience-border-faint)" }}
               >
