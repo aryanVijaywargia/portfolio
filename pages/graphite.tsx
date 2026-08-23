@@ -1,19 +1,52 @@
-import { NextSeo } from "next-seo";
-import type { InferGetStaticPropsType } from "next";
+import { AchievementProvider } from "components/achievements";
+import { Hero } from "components/sections/hero";
+import { getSupabaseConfig, readScratchpadNotes } from "lib/scratchpad";
+import type { ScratchpadNote } from "lib/scratchpad";
+import dynamic from "next/dynamic";
+import type { GetStaticProps } from "next";
 import { FC } from "react";
-import { PortfolioV2 } from "components/v2/portfolio-v2";
-import { getV2StaticProps } from "lib/v2-page";
 
-export const getStaticProps = getV2StaticProps;
-
-/** Redesign preview — softly rounded, green accent. See components/v2. */
-const GraphitePage: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
-  initialScratchpadNotes,
-}) => (
-  <>
-    <NextSeo title="Aryan Vijaywargia | Portfolio (Graphite)" noindex nofollow />
-    <PortfolioV2 variant="graphite" initialScratchpadNotes={initialScratchpadNotes} />
-  </>
+const About = dynamic(() => import("components/sections/about").then((mod) => mod.About));
+const Timeline = dynamic(() => import("components/sections/timeline").then((mod) => mod.Timeline));
+const Experience = dynamic(() =>
+  import("components/sections/experience").then((mod) => mod.Experience)
 );
+const PortfolioPreview = dynamic(() =>
+  import("components/sections/portfolio-preview").then((mod) => mod.PortfolioPreview)
+);
+const Contact = dynamic(() => import("components/sections/contact").then((mod) => mod.Contact));
+const Quiz = dynamic(() => import("components/quiz").then((mod) => mod.Quiz), { ssr: false });
+
+type GraphiteProps = {
+  initialScratchpadNotes: ScratchpadNote[] | null;
+};
+
+/** The previous portfolio remains available at /graphite. */
+const GraphitePage: FC<GraphiteProps> = ({ initialScratchpadNotes }) => (
+  <AchievementProvider>
+    <Hero initialScratchpadNotes={initialScratchpadNotes} />
+    <About />
+    <Timeline />
+    <Experience />
+    <PortfolioPreview />
+    <Contact />
+    <Quiz />
+  </AchievementProvider>
+);
+
+export const getStaticProps: GetStaticProps<GraphiteProps> = async () => {
+  const config = getSupabaseConfig();
+  if (!config) {
+    return { props: { initialScratchpadNotes: null }, revalidate: 60 };
+  }
+
+  try {
+    const initialScratchpadNotes = await readScratchpadNotes(config);
+    return { props: { initialScratchpadNotes }, revalidate: 60 };
+  } catch (error) {
+    console.error("Could not preload scratchpad notes", error);
+    return { props: { initialScratchpadNotes: null }, revalidate: 30 };
+  }
+};
 
 export default GraphitePage;

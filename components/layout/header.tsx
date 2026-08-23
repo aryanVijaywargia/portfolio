@@ -9,7 +9,8 @@ import { FC, useState, useEffect, useRef } from "react";
 
 export const Header: FC = ({}) => {
   const router = useRouter();
-  const isMinimal = router.pathname !== "/";
+  const isPortfolioHome = router.pathname === "/graphite";
+  const isMinimal = !isPortfolioHome;
   const [showNav, setShowNav] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
@@ -148,7 +149,7 @@ export const Header: FC = ({}) => {
       >
         <div className="mx-auto flex h-full max-w-6xl items-center gap-1 px-4 md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:gap-4 md:px-8 xl:grid-cols-[210px_1fr_210px]">
           <Link
-            href="/"
+            href="/graphite"
             className="z-10 w-min"
             data-tip="Hi, I'm Aryan. Welcome to my site."
             data-delay-show={2000}
