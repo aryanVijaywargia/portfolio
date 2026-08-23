@@ -9,8 +9,8 @@ export type V2PageProps = {
 /**
  * Shared data loader for the v2 routes.
  *
- * Both /signal and /graphite render the same page with the same data; only the
- * token set differs. Re-exported from each page because Next requires
+ * Both / and /signal render the same page with the same data; only the token
+ * set differs. Re-exported from each page because Next requires
  * getStaticProps to be a top-level export of the page module.
  */
 export const getV2StaticProps: GetStaticProps<V2PageProps> = async () => {

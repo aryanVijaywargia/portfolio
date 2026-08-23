@@ -106,10 +106,10 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
         <Component {...pageProps} />
       </main>
       {isV2 ? null : isBatman ? <BatmanFooter /> : <Footer />}
-      {!isV2 && (router.pathname === "/" || isBatman) ? <MobileExperienceNotice /> : null}
+      {!isV2 && (router.pathname === "/graphite" || isBatman) ? <MobileExperienceNotice /> : null}
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
-      {!isV2 && !isBatman && router.pathname === "/" ? <AmbientMessages /> : null}
+      {!isV2 && !isBatman && router.pathname === "/graphite" ? <AmbientMessages /> : null}
     </div>
   );
 };
