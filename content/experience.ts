@@ -6,6 +6,7 @@ export interface ExperienceAchievement {
   category: string;
   title: string;
   summary: string;
+  hidden?: boolean;
   pointers?: string[];
   impact: string;
   technologies: string[];
@@ -110,6 +111,7 @@ export const EXPERIENCE_JOURNEY: ExperienceJourney = {
         },
         {
           id: "gep-cdc",
+          hidden: true,
           category: "Data Platform",
           title: "Leo Storage CDC platform",
           summary:
