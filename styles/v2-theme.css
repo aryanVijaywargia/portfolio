@@ -1493,6 +1493,13 @@ html
   color: rgb(var(--v2-fg));
 }
 
+/* Active resume filters add a dark hover/focus sky fill. The broad rules above
+   deliberately leave interaction variants alone, so this narrower selector
+   retints only the selected filter after it is clicked. */
+[data-v2][data-v2] button.border-sky-300[class*="d:hf:bg-sky-"] {
+  background-color: rgb(var(--v2-accent) / 0.18);
+}
+
 [data-v2][data-v2] [class^="d:border-sky-"],
 [data-v2][data-v2] [class*=" d:border-sky-"],
 [data-v2][data-v2] [class^="d:border-cyan-"],

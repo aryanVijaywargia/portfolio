@@ -45,12 +45,15 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
   const isV2 = isV2Route(router.pathname);
   const canonicalPath = router.asPath.split(/[?#]/)[0] || "/";
 
-  // Pages outside the portfolio — the resume, for one — are shared with "/",
-  // so they cannot carry a skin of their own. A `?theme=` on the link opts them
-  // in, which keeps the unadorned URL identical to production.
+  // Resume is shared by the portfolio variants. Graphite is the public default,
+  // while a themed link can explicitly keep Signal's palette.
   const requestedTheme = typeof router.query.theme === "string" ? router.query.theme : undefined;
   const v2Variant =
-    requestedTheme === "signal" || requestedTheme === "graphite" ? requestedTheme : undefined;
+    requestedTheme === "signal" || requestedTheme === "graphite"
+      ? requestedTheme
+      : router.pathname === "/resume"
+      ? "graphite"
+      : undefined;
 
   // <body> paints the canvas behind the page and is an ancestor of the marker
   // below, so the skin has to be mirrored up for it to take. The portfolio

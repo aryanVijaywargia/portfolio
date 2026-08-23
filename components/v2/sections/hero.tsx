@@ -12,6 +12,7 @@ import { V2Container, V2Eyebrow, hueVars } from "components/v2/primitives";
 import { V2ThemeSwitch, V2ThemeToggle } from "components/v2/theme-toggle";
 import { useOpenChatbot } from "components/v2/use-open-chatbot";
 import { useRoleCycle } from "components/v2/use-role-cycle";
+import { useV2Variant } from "components/v2/variant";
 
 /* The v1 hero draws its action bar as round bordered buttons over a blurred
    surface — a standalone cluster, quite unlike the bare icons in the header.
@@ -47,6 +48,7 @@ type V2HeroProps = {
 export const V2Hero: FC<V2HeroProps> = ({ initialScratchpadNotes }) => {
   const { trackAchievementEvent } = useAchievementActions();
   const openChatbot = useOpenChatbot();
+  const resumeHref = `${V2_HERO.cta.primary.href}?theme=${useV2Variant()}`;
   const {
     lead: roleLead,
     suffix: roleSuffix,
@@ -238,7 +240,7 @@ export const V2Hero: FC<V2HeroProps> = ({ initialScratchpadNotes }) => {
             </p>
 
             <div className="flex flex-wrap items-center gap-3.5">
-              <Link href={V2_HERO.cta.primary.href}>
+              <Link href={resumeHref}>
                 <a className="inline-flex items-center rounded-[var(--v2-radius-sm)] bg-[rgb(var(--v2-btn-bg))] px-[var(--v2-btn-px)] py-[var(--v2-btn-py)] text-sm font-[number:var(--v2-btn-weight)] tracking-[var(--v2-btn-tracking)] text-[rgb(var(--v2-btn-fg))]">
                   {V2_HERO.cta.primary.label}
                 </a>
