@@ -25,10 +25,6 @@ const AmbientMessages = dynamic(
   () => import("components/ambient-messages").then((m) => m.AmbientMessages),
   { ssr: false }
 );
-const MobileExperienceNotice = dynamic(
-  () => import("components/layout/mobile-experience-notice").then((m) => m.MobileExperienceNotice),
-  { ssr: false }
-);
 
 type PortfolioV2Props = {
   variant: V2Variant;
@@ -86,10 +82,6 @@ export const PortfolioV2: FC<PortfolioV2Props> = ({ variant, initialScratchpadNo
           <V2Footer />
           {/* Inside the token scope so the v2 skin reaches them. */}
           <AmbientMessages />
-          {/* Wrapper gives the v1 notice a hook for the v2 skin below. */}
-          <div className="v2-mobile-notice">
-            <MobileExperienceNotice />
-          </div>
         </div>
       </AchievementProvider>
     </V2VariantProvider>

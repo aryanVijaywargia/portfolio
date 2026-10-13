@@ -1121,48 +1121,6 @@ html.dark [data-v2][data-v2] .rick-ascii {
   caret-color: rgb(var(--v2-accent));
 }
 
-/* ---------- mobile experience notice ---------- */
-/* The v1 notice paints itself with hardcoded gray/blue utilities. Remapping
-   its surfaces and its call-to-action keeps the one component while making it
-   read as part of this design. */
-
-[data-v2][data-v2] .v2-mobile-notice [class*="bg-white"],
-[data-v2][data-v2] .v2-mobile-notice [class*="bg-gray-9"],
-[data-v2][data-v2] .v2-mobile-notice [class*="bg-gray-8"] {
-  background-color: rgb(var(--v2-surface));
-}
-
-[data-v2][data-v2] .v2-mobile-notice [class*="border-gray-"] {
-  border-color: rgb(var(--v2-line-2));
-}
-
-[data-v2][data-v2] .v2-mobile-notice [class*="text-gray-9"],
-[data-v2][data-v2] .v2-mobile-notice [class*="text-gray-1"],
-[data-v2][data-v2] .v2-mobile-notice [class*="text-white"] {
-  color: rgb(var(--v2-fg));
-}
-
-[data-v2][data-v2] .v2-mobile-notice [class*="text-gray-3"],
-[data-v2][data-v2] .v2-mobile-notice [class*="text-gray-4"],
-[data-v2][data-v2] .v2-mobile-notice [class*="text-gray-5"],
-[data-v2][data-v2] .v2-mobile-notice [class*="text-gray-6"] {
-  color: rgb(var(--v2-fg-3));
-}
-
-/* The primary action and the status dot carry the accent. */
-[data-v2][data-v2] .v2-mobile-notice button[class*="bg-"],
-[data-v2][data-v2] .v2-mobile-notice [class*="bg-sky-"],
-[data-v2][data-v2] .v2-mobile-notice [class*="bg-blue-"],
-[data-v2][data-v2] .v2-mobile-notice [class*="bg-primary-"] {
-  background-color: rgb(var(--v2-accent));
-  color: rgb(var(--v2-btn-fg));
-  border-radius: var(--v2-radius-sm);
-}
-
-[data-v2][data-v2] .v2-mobile-notice button[class*="bg-"] * {
-  color: rgb(var(--v2-btn-fg));
-}
-
 /* ---------- mobile performance ---------- */
 /* Carried over from the v1 mobile pass: full-width backdrop filters and
    large off-screen sections are the two things that cost the most during
