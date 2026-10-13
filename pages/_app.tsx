@@ -5,7 +5,6 @@ import { PortfolioModeProvider, usePortfolioMode } from "components/_stores/port
 import { AmbientMessages } from "components/ambient-messages";
 import { Footer } from "components/layout/footer";
 import { Header } from "components/layout/header";
-import { MobileExperienceNotice } from "components/layout/mobile-experience-notice";
 import { BatTransition } from "components/batman/bat-transition";
 import { isV2Route } from "components/v2/routes";
 import { SEO } from "content/seo";
@@ -109,7 +108,6 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
         <Component {...pageProps} />
       </main>
       {isV2 ? null : isBatman ? <BatmanFooter /> : <Footer />}
-      {!isV2 && (router.pathname === "/graphite" || isBatman) ? <MobileExperienceNotice /> : null}
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
       {!isV2 && !isBatman && router.pathname === "/graphite" ? <AmbientMessages /> : null}
