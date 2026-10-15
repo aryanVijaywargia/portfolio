@@ -44,6 +44,30 @@ const TECH = {
 
 export const PROJECTS = [
   {
+    name: "Herdr Brain",
+    type: ["AI Infrastructure", "Developer Tools"],
+    tech: [TECH.go],
+    featuredImage: "/images/projects/herdr-brain-card.svg",
+    url: "",
+    repository: "https://github.com/aryanVijaywargia/herdr-brain",
+    description: `A herdr plugin that captures lessons from Claude Code and Codex sessions, lets you review them, and shares approved memory with new sessions.`,
+    content: (
+      <>
+        <p>
+          Herdr Brain is a shared memory plugin for Claude Code and Codex in herdr, a terminal
+          workspace for coding agents. It captures lessons from sessions in herdr panes and
+          drafts items for review. Approved items reach new sessions of either agent.
+        </p>
+        <p>
+          Built as a single Go binary with a local SQLite store and workspace or global memory
+          scopes. Hooks deliver approved items at session start for Claude Code and with the
+          first prompt for Codex.
+        </p>
+      </>
+    ),
+    year: "2026",
+  },
+  {
     name: "Continua",
     type: ["AI Infrastructure"],
     tech: [TECH.go, TECH.postgresql, TECH.react, TECH.typescript, TECH.python],
