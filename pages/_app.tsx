@@ -1,3 +1,4 @@
+import { SiteAnalytics } from "components/_app/site-analytics";
 import { ContextProviders } from "components/_stores/_context-providers";
 import { LoadInitialData } from "components/_stores/_load-initial-data";
 import { PortfolioModeProvider, usePortfolioMode } from "components/_stores/portfolio-mode-context";
@@ -8,8 +9,6 @@ import { Header } from "components/layout/header";
 import { BatTransition } from "components/batman/bat-transition";
 import { isV2Route } from "components/v2/routes";
 import { SEO } from "content/seo";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import dynamic from "next/dynamic";
 import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
@@ -113,22 +112,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
       {!isV2 && !isBatman && router.pathname === "/graphite" ? <AmbientMessages /> : null}
-      {/* The React entry points support Next 12; /next requires Next 13+. */}
-      {process.env.NODE_ENV === "production" &&
-      process.env.NEXT_PUBLIC_VERCEL_ENV === "production" &&
-      router.isReady
-        ? <>
-            <Analytics
-              route={router.pathname}
-              path={canonicalPath}
-              configString={process.env.NEXT_PUBLIC_VERCEL_OBSERVABILITY_CLIENT_CONFIG}
-            />
-            <SpeedInsights
-              route={router.pathname}
-              configString={process.env.NEXT_PUBLIC_VERCEL_OBSERVABILITY_CLIENT_CONFIG}
-            />
-          </>
-        : null}
+      {router.isReady ? <SiteAnalytics route={router.pathname} path={canonicalPath} /> : null}
     </div>
   );
 };
