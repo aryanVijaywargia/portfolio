@@ -1,3 +1,4 @@
+import { SiteAnalytics } from "components/_app/site-analytics";
 import { ContextProviders } from "components/_stores/_context-providers";
 import { LoadInitialData } from "components/_stores/_load-initial-data";
 import { PortfolioModeProvider, usePortfolioMode } from "components/_stores/portfolio-mode-context";
@@ -111,6 +112,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
       {showTransition ? <BatTransition /> : null}
       {isBatman ? <BatScrollFollower /> : null}
       {!isV2 && !isBatman && router.pathname === "/graphite" ? <AmbientMessages /> : null}
+      {router.isReady ? <SiteAnalytics route={router.pathname} path={canonicalPath} /> : null}
     </div>
   );
 };
