@@ -154,7 +154,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
 
   const runCommand = (rawCommand: string) => {
     const commandLine = rawCommand.trim().toLowerCase();
-    appendLog(`radio@aryancodes:~$ ${commandLine}`, "muted");
+    appendLog(`radio@aryanvijaywargia.com:~$ ${commandLine}`, "muted");
     const [command, ...args] = commandLine.split(/\s+/);
 
     if (!command) {
@@ -281,7 +281,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
       onClick={() => inputRef.current?.focus({ preventScroll: true })}
     >
       <div ref={outputRef} className="scrollbar-none min-h-0 flex-1 overflow-y-auto px-3 py-2">
-        <p className="text-slate-500 dark:text-slate-500">visitor@aryancodes.com:~$ radio</p>
+        <p className="text-slate-500 dark:text-slate-500">visitor@aryanvijaywargia.com:~$ radio</p>
         {logs.map((line) => (
           <p
             key={line.id}
@@ -357,7 +357,7 @@ export const TerminalRadio: FC<TerminalRadioProps> = ({ audio, initialStationInd
         className="flex shrink-0 items-center border-t border-slate-200 px-3 py-2 dark:border-slate-800"
       >
         <label htmlFor="radio-command" className="shrink-0 text-[#0d7377] dark:text-emerald-400">
-          radio@aryancodes:~$
+          radio@aryanvijaywargia.com:~$
         </label>
         <input
           ref={inputRef}

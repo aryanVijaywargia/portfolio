@@ -2,8 +2,8 @@
 
 export const TERMINAL_CONFIG = {
   username: "visitor",
-  hostname: "aryancodes.com",
-  prompt: "visitor@aryancodes.com:~$",
+  hostname: "aryanvijaywargia.com",
+  prompt: "visitor@aryanvijaywargia.com:~$",
   password: "aryancodes",
   batmanPassword: "darknight",
 };

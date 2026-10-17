@@ -956,7 +956,7 @@ What was giving it away, and what replaced it:
 |----------|------------------|
 | 52px and 40px display numbers | everything at 13px, score printed in a 3x5 block font |
 | duration row as buttons with hover chrome | `length  15s  [30s]  60s`, plus `1`-`3` |
-| no sign of where the command came from | the shell's own prompt echoed: `visitor@aryancodes.com:~$ typetest --time 30` |
+| no sign of where the command came from | the shell's own prompt echoed: `visitor@aryanvijaywargia.com:~$ typetest --time 30` |
 | vertically centred, generous whitespace | output starts at the top, status line pinned at the bottom |
 | rounded sliding hairline caret | a filled cell with the character inverted on top of it |
 | footer of key hints | an inverse status bar, the way a full-screen TUI keeps one |

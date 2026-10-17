@@ -1,6 +1,16 @@
+// next.config.js supplies this from the shared site.config.js build setting.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
+const sharingImage = {
+  url: `${siteUrl}/images/sharing-image.jpg`,
+  alt: "Aryan Vijaywargia - Senior Software Engineer",
+  width: 1200,
+  height: 630,
+  type: "image/jpeg",
+};
+
 export const SEO = {
   title: "Aryan Vijaywargia - Senior Software Engineer · Go, C#, .NET, TypeScript, Python",
-  url: "https://aryanvijaywargia.com",
+  url: siteUrl,
   description:
     "Senior Software Engineer at GEP Worldwide. I build agentic runtimes, search platforms, and durable execution engines. Creator of Continua.",
   siteName: "Aryan Vijaywargia",
@@ -12,22 +22,19 @@ export const SEO = {
     site: "@AryanVijaywargia",
     cardType: "summary_large_image",
   },
+  additionalMetaTags: [
+    { name: "twitter:image", content: sharingImage.url },
+    { name: "twitter:image:alt", content: sharingImage.alt },
+  ],
   openGraph: {
     type: "website",
     locale: "en_IE",
-    url: "https://aryanvijaywargia.com",
+    url: siteUrl,
     site_name: "Aryan Vijaywargia",
     title: "Aryan Vijaywargia",
     description:
       "Senior Software Engineer · Go, C#, .NET, TypeScript, Python · Agentic runtimes, search platforms, durable execution.",
-    images: [
-      {
-        url: "https://aryanvijaywargia.com/images/sharing-image.jpg",
-        alt: "Aryan Vijaywargia - Senior Software Engineer",
-        width: 1200,
-        height: 630,
-      },
-    ],
+    images: [sharingImage],
   },
 };
 

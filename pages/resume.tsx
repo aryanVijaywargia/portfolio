@@ -81,7 +81,8 @@ export const Resume: FC = (props) => {
         <tr>
           <th>
             <small className="absolute bottom-0 left-1/2 -translate-x-1/2 pb-1 pt-3 text-[13px] font-medium tracking-tight text-gray-400">
-              View full resume at <Link href="https://aryancodes.com">www.aryancodes.com</Link>
+              View full resume at{" "}
+              <Link href="https://aryanvijaywargia.com">aryanvijaywargia.com</Link>
             </small>
           </th>
         </tr>

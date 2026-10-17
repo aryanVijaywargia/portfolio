@@ -5,6 +5,7 @@
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
+const { siteUrl } = require("./site.config");
 
 module.exports = withBundleAnalyzer({
   swcMinify: true,
@@ -39,7 +40,7 @@ module.exports = withBundleAnalyzer({
             key: "Access-Control-Allow-Origin",
             value:
               process.env.NODE_ENV === "production"
-                ? process.env.NEXT_PUBLIC_SITE_URL || "https://aryancodes.com"
+                ? siteUrl
                 : "*",
           },
           { key: "Access-Control-Allow-Methods", value: "GET,POST,OPTIONS" },
@@ -77,6 +78,7 @@ module.exports = withBundleAnalyzer({
     return config;
   },
   env: {
+    NEXT_PUBLIC_SITE_URL: siteUrl,
     NEXT_PUBLIC_APP_VERSION: require("./package.json").version,
   },
 });

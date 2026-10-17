@@ -1,7 +1,7 @@
 /*= =============== Strings ================ */
 let name: string = 'Aryan Vijaywargia';
 let title: string = "Machine Learning Engineer";
-let website: string = String("https://aryancodes.com")
+let website: string = String("https://aryanvijaywargia.com")
 let greeting: string = `Hello, my name is ${name}, and I'm a ${title}.`
 
 // You can use single-, double-quotes or backticks to set
@@ -14,7 +14,7 @@ let inferredName = "Aryan Vijaywargia"
 let inferredTitle = "Machine Learning Engineer";
 // inferredTitle: string
 
-let inferredWebsite = String("https://aryancodes.com")
+let inferredWebsite = String("https://aryanvijaywargia.com")
 // inferredWebsite: string
 
 let inferredGreeting = `Hello, my name is ${name}, and I'm a ${title}.`

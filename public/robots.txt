@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://aryancodes.com
-
-# Sitemaps
-Sitemap: https://aryancodes.com/sitemap.xml
