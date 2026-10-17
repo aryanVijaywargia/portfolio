@@ -41,8 +41,8 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
   const router = useRouter();
   const { showTransition } = usePortfolioMode();
   const isBatman = router.pathname === "/batman";
-  // The v2 routes render their own header, footer and ambient chrome.
-  const isV2 = isV2Route(router.pathname);
+  // These pages supply their own chrome. Client errors retain the original route.
+  const isV2 = isV2Route(router.pathname) || Component.hasOwnChrome;
   const canonicalPath = router.asPath.split(/[?#]/)[0] || "/";
 
   // Resume is shared by the portfolio variants. Graphite is the public default,
