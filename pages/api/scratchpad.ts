@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSupabaseConfig, getSupabaseHeaders, readScratchpadNotes } from "lib/scratchpad";
 import type { ScratchpadNote } from "lib/scratchpad";
+import { createRateLimiter, getClientIp } from "lib/rate-limit";
 
 type ScratchpadResponse =
   | { notes: ScratchpadNote[] }
@@ -10,29 +11,7 @@ type ScratchpadResponse =
 const MAX_NOTE_LENGTH = 280;
 const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000;
 const RATE_LIMIT_MAX_WRITES = 3;
-const writeAttempts = new Map<string, number[]>();
-
-const getClientIp = (request: NextApiRequest) => {
-  const forwardedFor = request.headers["x-forwarded-for"];
-  const rawIp = Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor?.split(",")[0];
-  return rawIp?.trim() || request.socket.remoteAddress || "unknown";
-};
-
-const hasRateLimitCapacity = (ip: string) => {
-  const now = Date.now();
-  const recentAttempts = (writeAttempts.get(ip) || []).filter(
-    (timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS
-  );
-
-  if (recentAttempts.length >= RATE_LIMIT_MAX_WRITES) {
-    writeAttempts.set(ip, recentAttempts);
-    return false;
-  }
-
-  recentAttempts.push(now);
-  writeAttempts.set(ip, recentAttempts);
-  return true;
-};
+const takeWriteAttempt = createRateLimiter(RATE_LIMIT_MAX_WRITES, RATE_LIMIT_WINDOW_MS);
 
 export default async function handler(
   request: NextApiRequest,
@@ -70,7 +49,9 @@ export default async function handler(
     if (characterCount > MAX_NOTE_LENGTH) {
       return response.status(400).json({ error: "Keep the note under 280 characters." });
     }
-    if (!hasRateLimitCapacity(getClientIp(request))) {
+    const limit = takeWriteAttempt(getClientIp(request));
+    if (!limit.allowed) {
+      response.setHeader("Retry-After", limit.retryAfter);
       return response.status(429).json({
         error: "A few notes are enough for now. Try again in five minutes.",
       });

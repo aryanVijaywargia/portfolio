@@ -2,6 +2,7 @@ import { CONTACT } from "content/contact";
 import { motion, useInView } from "framer-motion";
 import { FC, FormEvent, ReactNode, useRef, useState } from "react";
 import { z } from "zod";
+import { ContactHoneypot } from "components/contact-honeypot";
 
 const contactSchema = z.object({
   name: z.string().min(1, "Name is required").min(2, "Name must be at least 2 characters"),
@@ -257,8 +258,9 @@ const SendMessagePanel: FC = () => {
   const [statusMessage, setStatusMessage] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const website = new FormData(e.currentTarget).get("website");
     setErrors({});
     setStatus("idle");
     setStatusMessage("");
@@ -279,7 +281,7 @@ const SendMessagePanel: FC = () => {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, message, website }),
       });
 
       if (!res.ok) {
@@ -312,6 +314,7 @@ const SendMessagePanel: FC = () => {
 
       <div className="flex flex-1 flex-col px-4 pb-3 pt-3 font-mono text-[0.84rem] leading-[1.5rem] md:px-5 lg:px-5">
         <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
+          <ContactHoneypot />
           <div className="flex-1">
             <div className="mb-2 text-[0.9rem]">
               <CodeComment>{"// " + "Run this script to send a message"}</CodeComment>
