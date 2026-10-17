@@ -5,7 +5,7 @@ import { ErrorPageLayout } from "components/v2/not-found-v2";
 
 type ErrorProps = { statusCode?: number };
 
-export const Error: NextPage<ErrorProps> = ({ statusCode = 500 }) => (
+export const Error: NextPage<ErrorProps> & { hasOwnChrome?: boolean } = ({ statusCode = 500 }) => (
   <>
     <NextSeo title={`${statusCode} | Something went wrong`} noindex nofollow />
     <ErrorPageLayout>
@@ -28,6 +28,8 @@ export const Error: NextPage<ErrorProps> = ({ statusCode = 500 }) => (
     </ErrorPageLayout>
   </>
 );
+
+Error.hasOwnChrome = true;
 
 Error.getInitialProps = ({ res, err }) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;

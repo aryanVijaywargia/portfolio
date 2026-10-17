@@ -14,7 +14,6 @@ import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { FC, PropsWithChildren, useEffect } from "react";
 import "styles/tailwind.css";
-import { Error as ErrorPage } from "./_error";
 
 const BatmanHeader = dynamic(
   () => import("components/layout/batman-header").then((mod) => mod.BatmanHeader),
@@ -42,7 +41,7 @@ const AppShell: FC<{ pageProps: any; Component: any }> = ({ pageProps, Component
   const { showTransition } = usePortfolioMode();
   const isBatman = router.pathname === "/batman";
   // These pages supply their own chrome. Client errors retain the original route.
-  const isV2 = isV2Route(router.pathname) || Component === ErrorPage;
+  const isV2 = isV2Route(router.pathname) || Component.hasOwnChrome;
   const canonicalPath = router.asPath.split(/[?#]/)[0] || "/";
 
   // Resume is shared by the portfolio variants. Graphite is the public default,
