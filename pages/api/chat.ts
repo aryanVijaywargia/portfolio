@@ -1,6 +1,7 @@
 // pages/api/chat.ts
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { createRateLimiter, getClientIp } from "lib/rate-limit";
 import { BYTE_KNOWLEDGE, BYTE_PERSONALITY } from "content/byte-knowledge";
 import { createPuzzleToken, formatPuzzleChallenge, isPlainEnglishPuzzle, isTerminalPasswordRequest, readPuzzleToken, SecretPuzzle } from "lib/chat/secret-puzzle";
 
@@ -21,6 +22,12 @@ type ChatResponse = {
 };
 
 type GeminiModel = ReturnType<GoogleGenerativeAI["getGenerativeModel"]>;
+
+export const config = { api: { bodyParser: { sizeLimit: "64kb" } } };
+
+const CHAT_RATE_LIMIT_MAX_REQUESTS = 20;
+const CHAT_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const takeChatAttempt = createRateLimiter(CHAT_RATE_LIMIT_MAX_REQUESTS, CHAT_RATE_LIMIT_WINDOW_MS);
 
 let cachedApiKey: string | null = null;
 let cachedModel: GeminiModel | null = null;
@@ -250,6 +257,15 @@ Return only the visitor-facing response with no JSON or markdown fence.
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ChatResponse>) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "", error: "Method not allowed" });
+  }
+
+  const limit = takeChatAttempt(getClientIp(req));
+  if (!limit.allowed) {
+    res.setHeader("Retry-After", limit.retryAfter);
+    return res.status(429).json({
+      message: "",
+      error: "Byte needs a break. Please wait ten minutes before sending another message.",
+    });
   }
 
   // Input validation

@@ -5,6 +5,7 @@ import { V2_SECTION_HEADINGS } from "content/v2";
 import { contactSchema, ContactStatus } from "lib/contact-schema";
 import { V2Heading, V2Section, V2SectionHeader } from "components/v2/primitives";
 import { V2ContactComposer } from "components/v2/sections/contact.composer";
+import { ContactHoneypot } from "components/contact-honeypot";
 
 /** Editor-chrome text. Looks like a source comment; it is copy. */
 const IDLE_COMMENT = "// Waiting for connection...";
@@ -140,8 +141,9 @@ const ContactForm: FC = () => {
   const [status, setStatus] = useState<ContactStatus>("idle");
   const [statusMessage, setStatusMessage] = useState("");
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const website = new FormData(event.currentTarget).get("website");
     setStatus("idle");
     setStatusMessage("");
 
@@ -157,7 +159,7 @@ const ContactForm: FC = () => {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify({ ...parsed.data, website }),
       });
 
       if (!response.ok) {
@@ -188,6 +190,7 @@ const ContactForm: FC = () => {
       }
     >
       <form onSubmit={handleSubmit} className="flex flex-1 flex-col leading-[1.6]">
+        <ContactHoneypot />
         <div className="flex-1">
           <div className="mb-2 italic text-[rgb(var(--v2-fg-4))]">{FORM_COMMENT}</div>
           <div className="mb-3">

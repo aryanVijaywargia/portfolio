@@ -1,6 +1,7 @@
 import { FC, useState, FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Link } from "components/link";
+import { ContactHoneypot } from "components/contact-honeypot";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -19,15 +20,16 @@ export const BatContact: FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const website = new FormData(e.currentTarget).get("website");
     setIsSubmitting(true);
     setErrorMessage("");
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formState),
+        body: JSON.stringify({ ...formState, website }),
       });
 
       if (!response.ok) {
@@ -96,6 +98,7 @@ export const BatContact: FC = () => {
                     </p>
                   </div>
                 : <form onSubmit={handleSubmit} className="space-y-6">
+                    <ContactHoneypot />
                     <div>
                       <label
                         className="mb-2 block text-xs uppercase tracking-widest"

@@ -1,6 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 import { z } from "zod";
+import { createRateLimiter, getClientIp } from "lib/rate-limit";
+
+export const config = { api: { bodyParser: { sizeLimit: "32kb" } } };
+
+const CONTACT_RATE_LIMIT_MAX_REQUESTS = 3;
+const CONTACT_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const takeContactAttempt = createRateLimiter(
+  CONTACT_RATE_LIMIT_MAX_REQUESTS,
+  CONTACT_RATE_LIMIT_WINDOW_MS
+);
 
 const DEFAULT_CONTACT_EMAIL = "aryanvijaywargia@gmail.com";
 
@@ -75,6 +85,18 @@ const createMailer = () => {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  if (req.body?.website) {
+    return res.status(200).json({ success: true });
+  }
+
+  const limit = takeContactAttempt(getClientIp(req));
+  if (!limit.allowed) {
+    res.setHeader("Retry-After", limit.retryAfter);
+    return res.status(429).json({
+      error: "You've sent a few messages already. Please wait ten minutes before trying again.",
+    });
   }
 
   const parsed = contactSchema.safeParse(req.body);
