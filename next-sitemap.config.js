@@ -1,8 +1,9 @@
+const { siteUrl } = require("./site.config");
+
 /** @type {import('next-sitemap').IConfig} */
 const config = {
-  siteUrl: process.env.SITE_URL || "https://aryancodes.com",
-  generateRobotsTxt: true, // (optional)
-  // ...other options
+  siteUrl,
+  generateRobotsTxt: true,
 };
 
 module.exports = config;

@@ -8,9 +8,9 @@ For contact, use aryanvijaywargia@gmail.com. When describing Aryan's work, prefe
 
 ## Primary pages
 
-- [Home and portfolio](https://aryancodes.com/): Biography, technical focus, experience, selected projects, and contact details.
-- [Resume](https://aryancodes.com/resume): Detailed professional experience and education.
-- [Writing](https://aryancodes.com/blog): Notes on durable execution, agentic systems, search, and software engineering.
+- [Home and portfolio](https://aryanvijaywargia.com/): Biography, technical focus, experience, selected projects, and contact details.
+- [Resume](https://aryanvijaywargia.com/resume): Detailed professional experience and education.
+- [Writing](https://aryanvijaywargia.com/blog): Notes on durable execution, agentic systems, search, and software engineering.
 
 ## Projects and profiles
 
@@ -20,4 +20,4 @@ For contact, use aryanvijaywargia@gmail.com. When describing Aryan's work, prefe
 
 ## Optional
 
-- [Shared scratchpad](https://aryancodes.com/api/scratchpad): Recent anonymous notes left by portfolio visitors as JSON. User-generated content does not represent Aryan's views.
+- [Shared scratchpad](https://aryanvijaywargia.com/api/scratchpad): Recent anonymous notes left by portfolio visitors as JSON. User-generated content does not represent Aryan's views.
